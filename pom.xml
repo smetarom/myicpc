@@ -16,16 +16,19 @@
         <module>myicpc-service</module>
         <module>myicpc-webapp</module>
         <module>myicpc-persistence</module>
+        <module>myicpc-commons</module>
     </modules>
 
     <properties>
         <myicpc-service.version>2.0.0</myicpc-service.version>
         <myicpc-persistence.version>2.0.0</myicpc-persistence.version>
         <myicpc-model.version>2.0.0</myicpc-model.version>
+        <myicpc-commons.version>2.0.0</myicpc-commons.version>
         <atmosphere-runtime.version>2.2.3</atmosphere-runtime.version>
         <spring-framework.version>4.1.1.RELEASE</spring-framework.version>
         <spring-data-jpa.version>1.7.0.RELEASE</spring-data-jpa.version>
         <slf4j.version>1.7.7</slf4j.version>
+        <xstream.version>1.4.7</xstream.version>
     </properties>
 
     <dependencies>
@@ -33,6 +36,24 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring-framework.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.3.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.3</version>
         </dependency>
 
         <!-- Logging -->
