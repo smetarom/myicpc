@@ -1,7 +1,6 @@
 package com.myicpc.model.security;
 
 import com.myicpc.model.IdGeneratedObject;
-import edu.baylor.icpc.myicpc.view.validator.annotation.ValidateSystemUser;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
@@ -13,7 +12,6 @@ import java.util.List;
  *
  * @author Roman Smetana
  */
-@ValidateSystemUser
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "User_id_seq")
 public class SystemUser extends IdGeneratedObject {

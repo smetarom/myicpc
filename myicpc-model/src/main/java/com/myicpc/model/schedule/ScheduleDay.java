@@ -17,7 +17,6 @@ import java.util.List;
  *
  * @author Roman Smetana
  */
-@ValidateScheduleDay
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "ScheduleDay_id_seq")
 public class ScheduleDay extends IdGeneratedContestObject implements Comparable<ScheduleDay> {

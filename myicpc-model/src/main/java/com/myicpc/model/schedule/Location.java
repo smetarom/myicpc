@@ -1,7 +1,6 @@
 package com.myicpc.model.schedule;
 
 import com.myicpc.model.IdGeneratedContestObject;
-import edu.baylor.icpc.myicpc.view.validator.annotation.ValidateLocation;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +12,6 @@ import javax.validation.constraints.NotNull;
  *
  * @author smetana
  */
-@ValidateLocation
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "Location_id_seq")
 public class Location extends IdGeneratedContestObject {

@@ -1,7 +1,6 @@
 package com.myicpc.model.schedule;
 
 import com.myicpc.model.IdGeneratedContestObject;
-import edu.baylor.icpc.myicpc.view.validator.annotation.ValidateEventRole;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +14,6 @@ import java.util.List;
  *
  * @author Roman Smetana
  */
-@ValidateEventRole
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "EventRole_id_seq")
 public class EventRole extends IdGeneratedContestObject {

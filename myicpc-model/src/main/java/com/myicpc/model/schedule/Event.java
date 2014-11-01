@@ -1,7 +1,6 @@
 package com.myicpc.model.schedule;
 
 import com.myicpc.model.StartEndDateObject;
-import edu.baylor.icpc.myicpc.view.validator.annotation.ValidateEvent;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -14,7 +13,6 @@ import java.util.Set;
  *
  * @author Roman Smetana
  */
-@ValidateEvent
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "Event_id_seq")
 public class Event extends StartEndDateObject {
