@@ -17,7 +17,7 @@
         <dependency>
             <groupId>com.myicpc</groupId>
             <artifactId>myicpc-model</artifactId>
-            <version>${myicpc.model.version}</version>
+            <version>${myicpc-model.version}</version>
         </dependency>
 
     </dependencies>
