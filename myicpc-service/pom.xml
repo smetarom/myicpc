@@ -14,10 +14,11 @@
     <name>MyICPC Service</name>
 
     <dependencies>
+
         <dependency>
             <groupId>com.myicpc</groupId>
-            <artifactId>myicpc-model</artifactId>
-            <version>${myicpc-model.version}</version>
+            <artifactId>myicpc-persistence</artifactId>
+            <version>${myicpc-persistence.version}</version>
         </dependency>
 
     </dependencies>

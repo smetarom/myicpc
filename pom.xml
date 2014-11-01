@@ -15,10 +15,12 @@
         <module>myicpc-model</module>
         <module>myicpc-service</module>
         <module>myicpc-webapp</module>
+        <module>myicpc-persistence</module>
     </modules>
 
     <properties>
         <myicpc-service.version>2.0.0</myicpc-service.version>
+        <myicpc-persistence.version>2.0.0</myicpc-persistence.version>
         <myicpc-model.version>2.0.0</myicpc-model.version>
         <atmosphere-runtime.version>2.2.3</atmosphere-runtime.version>
         <spring-framework.version>4.1.1.RELEASE</spring-framework.version>
@@ -27,6 +29,12 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring-framework.version}</version>
+        </dependency>
+
         <!-- Logging -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -86,8 +94,6 @@
             </plugin>
         </plugins>
     </build>
-
-
 
 
 </project>
