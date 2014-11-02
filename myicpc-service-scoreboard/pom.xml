@@ -3,26 +3,22 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>myicpc-parent</artifactId>
+        <artifactId>myicpc-service</artifactId>
         <groupId>com.myicpc</groupId>
         <version>2.0.0</version>
+        <relativePath>../myicpc-service/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>myicpc-commons</artifactId>
+    <artifactId>myicpc-service-scoreboard</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.3.5</version>
+            <groupId>com.myicpc</groupId>
+            <artifactId>myicpc-service</artifactId>
+            <version>${myicpc-service.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>info.bliki.wiki</groupId>
-            <artifactId>bliki-core</artifactId>
-            <version>3.0.19</version>
-        </dependency>
-
     </dependencies>
+
+
 </project>

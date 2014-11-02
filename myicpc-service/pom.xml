@@ -10,8 +10,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>myicpc-service</artifactId>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
     <name>MyICPC Service</name>
+    <modules>
+        <module>../myicpc-service-scoreboard</module>
+    </modules>
 
     <dependencies>
 
@@ -19,6 +22,12 @@
             <groupId>com.myicpc</groupId>
             <artifactId>myicpc-persistence</artifactId>
             <version>${myicpc-persistence.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.7</version>
         </dependency>
 
     </dependencies>
