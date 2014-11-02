@@ -20,12 +20,14 @@
         <module>myicpc-commons</module>
         <module>myicpc-controller</module>
         <module>myicpc-pubsub</module>
+        <module>myicpc-controller-scoreboard</module>
     </modules>
 
     <properties>
         <myicpc-service.version>2.0.0</myicpc-service.version>
         <myicpc-service-scoreboard.version>2.0.0</myicpc-service-scoreboard.version>
         <myicpc-controller.version>2.0.0</myicpc-controller.version>
+        <myicpc-controller-scoreboard.version>2.0.0</myicpc-controller-scoreboard.version>
         <myicpc-pubsub.version>2.0.0</myicpc-pubsub.version>
         <myicpc-persistence.version>2.0.0</myicpc-persistence.version>
         <myicpc-model.version>2.0.0</myicpc-model.version>
