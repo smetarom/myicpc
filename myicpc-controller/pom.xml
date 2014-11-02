@@ -9,23 +9,28 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>myicpc-service</artifactId>
-    <version>${myicpc-service.version}</version>
-    <packaging>pom</packaging>
-    <name>MyICPC Service</name>
+    <artifactId>myicpc-controller</artifactId>
+    <version>${myicpc-controller.version}</version>
+    <packaging>jar</packaging>
+    <name>MyICPC Controllers</name>
 
     <dependencies>
-
         <dependency>
             <groupId>com.myicpc</groupId>
-            <artifactId>myicpc-persistence</artifactId>
-            <version>${myicpc-persistence.version}</version>
+            <artifactId>myicpc-service</artifactId>
+            <version>${myicpc-service.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.thoughtworks.xstream</groupId>
-            <artifactId>xstream</artifactId>
-            <version>1.4.7</version>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring-framework.version}</version>
         </dependency>
 
     </dependencies>

@@ -10,8 +10,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>myicpc-model</artifactId>
+    <version>${myicpc-model.version}</version>
     <packaging>jar</packaging>
-    <name>MyICPC model</name>
+    <name>MyICPC Model</name>
 
     <dependencies>
         <dependency>
@@ -21,15 +22,9 @@
         </dependency>
 
         <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>persistence-api</artifactId>
-            <version>1.0.2</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-annotations</artifactId>
-            <version>3.5.6-Final</version>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>4.3.6.Final</version>
         </dependency>
 
         <dependency>

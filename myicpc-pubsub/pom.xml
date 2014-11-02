@@ -9,23 +9,17 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>myicpc-commons</artifactId>
-    <version>${myicpc-commons.version}</version>
+    <artifactId>myicpc-pubsub</artifactId>
+    <version>${myicpc-pubsub.version}</version>
     <packaging>jar</packaging>
-    <name>MyICPC Commons</name>
+    <name>MyICPC PubSub</name>
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.3.5</version>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-servlet</artifactId>
+            <version>${jersey.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>info.bliki.wiki</groupId>
-            <artifactId>bliki-core</artifactId>
-            <version>3.0.19</version>
-        </dependency>
-
     </dependencies>
+
 </project>

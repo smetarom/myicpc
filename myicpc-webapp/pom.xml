@@ -14,19 +14,24 @@
     <name>MyICPC Web Application</name>
 
     <properties>
-        <atmosphere.client.version>2.2.5</atmosphere.client.version>
-        <jersey.version>2.13</jersey.version>
+
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.myicpc</groupId>
-            <artifactId>myicpc-service</artifactId>
-            <version>${myicpc-service.version}</version>
+            <artifactId>myicpc-controller</artifactId>
+            <version>${myicpc-controller.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.glassfish.jersey.containers</groupId>
+            <groupId>com.myicpc</groupId>
+            <artifactId>myicpc-pubsub</artifactId>
+            <version>${myicpc-pubsub.version}</version>
+        </dependency>
+
+        <dependency>
+        <groupId>org.glassfish.jersey.containers</groupId>
             <artifactId>jersey-container-servlet</artifactId>
             <version>${jersey.version}</version>
         </dependency>
@@ -48,12 +53,6 @@
                     <artifactId>servlet-api</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.0.1</version>
         </dependency>
 
         <dependency>

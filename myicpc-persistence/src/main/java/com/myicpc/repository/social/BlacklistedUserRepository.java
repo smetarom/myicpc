@@ -7,7 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface BlacklistedUserRepository extends CrudRepository<BlacklistedUser, Long> {
-    @Query("SELECT bu FROM BlacklistedUser ORDER BY bu.username, bu.blacklistedUserType")
+    @Query("SELECT bu FROM BlacklistedUser bu ORDER BY bu.username, bu.blacklistedUserType")
     List<BlacklistedUser> findAllOrderByUsername();
 
     List<BlacklistedUser> findByBlacklistedUserType(BlacklistedUser.BlacklistedUserType blacklistType);

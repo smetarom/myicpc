@@ -48,10 +48,10 @@ public interface QuestParticipantRepository extends PagingAndSortingRepository<Q
 
     QuestParticipant findByTeamMember(TeamMember teamMember);
 
-    @Query("SELECT qp FROM QuestParticipant ORDER BY qp.teamMember.lastname")
+    @Query("SELECT qp FROM QuestParticipant qp ORDER BY qp.teamMember.lastname")
     List<QuestParticipant> findAllOrderByName();
 
-    @Query("SELECT qp FROM QuestParticipant ORDER BY qp.points DESC")
+    @Query("SELECT qp FROM QuestParticipant qp ORDER BY qp.points DESC")
     List<QuestParticipant> findAllOrderByPoints();
 
     @Query("SELECT qp FROM QuestParticipant qp WHERE qp.teamMember.twitterUsername NOT IN ?1 ORDER BY points DESC")

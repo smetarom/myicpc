@@ -10,6 +10,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>myicpc-persistence</artifactId>
+    <version>${myicpc-persistence.version}</version>
+    <packaging>jar</packaging>
+    <name>MyICPC Persistence</name>
 
     <dependencies>
         <dependency>
@@ -28,13 +31,6 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
             <version>${spring-data-jpa.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>4.3.6.Final</version>
-            <scope>runtime</scope>
         </dependency>
     </dependencies>
 

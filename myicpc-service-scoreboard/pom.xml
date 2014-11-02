@@ -3,14 +3,16 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>myicpc-service</artifactId>
+        <artifactId>myicpc-parent</artifactId>
         <groupId>com.myicpc</groupId>
         <version>2.0.0</version>
-        <relativePath>../myicpc-service/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>myicpc-service-scoreboard</artifactId>
+    <version>${myicpc-service-scoreboard.version}</version>
+    <packaging>jar</packaging>
+    <name>MyICPC Service - Scoreboard</name>
 
     <dependencies>
         <dependency>

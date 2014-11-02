@@ -44,10 +44,10 @@ public interface QuestChallengeRepository extends CrudRepository<QuestChallenge,
     @Query("SELECT qc FROM QuestChallenge qc WHERE qc.startDate < ?1 AND (qc.endDate IS NULL OR qc.endDate > ?1) ORDER BY qc.endDate")
     List<QuestChallenge> findAllAvailableChallenges(Date now);
 
-    @Query("SELECT qc FROM QuestChallenge ORDER BY RANDOM()")
+    @Query("SELECT qc FROM QuestChallenge qc ORDER BY RANDOM()")
     List<QuestChallenge> getRandomQuestChallenge(Pageable pageable);
 
-    @Query("SELECT qc FROM QuestChallenge ORDER BY challengeType DESC, endDate ASC")
+    @Query("SELECT qc FROM QuestChallenge qc ORDER BY challengeType DESC, endDate ASC")
     List<QuestChallenge> getLeaderboardChallenges();
 
     QuestChallenge findByHashtagSuffix(String hashtag);

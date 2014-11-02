@@ -14,13 +14,19 @@
     <modules>
         <module>myicpc-model</module>
         <module>myicpc-service</module>
+        <!--<module>myicpc-service-scoreboard</module>-->
         <module>myicpc-webapp</module>
         <module>myicpc-persistence</module>
         <module>myicpc-commons</module>
+        <module>myicpc-controller</module>
+        <module>myicpc-pubsub</module>
     </modules>
 
     <properties>
         <myicpc-service.version>2.0.0</myicpc-service.version>
+        <myicpc-service-scoreboard.version>2.0.0</myicpc-service-scoreboard.version>
+        <myicpc-controller.version>2.0.0</myicpc-controller.version>
+        <myicpc-pubsub.version>2.0.0</myicpc-pubsub.version>
         <myicpc-persistence.version>2.0.0</myicpc-persistence.version>
         <myicpc-model.version>2.0.0</myicpc-model.version>
         <myicpc-commons.version>2.0.0</myicpc-commons.version>
@@ -29,6 +35,7 @@
         <spring-data-jpa.version>1.7.0.RELEASE</spring-data-jpa.version>
         <slf4j.version>1.7.7</slf4j.version>
         <xstream.version>1.4.7</xstream.version>
+        <jersey.version>2.13</jersey.version>
     </properties>
 
     <dependencies>
