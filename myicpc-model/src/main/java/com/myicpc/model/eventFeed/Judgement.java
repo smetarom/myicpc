@@ -1,10 +1,10 @@
 package com.myicpc.model.eventFeed;
 
 import com.myicpc.model.IdGeneratedContestObject;
-import com.myicpc.model.IdGeneratedObject;
-import com.myicpc.model.contest.Contest;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.SequenceGenerator;
 
 /**
  * Judgment of the submission, which determine if the problem is solved or not

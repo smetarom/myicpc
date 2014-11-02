@@ -1,13 +1,8 @@
 package com.myicpc.service.notification;
 
-import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
+import com.google.common.collect.Lists;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.myicpc.commons.utils.TimeUtils;
 import com.myicpc.commons.utils.WikiUtils;
 import com.myicpc.enums.GalleryMediaType;
@@ -25,7 +20,7 @@ import com.myicpc.model.social.Notification.NotificationType;
 import com.myicpc.model.social.TwitterMessage;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.service.analyst.MessageAnalystService;
-import com.myicpc.service.scoreboard.eventFeed.dto.AnalystMessageXML;
+import com.myicpc.service.dto.AnalystMessageDTO;
 import com.myicpc.service.utils.lists.NotificationList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,9 +30,8 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.google.common.collect.Lists;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import java.text.DateFormat;
+import java.util.*;
 
 /**
  * This class provides services to manage {@link Notification}
@@ -112,10 +106,10 @@ public class NotificationService {
         return notificationRepository.save(builder.build());
     }
 
-    public Notification createNotification(final AnalystMessageXML analystMessageXML) {
+    public Notification createNotification(final AnalystMessageDTO analystMessageDTO) {
         NotificationBuilder builder = new NotificationBuilder();
-        builder.setTitle(analystMessageXML.getTitle());
-        builder.setBody(analystMessageXML.getMessage());
+        builder.setTitle(analystMessageDTO.getTitle());
+        builder.setBody(analystMessageDTO.getMessage());
         builder.setNotificationType(NotificationType.ANALYST_MESSAGE);
 
         return notificationRepository.save(builder.build());
