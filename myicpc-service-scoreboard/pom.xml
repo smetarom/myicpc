@@ -11,7 +11,6 @@
 
     <artifactId>myicpc-service-scoreboard</artifactId>
     <version>${myicpc-service-scoreboard.version}</version>
-    <packaging>jar</packaging>
     <name>MyICPC Service - Scoreboard</name>
 
     <dependencies>
@@ -21,6 +20,4 @@
             <version>${myicpc-service.version}</version>
         </dependency>
     </dependencies>
-
-
 </project>

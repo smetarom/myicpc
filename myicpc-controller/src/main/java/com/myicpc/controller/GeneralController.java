@@ -1,0 +1,63 @@
+package com.myicpc.controller;
+
+import com.myicpc.commons.utils.CookieUtils;
+import com.myicpc.model.social.Notification;
+import com.myicpc.service.notification.NotificationService;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.site.SitePreference;
+import org.springframework.mobile.device.site.SitePreferenceUtils;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * General controller, which is responsible for handling exceptions and populate
+ * model with object, we want to have in all public views
+ *
+ * @author Roman Smetana
+ */
+public abstract class GeneralController extends GeneralAbstractContoller {
+    @Autowired
+    protected NotificationService notificationService;
+
+    /**
+     * Populates model with site preference
+     *
+     * @return user site preferences
+     */
+    @ModelAttribute("sitePreference")
+    public SitePreference getSitePreferences(HttpServletRequest request) {
+        return SitePreferenceUtils.getCurrentSitePreference(request);
+    }
+
+    /**
+     * Populates model with featured notifications
+     *
+     * @param request
+     * @param response
+     * @param ignoreFeaturedNotifications
+     * @return list of featured notifications
+     */
+    @ModelAttribute("featuredNotifications")
+    public List<Notification> getFeaturedNotifications(HttpServletRequest request, HttpServletResponse response,
+                                                       @CookieValue(value = "ignoreFeaturedNotifications", required = false) String ignoreFeaturedNotifications) {
+        List<Long> ignoredFeatured = new ArrayList<Long>();
+        ignoredFeatured.add(-1L);
+        if (!StringUtils.isEmpty(ignoreFeaturedNotifications)) {
+            try {
+                String[] ss = ignoreFeaturedNotifications.split(",");
+                for (String s : ss) {
+                    ignoredFeatured.add(Long.parseLong(s));
+                }
+            } catch (Throwable ex) {
+                CookieUtils.removeCookie(request, response, "ignoreFeaturedNotifications");
+            }
+        }
+        return notificationService.getFeaturedNotifications(ignoredFeatured);
+    }
+}

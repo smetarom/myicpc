@@ -11,7 +11,7 @@
 
     <artifactId>myicpc-service</artifactId>
     <version>${myicpc-service.version}</version>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <name>MyICPC Service</name>
 
     <dependencies>

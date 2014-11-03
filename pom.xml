@@ -21,6 +21,7 @@
         <module>myicpc-controller</module>
         <module>myicpc-pubsub</module>
         <module>myicpc-controller-scoreboard</module>
+        <module>myicpc-service-scoreboard</module>
     </modules>
 
     <properties>
