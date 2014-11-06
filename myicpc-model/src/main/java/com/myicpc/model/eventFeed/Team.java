@@ -38,7 +38,7 @@ public class Team extends IdGeneratedContestObject {
     /**
      * Shorter team name, some words from the team name are abbreviated and the
      * short name has length 40 max (
-     * {@link com.myicpc.commons.utils.FormatUtils#getTeamShortName(String)})
+     * {@link com.myicpc.commons.utils.TextUtils#getTeamShortName(String)})
      */
     private String shortName;
     /**

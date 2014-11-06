@@ -1,6 +1,6 @@
 package com.myicpc.model.eventFeed;
 
-import com.myicpc.commons.utils.FormatUtils;
+import com.myicpc.commons.utils.TextUtils;
 import com.myicpc.model.IdGeneratedObject;
 
 import javax.persistence.*;
@@ -190,20 +190,20 @@ public class TeamProblem extends IdGeneratedObject {
 
     /**
      * @return human readable time in hours and minutes
-     * @see FormatUtils#formatTimeToHoursMinutes(Double)
+     * @see com.myicpc.commons.utils.TextUtils#formatTimeToHoursMinutes(Double)
      */
     @Transient
     public String getFormattedTime() {
-        return FormatUtils.formatTimeToHoursMinutes(time);
+        return TextUtils.formatTimeToHoursMinutes(time);
     }
 
     /**
      * @return human readable time in minutes
-     * @see FormatUtils#formatTimeToMinutes(Double)
+     * @see com.myicpc.commons.utils.TextUtils#formatTimeToMinutes(Double)
      */
     @Transient
     public String getTimeInMinutes() {
-        return FormatUtils.formatTimeToMinutes(time);
+        return TextUtils.formatTimeToMinutes(time);
     }
 
     public String getStatus() {

@@ -4,7 +4,7 @@ package com.myicpc.enums;
  * @author Roman Smetana
  */
 public enum FeedRunStrategyType {
-    NATIVE("MyICPC computed"), UNSORTED_JSON("Unsorted JSON scoreboard"), SORTED_JSON("Sorted JSON scoreboard");
+    POLLING("Long-polling"), NATIVE("Computed by MyICPC"), UNSORTED_JSON("Unsorted JSON scoreboard"), SORTED_JSON("Sorted JSON scoreboard");
 
     private String label;
 

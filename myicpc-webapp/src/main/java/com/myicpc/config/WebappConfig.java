@@ -3,6 +3,7 @@ package com.myicpc.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
@@ -55,5 +56,13 @@ public class WebappConfig extends WebMvcConfigurerAdapter {
         resolver.setViewResolvers(resolvers);
         resolver.setContentNegotiationManager(manager);
         return resolver;
+    }
+
+    @Bean
+    public ReloadableResourceBundleMessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        String[] resources = {"classpath:i18n/text"};
+        messageSource.setBasenames(resources);
+        return messageSource;
     }
 }

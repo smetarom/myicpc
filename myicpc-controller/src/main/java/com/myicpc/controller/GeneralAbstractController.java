@@ -14,8 +14,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 /**
  * @author Roman Smetana
  */
-public abstract class GeneralAbstractContoller {
-    private static final Logger logger = LoggerFactory.getLogger(GeneralAbstractContoller.class);
+public abstract class GeneralAbstractController {
+    private static final Logger logger = LoggerFactory.getLogger(GeneralAbstractController.class);
 
     /**
      * Handles {@link Exception}

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+        version="2.1">
+
+    <tlib-version>1.0</tlib-version>
+    <short-name>myicpc-functions</short-name>
+    <uri>http://myicpc.baylor.edu/functions</uri>
+
+    <function>
+        <name>urlEncode</name>
+        <function-class>edu.baylor.icpc.myicpc.utils.JSPCustomFunctions</function-class>
+        <function-signature>java.lang.String urlEncode(java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>correctURL</name>
+        <function-class>edu.baylor.icpc.myicpc.utils.JSPCustomFunctions</function-class>
+        <function-signature>java.lang.String correctURL(java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>escapeHTML</name>
+        <function-class>edu.baylor.icpc.myicpc.utils.JSPCustomFunctions</function-class>
+        <function-signature>java.lang.String escapeHTML(java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>prependHTTP</name>
+        <function-class>edu.baylor.icpc.myicpc.utils.JSPCustomFunctions</function-class>
+        <function-signature>java.lang.String prependHTTP(java.lang.String)</function-signature>
+    </function>
+    <function>
+        <name>isOddLine</name>
+        <function-class>edu.baylor.icpc.myicpc.utils.JSPCustomFunctions</function-class>
+        <function-signature>boolean isOddLine(javax.servlet.jsp.jstl.core.LoopTagStatus)</function-signature>
+    </function>
+    <function>
+        <name>isNLine</name>
+        <function-class>edu.baylor.icpc.myicpc.utils.JSPCustomFunctions</function-class>
+        <function-signature>boolean isNLine(javax.servlet.jsp.jstl.core.LoopTagStatus, int , int)</function-signature>
+    </function>
+    <function>
+        <name>parseWikiSyntax</name>
+        <function-class>edu.baylor.icpc.myicpc.utils.JSPCustomFunctions</function-class>
+        <function-signature>java.lang.String parseWikiSyntax(java.lang.String)</function-signature>
+    </function>
+    <function>
+        <name>escapeJavascript</name>
+        <function-class>edu.baylor.icpc.myicpc.utils.JSPCustomFunctions</function-class>
+        <function-signature>java.lang.String escapeJavascript(java.lang.String)</function-signature>
+    </function>
+</taglib>

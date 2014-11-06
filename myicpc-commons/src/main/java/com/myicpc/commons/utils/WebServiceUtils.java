@@ -1,5 +1,6 @@
 package com.myicpc.commons.utils;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -19,6 +20,8 @@ import java.io.InputStream;
  * @author Roman Smetana
  */
 public class WebServiceUtils {
+
+
     /**
      * Connect to CDS server
      *

@@ -5,6 +5,17 @@
          version="3.0">
     <display-name>MyICPC</display-name>
 
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy
+        </filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/private/*</url-pattern>
+    </filter-mapping>
+
     <context-param>
         <param-name>contextClass</param-name>
         <param-value>
@@ -13,7 +24,9 @@
     </context-param>
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>com.myicpc.config.AppConfig,com.myicpc.persistence.config.PersistenceAppConfig</param-value>
+        <param-value>
+            com.myicpc.config.AppConfig,com.myicpc.persistence.config.PersistenceAppConfig,com.myicpc.security.config.SecurityAppConfig
+        </param-value>
     </context-param>
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>

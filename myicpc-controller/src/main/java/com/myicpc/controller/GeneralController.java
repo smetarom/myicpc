@@ -21,7 +21,7 @@ import java.util.List;
  *
  * @author Roman Smetana
  */
-public abstract class GeneralController extends GeneralAbstractContoller {
+public abstract class GeneralController extends GeneralAbstractController {
     @Autowired
     protected NotificationService notificationService;
 

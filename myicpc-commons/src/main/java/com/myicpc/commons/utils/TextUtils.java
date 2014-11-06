@@ -1,9 +1,11 @@
 package com.myicpc.commons.utils;
 
+import com.google.common.base.Charsets;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +14,9 @@ import java.util.Map;
  *
  * @author Roman Smetana
  */
-public class FormatUtils {
+public class TextUtils {
+    public static final Charset DEFAULT_ENCODING = Charsets.UTF_8;
+
     /**
      * Mapping between word and abbreviation for team names
      */

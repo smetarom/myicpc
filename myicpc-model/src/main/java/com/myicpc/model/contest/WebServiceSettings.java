@@ -1,20 +1,38 @@
 package com.myicpc.model.contest;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.Embeddable;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.io.Serializable;
+import java.util.Date;
 
 @Embeddable
 public class WebServiceSettings implements Serializable {
     private static final long serialVersionUID = 8156742203651195626L;
 
+    //CM4
     private String wsCMToken;
 
+    //Twitter
     private String twitterConsumerKey;
     private String twitterConsumerSecret;
     private String twitterAccessToken;
     private String twitterAccessTokenSecret;
 
+    //YouTube
     private String youTubeUsername;
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "yyyy-MM-dd H:mm:ss")
+    private Date youtubePullSince;
+
+    //Instagram
+    private String instagramKey;
+
+    //Vine
+    private String vineEmail;
+    private String vinePassword;
 
     private boolean showPicasaPhotos;
 
@@ -64,6 +82,38 @@ public class WebServiceSettings implements Serializable {
 
     public void setYouTubeUsername(String youTubeUsername) {
         this.youTubeUsername = youTubeUsername;
+    }
+
+    public Date getYoutubePullSince() {
+        return youtubePullSince;
+    }
+
+    public void setYoutubePullSince(Date youtubePullSince) {
+        this.youtubePullSince = youtubePullSince;
+    }
+
+    public String getInstagramKey() {
+        return instagramKey;
+    }
+
+    public void setInstagramKey(String instagramKey) {
+        this.instagramKey = instagramKey;
+    }
+
+    public String getVineEmail() {
+        return vineEmail;
+    }
+
+    public void setVineEmail(String vineEmail) {
+        this.vineEmail = vineEmail;
+    }
+
+    public String getVinePassword() {
+        return vinePassword;
+    }
+
+    public void setVinePassword(String vinePassword) {
+        this.vinePassword = vinePassword;
     }
 
     public boolean isShowPicasaPhotos() {

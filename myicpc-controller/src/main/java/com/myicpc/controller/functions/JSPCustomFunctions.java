@@ -1,6 +1,6 @@
 package com.myicpc.controller.functions;
 
-import com.myicpc.commons.utils.FormatUtils;
+import com.myicpc.commons.utils.TextUtils;
 import com.myicpc.commons.utils.WikiUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -43,19 +43,19 @@ public class JSPCustomFunctions {
     /**
      * @param value text with HTML tags
      * @return text wintout HTML tags
-     * @see FormatUtils#removeHTMLTags(String)
+     * @see com.myicpc.commons.utils.TextUtils#removeHTMLTags(String)
      */
     public static String escapeHTML(String value) {
-        return FormatUtils.removeHTMLTags(value);
+        return TextUtils.removeHTMLTags(value);
     }
 
     /**
      * @param url URL to prepend
      * @return full URL
-     * @see FormatUtils#prependHTTPToURL(String)
+     * @see com.myicpc.commons.utils.TextUtils#prependHTTPToURL(String)
      */
     public static String prependHTTP(String url) {
-        return FormatUtils.prependHTTPToURL(url);
+        return TextUtils.prependHTTPToURL(url);
     }
 
     /**

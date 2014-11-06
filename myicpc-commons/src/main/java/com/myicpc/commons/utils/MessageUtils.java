@@ -19,7 +19,7 @@ public class MessageUtils {
 
     static {
         try {
-            messageBundle = ResourceBundle.getBundle("text");
+            messageBundle = ResourceBundle.getBundle("i18n.text");
         } catch (NullPointerException | MissingResourceException ex) {
             logger.error("File with translations not available.", ex);
         }
