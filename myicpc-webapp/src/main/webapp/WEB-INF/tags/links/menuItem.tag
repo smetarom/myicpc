@@ -8,7 +8,13 @@
 <%@ attribute name="styleClass" %>
 <%@ attribute name="disabled" type="java.lang.Boolean" %>
 
-<li class="${active eq activeItem ? 'active' : ''} ${disabled ? 'disabled' : ''} ${styleClass}"><a
-        href="<spring:url value="${url}" />">
-    <jsp:doBody/>
-</a></li>
+<li class="${active eq activeItem ? 'active' : ''} ${disabled ? 'disabled' : ''} ${styleClass}">
+    <c:if test="${not disabled}">
+        <a href="<spring:url value="${url}" />">
+            <jsp:doBody/>
+        </a>
+    </c:if>
+    <c:if test="${disabled}">
+        <a><jsp:doBody/></a>
+    </c:if>
+</li>

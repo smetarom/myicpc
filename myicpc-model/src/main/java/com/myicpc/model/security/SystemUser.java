@@ -1,10 +1,13 @@
 package com.myicpc.model.security;
 
 import com.myicpc.model.IdGeneratedObject;
+import com.myicpc.validator.annotation.ValidateSystemUser;
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,6 +15,7 @@ import java.util.List;
  *
  * @author Roman Smetana
  */
+@ValidateSystemUser
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "User_id_seq")
 public class SystemUser extends IdGeneratedObject {
@@ -44,6 +48,7 @@ public class SystemUser extends IdGeneratedObject {
      * Email as login username
      */
     @Email
+    @NotBlank
     @Column(unique = true)
     private String username;
     /**
@@ -65,7 +70,7 @@ public class SystemUser extends IdGeneratedObject {
     private boolean enabled;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserRole> roles;
+    private List<SystemUserRole> roles;
 
     /**
      * Copy of password
@@ -87,7 +92,7 @@ public class SystemUser extends IdGeneratedObject {
      * List of user roles in the system
      */
     @Transient
-    private List<String> stringRoles;
+    private List<String> stringRoles = new ArrayList<>();
 
     public String getUsername() {
         return username;
@@ -129,11 +134,11 @@ public class SystemUser extends IdGeneratedObject {
         this.enabled = enabled;
     }
 
-    public List<UserRole> getRoles() {
+    public List<SystemUserRole> getRoles() {
         return roles;
     }
 
-    public void setRoles(final List<UserRole> roles) {
+    public void setRoles(final List<SystemUserRole> roles) {
         this.roles = roles;
     }
 

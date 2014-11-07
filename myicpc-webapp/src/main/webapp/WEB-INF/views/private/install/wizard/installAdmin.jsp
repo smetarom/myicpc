@@ -6,3 +6,9 @@
 <t:springInput labelCode="installAdmin.wizard.setupAdmin.password" path="password" type="password"
                hintCode="user.password.hint"/>
 <t:springInput labelCode="user.passwordCheck" path="passwordCheck" type="password"/>
+
+<div class="form-group text-right">
+    <button type="submit" class="btn btn-primary">
+        <spring:message code="next"/>
+    </button>
+</div>

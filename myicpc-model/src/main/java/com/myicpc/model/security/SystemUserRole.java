@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "UserRoles_id_seq")
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"userId", "authority"})})
-public class UserRole extends IdGeneratedObject {
+public class SystemUserRole extends IdGeneratedObject {
     private static final long serialVersionUID = 447862063476520565L;
 
     /**

@@ -24,7 +24,7 @@
     </div>
     <div class="col-sm-offset-3 col-sm-9">
         <c:if test="${not empty hintCode}">
-            <spring:message code="${hintCode}"/>
+            <spring:message code="${hintCode}"/><br/>
         </c:if>
         <c:if test="${previewWiki}">
             <%@ include file="/WEB-INF/views/includes/help/wikiHelp.jsp" %>

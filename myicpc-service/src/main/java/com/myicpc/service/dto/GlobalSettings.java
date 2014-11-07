@@ -1,66 +1,68 @@
 package com.myicpc.service.dto;
 
 import com.google.common.base.Charsets;
+import com.myicpc.model.Globals;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Roman Smetana
  */
 public class GlobalSettings implements Serializable {
-    private String adminEmail;
-
-    private String fbAPIKey;
-    private String googleNonAuthenticatedKey;
-    private String googleAnalyticsKey;
-    private String defaultMapConfig;
+    private Map<Globals.GlobalsColumn, String> settingsMap = new HashMap<>();
 
     public GlobalSettings() {
     }
 
-    public GlobalSettings(String defaultMapConfig) {
-        this.defaultMapConfig = defaultMapConfig;
+    public void addSettings(Globals.GlobalsColumn name, String value) {
+        settingsMap.put(name, value);
+    }
+
+    public Map<Globals.GlobalsColumn, String> getSettingsMap() {
+        return settingsMap;
     }
 
     public String getAdminEmail() {
-        return adminEmail;
+        return settingsMap.get(Globals.GlobalsColumn.ADMIN_EMAIL);
     }
 
     public void setAdminEmail(String adminEmail) {
-        this.adminEmail = adminEmail;
+        settingsMap.put(Globals.GlobalsColumn.ADMIN_EMAIL, adminEmail);
     }
 
     public String getFbAPIKey() {
-        return fbAPIKey;
+        return settingsMap.get(Globals.GlobalsColumn.FB_API_KEY);
     }
 
     public void setFbAPIKey(String fbAPIKey) {
-        this.fbAPIKey = fbAPIKey;
+        settingsMap.put(Globals.GlobalsColumn.FB_API_KEY, fbAPIKey);
     }
 
     public String getGoogleNonAuthenticatedKey() {
-        return googleNonAuthenticatedKey;
+        return settingsMap.get(Globals.GlobalsColumn.GOOGLE_NON_AUTHENTICATED_KEY);
     }
 
     public void setGoogleNonAuthenticatedKey(String googleNonAuthenticatedKey) {
-        this.googleNonAuthenticatedKey = googleNonAuthenticatedKey;
+        settingsMap.put(Globals.GlobalsColumn.GOOGLE_NON_AUTHENTICATED_KEY, googleNonAuthenticatedKey);
     }
 
     public String getGoogleAnalyticsKey() {
-        return googleAnalyticsKey;
+        return settingsMap.get(Globals.GlobalsColumn.GOOGLE_ANALYTICS_KEY);
     }
 
     public void setGoogleAnalyticsKey(String googleAnalyticsKey) {
-        this.googleAnalyticsKey = googleAnalyticsKey;
+        settingsMap.put(Globals.GlobalsColumn.GOOGLE_ANALYTICS_KEY, googleAnalyticsKey);
     }
 
     public String getDefaultMapConfig() {
-        return defaultMapConfig;
+        return settingsMap.get(Globals.GlobalsColumn.DEFAULT_MAP_CONFIG);
     }
 
     public void setDefaultMapConfig(String defaultMapConfig) {
-        this.defaultMapConfig = defaultMapConfig;
+        settingsMap.put(Globals.GlobalsColumn.DEFAULT_MAP_CONFIG, defaultMapConfig);
     }
 }

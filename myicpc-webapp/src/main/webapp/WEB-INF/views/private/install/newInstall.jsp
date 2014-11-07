@@ -16,12 +16,18 @@
                     </div>
                 </div>
                 <ul class="nav nav-pills nav-stacked">
-                    <c:forEach var="step" items="${steps}" varStatus="status">
-                        <t:menuItem url="/private/contest/create/${status.index+1}" active="${status.index + 1}"
-                                    activeItem="${currentStep}"
-                                    disabled="${status.index >= currentStep}">${status.index+1}. ${step.value} <span
-                                class="glyphicon glyphicon-chevron-right pull-right"></span></t:menuItem>
-                    </c:forEach>
+                    <t:menuItem url="/private/install/admin" active="1"
+                                activeItem="${currentStep}" disabled="${0 >= currentStep}">
+                            1. <spring:message code="installAdmin.wizard.setupAdmin" /> <span class="glyphicon glyphicon-chevron-right pull-right"></span>
+                    </t:menuItem>
+                    <t:menuItem url="/private/install/settings" active="2"
+                                activeItem="${currentStep}" disabled="${1 >= currentStep}">
+                            2. <spring:message code="installAdmin.wizard.globalSettings" /> <span class="glyphicon glyphicon-chevron-right pull-right"></span>
+                    </t:menuItem>
+                    <t:menuItem url="/private/install/summary" active="3"
+                                activeItem="${currentStep}" disabled="${2 >= currentStep}">
+                            3. <spring:message code="installAdmin.wizard.summary" /> <span class="glyphicon glyphicon-chevron-right pull-right"></span>
+                    </t:menuItem>
                 </ul>
             </div>
             <div class="col-sm-8">
@@ -31,11 +37,6 @@
 
                     <input type="hidden" name="currentStep" value="${currentStep}"/>
 
-                    <div class="form-group text-right">
-                        <button type="submit" class="btn btn-primary">
-                            <spring:message code="next"/>
-                        </button>
-                    </div>
                 </form:form>
             </div>
         </div>

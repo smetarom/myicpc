@@ -22,6 +22,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.myicpc</groupId>
+            <artifactId>myicpc-security</artifactId>
+            <version>${myicpc-security.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>${javax.servlet.version}</version>

@@ -28,6 +28,10 @@
         <path>/WEB-INF/tags/components/pager.tag</path>
     </tag-file>
     <tag-file>
+        <name>panelWithHeading</name>
+        <path>/WEB-INF/tags/components/panelWithHeading.tag</path>
+    </tag-file>
+    <tag-file>
         <name>spinner</name>
         <path>/WEB-INF/tags/components/spinner.tag</path>
     </tag-file>
