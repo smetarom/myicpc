@@ -462,7 +462,7 @@ a.underline {
     font-size: 22px;
 }
 
-.noSelectedBig {
+.noSelectedBig, .no-items-available {
     font-size: 1.5em;
     padding: 25px 0;
     color: gray;

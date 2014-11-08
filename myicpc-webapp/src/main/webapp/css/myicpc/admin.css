@@ -70,6 +70,13 @@ dd {
     font-weight: normal;
 }
 
+.noSelectedBig, .no-items-available {
+    font-size: 1.5em;
+    padding: 25px 0;
+    color: gray;
+    text-align: center;
+}
+
 /*** POLLS ***/
 .choice-box {
     padding: 5px;

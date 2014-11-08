@@ -16,8 +16,16 @@
         <path>/WEB-INF/tags/components/downloadContestProblems.tag</path>
     </tag-file>
     <tag-file>
+        <name>glyphIcon</name>
+        <path>/WEB-INF/tags/components/glyphIcon.tag</path>
+    </tag-file>
+    <tag-file>
         <name>googleAnalytics</name>
         <path>/WEB-INF/tags/components/googleAnalytics.tag</path>
+    </tag-file>
+    <tag-file>
+        <name>faIcon</name>
+        <path>/WEB-INF/tags/components/faIcon.tag</path>
     </tag-file>
     <tag-file>
         <name>kioskTile</name>
