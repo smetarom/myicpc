@@ -110,6 +110,7 @@ public class InstallAdminController extends GeneralAdminController {
         adminUser.setPassword(systemUserService.hashPassword(adminUser.getPassword()));
         systemUserService.mergeUser(adminUser);
 
+        globalSettingsService.mergeDefaultGlobalSettings(globalSettings);
         globalSettingsService.saveGlobalSettings(globalSettings);
 
         return "redirect:/private/welcome/after-installation";

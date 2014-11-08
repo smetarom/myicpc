@@ -18,7 +18,8 @@ import javax.validation.constraints.NotNull;
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "Globals_id_seq")
 public class Globals extends IdGeneratedObject {
     public enum GlobalsColumn {
-        ADMIN_EMAIL(false), FB_API_KEY(false), GOOGLE_NON_AUTHENTICATED_KEY(false), GOOGLE_ANALYTICS_KEY(false), DEFAULT_MAP_CONFIG(true);
+        ADMIN_EMAIL(false), FB_API_KEY(false), GOOGLE_NON_AUTHENTICATED_KEY(false), GOOGLE_ANALYTICS_KEY(false), DEFAULT_MAP_CONFIG(true),
+        UNIVERSITY_LOGOS_URL(false), TEAM_PICTURES_URL(false);
 
         private boolean longText;
 
