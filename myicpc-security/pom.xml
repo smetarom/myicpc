@@ -15,6 +15,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.myicpc</groupId>
+            <artifactId>myicpc-commons</artifactId>
+            <version>${myicpc-commons.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
             <version>${spring-security.version}</version>

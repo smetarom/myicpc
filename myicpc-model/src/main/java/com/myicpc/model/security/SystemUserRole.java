@@ -1,5 +1,8 @@
 package com.myicpc.model.security;
 
+import com.myicpc.commons.enums.GeneralEnum;
+import com.myicpc.commons.utils.MessageUtils;
+import com.myicpc.enums.UserRoleEnum;
 import com.myicpc.model.IdGeneratedObject;
 
 import javax.persistence.*;
@@ -43,11 +46,14 @@ public class SystemUserRole extends IdGeneratedObject {
         this.user = user;
     }
 
-    public String getAuthorityLabel() {
+    @Transient
+    public UserRoleEnum getUserRoleLabel() {
         try {
-            return SystemUser.UserRoleEnum.valueOf(authority).getLabel();
-        } catch (IllegalArgumentException | NullPointerException ex) {
-            return authority;
+            UserRoleEnum userRoleEnum = UserRoleEnum.valueOf(authority);
+            return userRoleEnum;
+//            return MessageUtils.translateEnum(userRoleEnum);
+        } catch (IllegalArgumentException ex) {
+            return null;
         }
     }
 }

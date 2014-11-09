@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan("com.myicpc")
+@ComponentScan("com.myicpc.controller")
 public class WebappConfig extends WebMvcConfigurerAdapter {
 
     @Override

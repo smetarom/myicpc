@@ -1,5 +1,6 @@
 package com.myicpc.commons.utils;
 
+import com.myicpc.commons.enums.GeneralEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +24,16 @@ public class MessageUtils {
         } catch (NullPointerException | MissingResourceException ex) {
             logger.error("File with translations not available.", ex);
         }
+    }
+
+    public static String translateEnum(GeneralEnum generalEnum) {
+        String value;
+        try {
+            value = getMessage(generalEnum.getCode());
+        } catch (Exception ex) {
+            value = generalEnum.getLabel();
+        }
+        return value;
     }
 
     public static String getMessage(final String key) {

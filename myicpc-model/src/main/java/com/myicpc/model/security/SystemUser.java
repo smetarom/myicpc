@@ -2,6 +2,7 @@ package com.myicpc.model.security;
 
 import com.myicpc.model.IdGeneratedObject;
 import com.myicpc.validator.annotation.ValidateSystemUser;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -20,29 +21,6 @@ import java.util.List;
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "User_id_seq")
 public class SystemUser extends IdGeneratedObject {
     private static final long serialVersionUID = 1203338022775926192L;
-
-    /**
-     * List of system roles
-     *
-     * @author Roman Smetana
-     */
-    public enum UserRoleEnum {
-        ROLE_ADMIN("Admin"), ROLE_MANAGER("Manager"), ROLE_CONTEST("Contest"), ROLE_GALLERY("Gallery"), ROLE_SCOREBOARD("Scoreboard"), ROLE_POLLS(
-                "Polls"), ROLE_RSS("RSS"), ROLE_SCHEDULE("Schedule"), ROLE_QUEST("Quest"), ROLE_NOTIFICATION("Notifications"), ROLE_USER("Basic user");
-
-        /**
-         * Human readable name of the role
-         */
-        private String label;
-
-        private UserRoleEnum(final String label) {
-            this.label = label;
-        }
-
-        public String getLabel() {
-            return label;
-        }
-    }
 
     /**
      * Email as login username
@@ -179,6 +157,14 @@ public class SystemUser extends IdGeneratedObject {
      */
     @Transient
     public String getFullname() {
-        return lastname + " " + firstname;
+        StringBuilder builder = new StringBuilder();
+        if (!StringUtils.isEmpty(lastname)) {
+            builder.append(lastname);
+        }
+        builder.append(" ");
+        if (!StringUtils.isEmpty(firstname)) {
+            builder.append(firstname);
+        }
+        return builder.toString().trim();
     }
 }

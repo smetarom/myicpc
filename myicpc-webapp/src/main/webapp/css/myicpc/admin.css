@@ -77,6 +77,24 @@ dd {
     text-align: center;
 }
 
+.btn-hover {
+    font-weight: normal;
+    color: #333333;
+    cursor: pointer;
+    background-color: inherit;
+    border-color: transparent;
+    background-image: none;
+    box-shadow: none;
+}
+
+.btn-hover-alt {
+    font-weight: normal;
+    color: #ffffff;
+    cursor: pointer;
+    background-color: inherit;
+    border-color: transparent;
+}
+
 /*** POLLS ***/
 .choice-box {
     padding: 5px;

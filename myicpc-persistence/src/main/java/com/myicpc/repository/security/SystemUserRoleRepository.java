@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 public interface SystemUserRoleRepository extends JpaRepository<SystemUserRole, Long> {
 	SystemUserRole findByUserAndAuthority(SystemUser user, String authority);
 
-    @Query("SELECT COUNT(ur) FROM SystemUserRole ur WHERE ur.authority = 'ADMIN'")
+    @Query("SELECT COUNT(ur) FROM SystemUserRole ur WHERE ur.authority = 'ROLE_ADMIN'")
     Long countAdminUsers();
 }

@@ -5,17 +5,6 @@
          version="3.0">
     <display-name>MyICPC</display-name>
 
-    <filter>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy
-        </filter-class>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>springSecurityFilterChain</filter-name>
-        <url-pattern>/private/*</url-pattern>
-    </filter-mapping>
-
     <context-param>
         <param-name>contextClass</param-name>
         <param-value>
@@ -31,6 +20,35 @@
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
+
+    <!-- Spring implementation of open session in view (see https://community.jboss.org/wiki/OpenSessionInView) -->
+    <filter>
+        <filter-name>oemInViewFilter</filter-name>
+        <filter-class>
+            org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter
+        </filter-class>
+        <async-supported>true</async-supported>
+        <init-param>
+            <param-name>entityManagerFactoryBeanName</param-name>
+            <param-value>entityManagerFactory</param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>oemInViewFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy
+        </filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/private/*</url-pattern>
+    </filter-mapping>
 
     <servlet>
         <description>AtmosphereServlet</description>
@@ -68,6 +86,7 @@
             <param-value>com.myicpc.config.WebappConfig</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
+        <async-supported>true</async-supported>
     </servlet>
     <servlet-mapping>
         <servlet-name>WebServlet</servlet-name>

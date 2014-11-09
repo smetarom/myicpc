@@ -3,7 +3,7 @@ package com.myicpc.controller.admin;
 import com.google.common.collect.Lists;
 import com.myicpc.controller.GeneralAdminController;
 import com.myicpc.model.security.SystemUser;
-import com.myicpc.security.config.UserRoleEnum;
+import com.myicpc.enums.UserRoleEnum;
 import com.myicpc.service.dto.GlobalSettings;
 import com.myicpc.service.settings.GlobalSettingsService;
 import com.myicpc.service.user.SystemUserService;
@@ -13,11 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -105,7 +103,7 @@ public class InstallAdminController extends GeneralAdminController {
     @Transactional
     @RequestMapping(value = "/private/install/summary", method = RequestMethod.POST)
     public String processSummary(@ModelAttribute("adminUser") SystemUser adminUser, @ModelAttribute("globalSettings") GlobalSettings globalSettings, RedirectAttributes redirectAttributes) {
-        adminUser.getStringRoles().add(UserRoleEnum.ADMIN.toString());
+        adminUser.getStringRoles().add(UserRoleEnum.ROLE_ADMIN.toString());
         adminUser.setEnabled(true);
         adminUser.setPassword(systemUserService.hashPassword(adminUser.getPassword()));
         systemUserService.mergeUser(adminUser);

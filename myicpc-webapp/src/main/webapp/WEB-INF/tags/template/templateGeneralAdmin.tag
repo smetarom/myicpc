@@ -7,6 +7,7 @@
 
 <%@attribute name="headline" fragment="true" %>
 <%@attribute name="breadcrumb" fragment="true" %>
+<%@attribute name="controls" fragment="true" %>
 
 <compress:html compressCss="true">
     <!DOCTYPE html>
@@ -27,6 +28,13 @@
                 <jsp:invoke fragment="headline"/>
             </h1>
         </div>
+
+        <c:if test="${not empty controls}">
+            <div class="pull-right">
+                <jsp:invoke fragment="controls" />
+            </div>
+            <br class="clear" />
+        </c:if>
 
         <%@ include file="/WEB-INF/views/includes/messages.jsp" %>
 

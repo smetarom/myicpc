@@ -23,7 +23,7 @@
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <a href=""><t:glyphIcon icon="cog" /></a>
+                <a href="<spring:url value="/private/settings" />"><t:glyphIcon icon="cog" /></a>
             </li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><sec:authentication property="principal.username"/> <b class="caret"></b></a>
