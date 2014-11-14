@@ -7,7 +7,7 @@
 
     <jsp:body>
         <div class="col-md-6 col-sm-12">
-            <t:panelWithHeading>
+            <t:panelWithHeading showBody="false">
                 <jsp:attribute name="heading"><spring:message code="homeAdmin.contests"/></jsp:attribute>
                 <jsp:attribute name="table">
                     <c:if test="${not empty contests}">
@@ -30,8 +30,7 @@
                     </c:if>
                 </jsp:attribute>
                 <jsp:attribute name="footer">
-                    <a href="<spring:url value="/private/contest/create"/>" class="btn btn-primary"><span
-                            class="glyphicon glyphicon-plus"></span> <spring:message
+                    <a href="<spring:url value="/private/contest/create"/>" class="btn btn-primary"><t:glyphIcon icon="plus"/> <spring:message
                             code="homeAdmin.contest.create"/></a>
                 </jsp:attribute>
                 <jsp:body>

@@ -6,6 +6,8 @@ import com.myicpc.model.security.SystemUser;
 import com.myicpc.model.security.SystemUserRole;
 import com.myicpc.repository.security.SystemUserRepository;
 import com.myicpc.enums.UserRoleEnum;
+import com.myicpc.service.exception.ReportException;
+import com.myicpc.service.report.SystemUserReport;
 import com.myicpc.service.user.SystemUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
 import java.io.IOException;
@@ -42,6 +45,9 @@ public class SystemUserAdminController extends GeneralAdminController {
 
 	@Autowired
 	private SystemUserService systemUserService;
+
+	@Autowired
+	private SystemUserReport systemUserReport;
 
 	@Autowired
 	private SystemUserRepository systemUserRepository;
@@ -343,6 +349,19 @@ public class SystemUserAdminController extends GeneralAdminController {
 			errorMessage(redirectAttributes, e);
 		}
 		return "redirect:/private/users";
+	}
+
+	@RequestMapping(value = "/private/users/report/{format}", method = RequestMethod.GET)
+	public void exportUsers(@PathVariable String format, HttpServletResponse response) {
+		try {
+			List<SystemUser> users = systemUserRepository.findAll();
+			systemUserReport.generateUserReport(users, response.getOutputStream());
+			response.setContentType("application/pdf");
+			response.setHeader("Content-Disposition", "attachment; filename=user-report.pdf");
+			response.flushBuffer();
+		} catch (IOException ex) {
+			throw new ReportException(ex);
+		}
 	}
 
 	/**

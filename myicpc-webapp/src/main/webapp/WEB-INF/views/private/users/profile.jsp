@@ -1,36 +1,28 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp"%>
 
-<t:templateAdmin>
+<t:templateGeneralAdmin>
 	<jsp:attribute name="headline">
-		${user.fullname} <small>${user.username}</small>
+		${systemUser.fullname} <small>${systemUser.username}</small>
 	</jsp:attribute>
 	
 	<jsp:attribute name="breadcrumb">
 	    <li class="active"><spring:message code="userAdmin.profile.title" /></li>
 	</jsp:attribute>
 
+	<jsp:attribute name="controls">
+		<t:button href="/private/profile/changePassword" styleClass="btn-hover"><t:glyphIcon icon="lock"/> <spring:message code="userAdmin.changePassword" /></t:button>
+	</jsp:attribute>
+
 	<jsp:body>
 		<table>
 			<tbody>
-				<tr>
-					<th><spring:message code="user.enabled" />: </th>
-					<td>${user.enabled}</td>
-				</tr>
-				<tr>
-					<th style="min-width: 150px;">
-						<spring:message code="user.roles" />: 
-					</th>
-					<td>
-						<c:forEach var="role" items="${user.roles}">
-							<span class="label label-default">${role.authorityLabel}</span>
-						</c:forEach>
-					</td>
-				</tr>
+				<t:labelTableRow label="user.roles">
+					<c:forEach var="role" items="${systemUser.roles}">
+						<span class="label label-default"><spring:message code="${role.userRoleLabel.code}" text="${role.userRoleLabel.label}" /></span>
+					</c:forEach>
+				</t:labelTableRow>
 			</tbody>
 		</table>
 		<br />
-		<a href="<spring:url value="/private/profile/changePassword" />" class="btn btn-default"><spring:message code="userAdmin.changePassword" /></a>
-						
-		
     </jsp:body>
-</t:templateAdmin>
+</t:templateGeneralAdmin>

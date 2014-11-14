@@ -17,19 +17,22 @@
     <body>
     <jsp:include page="/WEB-INF/views/private/includes/header.jsp"/>
     <div id="body" class="wrapper clearfix">
-        <ol class="breadcrumb">
-            <li><a href="<spring:url value="/private/home" />"><spring:message code="nav.admin.home"/></a></li>
-            <c:if test="${not empty contest}">
-                <li><a href="<spring:url value="/private/${contest.code}/home" />">${contest.shortName}</a></li>
-            </c:if>
-            <jsp:invoke fragment="breadcrumb"/>
-        </ol>
-
-        <div class="page-header">
-            <h1>
-                <jsp:invoke fragment="headline"/>
-            </h1>
-        </div>
+        <c:if test="${not empty breadcrumb}">
+            <ol class="breadcrumb">
+                <li><a href="<spring:url value="/private/home" />"><spring:message code="nav.admin.home"/></a></li>
+                <c:if test="${not empty contest}">
+                    <li><a href="<spring:url value="/private/${contest.code}/home" />">${contest.shortName}</a></li>
+                </c:if>
+                <jsp:invoke fragment="breadcrumb"/>
+            </ol>
+        </c:if>
+        <c:if test="${not empty headline}">
+            <div class="page-header">
+                <h1>
+                    <jsp:invoke fragment="headline"/>
+                </h1>
+            </div>
+        </c:if>
 
         <%@ include file="/WEB-INF/views/includes/messages.jsp" %>
 

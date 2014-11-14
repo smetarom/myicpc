@@ -1,10 +1,15 @@
 package com.myicpc.controller;
 
 import com.myicpc.commons.utils.MessageUtils;
+import com.myicpc.model.contest.Contest;
+import com.myicpc.service.contest.ContestService;
 import com.myicpc.service.exception.ModuleDisabledException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -16,6 +21,18 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 public abstract class GeneralAbstractController {
     private static final Logger logger = LoggerFactory.getLogger(GeneralAbstractController.class);
+
+    @Autowired
+    private ContestService contestService;
+
+    protected Contest getContest(String contestCode, Model model) {
+        Contest contest = contestService.getContest(contestCode);
+        if (model != null) {
+            model.addAttribute("contest", contest);
+            model.addAttribute("contestURL", StringUtils.isEmpty(contestCode) ? "" : "/" + contestCode);
+        }
+        return contest;
+    }
 
     /**
      * Handles {@link Exception}

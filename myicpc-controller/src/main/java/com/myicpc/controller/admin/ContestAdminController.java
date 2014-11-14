@@ -12,6 +12,7 @@ import com.myicpc.service.contest.ContestService;
 import com.myicpc.service.settings.GlobalSettingsService;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -39,6 +40,29 @@ public class ContestAdminController extends GeneralAdminController {
 
     @Autowired
     private ContestRepository contestRepository;
+
+    @RequestMapping(value = "/private/contests", method = RequestMethod.GET)
+    public String contests(Model model) {
+        Sort sort = new Sort(Sort.Direction.DESC, "startTime");
+        List<Contest> contests = contestRepository.findAll(sort);
+
+        model.addAttribute("contests", contests);
+        return "private/contest/contestList";
+    }
+
+    @RequestMapping(value = { "/private/{contestCode}", "/private/{contestCode}/home" }, method = RequestMethod.GET)
+    public String contestHome(@PathVariable String contestCode, final Model model) {
+        Contest contest = getContest(contestCode, model);
+
+        return "/private/contest/contestHome";
+    }
+
+    @RequestMapping(value = "/private/{contestCode}/overview", method = RequestMethod.GET)
+    public String contestOverview(@PathVariable String contestCode, final Model model) {
+        Contest contest = getContest(contestCode, model);
+
+        return "/private/contest/contestDetail";
+    }
 
     @RequestMapping(value = "/private/contest/create", method = RequestMethod.GET)
     public String createContest(Model model) {

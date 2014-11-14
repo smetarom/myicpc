@@ -10,8 +10,9 @@
 	</jsp:attribute>
 	
 	<jsp:attribute name="controls">
-		<a href='<spring:url value="/private/users/create" />' class="btn btn-hover btn-default"><t:glyphIcon icon="plus"/> <spring:message code="userAdmin.createBtn" /></a>
+		<t:button href="/private/users/create" styleClass="btn-hover"><t:glyphIcon icon="plus"/> <spring:message code="userAdmin.createBtn" /></t:button>
 		<button data-toggle="modal" data-target="#importUsersModal" class="btn btn-hover btn-default"><t:glyphIcon icon="import"/> <spring:message code="userAdmin.import.title" /></button>
+		<t:button href="/private/users/report/pdf" styleClass="btn-hover"><t:faIcon icon="file-pdf-o"/> <spring:message code="export.pdf" /></t:button>
 
 		<t:modalWindow id="importUsersModal">
 			<jsp:attribute name="title"><spring:message code="userAdmin.import.title" /></jsp:attribute>
