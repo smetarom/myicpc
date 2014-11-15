@@ -8,6 +8,10 @@
     <uri>http://myicpc.baylor.edu/tags</uri>
 
     <tag-file>
+        <name>alert</name>
+        <path>/WEB-INF/tags/bootstrap/alert.tag</path>
+    </tag-file>
+    <tag-file>
         <name>button</name>
         <path>/WEB-INF/tags/bootstrap/button.tag</path>
     </tag-file>

@@ -1,15 +1,15 @@
 package com.myicpc.model.teamInfo;
 
-import com.myicpc.enums.TeamMemberRole;
+import com.myicpc.enums.ContestParticipantRole;
 import com.myicpc.model.IdGeneratedObject;
 
 import javax.persistence.*;
 
 /**
- * Contest where {@link TeamMember} participated or was involved
+ * Contest where {@link ContestParticipant} participated or was involved
  *
  * @author Roman Smetana
- * @see TeamMember
+ * @see ContestParticipant
  */
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "AttendedContest_id_seq")
@@ -33,17 +33,17 @@ public class AttendedContest extends IdGeneratedObject {
      */
     private Integer year;
     /**
-     * What was {@link TeamMemberRole} of {@link #teamMember} in contest
+     * What was {@link com.myicpc.enums.ContestParticipantRole} of {@link #contestParticipant} in contest
      */
     @Enumerated(EnumType.STRING)
-    private TeamMemberRole teamMemberRole;
+    private ContestParticipantRole contestParticipantRole;
 
     /**
      * Who attended this contest
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "teamMemberId")
-    private TeamMember teamMember;
+    @JoinColumn(name = "contestParticipantId")
+    private ContestParticipant contestParticipant;
 
     public Long getExternalId() {
         return externalId;
@@ -77,19 +77,19 @@ public class AttendedContest extends IdGeneratedObject {
         this.year = year;
     }
 
-    public TeamMemberRole getTeamMemberRole() {
-        return teamMemberRole;
+    public ContestParticipantRole getContestParticipantRole() {
+        return contestParticipantRole;
     }
 
-    public void setTeamMemberRole(final TeamMemberRole teamMemberRole) {
-        this.teamMemberRole = teamMemberRole;
+    public void setContestParticipantRole(final ContestParticipantRole contestParticipantRole) {
+        this.contestParticipantRole = contestParticipantRole;
     }
 
-    public TeamMember getTeamMember() {
-        return teamMember;
+    public ContestParticipant getContestParticipant() {
+        return contestParticipant;
     }
 
-    public void setTeamMember(final TeamMember teamMember) {
-        this.teamMember = teamMember;
+    public void setContestParticipant(final ContestParticipant contestParticipant) {
+        this.contestParticipant = contestParticipant;
     }
 }

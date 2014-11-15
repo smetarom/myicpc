@@ -1,7 +1,7 @@
 package com.myicpc.model.quest;
 
 import com.myicpc.model.IdGeneratedContestObject;
-import com.myicpc.model.teamInfo.TeamMember;
+import com.myicpc.model.teamInfo.ContestParticipant;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Predicate;
 
@@ -35,8 +35,8 @@ public class QuestParticipant extends IdGeneratedContestObject {
      */
     @NotNull
     @OneToOne
-    @JoinColumn(name = "teamMemberId", unique = true)
-    private TeamMember teamMember;
+    @JoinColumn(name = "contestParticipantId", unique = true)
+    private ContestParticipant contestParticipant;
 
     /**
      * All {@link QuestSubmission} submitted by participant
@@ -60,12 +60,12 @@ public class QuestParticipant extends IdGeneratedContestObject {
         this.pointsAdjustment = pointsAdjustment;
     }
 
-    public TeamMember getTeamMember() {
-        return teamMember;
+    public ContestParticipant getContestParticipant() {
+        return contestParticipant;
     }
 
-    public void setTeamMember(final TeamMember teamMember) {
-        this.teamMember = teamMember;
+    public void setContestParticipant(final ContestParticipant contestParticipant) {
+        this.contestParticipant = contestParticipant;
     }
 
     public List<QuestSubmission> getSubmissions() {

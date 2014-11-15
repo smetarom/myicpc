@@ -9,11 +9,12 @@
 <%@ attribute name="vertical" type="java.lang.Boolean" %>
 <%@ attribute name="resetFormButton" type="java.lang.Boolean" %>
 <%@ attribute name="cancelFormURL" %>
+<%@ attribute name="style" %>
 
 <%@attribute name="controls" fragment="true" %>
 
 <spring:url var="formAction" value="${action}"/>
-<form:form class="form-horizontal" role="form" action="${formAction}" commandName="${entity}">
+<form:form class="form-horizontal" role="form" action="${formAction}" commandName="${entity}" style="${style}">
     <jsp:doBody/>
 
     <div class="form-group text-right">

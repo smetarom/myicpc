@@ -34,4 +34,8 @@ public class ContestService {
         contestRepository.save(contest);
     }
 
+    public void deleteContest(Contest contest) {
+        contestRepository.delete(contest);
+    }
+
 }

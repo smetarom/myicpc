@@ -8,10 +8,10 @@ import java.util.TreeMap;
 /**
  * @author Roman Smetana
  */
-public enum TeamMemberRole {
+public enum ContestParticipantRole {
     /**
      * An <em>attendee</em>, or a person who attends a competition with the
-     * team but who has none of the other {@link TeamMemberRole}s. Attendees
+     * team but who has none of the other {@link ContestParticipantRole}s. Attendees
      * do not perform in the competition. An attendee may be sometimes
      * called a guest.
      */
@@ -43,19 +43,19 @@ public enum TeamMemberRole {
     private String code;
 
     /**
-     * Mapping between role name and {@link TeamMemberRole}
+     * Mapping between role name and {@link ContestParticipantRole}
      */
-    private static Map<String, TeamMemberRole> mapping;
+    private static Map<String, ContestParticipantRole> mapping;
 
     static {
         mapping = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-        mapping.put("Contestant", TeamMemberRole.CONTESTANT);
-        mapping.put("Coach", TeamMemberRole.COACH);
-        mapping.put("Attendee", TeamMemberRole.ATTENDEE);
-        mapping.put("Staff", TeamMemberRole.STAFF);
+        mapping.put("Contestant", ContestParticipantRole.CONTESTANT);
+        mapping.put("Coach", ContestParticipantRole.COACH);
+        mapping.put("Attendee", ContestParticipantRole.ATTENDEE);
+        mapping.put("Staff", ContestParticipantRole.STAFF);
     }
 
-    private TeamMemberRole(final String code) {
+    private ContestParticipantRole(final String code) {
         this.code = code;
     }
 
@@ -64,14 +64,14 @@ public enum TeamMemberRole {
     }
 
     /**
-     * @param role code of {@link TeamMemberRole}
+     * @param role code of {@link ContestParticipantRole}
      * @return team member role
      */
-    public static TeamMemberRole getTeamRoleByCode(final String role) {
+    public static ContestParticipantRole getTeamRoleByCode(final String role) {
         return mapping.get(role);
     }
 
-    public static List<TeamMemberRole> getAllTeamRoles() {
-        return Arrays.asList(TeamMemberRole.values());
+    public static List<ContestParticipantRole> getAllTeamRoles() {
+        return Arrays.asList(ContestParticipantRole.values());
     }
 };

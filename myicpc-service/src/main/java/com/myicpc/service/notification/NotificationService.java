@@ -197,12 +197,12 @@ public class NotificationService {
 
         // TODO what to do here?
         Notification notification = new Notification();
-        notification.setTitle(submission.getParticipant().getTeamMember().getTwitterUsername());
+        notification.setTitle(submission.getParticipant().getContestParticipant().getTwitterUsername());
         notification.setBody(submission.getEscapedText());
         notification.setNotificationType(submission.getSubmissionType().getNotificationType());
         notification.setNotificationCategory(Notification.NotificationCategory.QUEST);
         notification.setUrl(submission.getMediaURL());
-        notification.setProfilePictureUrl(submission.getParticipant().getTeamMember().getProfilePictureUrl());
+        notification.setProfilePictureUrl(submission.getParticipant().getContestParticipant().getProfilePictureUrl());
         notification.setTimestamp(new Date());
 
         notification = notificationRepository.save(notification);

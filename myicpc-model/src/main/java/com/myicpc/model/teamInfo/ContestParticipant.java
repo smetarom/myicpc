@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * A person, which is somehow involved in contest
  * <p/>
- * There are four kinds of {@link TeamMember}, depends on the role in the
+ * There are four kinds of {@link ContestParticipant}, depends on the role in the
  * contest
  *
  * @author Roman Smetana
@@ -17,8 +17,8 @@ import java.util.List;
  * @see AttendedContest
  */
 @Entity
-@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "TeamInfo_id_seq")
-public class TeamMember extends IdGeneratedObject {
+@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "ContestParticipant_id_seq")
+public class ContestParticipant extends IdGeneratedObject {
     private static final long serialVersionUID = -5521619641462388146L;
 
     /**
@@ -46,13 +46,13 @@ public class TeamMember extends IdGeneratedObject {
 
     private String profilePictureUrl;
 
-    @OneToMany(mappedBy = "teamMember", cascade = CascadeType.ALL)
-    private List<TeamMemberAssociation> teamAssociations;
+    @OneToMany(mappedBy = "contestParticipant", cascade = CascadeType.ALL)
+    private List<ContestParticipantAssociation> teamAssociations;
 
     /**
-     * The history of contests, which the {@link TeamMember} attended before
+     * The history of contests, which the {@link ContestParticipant} attended before
      */
-    @OneToMany(mappedBy = "teamMember", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "contestParticipant", cascade = CascadeType.ALL)
     private List<AttendedContest> attendedContests;
 
     public Long getExternalId() {
@@ -132,11 +132,11 @@ public class TeamMember extends IdGeneratedObject {
         this.linkedinOauthSecret = linkedinOauthSecret;
     }
 
-    public List<TeamMemberAssociation> getAssociations() {
+    public List<ContestParticipantAssociation> getAssociations() {
         return teamAssociations;
     }
 
-    public void setTeamInfos(final List<TeamMemberAssociation> asssociations) {
+    public void setTeamInfos(final List<ContestParticipantAssociation> asssociations) {
         this.teamAssociations = asssociations;
     }
 
@@ -166,9 +166,9 @@ public class TeamMember extends IdGeneratedObject {
 
     @Transient
     public boolean isStaffMember() {
-        return isTeamRole(new TeamMemberRoleCommand() {
+        return isTeamRole(new ContestParticipantRoleCommand() {
             @Override
-            public boolean hasTeamMemberRole(TeamMemberAssociation association) {
+            public boolean hasContestParticipantRole(ContestParticipantAssociation association) {
                 return association.isStaffMember();
             }
         });
@@ -176,9 +176,9 @@ public class TeamMember extends IdGeneratedObject {
 
     @Transient
     public boolean isContestant() {
-        return isTeamRole(new TeamMemberRoleCommand() {
+        return isTeamRole(new ContestParticipantRoleCommand() {
             @Override
-            public boolean hasTeamMemberRole(TeamMemberAssociation association) {
+            public boolean hasContestParticipantRole(ContestParticipantAssociation association) {
                 return association.isContestant();
             }
         });
@@ -186,27 +186,27 @@ public class TeamMember extends IdGeneratedObject {
 
     @Transient
     public boolean isContestParticipant() {
-        return isTeamRole(new TeamMemberRoleCommand() {
+        return isTeamRole(new ContestParticipantRoleCommand() {
             @Override
-            public boolean hasTeamMemberRole(TeamMemberAssociation association) {
+            public boolean hasContestParticipantRole(ContestParticipantAssociation association) {
                 return association.isContestParticipant();
             }
         });
     }
 
-    private boolean isTeamRole(TeamMemberRoleCommand command) {
+    private boolean isTeamRole(ContestParticipantRoleCommand command) {
         if (teamAssociations == null) {
             return false;
         }
-        for (TeamMemberAssociation association : teamAssociations) {
-            if (command.hasTeamMemberRole(association)) {
+        for (ContestParticipantAssociation association : teamAssociations) {
+            if (command.hasContestParticipantRole(association)) {
                 return true;
             }
         }
         return false;
     }
 
-    private static interface TeamMemberRoleCommand {
-        boolean hasTeamMemberRole(TeamMemberAssociation association);
+    private static interface ContestParticipantRoleCommand {
+        boolean hasContestParticipantRole(ContestParticipantAssociation association);
     }
 }

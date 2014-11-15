@@ -22,7 +22,7 @@
                     <li><a href='<spring:url value="/private${contestURL}/teams/abbreviation" />'>- <spring:message code="teamAdmin.abbr" /></a></li>
                     <li><a href='<spring:url value="/private${contestURL}/teams/hashtags" />'>- <spring:message code="teamAdmin.hashtag" /></a></li>
                     <li class="divider"></li>
-                    <li><a href='<spring:url value="/private/participants" />'><spring:message code="nav.admin.participants" /></a></li>
+                    <li><a href='<spring:url value="/private${contestURL}/participants" />'><spring:message code="nav.admin.participants" /></a></li>
                     <li class="divider"></li>
                     <li><a href='<spring:url value="/private/contest/updateFeed" />'><spring:message code="admin.panel.feed" /></a></li>
                     <li class="divider"></li>

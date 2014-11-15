@@ -4,7 +4,7 @@ import com.myicpc.model.contest.Contest;
 import com.myicpc.model.quest.QuestChallenge;
 import com.myicpc.model.quest.QuestParticipant;
 import com.myicpc.model.quest.QuestSubmission;
-import com.myicpc.model.teamInfo.TeamMember;
+import com.myicpc.model.teamInfo.ContestParticipant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -79,5 +79,5 @@ public interface QuestSubmissionRepository extends PagingAndSortingRepository<Qu
     @Query("SELECT COUNT(qs) FROM QuestSubmission qs WHERE qs.voteSubmissionState = 'VOTE_WINNER'")
     Long countWinningSubmissions();
 
-    List<QuestSubmission> findByParticipantTeamMemberOrderByIdDesc(TeamMember tm);
+    List<QuestSubmission> findByParticipantContestParticipantOrderByIdDesc(ContestParticipant tm);
 }

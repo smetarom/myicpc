@@ -159,7 +159,7 @@ public class ContestAdminController extends GeneralAdminController {
         Contest contest = getContest(contestCode, model);
         if (contest == null) {
             errorMessage(redirectAttributes, "contestAdmin.list.noResult");
-            return "redirect:/private/contest/create";
+            return "redirect:/private/home";
         }
         populateEditContestModel(model, contest, step);
         return "private/contest/editContest";
@@ -174,6 +174,25 @@ public class ContestAdminController extends GeneralAdminController {
         contestService.saveContest(contest);
         successMessage(redirectAttributes, "save.success");
         return "redirect:/private"+getContestURL(contest.getCode())+"/edit/" + currentStep;
+    }
+
+    @RequestMapping(value = "/private/{contestCode}/delete", method = RequestMethod.GET)
+    public String deleteContest(@PathVariable final String contestCode, final Model model, RedirectAttributes redirectAttributes) {
+        Contest contest = getContest(contestCode, model);
+        if (contest == null) {
+            errorMessage(redirectAttributes, "contestAdmin.list.noResult");
+            return "redirect:/private/home";
+        }
+        model.addAttribute("contest", contest);
+        return "private/contest/deleteContest";
+    }
+
+    @RequestMapping(value = "/private/{contestCode}/delete", method = RequestMethod.POST)
+    public String deleteContestPOST(@PathVariable final String contestCode, RedirectAttributes redirectAttributes) {
+        Contest contest = getContest(contestCode, null);
+        contestService.deleteContest(contest);
+        successMessage(redirectAttributes, "contestAdmin.delete.success");
+        return "redirect:/private/home";
     }
 
     protected void populateCreateContestModel(Model model, Contest contest, int currentStep) {
