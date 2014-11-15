@@ -12,6 +12,10 @@
         <path>/WEB-INF/tags/bootstrap/button.tag</path>
     </tag-file>
     <tag-file>
+        <name>form</name>
+        <path>/WEB-INF/tags/bootstrap/form.tag</path>
+    </tag-file>
+    <tag-file>
         <name>csvImport</name>
         <path>/WEB-INF/tags/components/csvImport.tag</path>
     </tag-file>

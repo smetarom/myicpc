@@ -34,6 +34,10 @@ public abstract class GeneralAbstractController {
         return contest;
     }
 
+    protected String getContestURL(String contestCode) {
+        return StringUtils.isEmpty(contestCode) ? "" : "/" + contestCode;
+    }
+
     /**
      * Handles {@link Exception}
      *

@@ -78,30 +78,19 @@ public class ContestAdminController extends GeneralAdminController {
         if (contest == null) {
             return "redirect:/private/contest/create";
         }
-        List<ImmutablePair<String, String>> steps = getWizardMenuItems();
-        model.addAttribute("contest", contest);
-        model.addAttribute("headline", getMessage("contestAdmin.create.title"));
-        model.addAttribute("steps", steps);
-        model.addAttribute("currentStep", step);
-        model.addAttribute("scoreboardStrategies", Arrays.asList(FeedRunStrategyType.values()));
-        model.addAttribute("formAction", step == steps.size() ? "/private/contest/create" : "/private/contest/nextStep");
+        populateCreateContestModel(model, contest, step);
         return "private/contest/editContest";
     }
 
     @RequestMapping(value = "/private/contest/create", method = RequestMethod.POST)
     public String createContest(@Valid @ModelAttribute Contest contest, RedirectAttributes redirectAttributes, Model model, BindingResult result) {
         if (result.hasErrors()) {
-            List<ImmutablePair<String, String>> steps = getWizardMenuItems();
-            model.addAttribute("contest", contest);
-            model.addAttribute("headline", getMessage("contestAdmin.create.title"));
-            model.addAttribute("steps", steps);
-            model.addAttribute("currentStep", steps.size());
-            model.addAttribute("formAction", "/private/contest/create");
-            model.addAttribute("defaultMapConfig", globalSettingsService.getGlobalSettings().getDefaultMapConfig());
+            List<ImmutablePair<String, String>> steps = getWizardMenuItems(false);
+            populateCreateContestModel(model, contest, steps.size());
             return "private/contest/editContest";
         }
 
-        contestRepository.save(contest);
+        contestService.saveContest(contest);
         getMessage("contestAdmin.create.success", contest.getName());
         return "redirect:/private/home";
     }
@@ -160,7 +149,61 @@ public class ContestAdminController extends GeneralAdminController {
         return cmService.getTeamCoordinatesCM(contest);
     }
 
-    protected List<ImmutablePair<String, String>> getWizardMenuItems() {
+    @RequestMapping(value = "/private/{contestCode}/edit", method = RequestMethod.GET)
+    public String editContest(@PathVariable final String contestCode, final Model model, RedirectAttributes redirectAttributes) {
+        return editContest(contestCode, 1, model, redirectAttributes);
+    }
+
+    @RequestMapping(value = "/private/{contestCode}/edit/{step}", method = RequestMethod.GET)
+    public String editContest(@PathVariable final String contestCode, @PathVariable Integer step, final Model model, RedirectAttributes redirectAttributes) {
+        Contest contest = getContest(contestCode, model);
+        if (contest == null) {
+            errorMessage(redirectAttributes, "contestAdmin.list.noResult");
+            return "redirect:/private/contest/create";
+        }
+        populateEditContestModel(model, contest, step);
+        return "private/contest/editContest";
+    }
+
+    @RequestMapping(value = "/private/contest/edit", method = RequestMethod.POST)
+    public String editContest(@Valid @ModelAttribute Contest contest, @RequestParam Integer currentStep, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            populateEditContestModel(model, contest, currentStep);
+            return "private/contest/editContest";
+        }
+        contestService.saveContest(contest);
+        successMessage(redirectAttributes, "save.success");
+        return "redirect:/private"+getContestURL(contest.getCode())+"/edit/" + currentStep;
+    }
+
+    protected void populateCreateContestModel(Model model, Contest contest, int currentStep) {
+        List<ImmutablePair<String, String>> steps = getWizardMenuItems(false);
+        model.addAttribute("headline", getMessage("contestAdmin.create.title"));
+        model.addAttribute("formAction", currentStep == steps.size() ? "/private/contest/create" : "/private/contest/nextStep");
+        model.addAttribute("cancelAction", "/private/home");
+        model.addAttribute("stepURL", "/private/contest/create/");
+        populateContestModel(model, contest, false, currentStep);
+    }
+
+    protected void populateEditContestModel(Model model, Contest contest, int currentStep) {
+        model.addAttribute("headline", getMessage("contestAdmin.edit.title", contest.getName()));
+        model.addAttribute("formAction", "/private/contest/edit");
+        model.addAttribute("cancelAction", "/private"+getContestURL(contest.getCode()));
+        model.addAttribute("stepURL", "/private"+getContestURL(contest.getCode()) + "/edit/");
+        populateContestModel(model, contest, true, currentStep);
+    }
+
+    protected void populateContestModel(Model model, Contest contest, boolean editMode, int currentStep) {
+        List<ImmutablePair<String, String>> steps = getWizardMenuItems(editMode);
+        model.addAttribute("contest", contest);
+        model.addAttribute("steps", steps);
+        model.addAttribute("currentStep", currentStep);
+        model.addAttribute("editMode", editMode);
+        model.addAttribute("scoreboardStrategies", Arrays.asList(FeedRunStrategyType.values()));
+        model.addAttribute("defaultMapConfig", globalSettingsService.getGlobalSettings().getDefaultMapConfig());
+    }
+
+    protected List<ImmutablePair<String, String>> getWizardMenuItems(boolean editMode) {
         List<ImmutablePair<String, String>> items = Lists.newArrayList();
         items.add(new ImmutablePair<String, String>("Initialize", getMessage("contestAdmin.wizard.stepInit")));
         items.add(new ImmutablePair<String, String>("ContestInfo", getMessage("contestAdmin.wizard.stepContestInfo")));
@@ -172,7 +215,9 @@ public class ContestAdminController extends GeneralAdminController {
         items.add(new ImmutablePair<String, String>("Instagram", getMessage("contestAdmin.wizard.stepInstagram")));
         items.add(new ImmutablePair<String, String>("Vine", getMessage("contestAdmin.wizard.stepVine")));
         items.add(new ImmutablePair<String, String>("Youtube", getMessage("contestAdmin.wizard.stepYoutube")));
-        items.add(new ImmutablePair<String, String>("Summary", getMessage("contestAdmin.wizard.stepSummary")));
+        if (!editMode) {
+            items.add(new ImmutablePair<String, String>("Summary", getMessage("contestAdmin.wizard.stepSummary")));
+        }
 
         return items;
     }

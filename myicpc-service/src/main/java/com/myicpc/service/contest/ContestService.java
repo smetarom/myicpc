@@ -30,4 +30,8 @@ public class ContestService {
         return contest;
     }
 
+    public void saveContest(Contest contest) {
+        contestRepository.save(contest);
+    }
+
 }

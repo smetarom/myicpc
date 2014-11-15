@@ -355,7 +355,7 @@ public class SystemUserAdminController extends GeneralAdminController {
 	public void exportUsers(@PathVariable String format, HttpServletResponse response) {
 		try {
 			List<SystemUser> users = systemUserRepository.findAll();
-			systemUserReport.generateUserReport(users, response.getOutputStream());
+//			systemUserReport.generateUserReport(users, response.getOutputStream());
 			response.setContentType("application/pdf");
 			response.setHeader("Content-Disposition", "attachment; filename=user-report.pdf");
 			response.flushBuffer();

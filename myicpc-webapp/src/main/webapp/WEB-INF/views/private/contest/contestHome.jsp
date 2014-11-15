@@ -8,7 +8,7 @@
     <jsp:body>
 
         <div class="text-right">
-            <t:button styleClass="btn-hover"><t:glyphIcon icon="pencil" /> <spring:message code="edit" /></t:button>
+            <t:button href="/private${contestURL}/edit" styleClass="btn-hover"><t:glyphIcon icon="pencil" /> <spring:message code="edit" /></t:button>
         </div>
         <br/>
 

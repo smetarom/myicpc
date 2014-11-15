@@ -14,6 +14,12 @@ body {
     font-size: 1em;
 }
 
+h1 {
+    font-size: 28px;
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
 .navbar{
     margin-bottom: 10px;
 }
