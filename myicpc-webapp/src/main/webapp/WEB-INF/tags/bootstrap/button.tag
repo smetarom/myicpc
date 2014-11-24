@@ -8,23 +8,34 @@
 <%@ attribute name="id" %>
 <%@ attribute name="context" %>
 <%@ attribute name="styleClass" %>
+<%@ attribute name="modalOpenId" %>
+<%@ attribute name="dataDismiss" type="java.lang.Boolean" %>
 
 <c:set var="context" value="${(empty context) ? 'default' : context}" />
 
-<c:if test="${empty href}">
-    <c:set var="type" value="${(empty type) ? 'button' : type}" />
-    <button type="${type}"
-            class="btn btn-${context} ${styleClass}"
+<c:if test="${empty modalOpenId}">
+    <c:if test="${empty href}">
+        <c:set var="type" value="${(empty type) ? 'button' : type}" />
+        <button type="${type}"
+                class="btn btn-${context} ${styleClass}"
+                ${empty id ? '' : 'id="'.concat(id).concat('"')}
+                ${dataDismiss ? 'data-dismiss="modal"' : ''}
+                ${empty onclick ? '' : 'onclick="'.concat(onclick).concat('"')}>
+            <jsp:doBody/>
+        </button>
+    </c:if>
+    <c:if test="${not empty href}">
+        <a href="<spring:url value="${href}" />"
+           class="btn btn-${context} ${styleClass}"
             ${empty id ? '' : 'id="'.concat(id).concat('"')}
             ${empty onclick ? '' : 'onclick="'.concat(onclick).concat('"')}>
-        <jsp:doBody/>
-    </button>
+            <jsp:doBody/>
+        </a>
+    </c:if>
 </c:if>
-<c:if test="${not empty href}">
-    <a href="<spring:url value="${href}" />"
-       class="btn btn-${context} ${styleClass}"
-        ${empty id ? '' : 'id="'.concat(id).concat('"')}
-        ${empty onclick ? '' : 'onclick="'.concat(onclick).concat('"')}>
-        <jsp:doBody/>
-    </a>
+
+<c:if test="${not empty modalOpenId}">
+    <button type="button" class="btn btn-${context} ${styleClass}" data-toggle="modal" data-target="#${modalOpenId}">
+        <jsp:doBody />
+    </button>
 </c:if>

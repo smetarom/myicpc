@@ -7,6 +7,11 @@
             <h1>&nbsp;<spring:message code="installAdmin.title"/></h1>
         </div>
 
+        <div class="col-sm-12">
+            <p><spring:message code="installAdmin.introduction" /></p>
+            <br/>
+        </div>
+
         <div class="clearfix" style="margin: 0 15px;">
             <div class="col-sm-4">
                 <div class="progress">

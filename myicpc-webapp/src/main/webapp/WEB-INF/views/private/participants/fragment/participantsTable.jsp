@@ -2,43 +2,39 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="t" uri="http://myicpc.baylor.edu/tags"%>
 
-<form action="<spring:url value="/private/participants/update" />" method="post">
- 	<br />
- 	<div class="well well-sm clearfix">
- 		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createNewPerson">
-			<span class="glyphicon glyphicon-plus"></span> <spring:message code="participantAdmin.create" />
-		</button>
-  		<button type="submit" class="btn btn-primary pull-right">
-			<spring:message code="saveAll" />
-		</button>
- 	</div>
+<c:if test="${not empty participants}">
 	<table class="table table-striped">
 		<thead>
 			<tr>
-				<th><spring:message code="teammember.name" /></th>
+				<th><spring:message code="participant.name" /></th>
 				<th></th>
-				<th><spring:message code="teammember.twitter" /> (w/o @)</th>
-				<th><spring:message code="teammember.vine" /></th>
-				<th><spring:message code="teammember.instagram" /></th>
+				<th><spring:message code="participant.twitter" /></th>
+				<th><spring:message code="participant.vine" /></th>
+				<th><spring:message code="participant.instagram" /></th>
 				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-			<c:forEach var="teamMember" items="${teamMembers}">
+			<c:forEach var="participant" items="${participants}">
 				<tr>
-					<td>${teamMember.officialFullname}</td>
-					<td><c:forEach var="association" items="${teamMember.associations}">
-							<spring:message code="${association.teamMemberRole.code}" /> ${not empty association.teamInfo ? ' - ' : ''} ${association.teamInfo.contestTeamName}<br />
-						</c:forEach></td>
-					<td width="300"><input type="text" name="twitter_${teamMember.id}" value="${teamMember.twitterUsername}" class="form-control" /></td>
-					<td width="300"><input type="text" name="vine_${teamMember.id}" value="${teamMember.vineUsername}" class="form-control" /></td>
-					<td width="300"><input type="text" name="instagram_${teamMember.id}" value="${teamMember.instagramUsername}" class="form-control" /></td>
-					<td><t:deleteButton url="/private/participants/${teamMember.id}/delete" confirmMessageCode="participantAdmin.delete.confirm" confirmMessageArgument="${teamMember.fullname}" /></td>
+					<td>${participant.officialFullname}</td>
+					<td>
+						<c:forEach var="association" items="${participant.teamAssociations}">
+							<spring:message code="${association.contestParticipantRole.code}" text="${association.contestParticipantRole.label}" /> ${not empty association.teamInfo ? ' - ' : ''} ${association.teamInfo.contestTeamName}<br />
+						</c:forEach>
+					</td>
+					<td width="300">${participant.twitterUsername}</td>
+					<td width="300">${participant.vineUsername}</td>
+					<td width="300">${participant.instagramUsername}</td>
+					<td><t:deleteButton url="/private/participants/${participant.id}/delete" confirmMessageCode="participantAdmin.delete.confirm" confirmMessageArgument="${teamMember.fullname}" /></td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
-	<button type="submit" class="btn btn-primary pull-right">
-		<spring:message code="saveAll" />
-	</button>
-</form>
+</c:if>
+
+<c:if test="${empty participants}">
+	<div class="no-items-available">
+		<spring:message code="participantAdmin.noResult" />
+	</div>
+</c:if>

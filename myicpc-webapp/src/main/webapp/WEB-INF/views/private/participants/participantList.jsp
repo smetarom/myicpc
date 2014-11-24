@@ -1,50 +1,51 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
 
 <t:templateAdmin>
-    <jsp:attribute name="breadcrumb">
-		  <li class="active"><spring:message code="contestHomeAdmin.title"/></li>
-	</jsp:attribute>
+  <jsp:attribute name="breadcrumb">
+        <li class="active"><spring:message code="participantAdmin.title"/></li>
+  </jsp:attribute>
+
+  <jsp:attribute name="headline">
+    <spring:message code="participantAdmin.title" />
+  </jsp:attribute>
 
   <jsp:body>
 
-    <div class="text-right">
-      <t:button href="/private${contestURL}/edit" styleClass="btn-hover"><t:glyphIcon icon="pencil" /> <spring:message code="edit" /></t:button>
-      <t:button href="/private${contestURL}/delete" styleClass="btn-hover"><t:glyphIcon icon="remove" /> <spring:message code="delete" /></t:button>
-    </div>
-    <br/>
+    <%@ include file="/WEB-INF/views/private/participants/fragment/participantsCreateModal.jsp"%>
+    <t:button modalOpenId="createNewPerson" styleClass="btn-hover pull-right"><t:glyphIcon icon="plus" /> <spring:message code="participantAdmin.create" /></t:button>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#allPeople" data-toggle="tab"><spring:message code="participantAdmin.all" /></a></li>
+      <li><a href="#contestants" data-toggle="tab"><spring:message code="participantAdmin.contestants" /></a></li>
+      <li><a href="#coaches" data-toggle="tab"><spring:message code="participantAdmin.coaches" /></a></li>
+      <li><a href="#attendees" data-toggle="tab"><spring:message code="participantAdmin.attendees" /></a></li>
+      <li><a href="#staff" data-toggle="tab"><spring:message code="participantAdmin.staff" /></a></li>
+    </ul>
 
-    <div class="col-md-6 col-sm-12">
-      <t:panelWithHeading>
-        <jsp:attribute name="heading"><spring:message code="contestHomeAdmin.info"/></jsp:attribute>
-        <jsp:body>
-          <table>
-            <tbody>
-            <t:labelTableRow label="contest">${contest.name}</t:labelTableRow>
-            <t:labelTableRow label="contest.code">${contest.code}</t:labelTableRow>
-            <t:labelTableRow label="contest.startTime"><fmt:formatDate value="${contest.startTime}" type="both"/></t:labelTableRow>
-            </tbody>
-          </table>
-          <div class="text-right">
-            <t:button href="/private${contestURL}/overview"><spring:message code="contestHomeAdmin.info.btn" /></t:button>
-          </div>
-        </jsp:body>
-      </t:panelWithHeading>
-      <t:panelWithHeading>
-        <jsp:attribute name="heading"><spring:message code="contestHomeAdmin.feedControl"/></jsp:attribute>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div class="tab-pane active" id="allPeople">
+        <c:set var="participants" value="${allPeople}" />
+        <%@ include file="/WEB-INF/views/private/participants/fragment/participantsTable.jsp"%>
+      </div>
+      <div class="tab-pane" id="contestants">
+        <c:set var="participants" value="${contestants}" />
+        <%@ include file="/WEB-INF/views/private/participants/fragment/participantsTable.jsp"%>
+      </div>
+      <div class="tab-pane" id="coaches">
+        <c:set var="participants" value="${coaches}" />
+        <%@ include file="/WEB-INF/views/private/participants/fragment/participantsTable.jsp"%>
+      </div>
+      <div class="tab-pane" id="attendees">
+        <c:set var="participants" value="${attendees}" />
+        <%@ include file="/WEB-INF/views/private/participants/fragment/participantsTable.jsp"%>
+      </div>
+      <div class="tab-pane" id="staff">
+        <c:set var="participants" value="${staff}" />
+        <%@ include file="/WEB-INF/views/private/participants/fragment/participantsTable.jsp"%>
+      </div>
+    </div>
 
-      </t:panelWithHeading>
-    </div>
-    <div class="col-md-6 col-sm-12">
-      <t:panelWithHeading panelStyle="warning">
-        <jsp:attribute name="heading"><spring:message code="warningAdmin.title"/></jsp:attribute>
-        <jsp:body>
-          <c:if test="${empty warnings}">
-            <div class="no-items-available text-success">
-              <t:faIcon icon="thumbs-o-up"/> <spring:message code="warningAdmin.noWarnings"/>
-            </div>
-          </c:if>
-        </jsp:body>
-      </t:panelWithHeading>
-    </div>
+
   </jsp:body>
 </t:templateAdmin>

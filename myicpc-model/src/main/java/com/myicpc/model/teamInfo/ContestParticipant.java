@@ -132,12 +132,12 @@ public class ContestParticipant extends IdGeneratedObject {
         this.linkedinOauthSecret = linkedinOauthSecret;
     }
 
-    public List<ContestParticipantAssociation> getAssociations() {
+    public List<ContestParticipantAssociation> getTeamAssociations() {
         return teamAssociations;
     }
 
-    public void setTeamInfos(final List<ContestParticipantAssociation> asssociations) {
-        this.teamAssociations = asssociations;
+    public void setTeamAssociations(final List<ContestParticipantAssociation> associations) {
+        this.teamAssociations = associations;
     }
 
     public List<AttendedContest> getAttendedContests() {

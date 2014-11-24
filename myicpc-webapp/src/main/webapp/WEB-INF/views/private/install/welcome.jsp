@@ -9,7 +9,7 @@
   </jsp:attribute>
 
   <jsp:body>
-    <p><spring:message code="installAdmin.welcome.intro"/></p>
+    <t:alert><spring:message code="installAdmin.welcome.intro"/></t:alert>
 
     <div class="col-sm-4">
       <t:panelWithHeading>

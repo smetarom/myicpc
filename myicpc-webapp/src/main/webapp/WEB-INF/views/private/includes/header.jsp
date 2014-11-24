@@ -60,7 +60,6 @@
                     <li><a href='<spring:url value="/private/modules" />'><spring:message code="nav.admin.modules" /></a></li>
                 </ul>
             </li>
-            <li><a href="<spring:url value="/private/help" />"><strong>?</strong> <spring:message code="nav.admin.help" /></a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <%@ include file="/WEB-INF/views/private/includes/header_right_appendix.jsp"%>

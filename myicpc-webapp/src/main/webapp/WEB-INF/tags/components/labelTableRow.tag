@@ -3,10 +3,13 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <%@ attribute name="label" required="true" %>
+<%@ attribute name="rendered" type="java.lang.Boolean" %>
 
-<tr>
-    <th style="min-width: 150px;"><spring:message code="${label}"/>:</th>
-    <td><jsp:doBody /></td>
-</tr>
+<c:if test="${empty rendered or rendered}">
+    <tr>
+        <th style="min-width: 150px; padding-right: 10px"><spring:message code="${label}"/>:</th>
+        <td><jsp:doBody /></td>
+    </tr>
+</c:if>
 
 

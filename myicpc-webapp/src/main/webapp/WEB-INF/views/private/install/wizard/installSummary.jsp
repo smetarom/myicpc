@@ -1,10 +1,19 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
 
-<p><spring:message code="installAdmin.wizard.summary.hint" arguments="${adminUser.username}"/></p>
+<table class="table table-striped">
+    <tbody>
+        <t:labelTableRow label="installAdmin.wizard.setupAdmin.username">${adminUser.username}</t:labelTableRow>
+        <t:labelTableRow label="globalSettings.adminEmail" rendered="${not empty globalSettings.adminEmail}">${globalSettings.adminEmail}</t:labelTableRow>
+        <t:labelTableRow label="globalSettings.fbAPIKey" rendered="${not empty globalSettings.fbAPIKey}">${globalSettings.fbAPIKey}</t:labelTableRow>
+        <t:labelTableRow label="globalSettings.googleNonAuthenticatedKey" rendered="${not empty globalSettings.googleNonAuthenticatedKey}">${globalSettings.googleNonAuthenticatedKey}</t:labelTableRow>
+        <t:labelTableRow label="globalSettings.googleAnalyticsKey" rendered="${not empty globalSettings.googleAnalyticsKey}">${globalSettings.googleAnalyticsKey}</t:labelTableRow>
+    </tbody>
+</table>
+<hr />
+
 
 <div class="form-group text-right">
-    <a href="<spring:url value="/private/install"/>" class="btn btn-default"><spring:message code="no"/></a>
     <button type="submit" class="btn btn-primary">
-        <spring:message code="yes"/>
+        <spring:message code="installAdmin.wizard.summary.btn"/>
     </button>
 </div>
