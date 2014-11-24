@@ -41,10 +41,13 @@
         <t:form action="${formAction}" entity="contest" cancelFormURL="${cancelAction}">
             <jsp:attribute name="controls">
                 <c:choose>
-                    <c:when test="${editMode}">
+                    <c:when test="${editMode or currentStep == steps.size()}">
                         <t:button type="submit" context="primary"><spring:message code="save"/></t:button>
                     </c:when>
                     <c:otherwise>
+                        <c:if test="${currentStep > 3}">
+                            <t:button href="${stepURL}${steps.size()}"><spring:message code="contestAdmin.wizard.sskipToSummary" /></t:button>
+                        </c:if>
                         <t:button type="submit" context="primary"><spring:message code="next"/></t:button>
                     </c:otherwise>
                 </c:choose>

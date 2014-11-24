@@ -4,10 +4,11 @@
 
 <%@ attribute name="label" required="true" %>
 <%@ attribute name="rendered" type="java.lang.Boolean" %>
+<%@ attribute name="style" %>
 
 <c:if test="${empty rendered or rendered}">
     <tr>
-        <th style="min-width: 150px; padding-right: 10px"><spring:message code="${label}"/>:</th>
+        <th style="min-width: 150px; padding-right: 10px; ${style}"><spring:message code="${label}"/>:</th>
         <td><jsp:doBody /></td>
     </tr>
 </c:if>

@@ -36,8 +36,8 @@
               <td>${contest.code}</td>
               <td><fmt:formatDate value="${contest.startTime}" type="both"/></td>
               <td class="text-right">
-                <t:editButton url="/private/contest/${contest.code}/edit" />
-                <t:deleteButton url="/private/contest/${contest.code}/delete" confirmMessageCode="userAdmin.delete.confirm" confirmMessageArgument="${contest.name}" />
+                <t:editButton url="/private/${contest.code}/edit" />
+                <t:deleteButton url="/private/${contest.code}/delete" />
               </td>
             </tr>
           </c:forEach>
