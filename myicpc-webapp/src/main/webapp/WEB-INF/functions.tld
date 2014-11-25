@@ -9,45 +9,81 @@
 
     <function>
         <name>urlEncode</name>
-        <function-class>edu.baylor.icpc.myicpc.utils.JSPCustomFunctions</function-class>
+        <function-class>com.myicpc.jsp.JSPCustomFunctions</function-class>
         <function-signature>java.lang.String urlEncode(java.lang.String)</function-signature>
     </function>
 
     <function>
         <name>correctURL</name>
-        <function-class>edu.baylor.icpc.myicpc.utils.JSPCustomFunctions</function-class>
+        <function-class>com.myicpc.jsp.JSPCustomFunctions</function-class>
         <function-signature>java.lang.String correctURL(java.lang.String)</function-signature>
     </function>
 
     <function>
         <name>escapeHTML</name>
-        <function-class>edu.baylor.icpc.myicpc.utils.JSPCustomFunctions</function-class>
+        <function-class>com.myicpc.jsp.JSPCustomFunctions</function-class>
         <function-signature>java.lang.String escapeHTML(java.lang.String)</function-signature>
     </function>
 
     <function>
         <name>prependHTTP</name>
-        <function-class>edu.baylor.icpc.myicpc.utils.JSPCustomFunctions</function-class>
+        <function-class>com.myicpc.jsp.JSPCustomFunctions</function-class>
         <function-signature>java.lang.String prependHTTP(java.lang.String)</function-signature>
     </function>
     <function>
         <name>isOddLine</name>
-        <function-class>edu.baylor.icpc.myicpc.utils.JSPCustomFunctions</function-class>
+        <function-class>com.myicpc.jsp.JSPCustomFunctions</function-class>
         <function-signature>boolean isOddLine(javax.servlet.jsp.jstl.core.LoopTagStatus)</function-signature>
     </function>
     <function>
         <name>isNLine</name>
-        <function-class>edu.baylor.icpc.myicpc.utils.JSPCustomFunctions</function-class>
+        <function-class>com.myicpc.jsp.JSPCustomFunctions</function-class>
         <function-signature>boolean isNLine(javax.servlet.jsp.jstl.core.LoopTagStatus, int , int)</function-signature>
     </function>
     <function>
         <name>parseWikiSyntax</name>
-        <function-class>edu.baylor.icpc.myicpc.utils.JSPCustomFunctions</function-class>
+        <function-class>com.myicpc.jsp.JSPCustomFunctions</function-class>
         <function-signature>java.lang.String parseWikiSyntax(java.lang.String)</function-signature>
     </function>
     <function>
         <name>escapeJavascript</name>
-        <function-class>edu.baylor.icpc.myicpc.utils.JSPCustomFunctions</function-class>
+        <function-class>com.myicpc.jsp.JSPCustomFunctions</function-class>
         <function-signature>java.lang.String escapeJavascript(java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>mapModuleEnabled</name>
+        <function-class>com.myicpc.jsp.JSPCustomFunctions</function-class>
+        <function-signature>boolean isMapModuleEnabled(com.myicpc.model.contest.Contest)</function-signature>
+    </function>
+    <function>
+        <name>scheduleModuleEnabled</name>
+        <function-class>com.myicpc.jsp.JSPCustomFunctions</function-class>
+        <function-signature>boolean isScheduleModuleEnabled(com.myicpc.model.contest.Contest)</function-signature>
+    </function>
+    <function>
+        <name>questModuleEnabled</name>
+        <function-class>com.myicpc.jsp.JSPCustomFunctions</function-class>
+        <function-signature>boolean isQuestModuleEnabled(com.myicpc.model.contest.Contest)</function-signature>
+    </function>
+    <function>
+        <name>techtrekModuleEnabled</name>
+        <function-class>com.myicpc.jsp.JSPCustomFunctions</function-class>
+        <function-signature>boolean isTechTrekModuleEnabled(com.myicpc.model.contest.Contest)</function-signature>
+    </function>
+    <function>
+        <name>rssModuleEnabled</name>
+        <function-class>com.myicpc.jsp.JSPCustomFunctions</function-class>
+        <function-signature>boolean isRssModuleEnabled(com.myicpc.model.contest.Contest)</function-signature>
+    </function>
+    <function>
+        <name>galleryModuleEnabled</name>
+        <function-class>com.myicpc.jsp.JSPCustomFunctions</function-class>
+        <function-signature>boolean isGalleryModuleEnabled(com.myicpc.model.contest.Contest)</function-signature>
+    </function>
+    <function>
+        <name>pollModuleEnabled</name>
+        <function-class>com.myicpc.jsp.JSPCustomFunctions</function-class>
+        <function-signature>boolean isPollModuleEnabled(com.myicpc.model.contest.Contest)</function-signature>
     </function>
 </taglib>

@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="t" uri="http://myicpc.baylor.edu/tags" %>
+<%@ taglib prefix="util" uri="http://myicpc.baylor.edu/functions"%>
 
 <nav class="navbar navbar-default">
 
@@ -29,7 +30,6 @@
                     <li><a href='<spring:url value="/private/contest/settings" />'><spring:message code="nav.admin.contestSettings" /></a></li>
                 </ul>
             </li>
-            <li><a href='<spring:url value="/private${contestURL}/schedule" />'><spring:message code="nav.admin.schedule" /></a></li>
             <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="nav.admin.notifications" /> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li><a href='<spring:url value="/private/timeline" />'><spring:message code="nav.admin.timeline" /></a></li>
@@ -41,19 +41,36 @@
                     <li><a href='<spring:url value="/private/notifications/admin" />'><spring:message code="nav.admin.notifications.icpc" /></a></li>
                 </ul>
             </li>
-            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="nav.admin.quest" /> <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    <li><a href='<spring:url value="/private${contestURL}/quest/challenges" />'><spring:message code="nav.admin.challenges" /></a></li>
-                    <li><a href='<spring:url value="/private${contestURL}/quest/participants" />'><spring:message code="nav.admin.quest.participants" /></a></li>
-                    <li><a href='<spring:url value="/private${contestURL}/quest/submissions" />'><spring:message code="nav.admin.quest.submissions" /></a></li>
-                    <li><a href='<spring:url value="/private${contestURL}/quest/votes" />'><spring:message code="nav.admin.quest.votes" /></a></li>
-                    <li><a href='<spring:url value="/private${contestURL}/techtrek" />'><spring:message code="nav.admin.techtrek" /></a></li>
-                </ul>
-            </li>
-            <li><a href='<spring:url value="/private${contestURL}/rss" />'><spring:message code="nav.admin.rssFeed" /></a></li>
-            <li><a href='<spring:url value="/private${contestURL}/polls" />'><spring:message code="nav.admin.polls" /></a></li>
-            <li><a href='<spring:url value="/private${contestURL}/gallery" />'><spring:message code="nav.admin.gallery" /></a></li>
-            <li><a href='<spring:url value="/private${contestURL}/modules" />'><spring:message code="nav.admin.modules" /></a></li>
+            <c:if test="${util:scheduleModuleEnabled(contest)}">
+                <li><a href='<spring:url value="/private${contestURL}/schedule" />'><spring:message code="nav.admin.schedule" /></a></li>
+            </c:if>
+            <c:if test="${util:questModuleEnabled(contest) or util:techtrekModuleEnabled(contest)}">
+                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="nav.admin.quest" /> <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <c:if test="${util:questModuleEnabled(contest)}">
+                            <li><a href='<spring:url value="/private${contestURL}/quest/challenges" />'><spring:message code="nav.admin.challenges" /></a></li>
+                            <li><a href='<spring:url value="/private${contestURL}/quest/participants" />'><spring:message code="nav.admin.quest.participants" /></a></li>
+                            <li><a href='<spring:url value="/private${contestURL}/quest/submissions" />'><spring:message code="nav.admin.quest.submissions" /></a></li>
+                            <li><a href='<spring:url value="/private${contestURL}/quest/votes" />'><spring:message code="nav.admin.quest.votes" /></a></li>
+                        </c:if>
+                        <c:if test="${util:questModuleEnabled(contest) and util:techtrekModuleEnabled(contest)}">
+                            <li class="divider"></li>
+                        </c:if>
+                        <c:if test="${util:techtrekModuleEnabled(contest)}">
+                            <li><a href='<spring:url value="/private${contestURL}/techtrek" />'><spring:message code="nav.admin.techtrek" /></a></li>
+                        </c:if>
+                    </ul>
+                </li>
+            </c:if>
+            <c:if test="${util:rssModuleEnabled(contest)}">
+                <li><a href='<spring:url value="/private${contestURL}/rss" />'><spring:message code="nav.admin.rssFeed" /></a></li>
+            </c:if>
+            <c:if test="${util:pollModuleEnabled(contest)}">
+                <li><a href='<spring:url value="/private${contestURL}/polls" />'><spring:message code="nav.admin.polls" /></a></li>
+            </c:if>
+            <c:if test="${util:galleryModuleEnabled(contest)}">
+                <li><a href='<spring:url value="/private${contestURL}/gallery" />'><spring:message code="nav.admin.gallery" /></a></li>
+            </c:if>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <%@ include file="/WEB-INF/views/private/includes/header_right_appendix.jsp"%>

@@ -4,14 +4,30 @@
     <div class="col-sm-6">
         <table class="table">
             <tbody>
-            <t:labelTableRow label="module.map" styleClassBody="text-right">
-                <form:checkbox path="moduleConfiguration.mapModule" class="moduleSwitch" data-size="small" />
-                &nbsp;&nbsp;&nbsp; <a href="javascript:showModuleDescription('mapModule')"><t:glyphIcon icon="eye-open" /></a>
-            </t:labelTableRow>
-            <t:labelTableRow label="module.codeInsight" styleClassBody="text-right">
-                <form:checkbox path="moduleConfiguration.codeInsightModule" class="moduleSwitch" data-size="small" />
-                &nbsp;&nbsp;&nbsp; <a href="javascript:showModuleDescription('codeInsightModule')"><t:glyphIcon icon="eye-open" /></a>
-            </t:labelTableRow>
+            <jsp:include page="/WEB-INF/views/private/contest/fragment/moduleControlRow.jsp">
+                <jsp:param name="module" value="map" />
+            </jsp:include>
+            <jsp:include page="/WEB-INF/views/private/contest/fragment/moduleControlRow.jsp">
+                <jsp:param name="module" value="codeInsight" />
+            </jsp:include>
+            <jsp:include page="/WEB-INF/views/private/contest/fragment/moduleControlRow.jsp">
+                <jsp:param name="module" value="schedule" />
+            </jsp:include>
+            <jsp:include page="/WEB-INF/views/private/contest/fragment/moduleControlRow.jsp">
+                <jsp:param name="module" value="rss" />
+            </jsp:include>
+            <jsp:include page="/WEB-INF/views/private/contest/fragment/moduleControlRow.jsp">
+                <jsp:param name="module" value="poll" />
+            </jsp:include>
+            <jsp:include page="/WEB-INF/views/private/contest/fragment/moduleControlRow.jsp">
+                <jsp:param name="module" value="gallery" />
+            </jsp:include>
+            <jsp:include page="/WEB-INF/views/private/contest/fragment/moduleControlRow.jsp">
+                <jsp:param name="module" value="quest" />
+            </jsp:include>
+            <jsp:include page="/WEB-INF/views/private/contest/fragment/moduleControlRow.jsp">
+                <jsp:param name="module" value="techtrek" />
+            </jsp:include>
             </tbody>
         </table>
     </div>
@@ -20,6 +36,7 @@
         <p class="noSelectedBig"><spring:message code="moduleAdmin.hint" /></p>
         <p id="mapModule" style="display: none;"><spring:message code="module.map.description" /></p>
         <p id="codeInsightModule" style="display: none;"><spring:message code="module.codeInsight.description" /></p>
+        <p id="scheduleModule" style="display: none;"><spring:message code="module.schedule.description" /></p>
     </div>
 </div>
 

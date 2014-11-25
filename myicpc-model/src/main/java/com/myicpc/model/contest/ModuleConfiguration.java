@@ -13,6 +13,12 @@ import javax.persistence.SequenceGenerator;
 public class ModuleConfiguration extends IdGeneratedObject {
     private boolean mapModule;
     private boolean codeInsightModule;
+    private boolean scheduleModule;
+    private boolean rssModule;
+    private boolean pollModule;
+    private boolean galleryModule;
+    private boolean questModule;
+    private boolean techtrekModule;
 
     public boolean isMapModule() {
         return mapModule;
@@ -28,5 +34,53 @@ public class ModuleConfiguration extends IdGeneratedObject {
 
     public void setCodeInsightModule(boolean codeInsightModule) {
         this.codeInsightModule = codeInsightModule;
+    }
+
+    public boolean isScheduleModule() {
+        return scheduleModule;
+    }
+
+    public void setScheduleModule(boolean scheduleModule) {
+        this.scheduleModule = scheduleModule;
+    }
+
+    public boolean isRssModule() {
+        return rssModule;
+    }
+
+    public void setRssModule(boolean rssModule) {
+        this.rssModule = rssModule;
+    }
+
+    public boolean isPollModule() {
+        return pollModule;
+    }
+
+    public void setPollModule(boolean pollModule) {
+        this.pollModule = pollModule;
+    }
+
+    public boolean isGalleryModule() {
+        return galleryModule;
+    }
+
+    public void setGalleryModule(boolean galleryModule) {
+        this.galleryModule = galleryModule;
+    }
+
+    public boolean isQuestModule() {
+        return questModule;
+    }
+
+    public void setQuestModule(boolean questModule) {
+        this.questModule = questModule;
+    }
+
+    public boolean isTechtrekModule() {
+        return techtrekModule;
+    }
+
+    public void setTechtrekModule(boolean techtrekModule) {
+        this.techtrekModule = techtrekModule;
     }
 }

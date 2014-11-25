@@ -9,7 +9,7 @@
 <%--<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>--%>
 
 <%@ taglib prefix="t" uri="http://myicpc.baylor.edu/tags" %>
-<%--<%@ taglib prefix="util" uri="http://myicpc.baylor.edu/functions"%>--%>
+<%@ taglib prefix="util" uri="http://myicpc.baylor.edu/functions"%>
 
 <c:set var="ctx" value="${pageContext['request'].contextPath}"/>
 <c:set var="serverURL"
