@@ -227,7 +227,10 @@ public class ContestAdminController extends GeneralAdminController {
         items.add(new ImmutablePair<String, String>("Initialize", getMessage("contestAdmin.wizard.stepInit")));
         items.add(new ImmutablePair<String, String>("ContestInfo", getMessage("contestAdmin.wizard.stepContestInfo")));
         items.add(new ImmutablePair<String, String>("EventFeed", getMessage("contestAdmin.wizard.stepEventFeed")));
-//        items.add(new ImmutablePair<String, String>("TeamEdit", getMessage("contestAdmin.wizard.stepTeamEdit")));
+        if (editMode) {
+            items.add(new ImmutablePair<String, String>("Modules", getMessage("contestAdmin.wizard.stepModules")));
+        }
+        items.add(new ImmutablePair<String, String>("TeamEdit", getMessage("contestAdmin.wizard.stepTeamEdit")));
 //        items.add(new ImmutablePair<String, String>("TeamPictures", getMessage("contestAdmin.wizard.stepTeamPictures")));
 //        items.add(new ImmutablePair<String, String>("Map", getMessage("contestAdmin.wizard.stepMap")));
 //        items.add(new ImmutablePair<String, String>("Twitter", getMessage("contestAdmin.wizard.stepTwitter")));

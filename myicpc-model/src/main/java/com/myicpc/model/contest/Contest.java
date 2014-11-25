@@ -68,6 +68,10 @@ public class Contest extends IdGeneratedObject {
     @JoinColumn(name = "questConfigurationId")
     private QuestConfiguration questConfiguration = new QuestConfiguration();
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "moduleConfigurationId")
+    private ModuleConfiguration moduleConfiguration = new ModuleConfiguration();
+
     public String getName() {
         return name;
     }
@@ -162,5 +166,13 @@ public class Contest extends IdGeneratedObject {
 
     public void setQuestConfiguration(QuestConfiguration questConfiguration) {
         this.questConfiguration = questConfiguration;
+    }
+
+    public ModuleConfiguration getModuleConfiguration() {
+        return moduleConfiguration;
+    }
+
+    public void setModuleConfiguration(ModuleConfiguration moduleConfiguration) {
+        this.moduleConfiguration = moduleConfiguration;
     }
 }

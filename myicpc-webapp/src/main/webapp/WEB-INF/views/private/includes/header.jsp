@@ -52,14 +52,8 @@
             </li>
             <li><a href='<spring:url value="/private${contestURL}/rss" />'><spring:message code="nav.admin.rssFeed" /></a></li>
             <li><a href='<spring:url value="/private${contestURL}/polls" />'><spring:message code="nav.admin.polls" /></a></li>
-            <li><a href='<spring:url value="/private/gallery" />'><spring:message code="nav.admin.gallery" /></a></li>
-            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="nav.admin.administration" /> <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                    <li><a href='<spring:url value="/private/users" />'><spring:message code="nav.admin.users" /></a></li>
-                    <li class="divider"></li>
-                    <li><a href='<spring:url value="/private/modules" />'><spring:message code="nav.admin.modules" /></a></li>
-                </ul>
-            </li>
+            <li><a href='<spring:url value="/private${contestURL}/gallery" />'><spring:message code="nav.admin.gallery" /></a></li>
+            <li><a href='<spring:url value="/private${contestURL}/modules" />'><spring:message code="nav.admin.modules" /></a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <%@ include file="/WEB-INF/views/private/includes/header_right_appendix.jsp"%>

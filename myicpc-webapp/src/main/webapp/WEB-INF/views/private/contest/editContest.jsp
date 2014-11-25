@@ -38,6 +38,17 @@
 	</jsp:attribute>
 
     <jsp:body>
+        <script type="application/javascript">
+            function toogleModuleInputs(checkbox) {
+                var form = $(checkbox).closest('form');
+                form.find("input").not(".moduleSwitch,:hidden").attr('disabled', !$(checkbox).prop('checked'));
+            }
+
+            $(function() {
+                $("input.moduleSwitch").bootstrapSwitch();
+            })
+        </script>
+
         <t:form action="${formAction}" entity="contest" cancelFormURL="${cancelAction}">
             <jsp:attribute name="controls">
                 <c:choose>

@@ -9,12 +9,13 @@
 <%@ attribute name="type" %>
 <%@ attribute name="required" type="java.lang.Boolean" %>
 <%@ attribute name="hintCode" %>
+<%@ attribute name="styleClass" %>
 
 <div class="form-group">
     <form:label path="${path}" class="col-sm-3 control-label">
         <spring:message code="${labelCode}"/>:${required ? '*' : ''} </form:label>
     <div class="col-sm-9">
-        <form:checkbox path="${path}"/>
+        <form:checkbox path="${path}" cssClass="${styleClass}" />
     </div>
     <div class="col-sm-offset-3 col-sm-9">
         <c:if test="${not empty hintCode}">
