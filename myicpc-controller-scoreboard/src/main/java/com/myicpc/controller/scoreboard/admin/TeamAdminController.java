@@ -151,8 +151,7 @@ public class TeamAdminController extends GeneralAdminController {
     public String processTeamAbbr(@PathVariable String contestCode, RedirectAttributes redirectAttributes, @RequestParam("file") MultipartFile file) {
         Contest contest = getContest(contestCode, null);
         try {
-            //TODO
-//          teamService.uploadAbbreviationFile(file, contest);
+            teamService.uploadAbbreviationFile(file, contest);
             successMessage(redirectAttributes, "teamAdmin.abbr.success");
         } catch (ValidationException ex) {
             errorMessage(redirectAttributes, ex);
@@ -166,8 +165,7 @@ public class TeamAdminController extends GeneralAdminController {
                                       @RequestParam("file") MultipartFile file) {
         Contest contest = getContest(contestCode, null);
         try {
-            //TODO
-//          teamService.uploadHashtagsFile(file, contest);
+            teamService.uploadHashtagsFile(file, contest);
             successMessage(redirectAttributes, "teamAdmin.hashtags.success");
         } catch (ValidationException ex) {
             errorMessage(redirectAttributes, ex);

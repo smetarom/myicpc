@@ -24,10 +24,6 @@
                     <li><a href='<spring:url value="/private${contestURL}/teams/hashtags" />'>- <spring:message code="teamAdmin.hashtag" /></a></li>
                     <li class="divider"></li>
                     <li><a href='<spring:url value="/private${contestURL}/participants" />'><spring:message code="nav.admin.participants" /></a></li>
-                    <li class="divider"></li>
-                    <li><a href='<spring:url value="/private/contest/updateFeed" />'><spring:message code="admin.panel.feed" /></a></li>
-                    <li class="divider"></li>
-                    <li><a href='<spring:url value="/private/contest/settings" />'><spring:message code="nav.admin.contestSettings" /></a></li>
                 </ul>
             </li>
             <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="nav.admin.notifications" /> <b class="caret"></b></a>

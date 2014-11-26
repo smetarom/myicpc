@@ -92,6 +92,10 @@
         <path>/WEB-INF/tags/form/input.tag</path>
     </tag-file>
     <tag-file>
+        <name>plainForm</name>
+        <path>/WEB-INF/tags/form/plainForm.tag</path>
+    </tag-file>
+    <tag-file>
         <name>springCheckbox</name>
         <path>/WEB-INF/tags/form/springCheckbox.tag</path>
     </tag-file>

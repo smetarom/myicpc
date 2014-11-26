@@ -10,9 +10,9 @@
 				<td>
 					<spring:message code="teamAdmin.sync.hint" />
 					<div class="text-right">
-						<form method="post" action='<spring:url value="/private${contestURL}/teams/synchronize" />'>
+						<t:plainForm action="/private${contestURL}/teams/synchronize">
 							<t:button type="submit" context="primary"><spring:message code="teamAdmin.sync.btn" /></t:button>
-						</form>
+						</t:plainForm>
 					</div>
 				</td>
 			</tr>
@@ -20,9 +20,9 @@
 				<td>
 					<spring:message code="teamAdmin.sync.staff.hint" />
 					<div class="text-right">
-						<form method="post" action='<spring:url value="/private${contestURL}/teams/synchronize/staff-members" />'>
+						<t:plainForm action="/private${contestURL}/teams/synchronize/staff-members">
 							<t:button type="submit" context="primary"><spring:message code="teamAdmin.sync.staff.btn" /></t:button>
-						</form>
+						</t:plainForm>
 					</div>
 				</td>
 			</tr>
@@ -30,20 +30,19 @@
 				<td>
 					<spring:message code="teamAdmin.sync.socialInfo.hint" />
 					<div class="text-right">
-						<form method="post" action='<spring:url value="/private${contestURL}/teams/synchronize/social-content" />'>
+						<t:plainForm action="/private${contestURL}/teams/synchronize/social-content">
 							<t:button type="submit" context="primary"><spring:message code="teamAdmin.sync.socialInfo.btn" /></t:button>
-						</form>
+						</t:plainForm>
 					</div>
 				</td>
 			</tr>
 		</table>
 	</fieldset>
 </div>
-<br class="clear" />
 <br />
 <br />
 
-<form method="post" action='<spring:url value="/private${contestURL}/teams/synchronize-manual" />' class="form-horizontal col-sm-12" enctype="multipart/form-data">
+<t:plainForm action="/private${contestURL}/teams/synchronize-manual" styleClass="col-sm-12" fileUpload="true">
 	<fieldset>
 		<legend>
 			<spring:message code="teamAdmin.sync.manual" />
@@ -69,7 +68,7 @@
 			</div>
 		</div>
 	</fieldset>
-</form>
+</t:plainForm>
 
 <form method="post" action='<spring:url value="/private${contestURL}/teams/contestteamidmapping" />' class="form-horizontal col-sm-10" enctype="multipart/form-data">
 	<fieldset>

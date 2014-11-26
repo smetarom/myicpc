@@ -30,8 +30,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.ValidationException;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,8 +66,7 @@ public class TeamService {
     /**
      * Synchronize team and university info via web services
      *
-     * @throws WebServiceException
-     *             communication with WS failed
+     * @throws WebServiceException communication with WS failed
      */
     public void synchronizeTeamsWithCM(Contest contest) throws WebServiceException, ValidationException {
         try {
@@ -82,12 +83,9 @@ public class TeamService {
     /**
      * Synchronize team and university info via file upload
      *
-     * @param universityJSON
-     *            file with university info
-     * @param teamJSON
-     *            file with team info
-     * @throws IOException
-     *             parsing uploaded files failed
+     * @param universityJSON file with university info
+     * @param teamJSON       file with team info
+     * @throws IOException parsing uploaded files failed
      */
     public void synchronizeTeamsFromFile(final MultipartFile universityJSON, final MultipartFile teamJSON, final Contest contest) throws IOException,
             ValidationException {
@@ -103,8 +101,7 @@ public class TeamService {
     /**
      * Synchronize universities based on given JSON data
      *
-     * @param universityJSON
-     *            university JSON data
+     * @param universityJSON university JSON data
      */
     private void synchronizeUniversities(String universityJSON) {
         try {
@@ -143,8 +140,7 @@ public class TeamService {
     /**
      * Synchronize teams based on given JSON data
      *
-     * @param teamJSON
-     *            team JSON data
+     * @param teamJSON team JSON data
      */
     private void synchronizeTeams(String teamJSON, Contest contest) {
         try {
@@ -198,10 +194,8 @@ public class TeamService {
     /**
      * Parses regional contests where the team participates
      *
-     * @param teamInfo
-     *            team
-     * @param teamAdapter
-     *            JSON representation
+     * @param teamInfo    team
+     * @param teamAdapter JSON representation
      * @return list of regional contests
      */
     private List<RegionalResult> parseRegionalContests(TeamInfo teamInfo, JSONAdapter teamAdapter) {
@@ -231,10 +225,8 @@ public class TeamService {
     /**
      * Parses people from JSON
      *
-     * @param teamInfo
-     *            team
-     * @param teamAdapter
-     *            team JSON representation
+     * @param teamInfo    team
+     * @param teamAdapter team JSON representation
      */
     private void parsePeople(TeamInfo teamInfo, JSONAdapter teamAdapter) {
         JsonArray persons = teamAdapter.getJsonArray("persons");
@@ -281,8 +273,7 @@ public class TeamService {
     /**
      * Parse person from JSON representation
      *
-     * @param personAdapter
-     *            person JSON representation
+     * @param personAdapter person JSON representation
      * @return parsed person
      */
     private ContestParticipant parsePerson(JSONAdapter personAdapter) {
@@ -302,8 +293,7 @@ public class TeamService {
     /**
      * Synchronize staff info via web services
      *
-     * @throws WebServiceException
-     *             communication with WS failed
+     * @throws WebServiceException communication with WS failed
      */
     public void synchronizeStaffMembersWithCM(Contest contest) throws WebServiceException {
         try {
@@ -331,8 +321,7 @@ public class TeamService {
     /**
      * Synchronize social info (social accounts, etc.) info via web services
      *
-     * @throws WebServiceException
-     *             communication with WS failed
+     * @throws WebServiceException communication with WS failed
      */
     public void synchronizeSocialInfosWithCM(Contest contest) throws WebServiceException {
         try {
@@ -346,8 +335,7 @@ public class TeamService {
     /**
      * Parses social info (social networks accounts, etc.) info
      *
-     * @param socialInfosJson
-     *            JSON data
+     * @param socialInfosJson JSON data
      */
     public void processSocialInfos(String socialInfosJson) {
         JsonArray arr = new JsonParser().parse(socialInfosJson).getAsJsonArray();
@@ -363,6 +351,62 @@ public class TeamService {
                 contestParticipant.setLinkedinOauthSecret(infoAdapter.getString("linkedinOauthSecret"));
                 contestParticipantRepository.save(contestParticipant);
             }
+        }
+    }
+
+    /**
+     * Updates team abbreviations
+     *
+     * @param file uploaded file with abbreviations
+     * @throws IOException parsed error during the file processing
+     */
+    public void uploadAbbreviationFile(final MultipartFile file, final Contest contest) {
+        processTABFileUpload(file, "abbreviation", contest);
+    }
+
+    /**
+     * Updates team hashtags
+     *
+     * @param file uploaded file with hashtags
+     * @throws IOException parsed error during the file processing
+     */
+    public void uploadHashtagsFile(final MultipartFile file, final Contest contest) throws ValidationException {
+        processTABFileUpload(file, "hashtag", contest);
+    }
+
+    /**
+     * Processes TAB file upload
+     * <p/>
+     * Format: col1\tcol2
+     *
+     * @param file
+     * @param attribute
+     */
+    private void processTABFileUpload(final MultipartFile file, final String attribute, final Contest contest) {
+        try (InputStream fileInputStream = file.getInputStream();
+             BufferedReader in = new BufferedReader(new InputStreamReader(fileInputStream, TextUtils.DEFAULT_ENCODING))) {
+            String line;
+            while ((line = in.readLine()) != null) {
+                String[] ss = line.split("\t");
+                if (ss.length != 2) {
+                    logger.warn("Invalid " + attribute + " format:" + line);
+                }
+                TeamInfo teamInfo = teamInfoRepository.findByExternalIdAndContest(Long.parseLong(ss[0]), contest);
+                if (teamInfo != null) {
+                    // decide what the value represents
+                    if ("hashtag".equalsIgnoreCase(attribute)) {
+                        teamInfo.setHashtag(ss[1].trim());
+                    } else if ("abbreviation".equalsIgnoreCase(attribute)) {
+                        teamInfo.setAbbreviation(ss[1]);
+                    }
+                    teamInfoRepository.save(teamInfo);
+                } else {
+                    logger.warn("No matching teamInfo for this " + attribute + ": " + line);
+                }
+            }
+        } catch (Exception ex) {
+            logger.error("Error parsing TAB file", ex);
+            throw new ValidationException("Error during parsing the file. Check the file format.", ex);
         }
     }
 
