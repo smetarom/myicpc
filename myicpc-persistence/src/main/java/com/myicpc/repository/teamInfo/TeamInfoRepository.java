@@ -3,12 +3,13 @@ package com.myicpc.repository.teamInfo;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.teamInfo.RegionalResult;
 import com.myicpc.model.teamInfo.TeamInfo;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface TeamInfoRepository extends CrudRepository<TeamInfo, Long> {
+public interface TeamInfoRepository extends JpaRepository<TeamInfo, Long> {
 
     TeamInfo findByExternalIdAndContest(Long externalId, Contest contest);
 

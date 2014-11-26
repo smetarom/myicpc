@@ -81,4 +81,12 @@ public class GlobalSettings implements Serializable {
     public void setTeamPicturesURL(String teamPicturesURL) {
         settingsMap.put(Globals.GlobalsColumn.TEAM_PICTURES_URL, teamPicturesURL);
     }
+
+    public String getContestManagementSystemURL() {
+        return settingsMap.get(Globals.GlobalsColumn.CONTEST_MANAGEMENT_SYSTEM_URL);
+    }
+
+    public void setContestManagementSystemURL(String contestManagementSystemURL) {
+        settingsMap.put(Globals.GlobalsColumn.CONTEST_MANAGEMENT_SYSTEM_URL, contestManagementSystemURL);
+    }
 }
