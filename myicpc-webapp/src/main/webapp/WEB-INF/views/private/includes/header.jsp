@@ -5,7 +5,7 @@
 <%@ taglib prefix="t" uri="http://myicpc.baylor.edu/tags" %>
 <%@ taglib prefix="util" uri="http://myicpc.baylor.edu/functions"%>
 
-<nav class="navbar navbar-default">
+<nav id="admin-navbar" class="navbar navbar-default">
 
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
