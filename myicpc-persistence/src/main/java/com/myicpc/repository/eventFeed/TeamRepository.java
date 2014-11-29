@@ -14,6 +14,9 @@ import java.util.List;
 public interface TeamRepository extends JpaRepository<Team, Long> {
     List<Team> findByContest(Contest contest);
 
+    @Query("SELECT t FROM Team t WHERE t.contest = ?1 AND t.id IN ?2")
+    List<Team> findByContestAndTeamId(Contest contest, List<Long> ids);
+
     List<Team> findByContestOrderByRankAsc(Contest contest);
 
     List<Team> findByRegion(Region region);

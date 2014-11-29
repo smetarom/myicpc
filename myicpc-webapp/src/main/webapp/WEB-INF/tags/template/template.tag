@@ -3,11 +3,19 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="t" uri="http://myicpc.baylor.edu/tags" %>
 <%@ taglib uri="http://htmlcompressor.googlecode.com/taglib/compressor" prefix="compress" %>
+
+<%@attribute name="title" fragment="true" %>
+<%@attribute name="head" fragment="true" %>
+
 <compress:html compressCss="true">
     <!DOCTYPE html>
     <html>
     <head>
-        <title><c:if test="${not empty pageTitle}">${pageTitle} - </c:if> MyICPC
+        <title>
+            <c:if test="${not empty title}">
+                <jsp:invoke fragment="title" /> &middot;
+            </c:if>
+                ${contest.shortName} &middot; MyICPC
         </title>
         <script type="text/javascript">
             websocketURL = '127.0.0.1';
@@ -18,6 +26,7 @@
         </script>
         <jsp:include page="/WEB-INF/views/includes/head.jsp"/>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <jsp:invoke fragment="head" />
     </head>
     <body class="${sitePreference.mobile ? 'mobile' : ''}">
     <div id="bodyContainer">

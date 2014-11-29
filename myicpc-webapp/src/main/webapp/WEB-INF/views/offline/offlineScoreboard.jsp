@@ -27,8 +27,8 @@
                 <tr class="team_{{team.teamId}}" ng-repeat="team in teams  | orderBy:'rank'">
                     <td>{{team.rank}}</td>
                     <td class="nowrap team-name" title="{{team.teamName}}"><a
-                            href="<spring:url value="/team/{{team.teamId}}"/>">{{team.teamShortName}}</a></td>
-                    <td class="nowrap hide-region"><a href="<spring:url value="/region/{{team.regionId}}"/>">{{team.regionShortName}}</a>
+                            href="<spring:url value="/team/{{team.teamId}}"/>">{{team.teamName}}</a></td>
+                    <td class="nowrap hide-region"><a href="<spring:url value="/region/{{team.regionId}}"/>">{{team.regionName}}</a>
                     </td>
                     <td class="text-center">{{team.nSolved}}</td>
                     <td class="text-center">{{team.totalTime}}</td>

@@ -3,6 +3,9 @@ package com.myicpc.controller.scoreboard;
 import com.myicpc.controller.GeneralAbstractController;
 import com.myicpc.controller.GeneralController;
 import com.myicpc.model.contest.Contest;
+import com.myicpc.model.eventFeed.Problem;
+import com.myicpc.service.scoreboard.ScoreboardService;
+import com.myicpc.service.scoreboard.problem.ProblemService;
 import com.myicpc.service.scoreboard.team.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * @author Roman Smetana
@@ -24,10 +28,21 @@ public class ScoreboardController extends GeneralController {
     @Autowired
     private TeamService teamService;
 
+    @Autowired
+    private ScoreboardService scoreboardService;
+
+    @Autowired
+    private ProblemService problemService;
+
     @RequestMapping(value = {"/{contestCode}/scoreboard"}, method = RequestMethod.GET)
     public String scoreboard(@PathVariable String contestCode, Model model, HttpSession session, HttpServletRequest request, @CookieValue(value = "followedTeams", required = false) String followedTeams) {
         Contest contest = getContest(contestCode, model);
 
+        List<Problem> problems = problemService.findByContest(contest);
+
+        model.addAttribute("teamJSON", scoreboardService.getTeamsFullTemplate(contest).toString());
+        model.addAttribute("problems", problems);
+        model.addAttribute("numProblems", problems.size());
         model.addAttribute("scoreboardAvailable", true);
         model.addAttribute("sideMenuActive", "scoreboard");
         return "scoreboard/scoreboard";
