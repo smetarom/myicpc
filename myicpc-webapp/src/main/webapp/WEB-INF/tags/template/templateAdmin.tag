@@ -17,22 +17,22 @@
     </head>
     <body>
     <jsp:include page="/WEB-INF/views/private/includes/header.jsp"/>
-        <div class="admin-header">
-            <c:if test="${not empty breadcrumb}">
-                <ol class="breadcrumb">
-                    <li><a href="<spring:url value="/private/home" />"><spring:message code="nav.admin.home"/></a></li>
-                    <c:if test="${not empty contest}">
-                        <li><a href="<spring:url value="/private/${contest.code}/home" />">${contest.shortName}</a></li>
-                    </c:if>
-                    <jsp:invoke fragment="breadcrumb"/>
-                </ol>
-            </c:if>
-            <c:if test="${not empty headline}">
-                <h1>
-                    <jsp:invoke fragment="headline"/>
-                </h1>
-            </c:if>
-        </div>
+    <div class="admin-header">
+        <c:if test="${not empty breadcrumb}">
+            <ol class="breadcrumb">
+                <li><a href="<spring:url value="/private/home" />"><spring:message code="nav.admin.home"/></a></li>
+                <c:if test="${not empty contest}">
+                    <li><a href="<spring:url value="/private/${contest.code}/home" />">${contest.shortName}</a></li>
+                </c:if>
+                <jsp:invoke fragment="breadcrumb"/>
+            </ol>
+        </c:if>
+        <c:if test="${not empty headline}">
+            <h1>
+                <jsp:invoke fragment="headline"/>
+            </h1>
+        </c:if>
+    </div>
     <div id="body" class="wrapper clearfix">
         <c:if test="${not empty controls}">
             <div class="pull-right">

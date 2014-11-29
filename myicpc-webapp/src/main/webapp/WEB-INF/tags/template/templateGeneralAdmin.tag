@@ -17,18 +17,19 @@
     </head>
     <body>
     <jsp:include page="/WEB-INF/views/private/includes/header_general.jsp"/>
-    <div id="body" class="wrapper clearfix">
+    <div class="admin-header">
         <ol class="breadcrumb">
             <li><a href="<spring:url value="/private/home" />"><spring:message code="nav.admin.home"/></a></li>
             <jsp:invoke fragment="breadcrumb"/>
         </ol>
 
-        <div class="page-header">
+        <div>
             <h1>
                 <jsp:invoke fragment="headline"/>
             </h1>
         </div>
-
+    </div>
+    <div id="body" class="wrapper clearfix">
         <c:if test="${not empty controls}">
             <div class="pull-right">
                 <jsp:invoke fragment="controls" />
