@@ -1,7 +1,11 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp"%>
 
 <t:templateGeneralAdmin>
-	<jsp:attribute name="headline">
+	<jsp:attribute name="title">
+		<spring:message code="contestAdmin.list.title" />
+	</jsp:attribute>
+
+  <jsp:attribute name="headline">
 		<spring:message code="contestAdmin.list.title" />
 	</jsp:attribute>
 	

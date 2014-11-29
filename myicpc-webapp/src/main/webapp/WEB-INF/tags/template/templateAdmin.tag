@@ -5,6 +5,7 @@
 <%@ taglib prefix="t" uri="http://myicpc.baylor.edu/tags" %>
 <%@ taglib uri="http://htmlcompressor.googlecode.com/taglib/compressor" prefix="compress" %>
 
+<%@attribute name="title" fragment="true" %>
 <%@attribute name="headline" fragment="true" %>
 <%@attribute name="breadcrumb" fragment="true" %>
 <%@attribute name="controls" fragment="true" %>
@@ -13,6 +14,12 @@
     <!DOCTYPE html>
     <html>
     <head>
+        <title>
+            <c:if test="${not empty title}">
+                <jsp:invoke fragment="title" /> &middot;
+            </c:if>
+            ${contest.shortName} &middot; MyICPC
+        </title>
         <%@ include file="/WEB-INF/views/includes/headAdmin.jsp" %>
     </head>
     <body>

@@ -1,6 +1,10 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
 
 <t:templateAdminWithSubmenu>
+    <jsp:attribute name="title">
+		<spring:message code="teams" />
+	</jsp:attribute>
+
 	<jsp:attribute name="headline">
 		<spring:message code="teams" />
 	</jsp:attribute>

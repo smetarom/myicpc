@@ -1,6 +1,9 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
 
 <t:templateGeneralAdmin>
+  <jsp:attribute name="title">
+		<spring:message code="settingsAdmin.title"/>
+  </jsp:attribute>
   <jsp:attribute name="breadcrumb">
 	    <li class="active"><spring:message code="settingsAdmin.title"/></li>
   </jsp:attribute>

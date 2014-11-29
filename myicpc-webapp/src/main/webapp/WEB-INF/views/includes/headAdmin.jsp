@@ -1,7 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" uri="http://myicpc.baylor.edu/tags" %>
 
-<title>MyICPC</title>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
 <link rel="Shortcut Icon" href="http://icpc.baylor.edu/img/icon-icpc-small.gif"/>
 

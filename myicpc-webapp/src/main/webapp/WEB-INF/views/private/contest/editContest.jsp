@@ -1,6 +1,10 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
 
 <t:templateGeneralAdminWithSubmenu>
+    <jsp:attribute name="title">
+		${headline}
+	</jsp:attribute>
+
 	<jsp:attribute name="headline">
 		${headline}
 	</jsp:attribute>

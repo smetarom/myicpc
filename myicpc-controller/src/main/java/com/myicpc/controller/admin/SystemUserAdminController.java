@@ -264,7 +264,7 @@ public class SystemUserAdminController extends GeneralAdminController {
 
 		if (user == null) {
 			errorMessage(redirectAttributes, "userAdmin.noResult");
-			return "redirect:/private/users";
+			return "redirect:/private/home";
 		}
 
 		model.addAttribute("systemUser", user);

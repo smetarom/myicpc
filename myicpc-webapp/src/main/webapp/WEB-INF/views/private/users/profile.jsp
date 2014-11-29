@@ -1,6 +1,10 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp"%>
 
 <t:templateGeneralAdmin>
+	<jsp:attribute name="title">
+		${systemUser.fullname}
+	</jsp:attribute>
+
 	<jsp:attribute name="headline">
 		${systemUser.fullname} <small>${systemUser.username}</small>
 	</jsp:attribute>

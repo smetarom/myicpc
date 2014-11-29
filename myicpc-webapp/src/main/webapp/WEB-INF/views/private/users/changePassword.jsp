@@ -1,6 +1,10 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp"%>
 
 <t:templateAdminEdit>
+	<jsp:attribute name="title">
+		<spring:message code="userAdmin.changePassword" />
+	</jsp:attribute>
+
 	<jsp:attribute name="headline">
 		<spring:message code="userAdmin.changePassword" />: ${user.username}
 	</jsp:attribute>
