@@ -9,14 +9,18 @@
 <td class="nowrap team-name"><a href="<spring:url value="/team/{{team.teamId}}"/>">{{team.teamName}}</a></td>
 <c:if test="${contest.contestSettings.showRegion}">
     <td class="nowrap hide-region">
-        <a href="<spring:url value="${contestURL}/region/{{team.regionId}}"/>">{{team.regionName}}</a>
+        <a href="javascript:void(0)" ng-click="filterByRegion(team.regionId)">{{team.regionName}}</a>
     </td>
 </c:if>
 <c:if test="${contest.contestSettings.showUniversity}">
-    <td class="text-center">{{team.universityName}}</td>
+    <td class="text-center">
+        <a href="javascript:void(0)" ng-click="filterByUniversity(team.universityName)">{{team.universityName}}</a>
+    </td>
 </c:if>
 <c:if test="${contest.contestSettings.showCountry}">
-    <td class="text-center">{{team.nationality}}</td>
+    <td class="text-center">
+        <a href="javascript:void(0)" ng-click="filterByNationality(team.nationality)">{{team.nationality}}</a>
+    </td>
 </c:if>
 <td class="text-center total-solved">{{team.nSolved}}</td>
 <td class="text-center total-time">{{team.totalTime}}</td>

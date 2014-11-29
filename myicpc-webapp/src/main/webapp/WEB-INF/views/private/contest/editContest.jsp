@@ -49,6 +49,7 @@
             }
 
             $(function() {
+                $.fn.bootstrapSwitch.defaults.size = 'small';
                 $("input.moduleSwitch,input.checkboxSwitch").bootstrapSwitch();
             })
         </script>

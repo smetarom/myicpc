@@ -6,11 +6,37 @@
 
   scoreboard.controller('scoreboardCtrl', function($scope) {
     $scope.teams = {};
-    $scope.message = "dasdsa";
+    $scope.filterBy = null;
+    $scope.filterValue = null;
     $scope.init = function(teams) {
       return $scope.$apply(function() {
         return $scope.teams = teams;
       });
+    };
+    $scope.filterTeam = function(team) {
+      if ($scope.filterBy == null) {
+        return true;
+      }
+      return team[$scope.filterBy] === $scope.filterValue;
+    };
+    $scope.clearFilter = function() {
+      $scope.filterBy = null;
+      return $scope.filterValue = null;
+    };
+    $scope.isFilteredBy = function(filtredBy) {
+      return $scope.filterBy === filtredBy;
+    };
+    $scope.filterByNationality = function(nationality) {
+      $scope.filterBy = 'nationality';
+      return $scope.filterValue = nationality;
+    };
+    $scope.filterByUniversity = function(university) {
+      $scope.filterBy = 'universityName';
+      return $scope.filterValue = university;
+    };
+    $scope.filterByRegion = function(region) {
+      $scope.filterBy = 'regionId';
+      return $scope.filterValue = region;
     };
     $scope.isFirstSolvedSubmission = function(team, problemId) {
       if (team.teamProblems[problemId] == null) {

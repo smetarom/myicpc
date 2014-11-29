@@ -19,7 +19,18 @@
         <c:if test="${scoreboardAvailable}">
             <div ng-app="scoreboard">
             <div id="mainScoreboard" class="table-responsive desktop" ng-controller="scoreboardCtrl">
-
+                <div ng-show="filterBy">
+                    <strong><spring:message code="filtredBy" />:</strong>
+                    <a href="javascript:void(0)" ng-click="clearFilter()" ng-show="isFilteredBy('regionId')">
+                        <span class="label label-default">&times; <spring:message code="scoreboard.region" /></span>
+                    </a>
+                    <a href="javascript:void(0)" ng-click="clearFilter()" ng-show="isFilteredBy('universityName')">
+                        <span class="label label-default">&times; <spring:message code="scoreboard.university" /></span>
+                    </a>
+                    <a href="javascript:void(0)" ng-click="clearFilter()" ng-show="isFilteredBy('nationality')">
+                        <span class="label label-default">&times; <spring:message code="scoreboard.country" /></span>
+                    </a>
+                </div>
                 <table class="table striped-rows scoreboard invisible">
                     <thead>
                     <tr>
@@ -37,13 +48,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr class="team_{{team.teamId}}" ng-repeat="team in pinnedTeams | orderBy:['teamRank','teamName']">
+                    <tr class="team_{{team.teamId}}" ng-repeat="team in teams | filter: filterTeam | filter: {followed: true} | orderBy:['teamRank','teamName']">
                         <%@ include file="/WEB-INF/views/scoreboard/fragment/scoreboardRow.jsp"%>
                     </tr>
                     <tr style="background-color: black;" ng-if="pinnedTeams.length > 0">
                         <td colspan="20"></td>
                     </tr>
-                    <tr class="team_{{team.teamId}}" ng-repeat="team in teams  | orderBy:['teamRank','teamName']">
+                    <tr class="team_{{team.teamId}}" ng-repeat="team in teams | filter: filterTeam | orderBy:['teamRank','teamName']">
                         <%@ include file="/WEB-INF/views/scoreboard/fragment/scoreboardRow.jsp"%>
                     </tr>
                     </tbody>
