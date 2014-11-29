@@ -26,7 +26,6 @@ import java.util.concurrent.Future;
  * @author Roman Smetana
  */
 @Service
-@Transactional
 public class ControlFeedService {
     private static final Logger logger = LoggerFactory.getLogger(ControlFeedService.class);
 

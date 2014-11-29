@@ -57,6 +57,11 @@
         <function-signature>boolean isMapModuleEnabled(com.myicpc.model.contest.Contest)</function-signature>
     </function>
     <function>
+        <name>codeInsightModuleEnabled</name>
+        <function-class>com.myicpc.jsp.JSPCustomFunctions</function-class>
+        <function-signature>boolean isCodeInsightModuleEnabled(com.myicpc.model.contest.Contest)</function-signature>
+    </function>
+    <function>
         <name>scheduleModuleEnabled</name>
         <function-class>com.myicpc.jsp.JSPCustomFunctions</function-class>
         <function-signature>boolean isScheduleModuleEnabled(com.myicpc.model.contest.Contest)</function-signature>

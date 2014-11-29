@@ -23,24 +23,6 @@ import java.util.List;
 public abstract class FeedRunStrategy {
     private static final Logger logger = LoggerFactory.getLogger(FeedRunStrategy.class);
 
-    public enum FeedRunStrategyType {
-        NATIVE("MyICPC computed"), UNSORTED_JSON("Unsorted JSON scoreboard"), SORTED_JSON("Sorted JSON scoreboard");
-
-        private String label;
-
-        private FeedRunStrategyType(String label) {
-            this.label = label;
-        }
-
-        public String getLabel() {
-            return label;
-        }
-
-        public String getName() {
-            return this.toString();
-        }
-    }
-
     @Autowired
     private PublishService publishService;
 
@@ -90,18 +72,6 @@ public abstract class FeedRunStrategy {
         publishService.broadcastTeamProblem(teamProblem, teamsToBroadcast);
         return teamProblem;
     }
-
-    /**
-     * Connects to Event feed and returns the input stream
-     *
-     * @param feedURL url of the Event feed
-     * @return input stream with event feed
-     * @throws IOException Error during getting the input stream of the feed
-     */
-    public InputStream connectToCDSFeed(final String feedURL, final String feedUsername, final String feedPassword) throws IOException {
-        return WebServiceUtils.connectCDS(feedURL, feedUsername, feedPassword);
-    }
-
 
     /**
      * Update {@link LastTeamProblem} by {@link TeamProblem}

@@ -10,6 +10,7 @@ import com.myicpc.service.scoreboard.eventFeed.dto.*;
 import com.myicpc.service.scoreboard.eventFeed.dto.convertor.ProblemConverter;
 import com.myicpc.service.scoreboard.eventFeed.dto.convertor.RegionConverter;
 import com.myicpc.service.scoreboard.eventFeed.dto.convertor.TeamConverter;
+import com.myicpc.service.scoreboard.exception.EventFeedException;
 import com.thoughtworks.xstream.XStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -26,6 +27,9 @@ import java.util.concurrent.Future;
 @Service
 public class EventFeedProcessor {
     private static final Logger logger = LoggerFactory.getLogger(EventFeedProcessor.class);
+
+    @Autowired
+    private EventFeedWSService eventFeedWSService;
 
     @Autowired
     private EventFeedVisitor eventFeedVisitor;
@@ -76,16 +80,18 @@ public class EventFeedProcessor {
             Reader reader = null;
             InputStream in = null;
             try {
-                in = WebServiceUtils.connectCDS("http://localhost:8080/simulator/2015/events", contestSettings.getEventFeedUsername(),
+                in = eventFeedWSService.connectCDS(contestSettings.getEventFeedURL(), contestSettings.getEventFeedUsername(),
                         contestSettings.getEventFeedPassword());
-                // in = new
-                // FileInputStream("/home/smetana/MyICPC/workspace/XStreamParser/eventFeed.xml");
                 reader = new InputStreamReader(in);
                 parseXML(reader, contest);
             } catch (IOException ex) {
                 logger.error(ex.getMessage(), ex);
+            } catch (EventFeedException ex) {
+                logger.error("Event feed connection failed. Reason: " + ex.getMessage());
             } catch (ClassNotFoundException ex) {
                 logger.error("Non existing Java representation of the XML sctructure", ex);
+            } catch (Exception ex) {
+                logger.error("Unexpected error occured", ex);
             } finally {
                 IOUtils.closeQuietly(reader);
                 IOUtils.closeQuietly(in);
@@ -111,7 +117,7 @@ public class EventFeedProcessor {
                     logger.info("Event feed reader for contest " + contest.getCode() + " was interrupted.");
                     break;
                 }
-                EventFeedElement elem = (EventFeedElement) in.readObject();
+                XMLEntity elem = (XMLEntity) in.readObject();
                 elem.accept(eventFeedVisitor, contest);
             }
         } catch (EOFException ex) {

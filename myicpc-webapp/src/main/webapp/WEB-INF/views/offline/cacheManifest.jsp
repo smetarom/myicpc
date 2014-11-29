@@ -19,7 +19,7 @@ ${ctx}/static/js/modernizr/modernizr.min.js
 ${ctx}/static/js/bootstrap/bootstrap.min.js
 ${ctx}/static/js/handlebars/handlebars.min.js
 ${ctx}/static/js/myicpc/functions.min.js
-${ctx}/static/js/myicpc/controllers.js
+${ctx}/static/js/myicpc/scoreboardController.js
 
 
 FALLBACK:

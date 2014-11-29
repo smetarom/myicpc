@@ -50,10 +50,6 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
     @Override
     @Transactional
     public void visit(final ContestXML xmlContest, Contest contest) {
-        contest = contestRepository.findByName(xmlContest.getTitle());
-        if (contest == null) {
-            contest = new Contest();
-        }
         xmlContest.mergeTo(contest);
         contestRepository.save(contest);
     }
@@ -106,6 +102,7 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
         if (problem == null) {
             problem = new Problem();
             xmlProblem.mergeTo(problem);
+            problem.setCode(Character.toString((char) (64 + problem.getSystemId())));
             problem.setContest(contest);
             problem = problemRepository.save(problem);
             logger.info("Problem " + problem.getCode() + " created");

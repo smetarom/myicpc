@@ -115,6 +115,13 @@ public class JSPCustomFunctions {
         return false;
     }
 
+    public static boolean isCodeInsightModuleEnabled(Contest contest) {
+        if (contest != null && contest.getModuleConfiguration() != null) {
+            return contest.getModuleConfiguration().isMapModule();
+        }
+        return false;
+    }
+
     public static boolean isScheduleModuleEnabled(Contest contest) {
         if (contest != null && contest.getModuleConfiguration() != null) {
             return contest.getModuleConfiguration().isMapModule();

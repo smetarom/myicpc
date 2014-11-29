@@ -12,15 +12,17 @@ import com.thoughtworks.xstream.annotations.XStreamConverter;
  */
 @XStreamAlias("problem")
 public class ProblemXML extends XMLEntity<Problem> {
-    @XStreamConverter(ProblemCodeConverter.class)
+    @XStreamAlias("id")
+    private Long systemId;
+
     private String code;
 
     private String name;
 
     @Override
     public void mergeTo(final Problem problem) {
-        problem.setCode(getCode());
         problem.setName(getName());
+        problem.setSystemId(getSystemId());
     }
 
     @Override
@@ -42,5 +44,13 @@ public class ProblemXML extends XMLEntity<Problem> {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Long getSystemId() {
+        return systemId;
+    }
+
+    public void setSystemId(Long systemId) {
+        this.systemId = systemId;
     }
 }
