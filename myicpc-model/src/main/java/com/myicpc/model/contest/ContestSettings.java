@@ -35,6 +35,9 @@ public class ContestSettings implements Serializable {
     private Integer year;
     private Integer timeDifference = 0;
     private boolean showTeamNames;
+    private boolean showRegion;
+    private boolean showUniversity;
+    private boolean showCountry;
 
     public String getEmail() {
         return email;
@@ -172,4 +175,27 @@ public class ContestSettings implements Serializable {
         this.problemPDFURL = problemPDFURL;
     }
 
+    public boolean isShowRegion() {
+        return showRegion;
+    }
+
+    public void setShowRegion(boolean showRegion) {
+        this.showRegion = showRegion;
+    }
+
+    public boolean isShowUniversity() {
+        return showUniversity;
+    }
+
+    public void setShowUniversity(boolean showUniversity) {
+        this.showUniversity = showUniversity;
+    }
+
+    public boolean isShowCountry() {
+        return showCountry;
+    }
+
+    public void setShowCountry(boolean showCountry) {
+        this.showCountry = showCountry;
+    }
 }

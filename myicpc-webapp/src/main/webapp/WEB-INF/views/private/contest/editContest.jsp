@@ -45,7 +45,7 @@
             }
 
             $(function() {
-                $("input.moduleSwitch").bootstrapSwitch();
+                $("input.moduleSwitch,input.checkboxSwitch").bootstrapSwitch();
             })
         </script>
 
