@@ -1,15 +1,11 @@
 package com.myicpc.service.publish;
 
 import com.google.gson.JsonObject;
-import com.myicpc.model.eventFeed.Team;
-import com.myicpc.model.eventFeed.TeamProblem;
 import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.cpr.BroadcasterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @author Roman Smetana
@@ -17,10 +13,12 @@ import java.util.List;
 @Service
 public class PublishService {
     public static final Logger logger = LoggerFactory.getLogger(PublishService.class);
+
+    private static final String PREFIX = "/pubsub/";
     /**
      * Web socket channel for submissions and contest related messages
      */
-    public static final String CHANNEL_TEAM_PROBLEMS = "teamProblems";
+    public static final String SCOREBOARD_CHANNEL = "scoreboard";
     /**
      * Web socket channel for poll related messages
      */
@@ -35,42 +33,10 @@ public class PublishService {
     public static final String QUEST = "quest";
 
     /**
-     * Broadcast a team submission to channel CHANNEL_TEAM_PROBLEMS
-     *
-     * @param teamProblem      team submission which triggered an event
-     * @param teamsToBroadcast all teams influenced by this team submission
+     * Broadcast a team submission to channel SCOREBOARD_CHANNEL
      */
-    public void broadcastTeamProblem(final TeamProblem teamProblem, final List<Team> teamsToBroadcast) {
-        JsonObject tpObject = new JsonObject();
-        tpObject.addProperty("type", "e");
-        tpObject.addProperty("teamId", teamProblem.getTeam().getId());
-        tpObject.addProperty("teamName", teamProblem.getTeam().getName());
-        tpObject.addProperty("problemId", teamProblem.getProblem().getId());
-        tpObject.addProperty("problemCode", teamProblem.getProblem().getCode());
-        tpObject.addProperty("problemName", teamProblem.getProblem().getName());
-        tpObject.addProperty("attempts", teamProblem.getAttempts());
-        tpObject.addProperty("judged", teamProblem.getJudged());
-        tpObject.addProperty("solved", teamProblem.getSolved());
-        tpObject.addProperty("passed", teamProblem.getNumTestPassed());
-        tpObject.addProperty("first", teamProblem.isFirstSolved());
-        tpObject.addProperty("testcases", teamProblem.getProblem().getTotalTestcases());
-        tpObject.addProperty("penalty", teamProblem.getPenalty());
-        tpObject.addProperty("time", teamProblem.getTime());
-        tpObject.addProperty("total", teamProblem.getTeam().getTotalTime());
-        tpObject.addProperty("numSolved", teamProblem.getTeam().getProblemsSolved());
-        tpObject.addProperty("oldRank", teamProblem.getOldRank());
-        tpObject.addProperty("rank", teamProblem.getTeam().getRank());
-
-        JsonObject teamsObject = new JsonObject();
-        for (Team team : teamsToBroadcast) {
-            JsonObject teamObject = new JsonObject();
-            teamObject.addProperty("teamId", team.getId());
-            teamObject.addProperty("rank", team.getRank());
-            teamsObject.add(team.getId().toString(), teamObject);
-        }
-        tpObject.add("teams", teamsObject);
-
-        atmospherePublish(CHANNEL_TEAM_PROBLEMS, tpObject.toString());
+    public void broadcastTeamProblem(final JsonObject teamProblemJSON, final String contestCode) {
+        atmospherePublish(PREFIX + contestCode + "/" + SCOREBOARD_CHANNEL, teamProblemJSON.toString());
     }
 
     /**

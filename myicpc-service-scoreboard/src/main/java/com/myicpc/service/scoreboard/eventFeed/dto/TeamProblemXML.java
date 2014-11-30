@@ -27,6 +27,7 @@ public class TeamProblemXML extends XMLEntity<TeamProblem> {
     private boolean judged;
     private String language;
     private String result;
+    private String status;
 
     private Team team;
     private Problem problem;
@@ -42,6 +43,7 @@ public class TeamProblemXML extends XMLEntity<TeamProblem> {
         teamProblem.setJudged(isJudged());
         teamProblem.setTeam(getTeam());
         teamProblem.setProblem(getProblem());
+        teamProblem.setStatus(getStatus());
     }
 
     @Override
@@ -121,6 +123,14 @@ public class TeamProblemXML extends XMLEntity<TeamProblem> {
         this.result = result;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Team getTeam() {
         return team;
     }
@@ -136,4 +146,5 @@ public class TeamProblemXML extends XMLEntity<TeamProblem> {
     public void setProblem(Problem problem) {
         this.problem = problem;
     }
+
 }

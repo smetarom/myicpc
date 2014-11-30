@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
     <version>2.0.0</version>
 
-    <name>MyICPC 2.0</name>
+    <name>MyICPC</name>
 
     <modules>
         <module>myicpc-model</module>

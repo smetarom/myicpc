@@ -22,7 +22,7 @@
             var author = null;
             var logged = false;
             var socket = $.atmosphere;
-            var request = { url: document.location.toString() + 'pubsub/notifications',
+            var request = { url: document.location.toString() + 'pubsub/CTU-Open-2013/scoreboard',
                 contentType: "application/json",
                 logLevel: 'debug',
                 transport: 'websocket',

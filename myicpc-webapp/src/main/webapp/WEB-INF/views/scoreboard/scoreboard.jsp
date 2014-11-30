@@ -73,13 +73,16 @@
 
                     $("#mainScoreboard > table").removeClass("invisible");
 
+                    startSubscribe('${r.contextPath}', '${contest.code}', 'scoreboard', updateScoreboard, ngController);
+
                     if (Modernizr.localstorage) {
                         <%--localStorage.setItem("scoreboard", JSON.stringify(teams));--%>
                         <%--localStorage.setItem("scoreboardProblems", JSON.stringify(${problemJSON}));--%>
                     }
                 </c:if>
 
-                <%@ include file="/WEB-INF/views/scoreboard/fragment/atmosphereHandler.jsp"%>
+
+                <%--<%@ include file="/WEB-INF/views/scoreboard/fragment/atmosphereHandler.jsp"%>--%>
 
                 $("#mainScoreboard").click(function() {
                     $("#scorebord-notification-bar").hide("slide", { direction: 'right'});

@@ -10,6 +10,33 @@ scoreboard.controller('scoreboardCtrl', ($scope) ->
       $scope.teams = teams
     )
 
+  $scope.updateRank = (teamId, rank) ->
+    obj = _.find($scope.teams, (obj) ->
+      obj.teamId == teamId
+    )
+    obj.teamRank = rank if obj?
+
+  $scope.updateNumSolvedAndTotalTime = (teamId, numSolved, totalTime) ->
+    obj = _.find($scope.teams, (obj) ->
+      obj.teamId == teamId
+    )
+    if obj?
+      obj.nSolved = numSolved;
+      obj.totalTime = totalTime;
+
+  $scope.updateTeamProblem = (teamId, problemId, judged, solved, attempts, time, first) ->
+    team = _.find($scope.teams, (obj) ->
+      obj.teamId == teamId
+    )
+    if typeof team != "undefined" and typeof team.teamProblems != "undefined"
+      if typeof team.teamProblems[problemId] == "undefined"
+        team.teamProblems[problemId] = {}
+      team.teamProblems[problemId].judged = judged
+      team.teamProblems[problemId].solved = solved
+      team.teamProblems[problemId].attempts = attempts
+      team.teamProblems[problemId].time = time
+      team.teamProblems[problemId].first = first
+
   $scope.filterTeam = (team) ->
     return true if not $scope.filterBy?;
     team[$scope.filterBy] is $scope.filterValue
@@ -49,4 +76,28 @@ scoreboard.controller('scoreboardCtrl', ($scope) ->
     return false if not team.teamProblems[problemId]?
     team.teamProblems[problemId].judged is false and !team.teamProblems[problemId].solved
 
+  $scope.formatTime = (time) ->
+    convertSecondsToMinutes(time)
 )
+
+updateScoreboard = (data, ngController = null) ->
+  console.log data
+  if data.type == 'submission'
+    if ngController != null
+      colorBg = "#ffff99"
+      if data.judged
+        colorBg = if data.solved then "#66FF33" else "#FF5C33"
+
+      $(".team_" + data.teamId).effect("highlight", {color: colorBg}, 3000);
+
+      ngController.$apply(() ->
+        for key of data.teams
+          ngController.updateRank(data.teams[key].teamId, data.teams[key].teamRank);
+
+        if data.solved
+          ngController.updateNumSolvedAndTotalTime(data.teamId, data.numSolved, data.total);
+
+        ngController.updateTeamProblem(data.teamId, data.problemId, data.judged, data.solved, data.attempts, data.time, data.first);
+      )
+
+
