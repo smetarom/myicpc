@@ -17,6 +17,8 @@ import java.util.List;
 public interface TeamProblemRepository extends JpaRepository<TeamProblem, Long>, Serializable {
     TeamProblem findBySystemIdAndTeamContest(Long systemId, Contest contest);
 
+    List<TeamProblem> findByTeam(Team team);
+
     List<TeamProblem> findByTeamOrderByTimeDesc(Team team);
 
     List<TeamProblem> findByTeamAndProblemOrderByTimeDesc(Team team, Problem problem);

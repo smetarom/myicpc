@@ -1,7 +1,9 @@
 package com.myicpc.controller.functions;
 
+import com.myicpc.commons.utils.MessageUtils;
 import com.myicpc.commons.utils.TextUtils;
-import com.myicpc.commons.utils.WikiUtils;
+import com.myicpc.model.contest.Contest;
+import info.bliki.wiki.model.WikiModel;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -43,7 +45,7 @@ public class JSPCustomFunctions {
     /**
      * @param value text with HTML tags
      * @return text wintout HTML tags
-     * @see com.myicpc.commons.utils.TextUtils#removeHTMLTags(String)
+     * @see TextUtils#removeHTMLTags(String)
      */
     public static String escapeHTML(String value) {
         return TextUtils.removeHTMLTags(value);
@@ -52,10 +54,20 @@ public class JSPCustomFunctions {
     /**
      * @param url URL to prepend
      * @return full URL
-     * @see com.myicpc.commons.utils.TextUtils#prependHTTPToURL(String)
+     * @see TextUtils#prependHTTPToURL(String)
      */
     public static String prependHTTP(String url) {
         return TextUtils.prependHTTPToURL(url);
+    }
+
+    public static String formatMinutes(int minutes) {
+        if (minutes < 60) {
+            return MessageUtils.getMessage("mm.shortcut", minutes);
+        } else {
+            int hours = minutes / 60;
+            minutes %= 60;
+            return MessageUtils.getMessage("HHmm.shortcut", hours, minutes);
+        }
     }
 
     /**
@@ -91,7 +103,10 @@ public class JSPCustomFunctions {
      * @return html representation of wiki text
      */
     public static String parseWikiSyntax(String wikiText) {
-        return WikiUtils.parseWikiSyntax(wikiText);
+        if (StringUtils.isEmpty(wikiText)) {
+            return wikiText;
+        }
+        return WikiModel.toHtml(wikiText);
     }
 
     /**
@@ -104,4 +119,59 @@ public class JSPCustomFunctions {
         return StringEscapeUtils.escapeEcmaScript(javascriptText);
     }
 
+    public static boolean isMapModuleEnabled(Contest contest) {
+        if (contest != null && contest.getModuleConfiguration() != null) {
+            return contest.getModuleConfiguration().isMapModule();
+        }
+        return false;
+    }
+
+    public static boolean isCodeInsightModuleEnabled(Contest contest) {
+        if (contest != null && contest.getModuleConfiguration() != null) {
+            return contest.getModuleConfiguration().isMapModule();
+        }
+        return false;
+    }
+
+    public static boolean isScheduleModuleEnabled(Contest contest) {
+        if (contest != null && contest.getModuleConfiguration() != null) {
+            return contest.getModuleConfiguration().isMapModule();
+        }
+        return false;
+    }
+
+    public static boolean isQuestModuleEnabled(Contest contest) {
+        if (contest != null && contest.getModuleConfiguration() != null) {
+            return contest.getModuleConfiguration().isQuestModule();
+        }
+        return false;
+    }
+
+    public static boolean isTechTrekModuleEnabled(Contest contest) {
+        if (contest != null && contest.getModuleConfiguration() != null) {
+            return contest.getModuleConfiguration().isTechtrekModule();
+        }
+        return false;
+    }
+
+    public static boolean isRssModuleEnabled(Contest contest) {
+        if (contest != null && contest.getModuleConfiguration() != null) {
+            return contest.getModuleConfiguration().isRssModule();
+        }
+        return false;
+    }
+
+    public static boolean isGalleryModuleEnabled(Contest contest) {
+        if (contest != null && contest.getModuleConfiguration() != null) {
+            return contest.getModuleConfiguration().isGalleryModule();
+        }
+        return false;
+    }
+
+    public static boolean isPollModuleEnabled(Contest contest) {
+        if (contest != null && contest.getModuleConfiguration() != null) {
+            return contest.getModuleConfiguration().isPollModule();
+        }
+        return false;
+    }
 }

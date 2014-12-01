@@ -164,6 +164,10 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
         // TODO handle analyst message
     }
 
+    public void visit(FinalizedXML finalizedXML, Contest contest) {
+        // TODO do something useful with finalized information
+    }
+
     protected FeedRunStrategy selectStrategy(Contest contest) throws EventFeedException {
         switch (contest.getContestSettings().getScoreboardStrategyType()) {
             case NATIVE:

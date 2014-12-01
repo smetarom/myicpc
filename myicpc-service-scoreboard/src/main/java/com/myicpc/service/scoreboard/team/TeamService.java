@@ -9,22 +9,35 @@ import com.myicpc.commons.adapters.JSONAdapter;
 import com.myicpc.commons.utils.TextUtils;
 import com.myicpc.enums.ContestParticipantRole;
 import com.myicpc.model.contest.Contest;
+import com.myicpc.model.eventFeed.LastTeamProblem;
+import com.myicpc.model.eventFeed.Team;
+import com.myicpc.model.eventFeed.TeamProblem;
+import com.myicpc.model.social.Notification;
 import com.myicpc.model.teamInfo.AttendedContest;
 import com.myicpc.model.teamInfo.ContestParticipant;
 import com.myicpc.model.teamInfo.ContestParticipantAssociation;
 import com.myicpc.model.teamInfo.RegionalResult;
 import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.model.teamInfo.University;
+import com.myicpc.repository.eventFeed.LastTeamProblemRepository;
+import com.myicpc.repository.eventFeed.TeamProblemRepository;
+import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.repository.teamInfo.AttendedContestRepository;
 import com.myicpc.repository.teamInfo.ContestParticipantAssociationRepository;
 import com.myicpc.repository.teamInfo.ContestParticipantRepository;
 import com.myicpc.repository.teamInfo.TeamInfoRepository;
 import com.myicpc.repository.teamInfo.UniversityRepository;
 import com.myicpc.service.exception.WebServiceException;
+import com.myicpc.service.scoreboard.dto.SubmissionDTO;
+import com.myicpc.service.utils.lists.NotificationList;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+import org.joda.time.Minutes;
+import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,7 +48,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Roman Smetana
@@ -47,6 +62,9 @@ public class TeamService {
 
     @Autowired
     private TeamWSService teamWSService;
+
+    @Autowired
+    private TeamProblemRepository teamProblemRepository;
 
     @Autowired
     private UniversityRepository universityRepository;
@@ -62,6 +80,12 @@ public class TeamService {
 
     @Autowired
     private AttendedContestRepository attendedContestRepository;
+
+    @Autowired
+    private NotificationRepository notificationRepository;
+
+    @Autowired
+    private LastTeamProblemRepository lastTeamProblemRepository;
 
     /**
      * Synchronize team and university info via web services
@@ -408,6 +432,46 @@ public class TeamService {
             logger.error("Error parsing TAB file", ex);
             throw new ValidationException("Error during parsing the file. Check the file format.", ex);
         }
+    }
+
+    public List<SubmissionDTO> getTeamSubmissionDTOs(final Team team) {
+        List<Long> teamProblemIds = new ArrayList<>();
+        Map<Long, TeamProblem> map = new HashMap<>();
+        List<TeamProblem> teamProblems = teamProblemRepository.findByTeam(team);
+        for (TeamProblem teamProblem : teamProblems) {
+            teamProblemIds.add(teamProblem.getId());
+            map.put(teamProblem.getId(), teamProblem);
+        }
+
+        List<Notification.NotificationType> expectedTypes = NotificationList.newList().addScoreboardSuccess().addScoreboardSubmitted().addScoreboardFailed();
+        Sort sort = new Sort(Sort.Direction.DESC, "timestamp");
+        List<Notification> notifications = notificationRepository.findByEntityIdsAndTypes(teamProblemIds, expectedTypes, sort);
+        List<SubmissionDTO> submissionDTOs = new ArrayList<>(notifications.size());
+        for (Notification notification : notifications) {
+            SubmissionDTO submissionDTO = new SubmissionDTO(notification);
+            submissionDTO.setTeamProblem(map.get(notification.getEntityId()));
+            int contestTime = Minutes.minutesBetween(new DateTime(team.getContest().getStartTime().getTime()), new DateTime(notification.getTimestamp().getTime())).getMinutes();
+            submissionDTO.setContestTime(Math.abs(contestTime));
+            submissionDTOs.add(submissionDTO);
+        }
+
+        return submissionDTOs;
+    }
+
+    /**
+     * Get latest runs for a team
+     *
+     * @param team
+     *            team
+     * @return latest runs
+     */
+    public Map<Long, TeamProblem> getLatestTeamProblems(final Team team) {
+        List<LastTeamProblem> list = lastTeamProblemRepository.findByTeam(team);
+        Map<Long, TeamProblem> map = new HashMap<Long, TeamProblem>();
+        for (LastTeamProblem lastTeamProblem : list) {
+            map.put(lastTeamProblem.getProblem().getId(), lastTeamProblem.getTeamProblem());
+        }
+        return map;
     }
 
 }

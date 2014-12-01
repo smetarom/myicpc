@@ -106,7 +106,7 @@ public class EventFeedProcessor {
         XStream xStream = new XStream();
         xStream.ignoreUnknownElements();
         xStream.processAnnotations(new Class[]{ContestXML.class, LanguageXML.class, RegionXML.class, JudgementXML.class, ProblemXML.class, TeamXML.class,
-                TeamProblemXML.class, TestcaseXML.class});
+                TeamProblemXML.class, TestcaseXML.class, FinalizedXML.class});
         xStream.registerLocalConverter(TeamProblemXML.class, "problem", new ProblemConverter(problemRepository, contest));
         xStream.registerLocalConverter(TeamProblemXML.class, "team", new TeamConverter(teamRepository, contest));
         xStream.registerLocalConverter(TeamXML.class, "region", new RegionConverter(regionRepository, contest));

@@ -5,6 +5,7 @@ import com.myicpc.model.social.Notification;
 import com.myicpc.model.social.Notification.NotificationType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -15,6 +16,9 @@ import java.util.List;
 
 public interface NotificationRepository extends PagingAndSortingRepository<Notification, Long> {
     List<Notification> findByContestAndEntityIdAndNotificationType(Contest contest, Long entityId, NotificationType notificationType);
+
+    @Query("SELECT n FROM Notification n WHERE n.entityId IN ?1 AND n.notificationType IN ?2")
+    List<Notification> findByEntityIdsAndTypes(List<Long> entityIds, List<NotificationType> notificationTypes, Sort sort);
 
     @Query("SELECT n FROM Notification n WHERE n.notificationType IN ?1 AND n.contest = ?2 ORDER BY n.id DESC")
     Page<Notification> findByNotificationTypesOrderByIdDesc(List<NotificationType> notificationTypes, Contest contest, Pageable pageable);

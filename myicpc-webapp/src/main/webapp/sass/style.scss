@@ -1,0 +1,15 @@
+
+td.fit-content {
+  width:1%;
+  white-space:nowrap;
+}
+
+// Team home page
+.team-timeline {
+  td.time-cell {
+    border-right: 2px solid #ddd;
+  }
+  &>tbody>tr>td {
+    border-top: 0px #000000 solid;
+  }
+}

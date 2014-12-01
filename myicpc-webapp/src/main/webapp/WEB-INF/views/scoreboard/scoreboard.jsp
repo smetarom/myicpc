@@ -1,12 +1,14 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
 
 <t:template>
+    <jsp:attribute name="head">
+        <script src="<c:url value='/js/myicpc/controllers/scoreboard.js'/>" defer></script>
+    </jsp:attribute>
     <jsp:attribute name="title">
         <spring:message code="nav.scoreboard" />
     </jsp:attribute>
 
     <jsp:body>
-        <script src="<c:url value='/js/myicpc/controllers/scoreboard.js'/>" defer></script>
         <t:downloadContestProblems />
 
         <c:if test="${not scoreboardAvailable}">
@@ -76,6 +78,7 @@
                     startSubscribe('${r.contextPath}', '${contest.code}', 'scoreboard', updateScoreboard, ngController);
 
                     if (Modernizr.localstorage) {
+                        <%-- TODO --%>
                         <%--localStorage.setItem("scoreboard", JSON.stringify(teams));--%>
                         <%--localStorage.setItem("scoreboardProblems", JSON.stringify(${problemJSON}));--%>
                     }

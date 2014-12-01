@@ -6,7 +6,7 @@
     </a>
 </td>
 <td class="team-rank">{{team.teamRank}}</td>
-<td class="nowrap team-name"><a href="<spring:url value="/team/{{team.teamId}}"/>">{{team.teamName}}</a></td>
+<td class="nowrap team-name"><a href="<spring:url value="${contestURL}/team/{{team.teamId}}"/>">{{team.teamName}}</a></td>
 <c:if test="${contest.contestSettings.showRegion}">
     <td class="nowrap hide-region">
         <a href="javascript:void(0)" ng-click="filterByRegion(team.regionId)">{{team.regionName}}</a>

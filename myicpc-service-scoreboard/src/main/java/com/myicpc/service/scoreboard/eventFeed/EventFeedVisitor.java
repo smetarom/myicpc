@@ -1,7 +1,16 @@
 package com.myicpc.service.scoreboard.eventFeed;
 
 import com.myicpc.model.contest.Contest;
-import com.myicpc.service.scoreboard.eventFeed.dto.*;
+import com.myicpc.service.scoreboard.eventFeed.dto.AnalystMessageXML;
+import com.myicpc.service.scoreboard.eventFeed.dto.ContestXML;
+import com.myicpc.service.scoreboard.eventFeed.dto.FinalizedXML;
+import com.myicpc.service.scoreboard.eventFeed.dto.JudgementXML;
+import com.myicpc.service.scoreboard.eventFeed.dto.LanguageXML;
+import com.myicpc.service.scoreboard.eventFeed.dto.ProblemXML;
+import com.myicpc.service.scoreboard.eventFeed.dto.RegionXML;
+import com.myicpc.service.scoreboard.eventFeed.dto.TeamProblemXML;
+import com.myicpc.service.scoreboard.eventFeed.dto.TeamXML;
+import com.myicpc.service.scoreboard.eventFeed.dto.TestcaseXML;
 
 public interface EventFeedVisitor {
     void visit(ContestXML c, Contest contest);
@@ -21,4 +30,6 @@ public interface EventFeedVisitor {
     void visit(TestcaseXML testcase, Contest contest);
 
     void visit(AnalystMessageXML analystMessage, Contest contest);
+
+    void visit(FinalizedXML finalizedXML, Contest contest);
 }

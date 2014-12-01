@@ -43,6 +43,8 @@ public class TeamProblemXML extends XMLEntity<TeamProblem> {
         teamProblem.setJudged(isJudged());
         teamProblem.setTeam(getTeam());
         teamProblem.setProblem(getProblem());
+        teamProblem.setLanguage(getLanguage());
+        teamProblem.setResultCode(getResult());
         teamProblem.setStatus(getStatus());
     }
 
