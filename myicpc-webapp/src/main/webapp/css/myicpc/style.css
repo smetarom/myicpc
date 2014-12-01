@@ -1,0 +1,10 @@
+td.fit-content {
+  width: 1%;
+  white-space: nowrap; }
+
+.team-timeline td.time-cell {
+  border-right: 2px solid #ddd; }
+.team-timeline > tbody > tr > td {
+  border-top: 0px #000000 solid; }
+
+/*# sourceMappingURL=style.css.map */
