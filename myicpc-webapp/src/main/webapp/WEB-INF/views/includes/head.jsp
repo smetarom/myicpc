@@ -15,7 +15,6 @@
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" type="text/css">
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"
       type="text/css">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.13-beta/nv.d3.min.css" type="text/css">
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js"></script>
@@ -27,8 +26,6 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js" defer></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.4/jquery.touchSwipe.min.js" defer></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.3.3/d3.min.js" defer></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.13-beta/nv.d3.min.js" defer="defer"></script>
 
 <%-- Local resources --%>
 <%--
@@ -57,7 +54,6 @@
 <script src="<c:url value='/js/myicpc/functions.js'/>"></script>
 <script src="<c:url value='/js/myicpc/myicpc-config.js'/>" defer></script>
 <script src="<c:url value='/js/bootstrap/bootstrap-tour.min.js'/>" defer></script>
-<script src="<c:url value='/js/angular/angularjs-nvd3-directives.min.js'/>"></script>
 
 <!-- FACEBOOK -->
 <script>window.fbAsyncInit = function () {

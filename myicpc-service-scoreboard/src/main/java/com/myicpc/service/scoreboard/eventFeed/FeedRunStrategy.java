@@ -5,9 +5,11 @@ import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.LastTeamProblem;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
+import com.myicpc.model.eventFeed.TeamRankHistory;
 import com.myicpc.model.social.Notification;
 import com.myicpc.repository.eventFeed.LastTeamProblemRepository;
 import com.myicpc.repository.eventFeed.TeamProblemRepository;
+import com.myicpc.repository.eventFeed.TeamRankHistoryRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.service.listener.ScoreboardListener;
 import com.myicpc.service.notification.NotificationService;
@@ -41,6 +43,9 @@ public abstract class FeedRunStrategy {
 
     @Autowired
     protected TeamRepository teamRepository;
+
+    @Autowired
+    protected TeamRankHistoryRepository teamRankHistoryRepository;
 
     @Autowired(required = false)
     protected ScoreboardListener notificationService;

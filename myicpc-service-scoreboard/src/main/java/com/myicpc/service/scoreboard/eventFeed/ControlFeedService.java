@@ -1,11 +1,13 @@
 package com.myicpc.service.scoreboard.eventFeed;
 
 import com.google.common.collect.Maps;
+import com.myicpc.commons.utils.MessageUtils;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.Notification;
 import com.myicpc.repository.editActivity.EditActivityRepository;
 import com.myicpc.repository.eventFeed.*;
 import com.myicpc.repository.social.NotificationRepository;
+import com.myicpc.service.scoreboard.exception.EventFeedException;
 import com.myicpc.service.utils.lists.NotificationList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,18 +60,27 @@ public class ControlFeedService {
     @Autowired
     private NotificationRepository notificationRepository;
 
+    @Autowired
+    private TeamRankHistoryRepository teamRankHistoryRepository;
+
     @Transactional
-    public void truncateDatabase(Contest contest) {
-        lastTeamProblemRepository.deleteByContest(contest);
-        teamProblemRepository.deleteByContest(contest);
-        editActivityRepository.deleteByContest(contest);
-        problemRepository.deleteByContest(contest);
-        teamRepository.deleteByContest(contest);
-        regionRepository.deleteByContest(contest);
-        judgementRepository.deleteByContest(contest);
-        List<Notification.NotificationType> notificationTypes = NotificationList.newList().addScoreboardSuccess().addScoreboardSubmitted().addScoreboardFailed()
-                .addAnalystMessage();
-        notificationRepository.deleteScoreboardNotificationsByContest(contest, notificationTypes);
+    public void truncateDatabase(Contest contest) throws EventFeedException {
+        try {
+            lastTeamProblemRepository.deleteByContest(contest);
+            teamProblemRepository.deleteByContest(contest);
+            teamRankHistoryRepository.deleteByContest(contest);
+            editActivityRepository.deleteByContest(contest);
+            problemRepository.deleteByContest(contest);
+            teamRepository.deleteByContest(contest);
+            regionRepository.deleteByContest(contest);
+            judgementRepository.deleteByContest(contest);
+            List<Notification.NotificationType> notificationTypes = NotificationList.newList().addScoreboardSuccess().addScoreboardSubmitted().addScoreboardFailed()
+                    .addAnalystMessage();
+            notificationRepository.deleteScoreboardNotificationsByContest(contest, notificationTypes);
+        } catch (Throwable ex) {
+            logger.error(ex.getMessage(), ex);
+            throw new EventFeedException("Error deleting old data from database.");
+        }
     }
 
     /**
@@ -89,12 +100,13 @@ public class ControlFeedService {
      * @throws IOException
      * @throws InterruptedException
      */
-    public void stopFeed(Contest contest) throws IOException, InterruptedException {
+    public void stopFeed(Contest contest) throws EventFeedException {
         Future<Void> running = runningFeedProcessors.get(contest.getCode());
         if (running != null && !running.isDone()) {
             boolean cancelled = running.cancel(true);
-            // TODO handle return false
-            System.out.println();
+            if (!cancelled) {
+                throw new EventFeedException(MessageUtils.getMessage("admin.panel.feed.reset.failed"));
+            }
         }
     }
 
@@ -107,7 +119,7 @@ public class ControlFeedService {
      * @throws IOException
      * @throws InterruptedException
      */
-    public void resetFeed(Contest contest) throws IOException, InterruptedException {
+    public void restartFeed(Contest contest) throws EventFeedException {
         stopFeed(contest);
         truncateDatabase(contest);
         startFeed(contest);
@@ -122,7 +134,7 @@ public class ControlFeedService {
      * @throws InterruptedException
      * @throws IOException
      */
-    public void reconnectFeed(Contest contest) throws InterruptedException, IOException {
+    public void resumeFeed(Contest contest)throws EventFeedException {
         stopFeed(contest);
         startFeed(contest);
     }

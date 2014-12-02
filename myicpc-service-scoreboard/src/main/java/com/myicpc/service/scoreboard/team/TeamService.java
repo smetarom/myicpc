@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 import com.myicpc.commons.adapters.JSONAdapter;
 import com.myicpc.commons.utils.TextUtils;
 import com.myicpc.enums.ContestParticipantRole;
@@ -12,6 +13,7 @@ import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.LastTeamProblem;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
+import com.myicpc.model.eventFeed.TeamRankHistory;
 import com.myicpc.model.social.Notification;
 import com.myicpc.model.teamInfo.AttendedContest;
 import com.myicpc.model.teamInfo.ContestParticipant;
@@ -21,6 +23,7 @@ import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.model.teamInfo.University;
 import com.myicpc.repository.eventFeed.LastTeamProblemRepository;
 import com.myicpc.repository.eventFeed.TeamProblemRepository;
+import com.myicpc.repository.eventFeed.TeamRankHistoryRepository;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.repository.teamInfo.AttendedContestRepository;
 import com.myicpc.repository.teamInfo.ContestParticipantAssociationRepository;
@@ -86,6 +89,9 @@ public class TeamService {
 
     @Autowired
     private LastTeamProblemRepository lastTeamProblemRepository;
+
+    @Autowired
+    private TeamRankHistoryRepository teamRankHistoryRepository;
 
     /**
      * Synchronize team and university info via web services
@@ -472,6 +478,24 @@ public class TeamService {
             map.put(lastTeamProblem.getProblem().getId(), lastTeamProblem.getTeamProblem());
         }
         return map;
+    }
+
+    public JsonArray getRankHistoryChartData(final Team team) {
+        List<TeamRankHistory> history = teamRankHistoryRepository.findByTeam(team);
+        JsonArray historyArray = new JsonArray();
+        for (TeamRankHistory teamRankHistory : history) {
+            JsonArray data = new JsonArray();
+            data.add(new JsonPrimitive(teamRankHistory.getTimestamp().getTime()));
+            data.add(new JsonPrimitive(teamRankHistory.getRank()));
+            historyArray.add(data);
+        }
+        JsonObject item = new JsonObject();
+        item.addProperty("Key", "Rank history");
+        item.add("values", historyArray);
+
+        JsonArray wrapper = new JsonArray();
+        wrapper.add(item);
+        return wrapper;
     }
 
 }

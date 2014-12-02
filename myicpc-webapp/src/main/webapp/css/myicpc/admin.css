@@ -44,6 +44,10 @@ h1 {
     margin-bottom: 5px;
 }
 
+.tooltip {
+    min-width: 200px;
+}
+
 dd {
     margin-left: 25px;
 }

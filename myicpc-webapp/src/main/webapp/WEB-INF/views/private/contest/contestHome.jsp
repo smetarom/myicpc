@@ -34,10 +34,9 @@
                     </div>
                 </jsp:body>
             </t:panelWithHeading>
-            <t:panelWithHeading>
-                <jsp:attribute name="heading"><spring:message code="contestHomeAdmin.feedControl"/></jsp:attribute>
+            <div id="eventFeedControlPanel">
 
-            </t:panelWithHeading>
+            </div>
         </div>
         <div class="col-md-6 col-sm-12">
             <t:panelWithHeading panelStyle="warning">
@@ -51,5 +50,17 @@
                 </jsp:body>
             </t:panelWithHeading>
         </div>
+
+        <script type="application/javascript">
+            var loadEventFeedStatus = function() {
+                $.get("<spring:url value="/private/${contestURL}/feed/status"/>", function(data) {
+                    $("#eventFeedControlPanel").html(data);
+                    $('[data-toggle="tooltip"]').tooltip();
+                });
+            }
+            $(function() {
+                loadEventFeedStatus();
+            });
+        </script>
     </jsp:body>
 </t:templateAdmin>

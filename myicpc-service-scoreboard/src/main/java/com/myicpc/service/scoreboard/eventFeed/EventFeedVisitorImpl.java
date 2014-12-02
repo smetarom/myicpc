@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 @Component
 public class EventFeedVisitorImpl implements EventFeedVisitor {
     private static final Logger logger = LoggerFactory.getLogger(EventFeedVisitorImpl.class);
@@ -50,8 +52,11 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
     @Override
     @Transactional
     public void visit(final ContestXML xmlContest, Contest contest) {
+        contest = contestRepository.findOne(contest.getId());
         xmlContest.mergeTo(contest);
-        contestRepository.save(contest);
+        // TODO remove timestamp, it is here for testing purposes
+        contest.setStartTime(new Date());
+        contest = contestRepository.saveAndFlush(contest);
     }
 
     @Override
@@ -164,6 +169,8 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
         // TODO handle analyst message
     }
 
+    @Override
+    @Transactional
     public void visit(FinalizedXML finalizedXML, Contest contest) {
         // TODO do something useful with finalized information
     }

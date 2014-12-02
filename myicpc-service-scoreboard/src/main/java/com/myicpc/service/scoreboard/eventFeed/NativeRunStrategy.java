@@ -4,6 +4,7 @@ import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.LastTeamProblem;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
+import com.myicpc.model.eventFeed.TeamRankHistory;
 import com.myicpc.repository.eventFeed.TeamProblemRepository;
 import org.springframework.stereotype.Component;
 
@@ -59,6 +60,8 @@ public class NativeRunStrategy extends FeedRunStrategy {
             t.setRank(rank);
             if (oldRank != rank) {
                 teamsToBroadcast.add(t);
+                TeamRankHistory history = new TeamRankHistory(t, rank, oldRank);
+                teamRankHistoryRepository.save(history);
             }
             rank++;
         }

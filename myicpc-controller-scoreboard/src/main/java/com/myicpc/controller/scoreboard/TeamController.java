@@ -1,5 +1,6 @@
 package com.myicpc.controller.scoreboard;
 
+import com.google.gson.JsonArray;
 import com.myicpc.controller.GeneralController;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Problem;
@@ -52,11 +53,13 @@ public class TeamController extends GeneralController {
 
         List<TeamProblem> submissions = teamProblemRepository.findByTeamOrderByTimeDesc(team);
         List<SubmissionDTO> timeline = teamService.getTeamSubmissionDTOs(team);
+        JsonArray rankHistoryChartData = teamService.getRankHistoryChartData(team);
 
         model.addAttribute("team", team);
         model.addAttribute("problems", problemRepository.findByContestOrderByCodeAsc(contest));
         model.addAttribute("timeline", timeline);
         model.addAttribute("submissions", submissions);
+        model.addAttribute("rankHistoryJSON", rankHistoryChartData);
         model.addAttribute("tab", "contest");
         return "scoreboard/teamContest";
     }
