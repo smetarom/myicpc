@@ -59,6 +59,11 @@
             <spring:message code="admin.contact"/>: smetarom@gmail.com
         </c:if>
     </footer>
+    <script type="application/javascript">
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
     </body>
     </html>
 </compress:html>

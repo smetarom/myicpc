@@ -13,8 +13,8 @@
     <jsp:body>
 
         <div class="text-right">
-            <t:button href="/private${contestURL}/edit" styleClass="btn-hover"><t:glyphIcon icon="pencil" /> <spring:message code="edit" /></t:button>
-            <t:button href="/private${contestURL}/delete" styleClass="btn-hover"><t:glyphIcon icon="remove" /> <spring:message code="delete" /></t:button>
+            <t:button href="/private${contestURL}/edit" styleClass="btn-hover"><t:glyphIcon icon="pencil" /> <spring:message code="contestAdmin.edit" /></t:button>
+            <t:button href="/private${contestURL}/delete" styleClass="btn-hover"><t:glyphIcon icon="remove" /> <spring:message code="contestAdmin.delete" /></t:button>
         </div>
         <br/>
 

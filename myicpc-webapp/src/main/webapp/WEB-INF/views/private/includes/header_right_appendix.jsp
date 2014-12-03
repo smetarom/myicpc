@@ -1,7 +1,4 @@
-<li>
-  <a href="<spring:url value="/private/settings" />"><t:glyphIcon icon="cog" /></a>
-</li>
-<li><a href="<spring:url value="/private/help" />"><t:faIcon icon="question"/></a></li>
+<li><a href="<spring:url value="/private/help" />"><t:tooltip titleCode="help"><t:faIcon icon="question"/></t:tooltip></a></li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown"><sec:authentication property="principal.username"/> <b class="caret"></b></a>
   <ul class="dropdown-menu">

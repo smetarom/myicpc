@@ -45,6 +45,10 @@ h1 {
 }
 
 .tooltip {
+    min-width: 100px;
+}
+
+.tooltip.help-icon {
     min-width: 200px;
 }
 

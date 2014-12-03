@@ -20,7 +20,24 @@
             <li><a href='<spring:url value="/private/users" />'><t:faIcon icon="users" /> <spring:message code="nav.admin.users"/></a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="<spring:url value="/private/settings" />"><t:tooltip titleCode="settingsAdmin.title"><t:glyphIcon icon="cog" /></t:tooltip></a>
+            </li>
             <%@ include file="/WEB-INF/views/private/includes/header_right_appendix.jsp"%>
         </ul>
     </div>
+    <script type="text/javascript">
+        $(function () {
+            $(".dropdown").hover(
+                    function () {
+                        $('.dropdown-menu', this).stop(true, true).slideDown("fast");
+                        $(this).toggleClass('open');
+                    },
+                    function () {
+                        $('.dropdown-menu', this).stop(true, true).slideUp("fast");
+                        $(this).toggleClass('open');
+                    }
+            );
+        });
+    </script>
 </nav>
