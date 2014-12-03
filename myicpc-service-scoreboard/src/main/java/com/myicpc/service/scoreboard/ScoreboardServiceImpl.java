@@ -4,8 +4,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.LastTeamProblem;
+import com.myicpc.model.eventFeed.Region;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
+import com.myicpc.model.teamInfo.TeamInfo;
+import com.myicpc.model.teamInfo.University;
 import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.service.listener.ScoreboardListenerAdapter;
 import com.myicpc.service.publish.PublishService;
@@ -104,18 +107,25 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
     public JsonArray getTeamsFullTemplate(final Iterable<Team> teams) {
         JsonArray root = new JsonArray();
         for (Team team : teams) {
+            final TeamInfo teamInfo = team.getTeamInfo();
             final Contest contest = team.getContest();
             JsonObject teamObject = new JsonObject();
             teamObject.addProperty("teamId", team.getId());
             teamObject.addProperty("teamExternalId", team.getExternalId());
             teamObject.addProperty("teamRank", team.getRank());
-            teamObject.addProperty("teamName", team.getShortName());
-            if (team.getRegion() != null && contest.getContestSettings().isShowRegion()) {
-                teamObject.addProperty("regionName", team.getRegion().getShortName());
-                teamObject.addProperty("regionId", team.getRegion().getId());
-            }
-            if (contest.getContestSettings().isShowUniversity()) {
-                teamObject.addProperty("universityName", team.getUniversityName());
+            if (teamInfo != null) {
+                teamObject.addProperty("teamName", team.getTeamInfo().getShortName());
+                Region teamRegion = team.getTeamInfo().getRegion();
+                if (teamRegion != null && contest.getContestSettings().isShowRegion()) {
+                    teamObject.addProperty("regionName", teamRegion.getShortName());
+                    teamObject.addProperty("regionId", teamRegion.getId());
+                }
+                University teamUniversity = teamInfo.getUniversity();
+                if (teamUniversity != null && contest.getContestSettings().isShowUniversity()) {
+                    teamObject.addProperty("universityName", teamUniversity.getName());
+                }
+            } else {
+                teamObject.addProperty("teamName", team.getName());
             }
             if (contest.getContestSettings().isShowCountry()) {
                 teamObject.addProperty("nationality", team.getNationality());

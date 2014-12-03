@@ -140,6 +140,11 @@ public class TextUtils {
         return rank + "th";
     }
 
+    public static String clearHashtag(String hashtag) {
+        if (StringUtils.isEmpty(hashtag)) return null;
+        return hashtag.charAt(0) == '#' ? hashtag.substring(1) : hashtag;
+    }
+
     /**
      * Get short name of the team
      *
@@ -147,7 +152,7 @@ public class TextUtils {
      * @return short team name
      */
     public static String getTeamShortName(final String teamName) {
-        return getShortName(teamName, teamMapping, 40);
+        return StringUtils.abbreviate(teamName, 40);
     }
 
     /**

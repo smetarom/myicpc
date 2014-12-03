@@ -124,19 +124,12 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
         if (team == null) {
             team = new Team();
             xmlTeam.mergeTo(team);
-            team.setShortName(TextUtils.getTeamShortName(xmlTeam.getName()));
             team.setRank(1);
             team.setProblemsSolved(0);
             team.setTotalTime(0);
             team.setContest(contest);
             TeamInfo teamInfo = teamInfoRepository.findByExternalIdAndContest(team.getExternalId(), contest);
-            if (teamInfo != null) {
-                team.setAbbreviation(teamInfo.getAbbreviation());
-                team.setHashtag(teamInfo.getHashtag());
-            }
-            if (StringUtils.isEmpty(team.getAbbreviation())) {
-                team.setAbbreviation(team.getShortName());
-            }
+            team.setTeamInfo(teamInfo);
             team = teamRepository.save(team);
             logger.info("Team " + team.getSystemId() + " created");
         }

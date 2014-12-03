@@ -24,6 +24,7 @@ import com.myicpc.model.teamInfo.University;
 import com.myicpc.repository.eventFeed.LastTeamProblemRepository;
 import com.myicpc.repository.eventFeed.TeamProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRankHistoryRepository;
+import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.repository.teamInfo.AttendedContestRepository;
 import com.myicpc.repository.teamInfo.ContestParticipantAssociationRepository;
@@ -37,7 +38,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
-import org.joda.time.Seconds;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -65,6 +65,9 @@ public class TeamService {
 
     @Autowired
     private TeamWSService teamWSService;
+
+    @Autowired
+    private TeamRepository teamRepository;
 
     @Autowired
     private TeamProblemRepository teamProblemRepository;
@@ -102,11 +105,14 @@ public class TeamService {
         try {
             synchronizeUniversities(teamWSService.getUniversitiesFromCM(contest));
             synchronizeTeams(teamWSService.getTeamsFromCM(contest), contest);
+            logger.info("Team & university synchronization finished.");
+            initTeamHashtagsAndAbbreviations(contest);
+            logger.info("Team hashtags and abbreviations synchronized.");
         } catch (ValidationException ex) {
             throw ex;
         } catch (Exception ex) {
             logger.error("Error parsing synchornization files", ex);
-            throw new ValidationException("Error during parsing the files. Check the file formats.", ex);
+            throw new ValidationException("Error during response parsing. Check the Contest Management web service settings.", ex);
         }
     }
 
@@ -125,6 +131,9 @@ public class TeamService {
 
             synchronizeUniversities(universityString);
             synchronizeTeams(teamString, contest);
+            logger.info("Team & university synchronization finished.");
+            initTeamHashtagsAndAbbreviations(contest);
+            logger.info("Team hashtags and abbreviations synchronized.");
         }
     }
 
@@ -177,6 +186,13 @@ public class TeamService {
         try {
             JsonObject teamRoot = new JsonParser().parse(teamJSON).getAsJsonObject();
             JsonArray teamArray = teamRoot.getAsJsonArray("teams");
+
+            List<Team> teamsToSync = teamRepository.findByContest(contest);
+            Map<Long, Team> externalIdTeamMap = new HashMap<>();
+            for (Team team : teamsToSync) {
+                externalIdTeamMap.put(team.getExternalId(), team);
+            }
+
             // Iterate through all JSON representations of teams
             for (JsonElement teamJE : teamArray) {
                 // Tries to find a team by externalReservationId in the database
@@ -194,23 +210,17 @@ public class TeamService {
                 teamInfo.setUniversity(university);
                 teamInfo.setExternalId(externalId);
                 teamInfo.setName(root.get("name").getAsString());
-                if (contest.getContestSettings().isShowTeamNames()) {
-                    teamInfo.setAbbreviation(teamInfo.getName());
-                    teamInfo.setHashtag(TextUtils.getHashtag(teamInfo.getName()));
-                } else {
-                    if (university != null) {
-                        teamInfo.setAbbreviation(university.getShortName());
-                        if (!StringUtils.isEmpty(university.getTwitterHash()) && StringUtils.isEmpty(teamInfo.getHashtag())) {
-                            teamInfo.setHashtag(university.getTwitterHash().charAt(0) == '#' ? university.getTwitterHash().substring(1) : university
-                                    .getTwitterHash());
-                        }
-                    }
-                }
 
                 // set team results of the team
                 teamInfo.setRegionalResults(parseRegionalContests(teamInfo, teamAdapter));
 
-                teamInfoRepository.save(teamInfo);
+                teamInfo = teamInfoRepository.save(teamInfo);
+
+                if (externalIdTeamMap.containsKey(externalId)) {
+                    Team team = externalIdTeamMap.get(externalId);
+                    team.setTeamInfo(teamInfo);
+                    teamRepository.save(team);
+                }
 
                 // process team members and assign them to the team
                 parsePeople(teamInfo, teamAdapter);
@@ -220,6 +230,33 @@ public class TeamService {
         } catch (JsonParseException | IllegalStateException ex) {
             logger.error(ex.getMessage(), ex);
             throw new ValidationException("Team parsing failed. Check if it has valid JSON format", ex);
+        }
+    }
+
+    private void initTeamHashtagsAndAbbreviations(Contest contest) {
+        List<TeamInfo> teamInfos = teamInfoRepository.findByContest(contest);
+        List<TeamInfo> teamInfosWithoutHashtag = new ArrayList<>();
+        int count = 1;
+        for (TeamInfo teamInfo : teamInfos) {
+            if (contest.getContestSettings().isShowTeamNames()) {
+                teamInfo.setShortName(TextUtils.getTeamShortName(teamInfo.getName()));
+                teamInfo.setAbbreviation(teamInfo.getShortName());
+                if (StringUtils.isEmpty(teamInfo.getHashtag())) {
+                    teamInfosWithoutHashtag.add(teamInfo);
+                } else {
+                    count++;
+                }
+            } else {
+                University university = teamInfo.getUniversity();
+                if (university != null) {
+                    teamInfo.setShortName(university.getShortName());
+                    teamInfo.setAbbreviation(university.getShortName());
+                    teamInfo.setHashtag(TextUtils.clearHashtag(university.getTwitterHash()));
+                }
+            }
+        }
+        for (TeamInfo teamInfo : teamInfosWithoutHashtag) {
+            teamInfo.setHashtag("team" + (count++));
         }
     }
 
@@ -387,62 +424,6 @@ public class TeamService {
         }
     }
 
-    /**
-     * Updates team abbreviations
-     *
-     * @param file uploaded file with abbreviations
-     * @throws IOException parsed error during the file processing
-     */
-    public void uploadAbbreviationFile(final MultipartFile file, final Contest contest) {
-        processTABFileUpload(file, "abbreviation", contest);
-    }
-
-    /**
-     * Updates team hashtags
-     *
-     * @param file uploaded file with hashtags
-     * @throws IOException parsed error during the file processing
-     */
-    public void uploadHashtagsFile(final MultipartFile file, final Contest contest) throws ValidationException {
-        processTABFileUpload(file, "hashtag", contest);
-    }
-
-    /**
-     * Processes TAB file upload
-     * <p/>
-     * Format: col1\tcol2
-     *
-     * @param file
-     * @param attribute
-     */
-    private void processTABFileUpload(final MultipartFile file, final String attribute, final Contest contest) {
-        try (InputStream fileInputStream = file.getInputStream();
-             BufferedReader in = new BufferedReader(new InputStreamReader(fileInputStream, TextUtils.DEFAULT_ENCODING))) {
-            String line;
-            while ((line = in.readLine()) != null) {
-                String[] ss = line.split("\t");
-                if (ss.length != 2) {
-                    logger.warn("Invalid " + attribute + " format:" + line);
-                }
-                TeamInfo teamInfo = teamInfoRepository.findByExternalIdAndContest(Long.parseLong(ss[0]), contest);
-                if (teamInfo != null) {
-                    // decide what the value represents
-                    if ("hashtag".equalsIgnoreCase(attribute)) {
-                        teamInfo.setHashtag(ss[1].trim());
-                    } else if ("abbreviation".equalsIgnoreCase(attribute)) {
-                        teamInfo.setAbbreviation(ss[1]);
-                    }
-                    teamInfoRepository.save(teamInfo);
-                } else {
-                    logger.warn("No matching teamInfo for this " + attribute + ": " + line);
-                }
-            }
-        } catch (Exception ex) {
-            logger.error("Error parsing TAB file", ex);
-            throw new ValidationException("Error during parsing the file. Check the file format.", ex);
-        }
-    }
-
     public List<SubmissionDTO> getTeamSubmissionDTOs(final Team team) {
         List<Long> teamProblemIds = new ArrayList<>();
         Map<Long, TeamProblem> map = new HashMap<>();
@@ -470,8 +451,7 @@ public class TeamService {
     /**
      * Get latest runs for a team
      *
-     * @param team
-     *            team
+     * @param team team
      * @return latest runs
      */
     public Map<Long, TeamProblem> getLatestTeamProblems(final Team team) {

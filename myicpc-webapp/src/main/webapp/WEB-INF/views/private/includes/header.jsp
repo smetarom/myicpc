@@ -19,9 +19,7 @@
             <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="nav.admin.contest" /> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li><a href='<spring:url value="/private${contestURL}/teams" />'><spring:message code="nav.admin.teams" /></a></li>
-                    <li><a href='<spring:url value="/private${contestURL}/teams/synchronize" />'>- <spring:message code="teamAdmin.sync" /></a></li>
-                    <li><a href='<spring:url value="/private${contestURL}/teams/abbreviation" />'>- <spring:message code="teamAdmin.abbr" /></a></li>
-                    <li><a href='<spring:url value="/private${contestURL}/teams/hashtags" />'>- <spring:message code="teamAdmin.hashtag" /></a></li>
+                    <li><a href='<spring:url value="/private${contestURL}/teams/synchronize" />'>- <spring:message code="nav.admin.teams.sync" /></a></li>
                     <li class="divider"></li>
                     <li><a href='<spring:url value="/private${contestURL}/participants" />'><spring:message code="nav.admin.participants" /></a></li>
                 </ul>

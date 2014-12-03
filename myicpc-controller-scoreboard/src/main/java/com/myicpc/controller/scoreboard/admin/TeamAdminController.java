@@ -46,7 +46,6 @@ public class TeamAdminController extends GeneralAdminController {
         Iterable<TeamInfo> teamInfos = teamInfoRepository.findByContest(contest);
 
         model.addAttribute("teamInfos", teamInfos);
-        model.addAttribute("active", "List");
         return "private/teams/teamsHome";
     }
 
@@ -59,10 +58,9 @@ public class TeamAdminController extends GeneralAdminController {
     @RequestMapping(value = "/private/{contestCode}/teams/synchronize", method = RequestMethod.GET)
     public String teamsSync(@PathVariable String contestCode, Model model) {
         Contest contest = getContest(contestCode, model);
-        model.addAttribute("active", "Sync");
         model.addAttribute("breadcrumb", getMessage("teamAdmin.sync"));
         model.addAttribute("warnMsg", getMessage("teamAdmin.sync.message") + " " + getMessage("teamAdmin.sync.message2"));
-        return "private/teams/teamsHome";
+        return "private/teams/teamsSynchronize";
     }
 
     @RequestMapping(value = "/private/{contestCode}/teams/synchronize", method = RequestMethod.POST)
@@ -127,50 +125,5 @@ public class TeamAdminController extends GeneralAdminController {
         }
 
         return "redirect:/private/" + contestCode + "/teams/synchronize";
-    }
-
-    @RequestMapping(value = "/private/{contestCode}/teams/abbreviation", method = RequestMethod.GET)
-    public String teamsAbbr(@PathVariable String contestCode, Model model) {
-        Contest contest = getContest(contestCode, model);
-        model.addAttribute("active", "Abbreviation");
-        model.addAttribute("breadcrumb", getMessage("teamAdmin.abbr"));
-        model.addAttribute("warnMsg", getMessage("teamAdmin.abbr.message"));
-        return "private/teams/teamsHome";
-    }
-
-    @RequestMapping(value = "/private/{contestCode}/teams/hashtags", method = RequestMethod.GET)
-    public String teamsHashtags(@PathVariable String contestCode, Model model) {
-        Contest contest = getContest(contestCode, model);
-        model.addAttribute("active", "Hashtags");
-        model.addAttribute("breadcrumb", getMessage("teamAdmin.hashtag"));
-        model.addAttribute("warnMsg", getMessage("teamAdmin.hashtags.message"));
-        return "private/teams/teamsHome";
-    }
-
-    @RequestMapping(value = "/private/{contestCode}/teams/abbreviation", method = RequestMethod.POST)
-    public String processTeamAbbr(@PathVariable String contestCode, RedirectAttributes redirectAttributes, @RequestParam("file") MultipartFile file) {
-        Contest contest = getContest(contestCode, null);
-        try {
-            teamService.uploadAbbreviationFile(file, contest);
-            successMessage(redirectAttributes, "teamAdmin.abbr.success");
-        } catch (ValidationException ex) {
-            errorMessage(redirectAttributes, ex);
-        }
-
-        return "redirect:/private/" + contestCode + "/teams/abbreviation";
-    }
-
-    @RequestMapping(value = "/private/{contestCode}/teams/hashtags", method = RequestMethod.POST)
-    public String processTeamHashtags(@PathVariable String contestCode, RedirectAttributes redirectAttributes,
-                                      @RequestParam("file") MultipartFile file) {
-        Contest contest = getContest(contestCode, null);
-        try {
-            teamService.uploadHashtagsFile(file, contest);
-            successMessage(redirectAttributes, "teamAdmin.hashtags.success");
-        } catch (ValidationException ex) {
-            errorMessage(redirectAttributes, ex);
-        }
-
-        return "redirect:/private/" + contestCode + "/teams/hashtags";
     }
 }

@@ -2,7 +2,6 @@ package com.myicpc.repository.eventFeed;
 
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Problem;
-import com.myicpc.model.eventFeed.Region;
 import com.myicpc.model.eventFeed.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -18,8 +17,6 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
     List<Team> findByContestAndTeamId(Contest contest, List<Long> ids);
 
     List<Team> findByContestOrderByRankAsc(Contest contest);
-
-    List<Team> findByRegion(Region region);
 
     // ---
 

@@ -1,6 +1,7 @@
 package com.myicpc.model.eventFeed;
 
 import com.myicpc.model.IdGeneratedContestObject;
+import com.myicpc.model.teamInfo.TeamInfo;
 
 import javax.persistence.*;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.Map;
  */
 @Cacheable
 @Entity
-@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "TeamInfo_id_seq")
+@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "Team_id_seq")
 public class Team extends IdGeneratedContestObject {
     private static final long serialVersionUID = -2333804505185439684L;
 
@@ -36,30 +37,11 @@ public class Team extends IdGeneratedContestObject {
      */
     private String name;
     /**
-     * Shorter team name, some words from the team name are abbreviated and the
-     * short name has length 40 max (
-     * {@link com.myicpc.commons.utils.TextUtils#getTeamShortName(String)})
-     */
-    private String shortName;
-    /**
-     * Represents hashtag for that given team
-     */
-    private String hashtag;
-    /**
-     * Team abbreviation for places, where is not enough space to print the team
-     * name.
-     */
-    private String abbreviation;
-    /**
      * Country of the team
      * <p/>
      * 3 letters abbreviation
      */
     private String nationality;
-    /**
-     * The name of team university
-     */
-    private String universityName;
     /**
      * Number of problems solved by team
      */
@@ -69,9 +51,9 @@ public class Team extends IdGeneratedContestObject {
      */
     private Integer totalTime;
 
-    @ManyToOne
-    @JoinColumn(name = "regionId")
-    private Region region;
+    @OneToOne(optional = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "externalIdLinToTeamInfo", referencedColumnName = "externalId")
+    private TeamInfo teamInfo;
 
     /**
      * List of all team submissions for each problem
@@ -126,30 +108,6 @@ public class Team extends IdGeneratedContestObject {
         this.name = name;
     }
 
-    public String getShortName() {
-        return shortName;
-    }
-
-    public void setShortName(final String shortName) {
-        this.shortName = shortName;
-    }
-
-    public String getHashtag() {
-        return hashtag;
-    }
-
-    public void setHashtag(final String hashtag) {
-        this.hashtag = hashtag;
-    }
-
-    public String getAbbreviation() {
-        return abbreviation;
-    }
-
-    public void setAbbreviation(final String abbreviation) {
-        this.abbreviation = abbreviation;
-    }
-
     public String getNationality() {
         return nationality;
     }
@@ -174,20 +132,12 @@ public class Team extends IdGeneratedContestObject {
         this.totalTime = totalTime;
     }
 
-    public String getUniversityName() {
-        return universityName;
+    public TeamInfo getTeamInfo() {
+        return teamInfo;
     }
 
-    public void setUniversityName(final String universityName) {
-        this.universityName = universityName;
-    }
-
-    public Region getRegion() {
-        return region;
-    }
-
-    public void setRegion(Region region) {
-        this.region = region;
+    public void setTeamInfo(TeamInfo teamInfo) {
+        this.teamInfo = teamInfo;
     }
 
     public List<TeamProblem> getTeamProblems() {

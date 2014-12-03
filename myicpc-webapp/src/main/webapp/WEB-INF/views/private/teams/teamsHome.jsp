@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
 
-<t:templateAdminWithSubmenu>
+<t:templateAdmin>
     <jsp:attribute name="title">
 		<spring:message code="teams" />
 	</jsp:attribute>
@@ -10,29 +10,33 @@
 	</jsp:attribute>
 
 	<jsp:attribute name="breadcrumb">
-	  <c:if test="${active == 'List' }">
         <li class="active"><spring:message code="teams" /></li>
-      </c:if>
-	  <c:if test="${active ne 'List' }">
-        <li><a href="<spring:url value="/private/teams" />"><spring:message code="teams" /></a></li>
-      </c:if>
-	  <c:if test="${not empty breadcrumb}">
-        <li class="active">${breadcrumb}</li>
-      </c:if>
 	</jsp:attribute>
 
-	<jsp:attribute name="submenu">
-		<div class="well sidebar-nav">
-          <ul class="nav nav-pills nav-stacked">
-            <t:menuItem url="/private${contestURL}/teams" active="${active}" activeItem="List"><spring:message code="teamAdmin.list" /></t:menuItem>
-            <t:menuItem url="/private${contestURL}/teams/synchronize" active="${active}" activeItem="Sync"><spring:message code="teamAdmin.sync" /></t:menuItem>
-            <t:menuItem url="/private${contestURL}/teams/abbreviation" active="${active}" activeItem="Abbreviation"><spring:message code="teamAdmin.abbr" /></t:menuItem>
-            <t:menuItem url="/private${contestURL}/teams/hashtags" active="${active}" activeItem="Hashtags"><spring:message code="teamAdmin.hashtag" /></t:menuItem>
-          </ul>
-        </div>
-	</jsp:attribute>
+    <jsp:attribute name="controls">
+        <t:button href="/private${contestURL}/teams/synchronize" styleClass="btn-hover"><t:glyphIcon icon="transfer" /> <spring:message code="teamAdmin.sync" /></t:button>
+    </jsp:attribute>
 
-<jsp:body>
-  <jsp:include page="/WEB-INF/views/private//teams/fragment/team${active}.jsp" />
-</jsp:body>
-</t:templateAdminWithSubmenu>
+    <jsp:body>
+        <table class="table">
+            <thead>
+            <tr>
+                <th><spring:message code="team" /></th>
+                <th><spring:message code="university" /></th>
+                <th><spring:message code="team.abbreviation" /></th>
+                <th><spring:message code="team.hashtag" /></th>
+            </tr>
+            </thead>
+            <tbody>
+            <c:forEach var="teamInfo" items="${teamInfos}">
+                <tr>
+                    <td><c:out value="${teamInfo.name}" /></td>
+                    <td>${teamInfo.university.name}</td>
+                    <td><c:out value="${teamInfo.abbreviation}" /></td>
+                    <td>#${teamInfo.hashtag}</td>
+                </tr>
+            </c:forEach>
+            </tbody>
+        </table>
+    </jsp:body>
+</t:templateAdmin>

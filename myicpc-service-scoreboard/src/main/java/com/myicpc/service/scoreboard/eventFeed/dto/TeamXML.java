@@ -33,8 +33,6 @@ public class TeamXML extends XMLEntity<Team> {
         team.setSystemId(getId());
         team.setExternalId(getExternalId());
         team.setNationality(getNationality());
-        team.setUniversityName(getUniversityName());
-        team.setRegion(getRegion());
     }
 
     @Override
@@ -72,21 +70,5 @@ public class TeamXML extends XMLEntity<Team> {
 
     public void setNationality(String nationality) {
         this.nationality = nationality;
-    }
-
-    public String getUniversityName() {
-        return universityName;
-    }
-
-    public void setUniversityName(String universityName) {
-        this.universityName = universityName;
-    }
-
-    public Region getRegion() {
-        return region;
-    }
-
-    public void setRegion(Region region) {
-        this.region = region;
     }
 }

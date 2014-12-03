@@ -1,6 +1,7 @@
 package com.myicpc.model.teamInfo;
 
 import com.myicpc.model.IdGeneratedContestObject;
+import com.myicpc.model.eventFeed.Region;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -40,6 +41,12 @@ public class TeamInfo extends IdGeneratedContestObject {
      */
     private String name;
     /**
+     * Shorter team name, some words from the team name are abbreviated and the
+     * short name has length 40 max (
+     * {@link com.myicpc.commons.utils.TextUtils#getTeamShortName(String)})
+     */
+    private String shortName;
+    /**
      * Team abbreviation for places, where is not enough space to print the team
      * name.
      */
@@ -52,6 +59,10 @@ public class TeamInfo extends IdGeneratedContestObject {
     @Lob
     @Type(type = "org.hibernate.type.StringClobType")
     private String questionnaire;
+
+    @ManyToOne
+    @JoinColumn(name = "regionId")
+    private Region region;
 
     /**
      * Team university
@@ -106,12 +117,28 @@ public class TeamInfo extends IdGeneratedContestObject {
         this.name = name;
     }
 
+    public String getShortName() {
+        return shortName;
+    }
+
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
+    }
+
     public String getQuestionnaire() {
         return questionnaire;
     }
 
     public void setQuestionnaire(final String questionnaire) {
         this.questionnaire = questionnaire;
+    }
+
+    public Region getRegion() {
+        return region;
+    }
+
+    public void setRegion(Region region) {
+        this.region = region;
     }
 
     public University getUniversity() {

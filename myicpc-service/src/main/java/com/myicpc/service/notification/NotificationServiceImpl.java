@@ -19,6 +19,7 @@ import com.myicpc.model.social.GalleryMedia;
 import com.myicpc.model.social.Notification;
 import com.myicpc.model.social.Notification.NotificationType;
 import com.myicpc.model.social.TwitterMessage;
+import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.service.analyst.MessageAnalystService;
 import com.myicpc.service.dto.AnalystMessageDTO;
@@ -32,7 +33,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * This class provides services to manage {@link Notification}
@@ -88,8 +94,9 @@ public class NotificationServiceImpl implements NotificationService {
         builder.setNotificationType(notificationType);
         builder.setUrl("/team/" + teamProblem.getTeam().getId());
         String hashtags = "";
-        if (teamProblem.getTeam().getHashtag() != null && !teamProblem.getTeam().getHashtag().isEmpty()) {
-            hashtags = teamProblem.getTeam().getHashtag() + ",";
+        TeamInfo teamInfo = teamProblem.getTeam().getTeamInfo();
+        if (teamInfo != null && teamInfo.getHashtag() != null && !teamInfo.getHashtag().isEmpty()) {
+            hashtags = teamInfo.getHashtag() + ",";
         }
         hashtags += teamProblem.getTeam().getContest().getHashtag();
         builder.setCode("\"hashtags\":\"" + hashtags + "\"}");
