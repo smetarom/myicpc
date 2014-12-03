@@ -4,6 +4,7 @@ import com.myicpc.commons.utils.WebServiceUtils;
 import com.myicpc.enums.FeedRunStrategyType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.contest.ContestSettings;
+import com.myicpc.model.eventFeed.EventFeedControl;
 import com.myicpc.repository.contest.ContestRepository;
 import com.myicpc.repository.eventFeed.*;
 import com.myicpc.service.scoreboard.eventFeed.dto.*;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.util.concurrent.Future;
@@ -44,10 +46,7 @@ public class EventFeedProcessor {
     private ProblemRepository problemRepository;
 
     @Autowired
-    private TeamProblemRepository teamProblemRepository;
-
-    @Autowired
-    private LastTeamProblemRepository lastTeamProblemRepository;
+    private EventFeedControlRepository eventFeedControlRepository;
 
     @Autowired
     private RegionRepository regionRepository;
@@ -77,13 +76,14 @@ public class EventFeedProcessor {
     public Future<Void> runEventFeed(final Contest contest) {
         ContestSettings contestSettings = contest.getContestSettings();
         if (contestSettings != null && !StringUtils.isEmpty(contestSettings.getEventFeedURL())) {
+            EventFeedControl eventFeedControl = getCurrentEventFeedControl(contest);
             Reader reader = null;
             InputStream in = null;
             try {
                 in = eventFeedWSService.connectCDS(contestSettings.getEventFeedURL(), contestSettings.getEventFeedUsername(),
                         contestSettings.getEventFeedPassword());
                 reader = new InputStreamReader(in);
-                parseXML(reader, contest);
+                parseXML(reader, contest, eventFeedControl);
             } catch (IOException ex) {
                 logger.error(ex.getMessage(), ex);
             } catch (EventFeedException ex) {
@@ -102,7 +102,7 @@ public class EventFeedProcessor {
         return new AsyncResult<Void>(null);
     }
 
-    protected void parseXML(final Reader reader, final Contest contest) throws IOException, ClassNotFoundException {
+    protected void parseXML(final Reader reader, final Contest contest, EventFeedControl eventFeedControl) throws IOException, ClassNotFoundException {
         XStream xStream = new XStream();
         xStream.ignoreUnknownElements();
         xStream.processAnnotations(new Class[]{ContestXML.class, LanguageXML.class, RegionXML.class, JudgementXML.class, ProblemXML.class, TeamXML.class,
@@ -118,10 +118,21 @@ public class EventFeedProcessor {
                     break;
                 }
                 XMLEntity elem = (XMLEntity) in.readObject();
-                elem.accept(eventFeedVisitor, contest);
+                elem.accept(eventFeedVisitor, contest, eventFeedControl);
             }
         } catch (EOFException ex) {
             logger.info("Event feed parsing is done.");
         }
+    }
+
+    @Transactional
+    private EventFeedControl getCurrentEventFeedControl(Contest contest) {
+        EventFeedControl eventFeedControl = eventFeedControlRepository.findByContest(contest);
+        if (eventFeedControl == null) {
+            eventFeedControl = new EventFeedControl(contest);
+            eventFeedControl = eventFeedControlRepository.save(eventFeedControl);
+        }
+        eventFeedControl.restartControl();
+        return eventFeedControl;
     }
 }

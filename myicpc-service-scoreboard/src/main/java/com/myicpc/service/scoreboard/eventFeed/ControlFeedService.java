@@ -63,12 +63,16 @@ public class ControlFeedService {
     @Autowired
     private TeamRankHistoryRepository teamRankHistoryRepository;
 
+    @Autowired
+    private EventFeedControlRepository eventFeedControlRepository;
+
     @Transactional
     public void truncateDatabase(Contest contest) throws EventFeedException {
         try {
             lastTeamProblemRepository.deleteByContest(contest);
             teamProblemRepository.deleteByContest(contest);
             teamRankHistoryRepository.deleteByContest(contest);
+            eventFeedControlRepository.deleteByContest(contest);
             editActivityRepository.deleteByContest(contest);
             problemRepository.deleteByContest(contest);
             teamRepository.deleteByContest(contest);
@@ -86,7 +90,11 @@ public class ControlFeedService {
     /**
      * Starts execution of feed event processing
      */
-    public void startFeed(Contest contest) {
+    public void startFeed(Contest contest) throws EventFeedException {
+        Future<Void> running = runningFeedProcessors.get(contest.getCode());
+        if (running != null && !running.isDone()) {
+            throw new EventFeedException(MessageUtils.getMessage("admin.panel.feed.reset.runningThread"));
+        }
         Future<Void> newFeedProcessor = eventFeedProcessor.runEventFeed(contest);
         runningFeedProcessors.put(contest.getCode(), newFeedProcessor);
     }

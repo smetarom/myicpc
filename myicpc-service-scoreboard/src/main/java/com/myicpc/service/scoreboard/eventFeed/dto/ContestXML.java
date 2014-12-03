@@ -1,6 +1,7 @@
 package com.myicpc.service.scoreboard.eventFeed.dto;
 
 import com.myicpc.model.contest.Contest;
+import com.myicpc.model.eventFeed.EventFeedControl;
 import com.myicpc.service.scoreboard.eventFeed.EventFeedVisitor;
 import com.myicpc.service.scoreboard.eventFeed.dto.convertor.TimeConverter;
 import com.myicpc.service.scoreboard.eventFeed.dto.convertor.TimestampConverter;
@@ -34,8 +35,8 @@ public class ContestXML extends XMLEntity<Contest> {
     }
 
     @Override
-    public void accept(EventFeedVisitor visitor, Contest contest) {
-        visitor.visit(this, contest);
+    public void accept(EventFeedVisitor visitor, Contest contest, EventFeedControl eventFeedControl) {
+        visitor.visit(this, contest, eventFeedControl);
     }
 
     public String getTitle() {

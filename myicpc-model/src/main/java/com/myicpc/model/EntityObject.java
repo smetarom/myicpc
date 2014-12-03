@@ -17,7 +17,7 @@ public abstract class EntityObject implements Serializable {
      * Optimistic locking mechanism
      */
     @Version
-    private Integer version;
+    protected Integer version;
 
     public Integer getVersion() {
         return version;
