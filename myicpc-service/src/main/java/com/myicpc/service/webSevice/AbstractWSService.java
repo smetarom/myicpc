@@ -11,11 +11,16 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.net.ssl.SSLContext;
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * @author Roman Smetana
@@ -49,10 +54,14 @@ public abstract class AbstractWSService {
     public String connectCM(final String server, final String url, final Contest contest) throws IOException {
         HttpGet httpGet = null;
         try {
+            SSLContext sslcontext = SSLContexts.custom().build();
+            // Allow TLSv1.2 protocol only
+            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, new String[] { "TLSv1.2" }, null, SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
+
             CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-            credentialsProvider.setCredentials(new AuthScope(server, 443), new UsernamePasswordCredentials(contest.getWebServiceSettings()
+            credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(contest.getWebServiceSettings()
                     .getWsCMToken(), ""));
-            HttpClient httpclient = HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider).build();
+            HttpClient httpclient = HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider).setSSLSocketFactory(sslsf).build();
 
             httpGet = new HttpGet("https://" + server + url);
 
@@ -60,6 +69,8 @@ public abstract class AbstractWSService {
             HttpEntity entity = response.getEntity();
 
             return IOUtils.toString(entity.getContent(), TextUtils.DEFAULT_ENCODING);
+        } catch (KeyManagementException | NoSuchAlgorithmException ex) {
+            throw new IOException(ex);
         } finally {
             releaseConnection(httpGet);
         }

@@ -16,6 +16,7 @@
       <spring:url var="formAction" value="/private/settings"/>
       <form:form class="form-horizontal" role="form" action="${formAction}" commandName="globalSettings">
         <t:springInput labelCode="globalSettings.adminEmail" path="adminEmail" hintCode="globalSettings.adminEmail.hint" />
+        <t:springInput labelCode="globalSettings.cmURL" path="contestManagementSystemURL" hintCode="globalSettings.cmURL.hint" />
         <t:springInput labelCode="globalSettings.fbAPIKey" path="fbAPIKey" hintCode="globalSettings.fbAPIKey.hint" />
         <t:springInput labelCode="globalSettings.googleNonAuthenticatedKey"
                        path="googleNonAuthenticatedKey" hintCode="globalSettings.googleNonAuthenticatedKey.hint"/>

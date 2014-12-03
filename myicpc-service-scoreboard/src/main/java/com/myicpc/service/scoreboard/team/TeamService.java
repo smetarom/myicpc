@@ -163,6 +163,7 @@ public class TeamService {
 
             }
         } catch (JsonParseException | IllegalStateException ex) {
+            logger.error(ex.getMessage(), ex);
             throw new ValidationException("University parsing failed. Check if it has valid JSON format", ex);
         }
     }
@@ -217,6 +218,7 @@ public class TeamService {
                 logger.info("CM import: team " + teamInfo.getExternalId());
             }
         } catch (JsonParseException | IllegalStateException ex) {
+            logger.error(ex.getMessage(), ex);
             throw new ValidationException("Team parsing failed. Check if it has valid JSON format", ex);
         }
     }
@@ -344,6 +346,7 @@ public class TeamService {
                 }
             }
         } catch (IOException ex) {
+            logger.error(ex.getMessage(), ex);
             throw new ValidationException("Error with web service communication.", ex);
         }
     }

@@ -1,43 +1,34 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
 
 <div class="col-sm-12">
-	<fieldset>
-		<legend>
-			<spring:message code="teamAdmin.sync.auto" />
-		</legend>
-		<table class="table">
+	<h3>
+		<spring:message code="teamAdmin.sync.auto" />
+	</h3>
+
+	<table class="table">
+		<tbody>
 			<tr>
 				<td>
-					<spring:message code="teamAdmin.sync.hint" />
-					<div class="text-right">
-						<t:plainForm action="/private${contestURL}/teams/synchronize">
-							<t:button type="submit" context="primary"><spring:message code="teamAdmin.sync.btn" /></t:button>
-						</t:plainForm>
-					</div>
+					<t:plainForm action="/private${contestURL}/teams/synchronize">
+						<t:button type="submit" context="primary"><spring:message code="teamAdmin.sync.btn" /></t:button>
+						<t:helpIcon helpTextCode="teamAdmin.sync.hint" placement="bottom" />
+					</t:plainForm>
 				</td>
-			</tr>
-			<tr>
 				<td>
-					<spring:message code="teamAdmin.sync.staff.hint" />
-					<div class="text-right">
-						<t:plainForm action="/private${contestURL}/teams/synchronize/staff-members">
-							<t:button type="submit" context="primary"><spring:message code="teamAdmin.sync.staff.btn" /></t:button>
-						</t:plainForm>
-					</div>
+					<t:plainForm action="/private${contestURL}/teams/synchronize/staff-members">
+						<t:button type="submit" context="primary"><spring:message code="teamAdmin.sync.staff.btn" /></t:button>
+						<t:helpIcon helpTextCode="teamAdmin.sync.staff.hint" placement="bottom" />
+					</t:plainForm>
 				</td>
-			</tr>
-			<tr>
 				<td>
-					<spring:message code="teamAdmin.sync.socialInfo.hint" />
-					<div class="text-right">
-						<t:plainForm action="/private${contestURL}/teams/synchronize/social-content">
-							<t:button type="submit" context="primary"><spring:message code="teamAdmin.sync.socialInfo.btn" /></t:button>
-						</t:plainForm>
-					</div>
+					<t:plainForm action="/private${contestURL}/teams/synchronize/social-content">
+						<t:button type="submit" context="primary"><spring:message code="teamAdmin.sync.socialInfo.btn" /></t:button>
+						<t:helpIcon helpTextCode="teamAdmin.sync.socialInfo.hint" placement="bottom" />
+					</t:plainForm>
 				</td>
 			</tr>
-		</table>
-	</fieldset>
+		</tbody>
+	</table>
 </div>
 <br />
 <br />
