@@ -9,8 +9,6 @@
   </jsp:attribute>
 
   <jsp:body>
-    <t:alert><spring:message code="installAdmin.welcome.intro"/></t:alert>
-
     <div class="col-sm-4">
       <t:panelWithHeading>
           <jsp:attribute name="heading"><spring:message code="installAdmin.welcome.globalSettings.title"/></jsp:attribute>

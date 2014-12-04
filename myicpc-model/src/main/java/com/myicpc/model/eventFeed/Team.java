@@ -27,6 +27,7 @@ public class Team extends IdGeneratedContestObject {
     /**
      * Reservation id from CM
      */
+    @Column(unique = true)
     private Long externalId;
     /**
      * Current team rank in the contest

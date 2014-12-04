@@ -18,6 +18,7 @@
         <ul class="nav navbar-nav">
             <li><a href='<spring:url value="/private/contests" />'><spring:message code="nav.admin.contests"/></a></li>
             <li><a href='<spring:url value="/private/users" />'><t:faIcon icon="users" /> <spring:message code="nav.admin.users"/></a></li>
+            <li><a href='<spring:url value="/private/getting-started" />'><spring:message code="nav.admin.gettingStarted"/></a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li>

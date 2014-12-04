@@ -111,7 +111,9 @@ public class InstallAdminController extends GeneralAdminController {
         globalSettingsService.mergeDefaultGlobalSettings(globalSettings);
         globalSettingsService.saveGlobalSettings(globalSettings);
 
-        return "redirect:/private/welcome/after-installation";
+        successMessage(redirectAttributes, "installAdmin.welcome.intro");
+
+        return "redirect:/private/getting-started";
     }
 
     @RequestMapping(value = "/private/install/error", method = RequestMethod.GET)
@@ -119,7 +121,7 @@ public class InstallAdminController extends GeneralAdminController {
         return "/private/install/errorInstall";
     }
 
-    @RequestMapping(value = "/private/welcome/after-installation", method = RequestMethod.GET)
+    @RequestMapping(value = "/private/getting-started", method = RequestMethod.GET)
     public String afterInstallWelcome(final Model model) {
         return "/private/install/welcome";
     }
