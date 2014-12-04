@@ -147,29 +147,31 @@ public class TeamService {
             // Parse string into JSON object and get JSON array of institutions
             JsonObject universityRoot = new JsonParser().parse(universityJSON).getAsJsonObject();
             JsonArray universitiesArray = universityRoot.getAsJsonArray("institutions");
-            // Iterate through all JSON representations of universities
-            for (JsonElement jsonElement : universitiesArray) {
-                // Tries to find an university by externalId in the database and
-                // if the university is not found, it returns a new university
-                JSONAdapter universityAdapter = new JSONAdapter(jsonElement);
-                Long externalId = universityAdapter.getLong("institutionId");
-                University university = universityRepository.findByExternalId(externalId);
-                if (university == null) {
-                    university = new University();
+            if (universitiesArray != null) {
+                // Iterate through all JSON representations of universities
+                for (JsonElement jsonElement : universitiesArray) {
+                    // Tries to find an university by externalId in the database and
+                    // if the university is not found, it returns a new university
+                    JSONAdapter universityAdapter = new JSONAdapter(jsonElement);
+                    Long externalId = universityAdapter.getLong("institutionId");
+                    University university = universityRepository.findByExternalId(externalId);
+                    if (university == null) {
+                        university = new University();
+                    }
+                    // Get data from JSON and set them to university object. and
+                    // save the university after that
+                    university.setExternalId(externalId);
+                    university.setName(universityAdapter.getString("name"));
+                    university.setShortName(universityAdapter.getString("shortName"));
+                    university.setTwitterHash(universityAdapter.getString("twitterhash", university.getTwitterHash()));
+                    university.setHomepageURL(universityAdapter.getString("homepageurl", university.getHomepageURL()));
+                    university.setState(universityAdapter.getString("state", university.getState()));
+                    university.setCountry(universityAdapter.getString("country", university.getCountry()));
+
+                    universityRepository.save(university);
+                    logger.info("CM import: university " + university.getExternalId());
+
                 }
-                // Get data from JSON and set them to university object. and
-                // save the university after that
-                university.setExternalId(externalId);
-                university.setName(universityAdapter.getString("name"));
-                university.setShortName(universityAdapter.getString("shortName"));
-                university.setTwitterHash(universityAdapter.getString("twitterhash", university.getTwitterHash()));
-                university.setHomepageURL(universityAdapter.getString("homepageurl", university.getHomepageURL()));
-                university.setState(universityAdapter.getString("state", university.getState()));
-                university.setCountry(universityAdapter.getString("country", university.getCountry()));
-
-                universityRepository.save(university);
-                logger.info("CM import: university " + university.getExternalId());
-
             }
         } catch (JsonParseException | IllegalStateException ex) {
             logger.error(ex.getMessage(), ex);
@@ -187,45 +189,47 @@ public class TeamService {
             JsonObject teamRoot = new JsonParser().parse(teamJSON).getAsJsonObject();
             JsonArray teamArray = teamRoot.getAsJsonArray("teams");
 
-            List<Team> teamsToSync = teamRepository.findByContest(contest);
-            Map<Long, Team> externalIdTeamMap = new HashMap<>();
-            for (Team team : teamsToSync) {
-                externalIdTeamMap.put(team.getExternalId(), team);
-            }
-
-            // Iterate through all JSON representations of teams
-            for (JsonElement teamJE : teamArray) {
-                // Tries to find a team by externalReservationId in the database
-                // and
-                // if the team is not found, it returns a new team
-                JsonObject root = teamJE.getAsJsonObject();
-                JSONAdapter teamAdapter = new JSONAdapter(teamJE);
-                Long externalId = teamAdapter.getLong("externalReservationId");
-                TeamInfo teamInfo = teamInfoRepository.findByExternalIdAndContest(externalId, contest);
-                if (teamInfo == null) {
-                    teamInfo = new TeamInfo();
-                }
-                University university = universityRepository.findByExternalId(teamAdapter.getLong("institutionId"));
-                teamInfo.setContest(contest);
-                teamInfo.setUniversity(university);
-                teamInfo.setExternalId(externalId);
-                teamInfo.setName(root.get("name").getAsString());
-
-                // set team results of the team
-                teamInfo.setRegionalResults(parseRegionalContests(teamInfo, teamAdapter));
-
-                teamInfo = teamInfoRepository.save(teamInfo);
-
-                if (externalIdTeamMap.containsKey(externalId)) {
-                    Team team = externalIdTeamMap.get(externalId);
-                    team.setTeamInfo(teamInfo);
-                    teamRepository.save(team);
+            if (teamArray != null) {
+                List<Team> teamsToSync = teamRepository.findByContest(contest);
+                Map<Long, Team> externalIdTeamMap = new HashMap<>();
+                for (Team team : teamsToSync) {
+                    externalIdTeamMap.put(team.getExternalId(), team);
                 }
 
-                // process team members and assign them to the team
-                parsePeople(teamInfo, teamAdapter);
+                // Iterate through all JSON representations of teams
+                for (JsonElement teamJE : teamArray) {
+                    // Tries to find a team by externalReservationId in the database
+                    // and
+                    // if the team is not found, it returns a new team
+                    JsonObject root = teamJE.getAsJsonObject();
+                    JSONAdapter teamAdapter = new JSONAdapter(teamJE);
+                    Long externalId = teamAdapter.getLong("externalReservationId");
+                    TeamInfo teamInfo = teamInfoRepository.findByExternalIdAndContest(externalId, contest);
+                    if (teamInfo == null) {
+                        teamInfo = new TeamInfo();
+                    }
+                    University university = universityRepository.findByExternalId(teamAdapter.getLong("institutionId"));
+                    teamInfo.setContest(contest);
+                    teamInfo.setUniversity(university);
+                    teamInfo.setExternalId(externalId);
+                    teamInfo.setName(root.get("name").getAsString());
 
-                logger.info("CM import: team " + teamInfo.getExternalId());
+                    // set team results of the team
+                    teamInfo.setRegionalResults(parseRegionalContests(teamInfo, teamAdapter));
+
+                    teamInfo = teamInfoRepository.save(teamInfo);
+
+                    if (externalIdTeamMap.containsKey(externalId)) {
+                        Team team = externalIdTeamMap.get(externalId);
+                        team.setTeamInfo(teamInfo);
+                        teamRepository.save(team);
+                    }
+
+                    // process team members and assign them to the team
+                    parsePeople(teamInfo, teamAdapter);
+
+                    logger.info("CM import: team " + teamInfo.getExternalId());
+                }
             }
         } catch (JsonParseException | IllegalStateException ex) {
             logger.error(ex.getMessage(), ex);

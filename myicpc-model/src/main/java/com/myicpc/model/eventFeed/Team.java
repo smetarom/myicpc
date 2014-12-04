@@ -20,6 +20,7 @@ import java.util.Map;
 @Cacheable
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "Team_id_seq")
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"systemId", "contestId"})})
 public class Team extends IdGeneratedContestObject {
     private static final long serialVersionUID = -2333804505185439684L;
 
