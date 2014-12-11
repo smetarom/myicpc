@@ -4,8 +4,10 @@ import com.myicpc.controller.GeneralAdminController;
 import com.myicpc.enums.ContestParticipantRole;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.teamInfo.ContestParticipant;
+import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.repository.teamInfo.ContestParticipantRepository;
 import com.myicpc.repository.teamInfo.TeamInfoRepository;
+import com.myicpc.service.dto.filter.ParticipantFilterDTO;
 import com.myicpc.service.participant.ParticipantService;
 import com.myicpc.service.settings.GlobalSettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +18,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.ValidationException;
+import java.util.List;
 
 
 /**
  * @author Roman Smetana
  */
 @Controller
+@SessionAttributes("participantFilter")
 public class ParticipantsAdminController extends GeneralAdminController {
     @Autowired
     private ParticipantService participantService;
@@ -35,6 +40,11 @@ public class ParticipantsAdminController extends GeneralAdminController {
     @Autowired
     private ContestParticipantRepository contestParticipantRepository;
 
+    @ModelAttribute("participantFilter")
+    public ParticipantFilterDTO createParticipantFilter() {
+        return new ParticipantFilterDTO();
+    }
+
     /**
      * Shows contest participants administration page
      *
@@ -42,11 +52,15 @@ public class ParticipantsAdminController extends GeneralAdminController {
      * @return view
      */
     @RequestMapping(value = "/private/{contestCode}/participants", method = RequestMethod.GET)
-    public String participants(@PathVariable String contestCode, Model model) {
+    public String participants(@PathVariable String contestCode, @ModelAttribute("participantFilter") ParticipantFilterDTO participantFilter, Model model) {
         Contest contest = getContest(contestCode, model);
         model.addAttribute("newParticipant", new ContestParticipant());
 
+        List<TeamInfo> teamInfos = participantService.getTeamInfosSortedByName(contest);
+
         model.addAttribute("participantRoles", ContestParticipantRole.getAllTeamRoles());
+        model.addAttribute("participantFilter", participantFilter);
+        model.addAttribute("teamInfos", teamInfos);
         if (contest.getContestSettings().isShowTeamNames()) {
             model.addAttribute("teams", teamInfoRepository.findAllOrderByName());
         } else {

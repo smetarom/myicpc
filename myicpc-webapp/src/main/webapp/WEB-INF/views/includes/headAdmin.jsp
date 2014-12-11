@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="<c:url value='/css/bootstrap.min.css'/>" type="text/css">
 <link rel="stylesheet" href="<c:url value='/css/bootstrap-theme.min.css'/>" type="text/css">
 <link rel="stylesheet" href="<c:url value='/css/jquery-ui.min.css'/>" type="text/css">
+<link rel="stylesheet" href="<c:url value='/css/jquery.chosen.min.css'/>" type="text/css">
 <link rel="stylesheet" href="<c:url value='/css/bootstrap-switch.min.css'/>" type="text/css">
 <link rel="stylesheet" href="<c:url value='/css/myicpc/adminStyle.css'/>" type="text/css">
 <link rel="stylesheet" href="<c:url value='/css/myicpc/admin.css'/>" type="text/css">
@@ -17,6 +18,7 @@
 <script src="<c:url value='/js/jquery/jquery.tmpl.min.js'/>"></script>
 <script src="<c:url value='/js/jquery/jquery.atmosphere.min.js'/>"></script>
 <script src="<c:url value='/js/jquery/jquery.datetimeduck.min.js'/>"></script>
+<script src="<c:url value='/js/jquery/jquery.chosen.min.js'/>"></script>
 <script src="<c:url value='/js/bootstrap/bootstrap-switch.min.js'/>"></script>
 <script src="<c:url value='/js/bootstrap/bootstrap.min.js'/>"></script>
 

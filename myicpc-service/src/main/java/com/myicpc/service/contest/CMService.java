@@ -74,7 +74,7 @@ public class CMService {
      * @return received data from WS
      * @throws IOException
      */
-    public Object connectCM(String url, final Contest contest) throws IOException {
+    private Object connectCM(String url, final Contest contest) throws IOException {
         return connectCM(ICPC_URL, url, contest);
     }
 
@@ -86,7 +86,7 @@ public class CMService {
      * @return received data from WS
      * @throws IOException
      */
-    public String connectCM(final String server, final String url, final Contest contest) throws IOException {
+    private String connectCM(final String server, final String url, final Contest contest) throws IOException {
         HttpGet httpGet = null;
         try {
             System.out.println(contest.getWebServiceSettings()

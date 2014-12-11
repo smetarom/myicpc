@@ -20,7 +20,7 @@
 					<td>${participant.officialFullname}</td>
 					<td>
 						<c:forEach var="association" items="${participant.teamAssociations}">
-							<spring:message code="${association.contestParticipantRole.code}" text="${association.contestParticipantRole.label}" /> ${not empty association.teamInfo ? ' - ' : ''} ${association.teamInfo.contestTeamName}<br />
+							<spring:message code="${association.contestParticipantRole.code}" text="${association.contestParticipantRole.label}" /> ${not empty association.teamInfo ? ' - ' : ''} <c:out value="${association.teamInfo.contestTeamName}" /><br />
 						</c:forEach>
 					</td>
 					<td width="300">${participant.twitterUsername}</td>

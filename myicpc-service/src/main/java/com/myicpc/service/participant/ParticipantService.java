@@ -1,6 +1,7 @@
 package com.myicpc.service.participant;
 
 import com.myicpc.enums.ContestParticipantRole;
+import com.myicpc.model.contest.Contest;
 import com.myicpc.model.teamInfo.ContestParticipant;
 import com.myicpc.model.teamInfo.ContestParticipantAssociation;
 import com.myicpc.model.teamInfo.TeamInfo;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ValidationException;
+import java.util.List;
 
 /**
  * @author Roman Smetana
@@ -61,5 +63,13 @@ public class ParticipantService {
         association.setContestParticipantRole(contestParticipantRole);
         association.setTeamInfo(teamInfo);
         contestParticipantAssociationRepository.save(association);
+    }
+
+    public List<TeamInfo> getTeamInfosSortedByName(Contest contest) {
+        if (contest.getContestSettings().isShowTeamNames()) {
+            return teamInfoRepository.findByContestOrderByNameAsc(contest);
+        } else {
+            return teamInfoRepository.findByContestOrderByUniversityNameAsc(contest);
+        }
     }
 }
