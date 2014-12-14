@@ -90,7 +90,7 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
      */
     @Override
     public JsonArray getTeamsFullTemplate(final Contest contest, final List<Long> teamIds) {
-        Iterable<Team> teams = teamRepository.findByContestAndTeamId(contest, teamIds);
+        Iterable<Team> teams = teamRepository.findByContestAndTeamIds(contest, teamIds);
 
         return getTeamsFullTemplate(teams);
     }

@@ -3,6 +3,7 @@ package com.myicpc.repository.contest;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.myicpc.model.contest.Contest;
+import com.myicpc.repository.AbstractRepositoryTest;
 import com.myicpc.repository.config.TestPersistenceConfig;
 import org.junit.Assert;
 import org.junit.Test;
@@ -19,14 +20,8 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 /**
  * @author Roman Smetana
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {TestPersistenceConfig.class})
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
-        DirtiesContextTestExecutionListener.class,
-        TransactionalTestExecutionListener.class,
-        DbUnitTestExecutionListener.class})
 @DatabaseSetup("classpath:dbunit/ContestRepositoryTest.xml")
-public class ContestRepositoryTest {
+public class ContestRepositoryTest extends AbstractRepositoryTest {
     @Autowired
     private ContestRepository contestRepository;
 
