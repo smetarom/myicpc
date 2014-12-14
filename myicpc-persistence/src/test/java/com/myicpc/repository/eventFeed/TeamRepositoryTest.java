@@ -1,6 +1,7 @@
 package com.myicpc.repository.eventFeed;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.google.common.collect.Lists;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Team;
@@ -16,7 +17,8 @@ import java.util.List;
 import static org.junit.Assert.*;
 
 @Transactional
-@DatabaseSetup("classpath:dbunit/TeamRepositoryTest.xml")
+@DatabaseSetup({"classpath:dbunit/contest/ContestRepositoryTest.xml", "classpath:dbunit/eventFeed/TeamRepositoryTest.xml"})
+@DatabaseTearDown("classpath:dbunit/CleanDatabase.xml")
 public class TeamRepositoryTest extends AbstractRepositoryTest {
 
     @Autowired

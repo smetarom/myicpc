@@ -1,26 +1,19 @@
 package com.myicpc.repository.contest;
 
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.repository.AbstractRepositoryTest;
-import com.myicpc.repository.config.TestPersistenceConfig;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Roman Smetana
  */
-@DatabaseSetup("classpath:dbunit/ContestRepositoryTest.xml")
+@DatabaseSetup("classpath:dbunit/contest/ContestRepositoryTest.xml")
 public class ContestRepositoryTest extends AbstractRepositoryTest {
     @Autowired
     private ContestRepository contestRepository;
@@ -70,5 +63,11 @@ public class ContestRepositoryTest extends AbstractRepositoryTest {
         Contest contest = new Contest();
         contest.setCode("CTU-Open-2013");
         contestRepository.save(contest);
+    }
+
+    @Test
+    @Transactional
+    public void delete() {
+        contestRepository.delete(3L);
     }
 }

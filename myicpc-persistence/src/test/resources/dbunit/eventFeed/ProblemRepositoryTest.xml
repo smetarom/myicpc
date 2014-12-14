@@ -1,0 +1,9 @@
+<dataset>
+    <problem id="1" code="B" name="Problem 2" systemid="2" totaltestcases="0" contestid="1"/>
+    <problem id="2" code="C" name="Problem 3" systemid="3" totaltestcases="0" contestid="1"/>
+    <problem id="3" code="A" name="Problem 1" systemid="1" totaltestcases="0" contestid="1"/>
+
+    <problem id="4" code="A" name="Prob 1" systemid="1" totaltestcases="0" contestid="2"/>
+    <problem id="5" code="B" name="Prob 2" systemid="2" totaltestcases="0" contestid="2"/>
+    <problem id="6" code="C" name="Prob 3" systemid="3" totaltestcases="0" contestid="2"/>
+</dataset>

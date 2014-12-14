@@ -19,15 +19,6 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
 
     Long countByContest(Contest contest);
 
-    // ----
-
-    @Query("SELECT p FROM Problem p ORDER BY p.code")
-    Iterable<Problem> findAllOrderByCode();
-
-    Problem findByCode(String code);
-
-    Problem findByCodeIgnoreCase(String code);
-
     /**
      * load all judgments and number of submissions for judgment if there is at
      * least one submission per judgment

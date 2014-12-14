@@ -1,6 +1,6 @@
 <dataset>
-    <contest id="1" code="Baylor-2013" generatemessages="true" showcountry="true" showregion="true" showteamnames="true" showuniversity="true" hashtag="BU2013" length="1800" name="Baylor Contest" penalty="20.0" shortname="BU" showpicasaphotos="false"/>
-    <contest id="2" code="CTU-OPEN-2013" generatemessages="true" showcountry="true" showregion="true" showteamnames="true" showuniversity="true" hashtag="CTU2013" length="1800" name="CTU Open" penalty="20.0" shortname="CTU" showpicasaphotos="false"/>
+    <!--<contest id="1" code="Baylor-2013" generatemessages="true" showcountry="true" showregion="true" showteamnames="true" showuniversity="true" hashtag="BU2013" length="1800" name="Baylor Contest" penalty="20.0" shortname="BU" showpicasaphotos="false"/>-->
+    <!--<contest id="2" code="CTU-OPEN-2013" generatemessages="true" showcountry="true" showregion="true" showteamnames="true" showuniversity="true" hashtag="CTU2013" length="1800" name="CTU Open" penalty="20.0" shortname="CTU" showpicasaphotos="false"/>-->
 
     <!-- from contest with id=1 -->
     <team id="1" externalid="201433" name="The University of Tokyo" nationality="JPN" problemssolved="0" rank="86" systemid="72" totaltime="0" contestid="1"/>
