@@ -1,9 +1,9 @@
-package com.myicpc.persistence.config;
+package com.myicpc.repository.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -14,14 +14,26 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 import java.util.Properties;
 
-
 /**
  * @author Roman Smetana
  */
 @Configuration
-@EnableJpaRepositories({"com.myicpc.repository"})
+@EnableJpaRepositories("com.myicpc.repository")
 @EnableTransactionManagement
-public class PersistenceAppConfig {
+public class TestPersistenceConfig {
+    @Bean
+    public DataSource dataSource() {
+//		return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.HSQL).build();
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUrl("jdbc:postgresql://127.0.0.1:5432/myicpcTest");
+        dataSource.setUsername("myicpc");
+        dataSource.setPassword("password");
+
+        return dataSource;
+    }
+
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
@@ -33,15 +45,6 @@ public class PersistenceAppConfig {
         em.setJpaProperties(additionalProperties());
 
         return em;
-    }
-
-    @Bean
-    public DataSource dataSource() {
-        JndiDataSourceLookup dataLookup = new JndiDataSourceLookup();
-        dataLookup.setResourceRef(true);
-
-        DataSource dataSource = dataLookup.getDataSource("jdbc/myicpc2DB");
-        return dataSource;
     }
 
     @Bean

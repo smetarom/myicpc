@@ -14,7 +14,6 @@
     <modules>
         <module>myicpc-model</module>
         <module>myicpc-service</module>
-        <!--<module>myicpc-service-scoreboard</module>-->
         <module>myicpc-webapp</module>
         <module>myicpc-persistence</module>
         <module>myicpc-commons</module>
@@ -37,9 +36,9 @@
         <myicpc-security.version>2.0.0</myicpc-security.version>
 
         <atmosphere-runtime.version>2.2.3</atmosphere-runtime.version>
-        <spring-framework.version>4.1.1.RELEASE</spring-framework.version>
-        <spring-data-jpa.version>1.7.0.RELEASE</spring-data-jpa.version>
-        <spring-security.version>3.2.5.RELEASE</spring-security.version>
+        <spring-framework.version>4.1.3.RELEASE</spring-framework.version>
+        <spring-data-jpa.version>1.7.1.RELEASE</spring-data-jpa.version>
+        <spring-security.version>4.0.0.CI-SNAPSHOT</spring-security.version>
         <slf4j.version>1.7.7</slf4j.version>
         <xstream.version>1.4.7</xstream.version>
         <jersey.version>2.13</jersey.version>
@@ -130,6 +129,13 @@
             <version>1.10.8</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring-framework.version}</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
@@ -168,5 +174,15 @@
         </plugins>
     </build>
 
+    <repositories>
+        <repository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>http://repo.spring.io/snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
 </project>

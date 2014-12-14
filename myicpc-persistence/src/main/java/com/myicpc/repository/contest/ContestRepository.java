@@ -11,12 +11,4 @@ public interface ContestRepository extends JpaRepository<Contest, Long> {
     Contest findByName(String name);
 
     Contest findByCode(String code);
-
-    @Query(value = "SELECT c FROM Contest c")
-    Contest getContest();
-
-    @Cacheable(value = "contestTime")
-    @Query(value = "SELECT c.startTime FROM Contest c")
-    Date getContestStartDate();
-
 }
