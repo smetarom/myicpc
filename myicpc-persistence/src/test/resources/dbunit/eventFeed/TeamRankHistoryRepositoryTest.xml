@@ -1,0 +1,14 @@
+<dataset>
+    <!-- from contest with id=1 -->
+    <team id="1" externalid="201433" name="The University of Tokyo" nationality="JPN" problemssolved="0" rank="86" systemid="72" totaltime="0" contestid="1"/>
+    <team id="2" externalid="201434" name="Tokyo Institute of Technology" nationality="JPN" problemssolved="0" rank="34" systemid="75" totaltime="0" contestid="1"/>
+
+    <!-- from contest with id=2 -->
+    <team id="6" version="18" externalid="201438" name="Shanghai Jiao Tong University" nationality="CHN" problemssolved="0" rank="42" systemid="60" totaltime="0" contestid="2"/>
+
+    <teamrankhistory id="1" fromrank="1" rank="2" timestamp="2014-12-14 10:12:53.538" teamid="1"/>
+    <teamrankhistory id="2" fromrank="2" rank="3" timestamp="2014-12-14 10:12:54.552" teamid="2"/>
+    <teamrankhistory id="3" fromrank="1" rank="4" timestamp="2014-12-14 10:12:55.554" teamid="1"/>
+    <teamrankhistory id="4" fromrank="4" rank="5" timestamp="2014-12-14 10:12:56.555" teamid="6"/>
+    <teamrankhistory id="5" fromrank="5" rank="6" timestamp="2014-12-14 10:12:57.556" teamid="1"/>
+</dataset>
