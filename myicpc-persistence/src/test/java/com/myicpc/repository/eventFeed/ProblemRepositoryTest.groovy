@@ -8,6 +8,7 @@ import com.myicpc.repository.AbstractRepositoryTest
 import com.myicpc.repository.contest.ContestRepository
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.transaction.annotation.Transactional
 
 @Transactional
@@ -59,6 +60,13 @@ public class ProblemRepositoryTest extends AbstractRepositoryTest {
     @Test
     public void testGetProblemReport() {
         // TODO implement after refactoring insight
+    }
+
+    @Test(expected = DataIntegrityViolationException.class)
+    void unique_codeAndContest() {
+        Contest contest = contestRepository.findOne(1L);
+        Problem problem = new Problem(code: "A", contest: contest);
+        problemRepository.saveAndFlush(problem);
     }
 
     @Test

@@ -8,6 +8,7 @@ import com.myicpc.repository.AbstractRepositoryTest
 import com.myicpc.repository.contest.ContestRepository
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.transaction.annotation.Transactional
 
 /**
@@ -34,6 +35,13 @@ class JudgementRepositoryTest extends AbstractRepositoryTest {
         Contest contest = contestRepository.findOne(1L);
         List<Judgement> judgementList = judgementRepository.findByContest(contest);
         assert judgementList.size() == 3
+    }
+
+    @Test(expected = DataIntegrityViolationException.class)
+    void unique_codeAndContest() {
+        Contest contest = contestRepository.findOne(1L);
+        Judgement judgement = new Judgement(code: "AC", contest: contest);
+        judgementRepository.saveAndFlush(judgement);
     }
 
     @Test

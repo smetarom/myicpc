@@ -8,6 +8,7 @@ import com.myicpc.repository.AbstractRepositoryTest
 import com.myicpc.repository.contest.ContestRepository
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.transaction.annotation.Transactional
 
 @Transactional
@@ -42,6 +43,13 @@ public class TeamRepositoryTest extends AbstractRepositoryTest {
         assert team.getSystemId() == systemId
         assert team.getId() == 4L
 
+    }
+
+    @Test(expected = DataIntegrityViolationException.class)
+    void unique_systemIdAndContest() {
+        Contest contest = contestRepository.findOne(1L);
+        Team team = new Team(systemId: 106L, contest: contest);
+        teamRepository.saveAndFlush(team);
     }
 
     @Test

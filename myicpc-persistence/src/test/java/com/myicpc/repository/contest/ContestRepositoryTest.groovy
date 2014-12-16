@@ -45,19 +45,19 @@ class ContestRepositoryTest extends AbstractRepositoryTest {
     }
 
     @Test(expected = DataIntegrityViolationException.class)
-    public void create_DuplicatedName() {
+    public void unique_name() {
         Contest contest = new Contest(name: "CTU Open");
         contestRepository.save(contest);
     }
 
     @Test(expected = DataIntegrityViolationException.class)
-    public void create_DuplicatedShortName() {
+    public void unique_shortName() {
         Contest contest = new Contest(shortName: "CTU");
         contestRepository.save(contest);
     }
 
     @Test(expected = DataIntegrityViolationException.class)
-    public void create_DuplicatedCode() {
+    public void unique_code() {
         Contest contest = new Contest(code: "CTU-Open-2013");
         contestRepository.save(contest);
     }
