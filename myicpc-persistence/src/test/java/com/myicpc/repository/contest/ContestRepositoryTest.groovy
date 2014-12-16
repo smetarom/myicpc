@@ -14,54 +14,51 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Roman Smetana
  */
 @DatabaseSetup("classpath:dbunit/contest/ContestRepositoryTest.xml")
-public class ContestRepositoryTest extends AbstractRepositoryTest {
+class ContestRepositoryTest extends AbstractRepositoryTest {
     @Autowired
     private ContestRepository contestRepository;
 
     @Test
-    public void findByName() throws Exception {
+    public void findByName() {
         Contest contest = contestRepository.findByName("CTU Open");
-        Assert.assertNotNull(contest);
-        Assert.assertEquals("CTU Open", contest.getName());
+        assert contest != null
+        assert contest.getName() == "CTU Open"
     }
 
     @Test
-    public void findByName_NonExisting() throws Exception {
+    public void findByName_NonExisting() {
         Contest contest = contestRepository.findByName("NonExisting Name");
-        Assert.assertNull(contest);
+        assert contest == null
     }
 
     @Test
-    public void findByCode() throws Exception {
+    public void findByCode() {
         Contest contest = contestRepository.findByCode("CTU-Open-2013");
-        Assert.assertNotNull(contest);
-        Assert.assertEquals("CTU-Open-2013", contest.getCode());
+        assert contest != null
+        assert contest.getCode() == "CTU-Open-2013"
     }
 
     @Test
-    public void findByCode_NonExisting() throws Exception {
+    public void findByCode_NonExisting() {
         Contest contest = contestRepository.findByCode("NonExisting Code");
-        Assert.assertNull(contest);
+        assert contest == null
     }
 
     @Test(expected = DataIntegrityViolationException.class)
-    public void create_DuplicatedName() throws Exception {
-        Contest contest = new Contest();
-        contest.setName("CTU Open");
+    public void create_DuplicatedName() {
+        Contest contest = new Contest(name: "CTU Open");
         contestRepository.save(contest);
     }
 
     @Test(expected = DataIntegrityViolationException.class)
-    public void create_DuplicatedShortName() throws Exception {
-        Contest contest = new Contest();
-        contest.setShortName("CTU");
+    public void create_DuplicatedShortName() {
+        Contest contest = new Contest(shortName: "CTU");
         contestRepository.save(contest);
     }
 
     @Test(expected = DataIntegrityViolationException.class)
-    public void create_DuplicatedCode() throws Exception {
-        Contest contest = new Contest();
-        contest.setCode("CTU-Open-2013");
+    public void create_DuplicatedCode() {
+        Contest contest = new Contest(code: "CTU-Open-2013");
         contestRepository.save(contest);
     }
 
@@ -69,5 +66,6 @@ public class ContestRepositoryTest extends AbstractRepositoryTest {
     @Transactional
     public void delete() {
         contestRepository.delete(3L);
+        assert contestRepository.findOne(3L) == null
     }
 }
