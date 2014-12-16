@@ -1,0 +1,7 @@
+<dataset>
+    <judgement id="1" version="0" code="TLE" name="Time Limit Exceeded" contestid="1"/>
+    <judgement id="2" version="0" code="IF" name="Illegal Function" contestid="1"/>
+    <judgement id="3" version="0" code="AC" name="Accepted" contestid="1"/>
+    <judgement id="4" version="0" code="TLE" name="Time Limit Exceeded" contestid="2"/>
+    <judgement id="5" version="0" code="AC" name="Accepted" contestid="2"/>
+</dataset>
