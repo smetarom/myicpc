@@ -14,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional
 @DatabaseSetup(["classpath:dbunit/contest/ContestRepositoryTest.xml", "classpath:dbunit/eventFeed/ProblemRepositoryTest.xml"])
 @DatabaseTearDown("classpath:dbunit/CleanDatabase.xml")
 public class ProblemRepositoryTest extends AbstractRepositoryTest {
-    @Autowired
-    private ContestRepository contestRepository;
 
     @Autowired
     private ProblemRepository problemRepository;

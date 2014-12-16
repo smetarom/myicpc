@@ -17,9 +17,6 @@ import org.springframework.transaction.annotation.Transactional
 public class EventFeedControlRepositoryTest extends AbstractRepositoryTest {
 
     @Autowired
-    private ContestRepository contestRepository;
-
-    @Autowired
     private EventFeedControlRepository eventFeedControlRepository;
 
     @Test

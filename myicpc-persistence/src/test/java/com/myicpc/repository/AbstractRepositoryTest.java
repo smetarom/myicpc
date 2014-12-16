@@ -3,7 +3,9 @@ package com.myicpc.repository;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseTearDown;
 import com.myicpc.repository.config.TestPersistenceConfig;
+import com.myicpc.repository.contest.ContestRepository;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -22,4 +24,6 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
         DbUnitTestExecutionListener.class})
 @DatabaseTearDown("classpath:dbunit/CleanDatabase.xml")
 public abstract class AbstractRepositoryTest extends groovy.util.GroovyTestCase {
+    @Autowired
+    protected ContestRepository contestRepository;
 }

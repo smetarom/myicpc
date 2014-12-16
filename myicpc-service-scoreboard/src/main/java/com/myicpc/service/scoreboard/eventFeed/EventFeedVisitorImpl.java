@@ -9,7 +9,6 @@ import com.myicpc.repository.eventFeed.*;
 import com.myicpc.repository.teamInfo.TeamInfoRepository;
 import com.myicpc.service.scoreboard.eventFeed.dto.*;
 import com.myicpc.service.scoreboard.exception.EventFeedException;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,7 +90,7 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
     @Override
     @Transactional
     public void visit(JudgementXML xmlJudgement, Contest contest, EventFeedControl eventFeedControl) {
-        Judgement judgement = judgementRepository.findByCode(xmlJudgement.getAcronym());
+        Judgement judgement = judgementRepository.findByCodeAndContest(xmlJudgement.getAcronym(), contest);
         if (judgement == null) {
             judgement = new Judgement();
             xmlJudgement.mergeTo(judgement);

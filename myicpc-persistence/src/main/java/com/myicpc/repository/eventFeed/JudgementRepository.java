@@ -11,10 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface JudgementRepository extends CrudRepository<Judgement, Long> {
-    Judgement findByCode(String code);
+    Judgement findByCodeAndContest(String code, Contest contest);
 
-    @Query("SELECT j FROM Judgement j ORDER BY j.id DESC")
-    List<Judgement> findAllOrderByIdDesc();
+    List<Judgement> findByContest(Contest contest);
 
     /**
      * load all languages and number of submissions for judgment if there is at

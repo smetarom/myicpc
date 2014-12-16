@@ -17,9 +17,6 @@ import org.springframework.transaction.annotation.Transactional
 public class TeamRankHistoryRepositoryTest extends AbstractRepositoryTest {
 
     @Autowired
-    private ContestRepository contestRepository;
-
-    @Autowired
     private TeamRepository teamRepository;
 
     @Autowired
