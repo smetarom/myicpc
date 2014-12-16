@@ -2,12 +2,13 @@ package com.myicpc.repository.eventFeed;
 
 import com.myicpc.model.eventFeed.Language;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-public interface LanguageRepository extends CrudRepository<Language, Long> {
+public interface LanguageRepository extends JpaRepository<Language, Long> {
     Language findByName(String name);
 
     Language findByNameIgnoreCase(String name);
