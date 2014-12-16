@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
  */
 @Cacheable
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"teamId", "problemId", "teamProblemId"})})
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "LastTeamProblem_id_seq")
 public class LastTeamProblem extends IdGeneratedObject {
     private static final long serialVersionUID = 2037705931029494546L;
