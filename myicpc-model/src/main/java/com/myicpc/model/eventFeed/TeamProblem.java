@@ -4,6 +4,7 @@ import com.myicpc.commons.utils.TextUtils;
 import com.myicpc.model.IdGeneratedObject;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -92,6 +93,9 @@ public class TeamProblem extends IdGeneratedObject {
     @JoinColumn(name = "problemId")
     private Problem problem;
 
+    @OneToOne(fetch=FetchType.LAZY, mappedBy="teamProblem", cascade = CascadeType.ALL, optional = true)
+    private LastTeamProblem lastTeamProblem;
+
     public Team getTeam() {
         return team;
     }
@@ -106,6 +110,14 @@ public class TeamProblem extends IdGeneratedObject {
 
     public void setProblem(final Problem problem) {
         this.problem = problem;
+    }
+
+    public LastTeamProblem getLastTeamProblem() {
+        return lastTeamProblem;
+    }
+
+    public void setLastTeamProblem(LastTeamProblem lastTeamProblem) {
+        this.lastTeamProblem = lastTeamProblem;
     }
 
     public Long getSystemId() {

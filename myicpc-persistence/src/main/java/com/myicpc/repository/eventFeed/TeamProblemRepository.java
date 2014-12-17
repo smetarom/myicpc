@@ -21,15 +21,11 @@ public interface TeamProblemRepository extends JpaRepository<TeamProblem, Long>,
 
     List<TeamProblem> findByTeamOrderByTimeDesc(Team team);
 
-    List<TeamProblem> findByTeamAndProblemOrderByTimeDesc(Team team, Problem problem);
-
-    List<TeamProblem> findByJudgedOrderByTimeAsc(Boolean judged);
-
     List<TeamProblem> findByProblem(Problem problem);
 
     List<TeamProblem> findByProblemAndFirstSolved(Problem problem, boolean firstSolved);
 
-    List<TeamProblem> findByLanguage(String language);
+    List<TeamProblem> findByLanguageAndTeamContest(String language, Contest contest);
 
     @Query(value = "SELECT COUNT(tp) FROM TeamProblem tp WHERE tp.team = ?1 and tp.problem = ?2")
     Long countTeamProblemsByTeamAndProblem(Team team, Problem problem);
@@ -38,9 +34,6 @@ public interface TeamProblemRepository extends JpaRepository<TeamProblem, Long>,
 
     @Query(value = "SELECT MIN(tp.time) FROM TeamProblem tp WHERE tp.team = ?1 AND tp.solved = true")
     Double getLastAcceptedTeamProblemTime(Team team);
-
-    @Query(value = "SELECT tp FROM TeamProblem tp ORDER BY tp.id DESC")
-    Page<TeamProblem> getLatestTeamProblems(Pageable pageable);
 
     @Transactional
     @Modifying
