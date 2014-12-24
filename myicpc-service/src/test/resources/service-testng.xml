@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="ServiceModule" verbose="1" >
+    <test name="ContestService1">
+        <packages>
+            <package name="com.myicpc.service.contest" />
+        </packages>
+    </test>
+</suite>
