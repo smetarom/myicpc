@@ -11,6 +11,7 @@
   </jsp:attribute>
 
   <jsp:body>
+      <%@ include file="/WEB-INF/views/scoreboard/fragment/teamHomeMenu.jsp"%>
 
   </jsp:body>
 </t:template>

@@ -13,7 +13,7 @@
 
 <div class="panel panel-${panelStyle}">
     <div class="panel-heading">
-        <h3 class="panel-title"><jsp:invoke fragment="heading"/></h3>
+        <h3 class="panel-title no-underline"><jsp:invoke fragment="heading"/></h3>
     </div>
     <c:if test="${showBody}">
         <div class="panel-body">

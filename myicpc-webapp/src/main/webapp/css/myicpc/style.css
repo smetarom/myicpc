@@ -1,3 +1,7 @@
+.no-underline {
+  text-decoration: none;
+  border-bottom: none; }
+
 td.fit-content {
   width: 1%;
   white-space: nowrap; }

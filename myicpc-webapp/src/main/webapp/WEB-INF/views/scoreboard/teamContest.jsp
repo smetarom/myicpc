@@ -20,14 +20,7 @@
 
   <jsp:body>
       <div id="teamDetail" ng-app="teamDetail" ng-controller="TeamDeatilCtrl">
-          <div class="col-sm-12">
-              <ul class="nav nav-pills">
-                  <t:menuItem activeItem="contest" active="${tab}" url="${contestURL}/team/${team.id}"><spring:message code="teamHome.nav.contest" /></t:menuItem>
-                  <t:menuItem activeItem="profile" active="${tab}" url="${contestURL}/team/${team.id}"><spring:message code="teamHome.nav.about" /></t:menuItem>
-                  <t:menuItem activeItem="insight" active="${tab}" url="${contestURL}/team/${team.id}"><spring:message code="teamHome.nav.insight" /></t:menuItem>
-                  <t:menuItem activeItem="social" active="${tab}" url="${contestURL}/team/${team.id}"><spring:message code="teamHome.nav.social" /></t:menuItem>
-              </ul>
-          </div>
+          <%@ include file="/WEB-INF/views/scoreboard/fragment/teamHomeMenu.jsp"%>
 
           <div class="col-sm-6">
               <h3><spring:message code="teamHome.contest.timeline"/></h3>

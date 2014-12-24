@@ -6,15 +6,14 @@
       content="MyICPC provides a personalized view of an ICPC competition and encourages social engagement.  MyICPC has been used at regionals and World Finals."/>
 <meta name="keywords"
       content="MyICPC, ICPC, ACM-ICPC, personalized view, programming competition, programming contest, ACM, World finals, regionals"/>
-<meta name="author" content="Roman Smetana, MyICPC team"/>
+<meta name="author" content="Roman Smetana"/>
 <meta name="application-name" content="MyICPC"/>
 
 <link rel="Shortcut Icon" href="http://icpc.baylor.edu/img/icon-icpc-small.gif"/>
 
 <%-- Public CDNs --%>
 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" type="text/css">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css"
-      type="text/css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" type="text/css">
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.12/angular.min.js"></script>

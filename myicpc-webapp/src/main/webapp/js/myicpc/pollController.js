@@ -1,6 +1,6 @@
 //Angular controller for poll page
-var insightApp = angular.module("pollApp", ['nvd3ChartDirectives']);
-insightApp.controller('PollController', function ($scope) {
+var pollApp = angular.module("pollApp", ['nvd3ChartDirectives']);
+pollApp.controller('PollController', function ($scope) {
     // Polls data
     $scope.data = {};
 

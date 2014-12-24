@@ -10,6 +10,7 @@ import com.myicpc.repository.eventFeed.ProblemRepository;
 import com.myicpc.repository.eventFeed.TeamProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.service.scoreboard.dto.SubmissionDTO;
+import com.myicpc.service.scoreboard.insight.ProblemInsightService;
 import com.myicpc.service.scoreboard.team.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,11 +43,14 @@ public class TeamController extends GeneralController {
     @Autowired
     private TeamProblemRepository teamProblemRepository;
 
+    @Autowired
+    private ProblemInsightService problemInsightService;
+
     @RequestMapping(value = { "/{contestCode}/team/{teamId}", "/{contestCode}/team/{teamId}/contest" }, method = RequestMethod.GET)
     public String teamContest(@PathVariable String contestCode, @PathVariable Long teamId, Model model) {
         Team team = teamRepository.findOne(teamId);
         if (team == null) {
-            return "redirect:" + getContestURL(contestCode) + "/team/" + teamId + "/about";
+            return "redirect:" + getContestURL(contestCode) + "/team/" + teamId + "/profile";
         }
         team.setCurrentProblems(teamService.getLatestTeamProblems(team));
         Contest contest = getContest(contestCode, model);
@@ -64,8 +68,21 @@ public class TeamController extends GeneralController {
         return "scoreboard/teamContest";
     }
 
-    @RequestMapping(value = {"/{contestCode}/team/{teamId}/about"}, method = RequestMethod.GET)
-    public String teamAbout(@PathVariable String contestCode, @PathVariable Long teamId, Model model) {
-        return "scoreboard/teamAbout";
+    @RequestMapping(value = {"/{contestCode}/team/{teamId}/profile"}, method = RequestMethod.GET)
+    public String teamProfile(@PathVariable String contestCode, @PathVariable Long teamId, Model model) {
+
+        return "scoreboard/teamProfile";
+    }
+
+    @RequestMapping(value = {"/{contestCode}/team/{teamId}/insight"}, method = RequestMethod.GET)
+    public String teamInsight(@PathVariable String contestCode, @PathVariable Long teamId, Model model) {
+        Team team = teamRepository.findOne(teamId);
+        Contest contest = getContest(contestCode, model);
+
+        model.addAttribute("team", team);
+        model.addAttribute("insightProblemModel", problemInsightService.reportAll(team, contest).toString());
+        model.addAttribute("tab", "insight");
+
+        return "scoreboard/teamInsight";
     }
 }
