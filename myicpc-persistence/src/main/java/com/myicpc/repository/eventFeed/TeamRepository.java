@@ -18,6 +18,8 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
 
     Team findBySystemIdAndContest(Long systemId, Contest contest);
 
+    Long countByContest(Contest contest);
+
     @Transactional
     @Modifying
     @Query("DELETE FROM Team t WHERE t.contest = ?1")

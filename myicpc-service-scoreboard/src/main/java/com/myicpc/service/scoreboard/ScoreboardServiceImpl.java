@@ -9,13 +9,16 @@ import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
 import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.model.teamInfo.University;
+import com.myicpc.repository.eventFeed.LastTeamProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.service.listener.ScoreboardListenerAdapter;
 import com.myicpc.service.publish.PublishService;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +33,9 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
 
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private LastTeamProblemRepository lastTeamProblemRepository;
 
     @Override
     public void onSubmission(TeamProblem teamProblem, List<Team> effectedTeams) {
@@ -70,7 +76,7 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
      * submissions
      *
      * @return JSON representation of all teams paired with last team
-     *         submissions
+     * submissions
      */
     @Override
     public JsonArray getTeamsFullTemplate(final Contest contest) {
@@ -83,10 +89,9 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
      * Returns JSON representation of selected teams paired with last team
      * submissions
      *
-     * @param teamIds
-     *            ids of selected teams
+     * @param teamIds ids of selected teams
      * @return JSON representation of selected teams paired with last team
-     *         submissions
+     * submissions
      */
     @Override
     public JsonArray getTeamsFullTemplate(final Contest contest, final List<Long> teamIds) {
@@ -99,10 +104,9 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
      * Returns JSON representation of selected teams paired with last team
      * submissions
      *
-     * @param teams
-     *            selected teams
+     * @param teams selected teams
      * @return JSON representation of selected teams paired with last team
-     *         submissions
+     * submissions
      */
     public JsonArray getTeamsFullTemplate(final Iterable<Team> teams) {
         JsonArray root = new JsonArray();
@@ -153,5 +157,45 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
             root.add(teamObject);
         }
         return root;
+    }
+
+    @Override
+    public JsonArray getTeamsScorebarTemplate(final Contest contest) {
+        JsonArray arr = new JsonArray();
+        List<Team> teams = teamRepository.findByContest(contest);
+
+        for (Team team : teams) {
+            List<LastTeamProblem> lastTeamProblems = lastTeamProblemRepository.findByTeam(team);
+            List<JsonObject> solved = new ArrayList<>();
+            List<JsonObject> failed = new ArrayList<>();
+
+            for (LastTeamProblem lastTeamProblem : lastTeamProblems) {
+                if (lastTeamProblem.getTeamProblem().getJudged()) {
+                    JsonObject problem = new JsonObject();
+                    problem.addProperty("code", lastTeamProblem.getProblem().getCode());
+                    if (lastTeamProblem.getTeamProblem().getSolved()) {
+                        solved.add(problem);
+                    } else {
+                        failed.add(problem);
+                    }
+                }
+            }
+
+            JsonObject teamObject = new JsonObject();
+            String shortName = team.getTeamInfo() != null ? team.getTeamInfo().getShortName() : team.getName();
+            String abbreviation = team.getTeamInfo() != null ? team.getTeamInfo().getAbbreviation() : team.getName();
+
+            teamObject.addProperty("rank", team.getRank());
+            teamObject.addProperty("teamId", team.getId());
+            teamObject.addProperty("teamExternalId", team.getExternalId());
+            teamObject.addProperty("teamShortName", StringEscapeUtils.escapeEcmaScript(shortName));
+            teamObject.addProperty("teamAbbreviation", StringEscapeUtils.escapeEcmaScript(abbreviation));
+            teamObject.addProperty("solvedNum", solved.size());
+            teamObject.addProperty("failedNum", failed.size());
+
+            arr.add(teamObject);
+        }
+
+        return arr;
     }
 }

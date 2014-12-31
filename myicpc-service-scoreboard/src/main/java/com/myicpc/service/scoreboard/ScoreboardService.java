@@ -18,4 +18,6 @@ public interface ScoreboardService extends ScoreboardListener {
     JsonArray getTeamsFullTemplate(Contest contest);
 
     JsonArray getTeamsFullTemplate(Contest contest, List<Long> teamIds);
+
+    JsonArray getTeamsScorebarTemplate(Contest contest);
 }

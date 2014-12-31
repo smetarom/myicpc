@@ -1,3 +1,52 @@
+#scorebar .teamInfoHidden {
+  display: none; }
+#scorebar .teamInfoVisible {
+  display: block; }
+#scorebar .passed {
+  stroke: none;
+  fill: green; }
+#scorebar .neutral {
+  fill: gainsboro; }
+#scorebar .barhover {
+  fill: blue; }
+#scorebar .failed {
+  stroke: none;
+  fill: red; }
+#scorebar .workon {
+  fill: lavender;
+  stroke: none; }
+#scorebar .tick-label {
+  font-size: 10px; }
+#scorebar .bar-title-Visible {
+  display: block; }
+#scorebar .bar-title-Hidden {
+  display: none; }
+#scorebar img.empty-well {
+  background: white; }
+#scorebar .map-rank-text {
+  font-size: 16px; }
+#scorebar #teaminfo-graph {
+  float: left;
+  z-index: 10;
+  position: relative; }
+#scorebar .teamInfoVisible, #scorebar .teamInfoHidden {
+  min-height: 90px; }
+#scorebar #map-team-info div {
+  min-width: 50px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px;
+  border: solid 2px black; }
+  #scorebar #map-team-info div h5 {
+    background-color: rgba(100, 100, 100, 0.8);
+    color: white;
+    padding: 3px; }
+#scorebar #map-team-info .teamInfoVisible {
+  position: absolute;
+  border: black solid 1px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px;
+  min-width: 250px; }
+
 .no-underline {
   text-decoration: none;
   border-bottom: none; }
