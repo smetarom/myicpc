@@ -4,6 +4,7 @@ import com.myicpc.model.IdGeneratedContestObject;
 import com.myicpc.model.teamInfo.TeamInfo;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +29,7 @@ public class Team extends IdGeneratedContestObject {
     /**
      * Reservation id from CM
      */
+    @NotNull
     @Column(unique = true)
     private Long externalId;
     /**

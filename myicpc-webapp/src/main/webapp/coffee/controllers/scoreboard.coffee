@@ -81,7 +81,6 @@ scoreboard.controller('scoreboardCtrl', ($scope) ->
 )
 
 updateScoreboard = (data, ngController = null) ->
-  console.log data
   if data.type == 'submission'
     if ngController != null
       colorBg = "#ffff99"

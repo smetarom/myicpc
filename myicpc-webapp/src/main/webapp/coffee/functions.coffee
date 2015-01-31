@@ -22,11 +22,11 @@ class AtmosphereRequest
 startSubscribe = (contextPath, contestCode, channel, processMethod, ngController) ->
   socket = $.atmosphere
   request = new AtmosphereRequest(getSubscribeAddress(contextPath) + contestCode + "/" + channel, (response) ->
-    try
+    #try
       result = $.parseJSON(response.responseBody);
       processMethod(result, ngController)
-    catch error
-      console.log("An error occurred while parsing the JSON Data: #{response.responseBody}; Error: #{error}");
+    #catch error
+     # console.log("An error occurred while parsing the JSON Data: #{response.responseBody}; Error: #{error}");
   )
   connectedSocket = socket.subscribe(request)
 
@@ -38,6 +38,7 @@ convertSecondsToMinutes = (seconds) ->
   seconds // 60
 
 formatContestTime = (seconds) ->
+  minus = ""
   if (seconds < 0)
     seconds *= -1
     minus = "-"

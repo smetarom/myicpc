@@ -48,7 +48,7 @@ public class TeamController extends GeneralController {
 
     @RequestMapping(value = { "/{contestCode}/team/{teamId}", "/{contestCode}/team/{teamId}/contest" }, method = RequestMethod.GET)
     public String teamContest(@PathVariable String contestCode, @PathVariable Long teamId, Model model) {
-        Team team = teamRepository.findOne(teamId);
+        Team team = teamRepository.findByExternalId(teamId);
         if (team == null) {
             return "redirect:" + getContestURL(contestCode) + "/team/" + teamId + "/profile";
         }
@@ -76,7 +76,7 @@ public class TeamController extends GeneralController {
 
     @RequestMapping(value = {"/{contestCode}/team/{teamId}/insight"}, method = RequestMethod.GET)
     public String teamInsight(@PathVariable String contestCode, @PathVariable Long teamId, Model model) {
-        Team team = teamRepository.findOne(teamId);
+        Team team = teamRepository.findByExternalId(teamId);
         Contest contest = getContest(contestCode, model);
 
         model.addAttribute("team", team);

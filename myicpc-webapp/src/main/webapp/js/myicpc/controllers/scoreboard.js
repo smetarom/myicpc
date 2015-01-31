@@ -106,7 +106,6 @@ updateScoreboard = function(data, ngController) {
   if (ngController == null) {
     ngController = null;
   }
-  console.log(data);
   if (data.type === 'submission') {
     if (ngController !== null) {
       colorBg = "#ffff99";

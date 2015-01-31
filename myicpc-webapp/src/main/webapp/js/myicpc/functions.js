@@ -33,14 +33,9 @@ startSubscribe = function(contextPath, contestCode, channel, processMethod, ngCo
   var connectedSocket, request, socket;
   socket = $.atmosphere;
   request = new AtmosphereRequest(getSubscribeAddress(contextPath) + contestCode + "/" + channel, function(response) {
-    var error, result;
-    try {
-      result = $.parseJSON(response.responseBody);
-      return processMethod(result, ngController);
-    } catch (_error) {
-      error = _error;
-      return console.log("An error occurred while parsing the JSON Data: " + response.responseBody + "; Error: " + error);
-    }
+    var result;
+    result = $.parseJSON(response.responseBody);
+    return processMethod(result, ngController);
   });
   return connectedSocket = socket.subscribe(request);
 };
@@ -56,6 +51,7 @@ convertSecondsToMinutes = function(seconds) {
 
 formatContestTime = function(seconds) {
   var divisor_for_minutes, hours, minus, minutes;
+  minus = "";
   if (seconds < 0) {
     seconds *= -1;
     minus = "-";

@@ -45,6 +45,7 @@
                 var width = $("#scorebar-container").width();
                 ngController.render(width);
 
+                startSubscribe('${r.contextPath}', '${contest.code}', 'scoreboard', updateScorebar, ngController);
             });
         </script>
 

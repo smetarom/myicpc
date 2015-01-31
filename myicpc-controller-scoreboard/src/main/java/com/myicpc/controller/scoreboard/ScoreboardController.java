@@ -65,4 +65,14 @@ public class ScoreboardController extends GeneralController {
         model.addAttribute("teamCount", teamRepository.countByContest(contest));
         return "scoreboard/scorebar";
     }
+
+    @RequestMapping(value = {"/{contestCode}/map"}, method = RequestMethod.GET)
+    public String map(@PathVariable String contestCode, Model model) {
+        Contest contest = getContest(contestCode, model);
+
+        model.addAttribute("teamJSON", scoreboardService.getTeamsScorebarTemplate(contest).toString());
+        model.addAttribute("problemCount", problemRepository.countByContest(contest));
+        model.addAttribute("teamCount", teamRepository.countByContest(contest));
+        return "scoreboard/worldMap";
+    }
 }

@@ -18,6 +18,8 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
 
     Team findBySystemIdAndContest(Long systemId, Contest contest);
 
+    Team findByExternalId(Long externalId);
+
     Long countByContest(Contest contest);
 
     @Transactional

@@ -152,6 +152,25 @@ scorebar.controller('scorebarCtrl', ($scope) ->
   $scope._getTeamX = (team) ->
     return $scope.config.zeroBar + (team.solvedNum + team.failedNum) * $scope.config.problemBarSize + $scope.config.teamNameOffset + $scope.config.infoBoxOffset;
 
+  $scope.updateTeamInfo = (team) ->
+      if ($("#info-" + team.teamId).length)
+        $("#info-" + team.teamId).css({top : $scope._getTeamY(team) + "px", left : $scope._getTeamX(team) + "px"})
+
+      if ($("#info-" + team.teamId + "-rank").length)
+        $("#info-" + team.teamId + "-rank").html(team.rank)
+
+      formatProblemArray = (letters) ->
+        str = letters.join(", ")
+        if (str.length > 0)
+          str = "(#{str})"
+        return str
+
+      if ($("#info-" + team.teamId + "-solved").length)
+        $("#info-" + team.teamId + "-solved").html(team.solvedNum + " " + formatProblemArray(team.solved));
+
+      if ($("#info-" + team.teamId + "-failed").length)
+        $("#info-" + team.teamId + "-failed").html(team.failedNum + " " + formatProblemArray(team.failed));
+
   $scope.drawTeamBar = (team) ->
     chart = d3.select("#scorebar-chart g.canvas")
     n = chart.selectAll("#neutrl-bar" + team["teamId"]).data([ team, ])
@@ -281,6 +300,40 @@ scorebar.controller('scorebarCtrl', ($scope) ->
   $scope.displayText = (element) ->
 
   $scope.hideText = (element) ->
+
+  $scope.findById = (teamId) ->
+    _.find($scope.teams, (obj) ->
+      obj.teamId == teamId
+    )
 )
+
+updateScorebar = (data, ngController = null) ->
+  if data.type == 'submission'
+    if ngController != null
+      team = ngController.findById(data["teamId"])
+      if data.solved
+        if team.solved.indexOf(data["problemCode"]) == -1
+          team.solvedNum += 1
+          team.solved.push(data["problemCode"])
+          index = team.failed.indexOf(data["problemCode"]);
+          if index != -1
+            team.failedNum -= 1
+            team.failed.splice(index, 1)
+      else if team.failed.indexOf(data["problemCode"]) == -1
+        team.failedNum += 1;
+        team.failed.push(data["problemCode"]);
+
+      if data.judged && data.solved
+        for key of data.teams
+          teamId = parseInt(key)
+          effectedTeam = ngController.findById(teamId)
+          effectedTeam.rank = data.teams[key].teamRank
+          ngController.drawTeamBar(effectedTeam)
+          ngController.updateTeamInfo(effectedTeam)
+
+      ngController.drawTeamBar(team)
+      ngController.updateTeamInfo(team)
+
+
 
 

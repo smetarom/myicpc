@@ -41,7 +41,7 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
     public void onSubmission(TeamProblem teamProblem, List<Team> effectedTeams) {
         JsonObject tpObject = new JsonObject();
         tpObject.addProperty("type", "submission");
-        tpObject.addProperty("teamId", teamProblem.getTeam().getId());
+        tpObject.addProperty("teamId", teamProblem.getTeam().getExternalId());
         tpObject.addProperty("teamName", teamProblem.getTeam().getName());
         tpObject.addProperty("problemId", teamProblem.getProblem().getId());
         tpObject.addProperty("problemCode", teamProblem.getProblem().getCode());
@@ -62,9 +62,9 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
         JsonObject teamsObject = new JsonObject();
         for (Team team : effectedTeams) {
             JsonObject teamObject = new JsonObject();
-            teamObject.addProperty("teamId", team.getId());
+            teamObject.addProperty("teamId", team.getExternalId());
             teamObject.addProperty("teamRank", team.getRank());
-            teamsObject.add(team.getId().toString(), teamObject);
+            teamsObject.add(team.getExternalId().toString(), teamObject);
         }
         tpObject.add("teams", teamsObject);
 
@@ -114,7 +114,7 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
             final TeamInfo teamInfo = team.getTeamInfo();
             final Contest contest = team.getContest();
             JsonObject teamObject = new JsonObject();
-            teamObject.addProperty("teamId", team.getId());
+            teamObject.addProperty("teamId", team.getExternalId());
             teamObject.addProperty("teamExternalId", team.getExternalId());
             teamObject.addProperty("teamRank", team.getRank());
             if (teamInfo != null) {
@@ -166,8 +166,8 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
 
         for (Team team : teams) {
             List<LastTeamProblem> lastTeamProblems = lastTeamProblemRepository.findByTeam(team);
-            List<JsonObject> solved = new ArrayList<>();
-            List<JsonObject> failed = new ArrayList<>();
+            JsonArray solved = new JsonArray();
+            JsonArray failed = new JsonArray();
 
             for (LastTeamProblem lastTeamProblem : lastTeamProblems) {
                 if (lastTeamProblem.getTeamProblem().getJudged()) {
@@ -186,12 +186,13 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
             String abbreviation = team.getTeamInfo() != null ? team.getTeamInfo().getAbbreviation() : team.getName();
 
             teamObject.addProperty("rank", team.getRank());
-            teamObject.addProperty("teamId", team.getId());
-            teamObject.addProperty("teamExternalId", team.getExternalId());
+            teamObject.addProperty("teamId", team.getExternalId());
             teamObject.addProperty("teamShortName", StringEscapeUtils.escapeEcmaScript(shortName));
             teamObject.addProperty("teamAbbreviation", StringEscapeUtils.escapeEcmaScript(abbreviation));
             teamObject.addProperty("solvedNum", solved.size());
+            teamObject.add("solved", solved);
             teamObject.addProperty("failedNum", failed.size());
+            teamObject.add("failed", failed);
 
             arr.add(teamObject);
         }
