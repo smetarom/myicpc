@@ -1,27 +1,70 @@
-drawMarkersMap = () ->
-  data = new google.visualization.DataTable();
-  data.addColumn('number', 'Latitude');
-  data.addColumn('number', 'Longitude');
-  data.addColumn('string', 'Team');
-  data.addColumn('number', 'Rank');
+scorebar = angular.module('worldMap', []);
 
-  data.addRow([50.5,14.25, 'First marker', 1])
-  data.addRow([50.5,14.25, 'Second Marker', 2])
+scorebar.controller('worldMapCtrl', ($scope) ->
+  $scope.teams = []
+  $scope.config = {
+    centered: null,
+    config: null,
+    projection: null,
+    feature: null,
+    # team coordinates
+    teamCoorData: null,
+    # teams with coordinates
+    teamsWithCoor: new Array(),
+    circleData: new Array(),
+    # circle size
+    circleSize: 5,
+    teamCount:0,
+    # settings for color interpolation
+    fullColor: 255,
+    darkColor: 100,
 
-  options = {
-    displayMode: 'markers',
-    height: 500,
-    enableRegionInteractivity: true
+    refreshAnimationLength: 750,
+    # settings for color legend
+    # width of the legend
+    legendWidth: 1000,
+    legendYTextBottomCorner: 200, # Y coor. of bottom corner of title text
+    legendYSpaceTitleBars: 5, # space between title and top corner or bars
+    legendYSpaceBottomTicks: 15, # space between bottom corner of bars and
+    # bottom corner of labels
+    legendXCorner: 10, # X coordinate of legend
+    legendBarHeight: 10, # height of bars in legend
+    legendLabelFrequency: 10 # how often should the text label appear
   }
 
-  worldMap = new google.visualization.GeoChart(document.getElementById('world-map'));
-  worldMap.draw(data, options)
+  $scope.renderMap = (appPath, config) ->
+    $scope.config = $.extend({
+      width: 1000,
+      ratio: 0.65,
+      scale: 150,
+      translate: [ 490, 380 ],
+      circleSize: 6
+    }, config)
 
-  tableView = new google.visualization.DataView(data);
-  tableView.setColumns([3,2])
+    $scope.config.teamCount = $scope.teams.length
+    $scope.config.legendWidth = $scope.config.width - 20
+    $scope.config.height = Math.round($scope.config.width * $scope.config.ratio)
+    $scope.config.legendYTextBottomCorner = $scope.config.height - 40
 
-  scoreboard = new google.visualization.Table(document.getElementById('map-scoreboard'));
-  scoreboard.draw(tableView, {})
+    currentScale = $scope.config.scale
+    currentTranslate = $scope.config.translate
+    # create map svg
+    svg = d3.select("#mapContainer").append("svg:svg").attr("width", $scope.config.width).attr("height", $scope.config.height);
 
-google.load('visualization', '1', {'packages': ['geochart', 'table']})
-google.setOnLoadCallback(drawMarkersMap)
+    # create projection
+    $scope.config.projection = d3.geo.mercator().scale(currentScale).translate(currentTranslate);
+
+    # create object for GPS coordinate conversions using projection
+    path = d3.geo.path().projection($scope.config.projection);
+
+    d3.json(appPath+"/maps/world-countries.json", (collection) ->
+      $scope.config.feature = svg.selectAll("path").data(collection.features).enter().append("svg:path").attr("d", (d) -> path(d))
+        .attr("id", (d) ->
+          return d.id
+        ).on("click", onCountryClick);
+      $scope.config.feature.append("svg:title").text((d) ->
+        return d.properties.name
+      )
+    )
+
+)

@@ -11,6 +11,7 @@ import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.model.teamInfo.University;
 import com.myicpc.repository.eventFeed.LastTeamProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
+import com.myicpc.repository.teamInfo.TeamInfoRepository;
 import com.myicpc.service.listener.ScoreboardListenerAdapter;
 import com.myicpc.service.publish.PublishService;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -33,6 +34,9 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
 
     @Autowired
     private TeamRepository teamRepository;
+
+    @Autowired
+    private TeamInfoRepository teamInfoRepository;
 
     @Autowired
     private LastTeamProblemRepository lastTeamProblemRepository;
@@ -198,5 +202,22 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
         }
 
         return arr;
+    }
+
+    @Override
+    public JsonObject getTeamMapCoordinates(Contest contest) {
+        List<TeamInfo> teamInfos = teamInfoRepository.findByContest(contest);
+        JsonObject coordinates = new JsonObject();
+        for (TeamInfo teamInfo : teamInfos) {
+            University university = teamInfo.getUniversity();
+            if (university != null) {
+                JsonObject teamCoordinates = new JsonObject();
+                teamCoordinates.addProperty("latitude", university.getLatitude());
+                teamCoordinates.addProperty("longtitude", university.getLongtitude());
+                teamCoordinates.addProperty("country", university.getCountry());
+                coordinates.add(teamInfo.getExternalId().toString(), teamCoordinates);
+            }
+        }
+        return coordinates;
     }
 }

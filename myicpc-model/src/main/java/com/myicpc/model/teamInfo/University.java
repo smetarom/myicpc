@@ -48,6 +48,14 @@ public class University extends IdGeneratedObject {
      * Country of the university
      */
     private String country;
+    /**
+     * University latitude on the map
+     */
+    private Long latitude;
+    /**
+     * University longtitude on the map
+     */
+    private Long longtitude;
 
     public Long getExternalId() {
         return externalId;
@@ -103,5 +111,21 @@ public class University extends IdGeneratedObject {
 
     public void setCountry(final String country) {
         this.country = country;
+    }
+
+    public Long getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Long latitude) {
+        this.latitude = latitude;
+    }
+
+    public Long getLongtitude() {
+        return longtitude;
+    }
+
+    public void setLongtitude(Long longtitude) {
+        this.longtitude = longtitude;
     }
 }

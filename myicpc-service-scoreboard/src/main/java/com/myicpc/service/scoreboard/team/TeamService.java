@@ -167,10 +167,11 @@ public class TeamService {
                     university.setHomepageURL(universityAdapter.getString("homepageurl", university.getHomepageURL()));
                     university.setState(universityAdapter.getString("state", university.getState()));
                     university.setCountry(universityAdapter.getString("country", university.getCountry()));
+                    university.setLatitude(universityAdapter.getLong("latitude", university.getLatitude()));
+                    university.setLongtitude(universityAdapter.getLong("longtitude", university.getLongtitude()));
 
                     universityRepository.save(university);
                     logger.info("CM import: university " + university.getExternalId());
-
                 }
             }
         } catch (JsonParseException | IllegalStateException ex) {

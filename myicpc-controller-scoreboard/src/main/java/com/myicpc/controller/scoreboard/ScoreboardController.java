@@ -71,6 +71,7 @@ public class ScoreboardController extends GeneralController {
         Contest contest = getContest(contestCode, model);
 
         model.addAttribute("teamJSON", scoreboardService.getTeamsScorebarTemplate(contest).toString());
+        model.addAttribute("teamCoordinatesJSON", scoreboardService.getTeamMapCoordinates(contest).toString());
         model.addAttribute("problemCount", problemRepository.countByContest(contest));
         model.addAttribute("teamCount", teamRepository.countByContest(contest));
         return "scoreboard/worldMap";

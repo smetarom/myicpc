@@ -196,9 +196,9 @@ scorebar.controller('scorebarCtrl', ($scope) ->
         return "neutrl-bar" + d["teamId"];
       )
       # set hover - display info and highlight
-#      .attr("onmouseover", "displayText(this);")
+      .attr("onmouseover", "scorebarDisplayText(this);")
       # set hover - hide info
-#      .attr("onmouseout", "hideText(this);");
+      .attr("onmouseout", "scorebarHideTextHideText(this);");
 
     # Draw bar for solved problems
     p = chart.selectAll("#passed-bar" + team["teamId"]).data([ team, ])
@@ -224,8 +224,8 @@ scorebar.controller('scorebarCtrl', ($scope) ->
     .attr("height", getHeight).attr("class", "passed").attr("id", (d, i) ->
       return "passed-bar" + d["teamId"];
     )
-#    .attr("onmouseover", "displayText(this);")
-#    .attr("onmouseout", "hideText(this);")
+    .attr("onmouseover", "scorebarDisplayText(this);")
+    .attr("onmouseout", "scorebarHideText(this);")
 
     # Draw bar for failed problems
     failedSpace = 2 * $scope.config.space
@@ -264,8 +264,11 @@ scorebar.controller('scorebarCtrl', ($scope) ->
     ).attr("height", getHeight).attr("id", (d, i) ->
       return "failed-bar" + d["teamId"]
     ).attr("class", "failed")
-#    .attr("onmouseover", "displayText(this);")
-#    .attr("onmouseout", "hideText(this);")
+    .on("mouseover", (team) ->
+      alert(team["teamId"])
+      #chart.selectAll("#bar-Ntitle" + team["teamId"]).attr("class", "bar-title-Visible")
+    )
+    .attr("onmouseout", "scorebarHideText(this);")
 
     # Draw team text on the left
     getTextClass = (team, i) ->
@@ -294,18 +297,38 @@ scorebar.controller('scorebarCtrl', ($scope) ->
     ).attr("class", getTextClass).text((team) ->
       return if $scope.config.useLongNames then team.teamShortName else team.teamAbbreviation
     )
-#    .attr("onmouseover", "displayText(this);")
-#    .attr("onmouseout", "hideText(this);")
-
-  $scope.displayText = (element) ->
-
-  $scope.hideText = (element) ->
+    .attr("onmouseover", "scorebarDisplayText(this);")
+    .attr("onmouseout", "scorebarHideText(this);")
 
   $scope.findById = (teamId) ->
     _.find($scope.teams, (obj) ->
       obj.teamId == teamId
     )
 )
+
+scorebarDisplayText = (element) ->
+  s = element.id.substring(10);
+  # do not change substring size - all IDs are made to follow the 10
+  # character format
+  # e.g. "#passed-bar", "#bar-Ntitle", etc.
+  d3.select("#passed-bar" + s).attr("class", "barhover");
+  d3.select("#failed-bar" + s).attr("class", "barhover");
+  d3.select("#neutrl-bar" + s).attr("class", "barhover");
+  d3.select("#workon-bar" + s).attr("class", "barhover");
+  d3.select("#bar-Ntitle" + s).style("fill", "blue");
+  d3.select("#info-" + s).attr("class", "teamInfoVisible");
+
+scorebarHideText = (element) ->
+  s = element.id.substring(10)
+  # do not change substring size - all IDs are made to follow the 10
+  # character format
+  # e.g. "#passed-bar", "#bar-Ntitle", etc.
+  d3.select("#passed-bar" + s).attr("class", "passed")
+  d3.select("#failed-bar" + s).attr("class", "failed")
+  d3.select("#neutrl-bar" + s).attr("class", "neutral")
+  d3.select("#workon-bar" + s).attr("class", "workon")
+  d3.select("#bar-Ntitle" + s).style("fill", "black")
+  d3.select(".teamInfoVisible").attr("class", "teamInfoHidden")
 
 updateScorebar = (data, ngController = null) ->
   if data.type == 'submission'

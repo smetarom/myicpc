@@ -1,6 +1,7 @@
 package com.myicpc.service.scoreboard;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
@@ -20,4 +21,6 @@ public interface ScoreboardService extends ScoreboardListener {
     JsonArray getTeamsFullTemplate(Contest contest, List<Long> teamIds);
 
     JsonArray getTeamsScorebarTemplate(Contest contest);
+
+    JsonObject getTeamMapCoordinates(Contest contest);
 }
