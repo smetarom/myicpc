@@ -1,7 +1,8 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
 
 <t:template>
-    Ahoj svete
+
+    <t:notification notification="${notification}" />
 
     <div id="header"><h3>Atmosphere Chat. Default transport is WebSocket, fallback is long-polling</h3></div>
     <div id="content"></div>

@@ -7,6 +7,20 @@
     <short-name>myicpc-tags</short-name>
     <uri>http://myicpc.baylor.edu/tags</uri>
 
+    <!-- Custom JSP tags -->
+    <tag>
+        <name>notification</name>
+        <tag-class>com.myicpc.tags.notification.NotificationTag</tag-class>
+        <body-content>scriptless</body-content>
+        <attribute>
+            <name>notification</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.myicpc.model.social.Notification</type>
+        </attribute>
+    </tag>
+
+    <!-- JSP templates -->
     <tag-file>
         <name>alert</name>
         <path>/WEB-INF/tags/bootstrap/alert.tag</path>
