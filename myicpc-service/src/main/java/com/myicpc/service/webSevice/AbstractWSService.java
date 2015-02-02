@@ -1,6 +1,6 @@
 package com.myicpc.service.webSevice;
 
-import com.myicpc.commons.utils.TextUtils;
+import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.service.settings.GlobalSettingsService;
 import org.apache.commons.io.IOUtils;
@@ -68,7 +68,7 @@ public abstract class AbstractWSService {
             HttpResponse response = httpclient.execute(httpGet);
             HttpEntity entity = response.getEntity();
 
-            return IOUtils.toString(entity.getContent(), TextUtils.DEFAULT_ENCODING);
+            return IOUtils.toString(entity.getContent(), FormatUtils.DEFAULT_ENCODING);
         } catch (KeyManagementException | NoSuchAlgorithmException ex) {
             throw new IOException(ex);
         } finally {

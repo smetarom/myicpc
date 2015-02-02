@@ -7,7 +7,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.myicpc.commons.adapters.JSONAdapter;
-import com.myicpc.commons.utils.TextUtils;
+import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.enums.ContestParticipantRole;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.LastTeamProblem;
@@ -46,10 +46,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.ValidationException;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -126,8 +124,8 @@ public class TeamService {
     public void synchronizeTeamsFromFile(final MultipartFile universityJSON, final MultipartFile teamJSON, final Contest contest) throws IOException,
             ValidationException {
         try (InputStream universityInputStream = universityJSON.getInputStream(); InputStream teamInputStream = teamJSON.getInputStream()) {
-            String universityString = IOUtils.toString(universityInputStream, TextUtils.DEFAULT_ENCODING);
-            String teamString = IOUtils.toString(teamInputStream, TextUtils.DEFAULT_ENCODING);
+            String universityString = IOUtils.toString(universityInputStream, FormatUtils.DEFAULT_ENCODING);
+            String teamString = IOUtils.toString(teamInputStream, FormatUtils.DEFAULT_ENCODING);
 
             synchronizeUniversities(universityString);
             synchronizeTeams(teamString, contest);
@@ -244,7 +242,7 @@ public class TeamService {
         int count = 1;
         for (TeamInfo teamInfo : teamInfos) {
             if (contest.getContestSettings().isShowTeamNames()) {
-                teamInfo.setShortName(TextUtils.getTeamShortName(teamInfo.getName()));
+                teamInfo.setShortName(FormatUtils.getTeamShortName(teamInfo.getName()));
                 teamInfo.setAbbreviation(teamInfo.getShortName());
                 if (StringUtils.isEmpty(teamInfo.getHashtag())) {
                     teamInfosWithoutHashtag.add(teamInfo);
@@ -256,7 +254,7 @@ public class TeamService {
                 if (university != null) {
                     teamInfo.setShortName(university.getShortName());
                     teamInfo.setAbbreviation(university.getShortName());
-                    teamInfo.setHashtag(TextUtils.clearHashtag(university.getTwitterHash()));
+                    teamInfo.setHashtag(FormatUtils.clearHashtag(university.getTwitterHash()));
                 }
             }
         }

@@ -1,6 +1,6 @@
 package com.myicpc.service.contest;
 
-import com.myicpc.commons.utils.TextUtils;
+import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.model.contest.Contest;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
@@ -101,7 +101,7 @@ public class CMService {
             HttpResponse response = httpclient.execute(httpGet);
             HttpEntity entity = response.getEntity();
 
-            return IOUtils.toString(entity.getContent(), TextUtils.DEFAULT_ENCODING);
+            return IOUtils.toString(entity.getContent(), FormatUtils.DEFAULT_ENCODING);
         } finally {
             releaseConnection(httpGet);
         }

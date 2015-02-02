@@ -1,6 +1,6 @@
 package com.myicpc.service.scoreboard.eventFeed;
 
-import com.myicpc.commons.utils.TextUtils;
+import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.*;
 import com.myicpc.model.teamInfo.TeamInfo;
@@ -80,7 +80,7 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
         if (region == null) {
             region = new Region();
             xmlRegion.mergeTo(region);
-            region.setShortName(TextUtils.getRegionShortName(region.getName()));
+            region.setShortName(FormatUtils.getRegionShortName(region.getName()));
             region.setContest(contest);
             region = regionRepository.save(region);
             logger.info("Region " + region.getName() + " created");

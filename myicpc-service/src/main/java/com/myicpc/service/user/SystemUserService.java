@@ -1,7 +1,7 @@
 package com.myicpc.service.user;
 
 import au.com.bytecode.opencsv.CSVReader;
-import com.myicpc.commons.utils.TextUtils;
+import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.model.security.SystemUser;
 import com.myicpc.model.security.SystemUserRole;
 import com.myicpc.repository.security.SystemUserRepository;
@@ -99,7 +99,7 @@ public class SystemUserService {
     public void importUsers(final MultipartFile usersFile) throws IOException {
         String[] line;
         try (InputStream fileInputStream = usersFile.getInputStream();
-             CSVReader usersReader = new CSVReader(new InputStreamReader(fileInputStream, TextUtils.DEFAULT_ENCODING))) {
+             CSVReader usersReader = new CSVReader(new InputStreamReader(fileInputStream, FormatUtils.DEFAULT_ENCODING))) {
             while ((line = usersReader.readNext()) != null) {
                 SystemUser user = systemUserRepository.findByUsername(line[0]);
                 if (user == null) {

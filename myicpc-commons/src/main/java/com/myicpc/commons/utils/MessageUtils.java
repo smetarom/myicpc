@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.MessageFormat;
+import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -40,8 +41,16 @@ public class MessageUtils {
         return messageBundle.getString(key);
     }
 
+    public static String getMessage(final String key, final Locale locale) {
+        return getMessage(key);
+    }
+
     public static String getMessage(final String key, final Object... params) {
         return MessageFormat.format(messageBundle.getString(key), params);
+    }
+
+    public static String getMessage(final String key, Locale locale, final Object... params) {
+        return getMessage(key, params);
     }
 
 }

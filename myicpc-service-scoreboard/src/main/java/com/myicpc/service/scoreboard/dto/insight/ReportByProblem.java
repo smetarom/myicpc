@@ -2,7 +2,7 @@ package com.myicpc.service.scoreboard.dto.insight;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.myicpc.commons.utils.TextUtils;
+import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.model.eventFeed.Problem;
 import com.myicpc.model.eventFeed.TeamProblem;
 
@@ -212,7 +212,7 @@ public class ReportByProblem extends InsightReport {
 		problemReportJSON.addProperty("numSolvedTeams", numSolvedTeams);
 		problemReportJSON.addProperty("numSubmittedTeams", numSubmittedTeams);
 		problemReportJSON.addProperty("totalSubmissions", totalSubmissions);
-		problemReportJSON.addProperty("averageSolutionTime", TextUtils.formatTimeToMinutes(averageSolutionTime));
+		problemReportJSON.addProperty("averageSolutionTime", FormatUtils.formatTimeToMinutes(averageSolutionTime));
 		JsonArray langArr = new JsonArray();
 		// populate language array with info about used languages
 		for (String language : languageMap.keySet()) {

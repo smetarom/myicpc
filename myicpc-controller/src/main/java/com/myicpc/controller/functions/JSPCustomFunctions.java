@@ -1,7 +1,7 @@
 package com.myicpc.controller.functions;
 
 import com.myicpc.commons.utils.MessageUtils;
-import com.myicpc.commons.utils.TextUtils;
+import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.model.contest.Contest;
 import info.bliki.wiki.model.WikiModel;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -45,19 +45,19 @@ public class JSPCustomFunctions {
     /**
      * @param value text with HTML tags
      * @return text wintout HTML tags
-     * @see TextUtils#removeHTMLTags(String)
+     * @see com.myicpc.commons.utils.FormatUtils#removeHTMLTags(String)
      */
     public static String escapeHTML(String value) {
-        return TextUtils.removeHTMLTags(value);
+        return FormatUtils.removeHTMLTags(value);
     }
 
     /**
      * @param url URL to prepend
      * @return full URL
-     * @see TextUtils#prependHTTPToURL(String)
+     * @see com.myicpc.commons.utils.FormatUtils#prependHTTPToURL(String)
      */
     public static String prependHTTP(String url) {
-        return TextUtils.prependHTTPToURL(url);
+        return FormatUtils.prependHTTPToURL(url);
     }
 
     public static String formatMinutes(int minutes) {

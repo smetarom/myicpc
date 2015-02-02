@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.charset.Charset;
+import java.text.DateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ import java.util.Map;
  *
  * @author Roman Smetana
  */
-public class TextUtils {
+public class FormatUtils {
     public static final Charset DEFAULT_ENCODING = Charsets.UTF_8;
 
     /**
