@@ -33,14 +33,26 @@ public class Notification extends IdGeneratedContestObject {
      * @author Roman Smetana
      */
     public enum NotificationType {
-        SCOREBOARD_SUCCESS("Scoreboard", "Scoreboard success", "s"), SCOREBOARD_FAILED("Scoreboard", "Scoreboard failed", "sf"), SCOREBOARD_SUBMIT(
-                "Scoreboard", "Scoreboard submitted", "ss"), TWITTER("Tweet", "Twitter", "t"), ARTICLE("Article", "Article", "a"), ADMIN_NOTIFICATION(
-                "Admin notification", "Admin notification", "an"), GALLERY("Gallery", "Gallery", "ga"), VINE("Vine", "Vine", "vi"), INSTAGRAM_VIDEO(
-                "Instagram", "Instagram video", "iv"), INSTAGRAM_IMAGE("Instagram", "Instagram photo", "im"), POLL_OPEN("Poll", "Poll open", "po"), POLL_CLOSE(
-                "Poll", "Poll close", "pc"), YOUTUBE_VIDEO("YouTube", "YouTube", "yt"), SCHEDULE_EVENT_OPEN("Schedule", "Schedule event open", "seo"), QUEST_VOTE_WINNER_TWITTER(
-                "Quest vote winner", "Quest vote winner", "qvwt"), QUEST_VOTE_WINNER_VINE("Quest vote winner", "Quest vote winner", "qvwv"), QUEST_VOTE_WINNER_INSTAGRAM_IMAGE(
-                "Quest vote winner", "Quest vote winner", "qvwim"), QUEST_VOTE_INSTAGRAM_VIDEO("Quest vote winner", "Quest vote winner", "qvwiv"), QUEST_CHALLENGE(
-                "Quest challenge", "Quest challenge", "qch"), ANALYST_MESSAGE("Analytics Message", "Analytics Message", "ame");
+        SCOREBOARD_SUCCESS("Scoreboard", "Scoreboard success", "submissionSuccess"),
+        SCOREBOARD_FAILED("Scoreboard", "Scoreboard failed", "submissionFailed"),
+        SCOREBOARD_SUBMIT("Scoreboard", "Scoreboard submitted", "submissionSubmitted"),
+        TWITTER("Tweet", "Twitter", "t"),
+        ARTICLE("Article", "Article", "a"),
+        ADMIN_NOTIFICATION("Admin notification", "Admin notification", "an"),
+        GALLERY("Gallery", "Gallery", "ga"),
+        VINE("Vine", "Vine", "vi"),
+        INSTAGRAM_VIDEO("Instagram", "Instagram video", "iv"),
+        INSTAGRAM_IMAGE("Instagram", "Instagram photo", "im"),
+        POLL_OPEN("Poll", "Poll open", "po"),
+        POLL_CLOSE("Poll", "Poll close", "pc"),
+        YOUTUBE_VIDEO("YouTube", "YouTube", "yt"),
+        SCHEDULE_EVENT_OPEN("Schedule", "Schedule event open", "seo"),
+        QUEST_VOTE_WINNER_TWITTER("Quest vote winner", "Quest vote winner", "qvwt"),
+        QUEST_VOTE_WINNER_VINE("Quest vote winner", "Quest vote winner", "qvwv"),
+        QUEST_VOTE_WINNER_INSTAGRAM_IMAGE("Quest vote winner", "Quest vote winner", "qvwim"),
+        QUEST_VOTE_INSTAGRAM_VIDEO("Quest vote winner", "Quest vote winner", "qvwiv"),
+        QUEST_CHALLENGE("Quest challenge", "Quest challenge", "qch"),
+        ANALYST_MESSAGE("Analytics Message", "Analytics Message", "ame");
         /**
          * Human readable name of notification type
          */

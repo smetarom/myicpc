@@ -1,11 +1,17 @@
 package com.myicpc.service.publish;
 
 import com.google.gson.JsonObject;
+import com.myicpc.model.contest.Contest;
+import com.myicpc.model.social.Notification;
+import com.myicpc.service.notification.NotificationServiceImpl;
 import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.cpr.BroadcasterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.inject.Inject;
 
 /**
  * @author Roman Smetana
@@ -26,7 +32,7 @@ public class PublishService {
     /**
      * Web socket channel for submissions and notification messages
      */
-    public static final String NOTIFICATIONS = "notifications";
+    public static final String NOTIFICATION = "notification";
     /**
      * Web socket channel for Quest
      */
@@ -37,6 +43,22 @@ public class PublishService {
      */
     public void broadcastTeamProblem(final JsonObject teamProblemJSON, final String contestCode) {
         atmospherePublish(PREFIX + contestCode + "/" + SCOREBOARD_CHANNEL, teamProblemJSON.toString());
+    }
+
+    /**
+     * Broadcast the notification to notification channel
+     *
+     * @param notification
+     *            notification, which triggered the event
+     */
+    public void broadcastNotification(final Notification notification, final Contest contest) {
+        if (notification.isOffensive()) {
+            // ignore offensive notifications
+            return;
+        }
+        JsonObject notificationObject = NotificationServiceImpl.getNotificationInJson(notification);
+
+        atmospherePublish(PREFIX + contest.getCode() + "/" + NOTIFICATION, notificationObject.toString());
     }
 
     /**

@@ -27,8 +27,8 @@ public class NotificationTag extends SimpleTagSupport {
         this.notification = notification;
     }
 
-    public void setType(Notification.NotificationType type) {
-        this.type = type;
+    public void setType(String type) {
+        this.type = Notification.NotificationType.valueOf(type);
     }
 
     @Override
@@ -47,7 +47,9 @@ public class NotificationTag extends SimpleTagSupport {
             throw new JspException("Notification type cannot be null.");
         }
         NotificationTile tile = getNotificationTile(notificationType, isTemplate);
-        tile.render(out);
+        if (tile != null) {
+            tile.render(out);
+        }
     }
 
     protected NotificationTile getNotificationTile(final Notification.NotificationType notificationType, boolean isTemplate) {
@@ -58,7 +60,7 @@ public class NotificationTag extends SimpleTagSupport {
                 notificationType.isScoreboardFailed() ||
                 notificationType.isScoreboardSubmitted() ||
                 notificationType.isAnalyticsMessage()) {
-            tile = new SubmissionTile(notification, false, locale, pageContext);
+            tile = new SubmissionTile(notification, isTemplate, locale, pageContext);
         }
         // TODO more notification types to come
         return tile;

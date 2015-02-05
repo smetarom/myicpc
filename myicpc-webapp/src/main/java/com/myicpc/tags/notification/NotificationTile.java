@@ -28,12 +28,16 @@ public abstract class NotificationTile {
     }
 
     public void render(JspWriter out) throws IOException, JspException {
+        out.print("<div class=\"timelineTile clearfix\">");
         renderAvatar(out);
+        out.print("<div class=\"media-body\">");
         out.print("<h4 class=\"media-heading\">");
         renderTitle(out);
         out.println("</h4>");
         renderBody(out);
         renderFooter(out);
+        out.print("</div>");
+        out.print("</div>");
     }
 
     protected abstract void renderAvatar(JspWriter out) throws IOException, JspException;
@@ -66,11 +70,11 @@ public abstract class NotificationTile {
     }
 
     protected String getTitle() {
-        return isTemplate ? "{{notification.title}}" : notification.getTitle();
+        return isTemplate ? "{{title}}" : notification.getTitle();
     }
 
     protected String getBody() {
-        return isTemplate ? "{{{notification.body}}}" : notification.getBody();
+        return isTemplate ? "{{{body}}}" : notification.getBody();
     }
 
     protected String getTimestamp() {

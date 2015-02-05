@@ -138,7 +138,7 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
     @Transactional
     public void visit(TeamProblemXML xmlTeamProblem, Contest contest, EventFeedControl eventFeedControl) {
         try {
-            if (eventFeedControl.getSkippedRuns() < eventFeedControl.getRunsToSkip()) {
+           if (eventFeedControl.getSkippedRuns() < eventFeedControl.getRunsToSkip()) {
                 eventFeedControl.increaseSkippedRuns();
                 logger.info("Skipped {} out of {} runs", eventFeedControl.getSkippedRuns(), eventFeedControl.getRunsToSkip());
             } else {

@@ -24,15 +24,19 @@ startSubscribe = (contextPath, contestCode, channel, processMethod, ngController
   request = new AtmosphereRequest(getSubscribeAddress(contextPath) + contestCode + "/" + channel, (response) ->
     #try
       result = $.parseJSON(response.responseBody);
+      console.log result
       processMethod(result, ngController)
     #catch error
-     # console.log("An error occurred while parsing the JSON Data: #{response.responseBody}; Error: #{error}");
+    #  console.log("An error occurred while parsing the JSON Data: #{response.responseBody}; Error: #{error}");
   )
   connectedSocket = socket.subscribe(request)
 
 getSubscribeAddress = (contextPath) ->
   contextPath = if contextPath != "" then contextPath + '/' else '/'
   window.location.protocol + "//" + window.location.hostname + ':' + window.location.port + contextPath + 'pubsub/'
+
+compileHandlebarsTemplate = (id) ->
+  return Handlebars.compile($("#" + id).html())
 
 convertSecondsToMinutes = (seconds) ->
   seconds // 60

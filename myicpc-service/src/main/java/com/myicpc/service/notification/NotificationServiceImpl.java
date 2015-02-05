@@ -23,6 +23,7 @@ import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.service.analyst.MessageAnalystService;
 import com.myicpc.service.dto.AnalystMessageDTO;
+import com.myicpc.service.publish.PublishService;
 import com.myicpc.service.utils.lists.NotificationList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -57,6 +58,9 @@ public class NotificationServiceImpl implements NotificationService {
     @Autowired
     private MessageAnalystService messageAnalystService;
 
+    @Autowired
+    private PublishService publishService;
+
     /**
      * Construct default list of notification types, which should be ignored by
      * default
@@ -66,19 +70,45 @@ public class NotificationServiceImpl implements NotificationService {
                 .addQuestWinnerTwitter().addQuestWinnerVine();
     }
 
+    /**
+     * Returns JSON representation of {@link Notification}
+     *
+     * @param notification
+     * @return JSON representation
+     */
+    public static JsonObject getNotificationInJson(final Notification notification, final Contest contest) {
+        DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.ENGLISH);
+        JsonObject notificationObject = new JsonObject();
+        notificationObject.addProperty("id", notification.getId());
+        notificationObject.addProperty("type", notification.getNotificationType().getCode());
+        notificationObject.addProperty("title", notification.getTitle());
+        notificationObject.addProperty("body", notification.getBody());
+        notificationObject.addProperty("user", notification.getDisplayName());
+        notificationObject.addProperty("url", notification.getUrl());
+        notificationObject.addProperty("entityId", notification.getEntityId());
+        notificationObject.addProperty("code", notification.getCode());
+        Date timestamp = notification.getLocalTimestamp();
+        notificationObject.addProperty("timestamp", timestamp != null ? formatter.format(timestamp) : "");
+        notificationObject.addProperty("profileUrl", notification.getProfilePictureUrl());
+
+        return notificationObject;
+    }
+
     @Override
     public void onPendingSubmissionNotification(final TeamProblem teamProblem) {
-        createNotification(teamProblem, NotificationType.SCOREBOARD_SUBMIT);
+        Notification notification = createNotification(teamProblem, NotificationType.SCOREBOARD_SUBMIT);
+        publishService.broadcastNotification(notification, teamProblem.getTeam().getContest());
     }
 
     @Override
     public void onSuccessSubmissionNotification(final TeamProblem teamProblem) {
-        createNotification(teamProblem, NotificationType.SCOREBOARD_SUCCESS);
+        Notification notification = createNotification(teamProblem, NotificationType.SCOREBOARD_SUCCESS);
+        publishService.broadcastNotification(notification, teamProblem.getTeam().getContest());
     }
 
     @Override
     public void onFailedSubmissionNotification(TeamProblem teamProblem) {
-        // ignored
+        // TODO
     }
 
     @Override
@@ -99,7 +129,7 @@ public class NotificationServiceImpl implements NotificationService {
             hashtags = teamInfo.getHashtag() + ",";
         }
         hashtags += teamProblem.getTeam().getContest().getHashtag();
-        builder.setCode("\"hashtags\":\"" + hashtags + "\"}");
+        builder.setCode("{\"hashtags\":\"" + hashtags + "\"}");
         return notificationRepository.save(builder.build());
     }
 
