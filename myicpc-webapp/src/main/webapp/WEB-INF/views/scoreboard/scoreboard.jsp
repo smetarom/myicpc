@@ -21,7 +21,7 @@
         <c:if test="${scoreboardAvailable}">
             <div ng-app="scoreboard">
             <div id="mainScoreboard" class="table-responsive desktop" ng-controller="scoreboardCtrl">
-                <div ng-show="filterBy">
+                <div ng-show="filterBy" ng-cloak>
                     <strong><spring:message code="filtredBy" />:</strong>
                     <a href="javascript:void(0)" ng-click="clearFilter()" ng-show="isFilteredBy('regionId')">
                         <span class="label label-default">&times; <spring:message code="scoreboard.region" /></span>
@@ -33,7 +33,7 @@
                         <span class="label label-default">&times; <spring:message code="scoreboard.country" /></span>
                     </a>
                 </div>
-                <table class="table striped-rows scoreboard invisible">
+                <table class="table striped-rows scoreboard" ng-cloak>
                     <thead>
                     <tr>
                         <th></th>
@@ -72,8 +72,6 @@
                     var ngController = angular.element($("#mainScoreboard")).scope();
                     var teams = ${not empty teamJSON ? teamJSON : '[]'};
                     ngController.init(teams);
-
-                    $("#mainScoreboard > table").removeClass("invisible");
 
                     startSubscribe('${r.contextPath}', '${contest.code}', 'scoreboard', updateScoreboard, ngController);
 

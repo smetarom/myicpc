@@ -5,7 +5,7 @@
 <nav id="top-menu-nav" class="navbar navbar-inverse navbar-fixed-top desktop">
     <div class="navbar-header">
         <div class="navbar-brand">
-            <a href="<spring:url value="/" />" id="homepage-link"><span class="fa fa-home"></span> <spring:message
+            <a href="<spring:url value="${contestURL}" />" id="homepage-link"><span class="fa fa-home"></span> <spring:message
                     code="app.name"/></a>
         </div>
     </div>

@@ -1,24 +1,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <footer id="footer">
-    <button type="button" class="btn btn-danger pull-right btn-sm" data-toggle="modal" data-target="#feedbackModal">
-        <spring:message code="feedback"/>
+    <button type="button" class="btn btn-info pull-right btn-xs" data-toggle="modal" data-target="#feedbackModal">
+        <t:faIcon icon="envelope-o" /> <spring:message code="feedback"/>
     </button>
-
-    <div class="side-menu-spacer"></div>
-
-    <div class="btn-group dropup">
-        <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown">
-            <spring:message code="viewMode"/>
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <li><a href="?site_preference=normal"><spring:message code="viewMode.normal"/></a></li>
-            <li><a href="?site_preference=mobile"><spring:message code="viewMode.mobile"/></a></li>
-        </ul>
-    </div>
-
-    <br class="clear"/>
 
     <div id="share-container" style="margin-top: 5px;">
         <span class="hidden-xs" style="display: inline-block !important;"><spring:message code="footer.follow"/></span>

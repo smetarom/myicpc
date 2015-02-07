@@ -55,6 +55,9 @@ td.fit-content {
   width: 1%;
   white-space: nowrap; }
 
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important; }
+
 .team-timeline td.time-cell {
   border-right: 2px solid #ddd; }
 .team-timeline > tbody > tr > td {
