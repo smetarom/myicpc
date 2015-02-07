@@ -42,11 +42,41 @@ scorebar.controller('worldMapCtrl', ($scope) ->
       $scope.problems = problems
     )
 
+  $scope.getTeamById = (teamId) ->
+    return _.find($scope.teams, (obj) -> return obj.teamId == teamId)
+
   $scope.filterTeams = (team) ->
     if $scope.config.isCountryBased
       return team.nationality == $scope.activeComponent.id
     else
       return team.regionName == $scope.activeComponent.id
+
+  $scope.updateRank = (teamId, rank) ->
+    obj = _.find($scope.teams, (obj) ->
+      obj.teamId == teamId
+    )
+    obj.teamRank = rank if obj?
+
+  $scope.updateNumSolvedAndTotalTime = (teamId, numSolved, totalTime) ->
+    obj = _.find($scope.teams, (obj) ->
+      obj.teamId == teamId
+    )
+    if obj?
+      obj.nSolved = numSolved;
+      obj.totalTime = totalTime;
+
+  $scope.updateTeamProblem = (teamId, problemId, judged, solved, attempts, time, first) ->
+    team = _.find($scope.teams, (obj) ->
+      obj.teamId == teamId
+    )
+    if typeof team != "undefined" and typeof team.teamProblems != "undefined"
+      if typeof team.teamProblems[problemId] == "undefined"
+        team.teamProblems[problemId] = {}
+      team.teamProblems[problemId].judged = judged
+      team.teamProblems[problemId].solved = solved
+      team.teamProblems[problemId].attempts = attempts
+      team.teamProblems[problemId].time = time
+      team.teamProblems[problemId].first = first
 
   $scope.pickSuitableConfiguration = (configurations, width) ->
     for i in [configurations.length-1..0] by -1
@@ -73,13 +103,14 @@ scorebar.controller('worldMapCtrl', ($scope) ->
 
     # special animation if team moved up in rank
     if (solved)
-#      showMapPopover({'id': team["teamId"]}, globalMapController);
+      $scope._showTeamPopoverById(team["teamId"])
+      $("#mapContainer svg").append($("#map-circle-"+team.teamId))
       d3.select("#map-circle-" + team["teamId"]).transition().duration(500)
-        .style("fill", textRankColor(team.rank))
+        .style("fill", $scope._textRankColor(team.teamRank))
         .attr("r", 2* $scope.config.circleSize)
         .transition().duration(2500).transition().duration(500)
         .attr("r", $scope.config.circleSize).each("end", () ->
-        #    hideMapPopover();
+          $scope._hideTeamPopover()
         )
     else
       # otherwise just change color by new rank
@@ -205,13 +236,13 @@ scorebar.controller('worldMapCtrl', ($scope) ->
       )
 
     $scope._showTeamPopoverById = (teamId) ->
-      team = _.find($scope.teams, (obj) -> return obj.teamId == parseInt(teamId));
+      team = _.find($scope.teams, (obj) -> return obj.teamId == parseInt(teamId))
       if team?
         $scope._showTeamPopover(team)
 
     $scope.highlightTeamOnMap = (team) ->
-      $("#map-circle-"+team.teamId).attr({"r":2 * $scope.config.circleSize});
-      $("#mapContainer svg").append($("#map-circle-"+team.teamId));
+      $("#map-circle-"+team.teamId).attr({"r":2 * $scope.config.circleSize})
+      $("#mapContainer svg").append($("#map-circle-"+team.teamId))
       $scope._showTeamPopover(team)
 
     $scope._showTeamPopover = (team) ->
@@ -298,3 +329,22 @@ scorebar.controller('worldMapCtrl', ($scope) ->
       return (parseFloat(computeCoord(d.longtitude, d.latitude)[0]) + 15) + "px"
 
 )
+
+updateWorldMap = (data, ngController = null) ->
+  if data.type == 'submission'
+    if ngController != null
+      if data.judged
+        colorBg = if data.solved then "#66FF33" else "#FF5C33"
+        $(".team_"+data.teamId).effect("highlight",{color: colorBg}, 3000);
+
+      ngController.$apply(() ->
+        for key of data.teams
+          ngController.updateRank(data.teams[key].teamId, data.teams[key].teamRank)
+          ngController.updateTeamOnMap(ngController.getTeamById(data.teams[key].teamId))
+
+        if data.solved
+          ngController.updateNumSolvedAndTotalTime(data.teamId, data.numSolved, data.total)
+
+        ngController.updateTeamProblem(data.teamId, data.problemId, data.judged, data.solved, data.attempts, data.time, data.first)
+        ngController.updateTeamOnMap(ngController.getTeamById(data["teamId"]), data.solved)
+      )

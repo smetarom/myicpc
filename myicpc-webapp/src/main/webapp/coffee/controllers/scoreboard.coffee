@@ -87,16 +87,16 @@ updateScoreboard = (data, ngController = null) ->
       if data.judged
         colorBg = if data.solved then "#66FF33" else "#FF5C33"
 
-      $(".team_" + data.teamId).effect("highlight", {color: colorBg}, 3000);
+      $(".team_" + data.teamId).effect("highlight", {color: colorBg}, 3000)
 
       ngController.$apply(() ->
         for key of data.teams
-          ngController.updateRank(data.teams[key].teamId, data.teams[key].teamRank);
+          ngController.updateRank(data.teams[key].teamId, data.teams[key].teamRank)
 
         if data.solved
-          ngController.updateNumSolvedAndTotalTime(data.teamId, data.numSolved, data.total);
+          ngController.updateNumSolvedAndTotalTime(data.teamId, data.numSolved, data.total)
 
-        ngController.updateTeamProblem(data.teamId, data.problemId, data.judged, data.solved, data.attempts, data.time, data.first);
+        ngController.updateTeamProblem(data.teamId, data.problemId, data.judged, data.solved, data.attempts, data.time, data.first)
       )
 
 

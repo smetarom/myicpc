@@ -25,7 +25,7 @@
                 </div>
                 <div class="col-sm-12 col-md-3" id="sidebar" ng-cloak>
                     <div id="mapSubmenu" style="overflow-y: auto">
-                        <h3>{{activeComponent.name}}</h3>
+                        <h3 style="text-underline: none;">{{activeComponent.name}}</h3>
                         <table class="table table-condensed striped-rows" ng-if="activeComponent">
                             <thead>
                             <tr>
@@ -68,8 +68,9 @@
                 var config = ngController.pickSuitableConfiguration(mapConfigurations, width);
                 ngController.renderMap('${r.contextPath}', config, teamCoordinates);
 
-                var height = $("#mapContainer").height();
-                $("#mapSubmenu").height(height);
+                $("#mapSubmenu").height($("#mapContainer").height());
+
+                startSubscribe('${r.contextPath}', '${contest.code}', 'scoreboard', updateWorldMap, ngController);
             });
         </script>
     </jsp:body>
