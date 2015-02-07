@@ -23,13 +23,53 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-sm-12 col-md-3" id="sidebar" ng-cloak>
+                    <div id="mapSubmenu" style="overflow-y: auto">
+                        <h3>{{activeComponent.name}}</h3>
+                        <table class="table table-condensed striped-rows" ng-if="activeComponent">
+                            <thead>
+                            <tr>
+                                <th><spring:message code="scoreboard.rankShort" /></th>
+                                <th><spring:message code="scoreboard.teamName" /></th>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+                            <tr id="selectedCountryScoreboard" ng-repeat="team in teams | filter:filterTeams | orderBy:['teamRank', 'teamName']" class="team_{{team.teamId}} cursor-pointer"
+                                ng-mouseover="highlightTeamOnMap(team);" ng-mouseleave="dishighlightTeamOnMap(team)" id="team_{{team.teamExternalId}}">
+                                <td>{{team.teamRank}}</td>
+                                <td><a href='<spring:url value="/team/{{team.teamId}}" />'>{{team.teamName}}</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="scoreboardLegend" ng-hide="!activeComponent">
+                            <strong><spring:message code="scoreboard.legend" />:</strong> <br />
+                            <span class="label label-success">X - YY</span> - <spring:message code="scoreboard.legend.solved" />
+                            <br />
+                            <span class="label label-warning">?</span> - <spring:message code="scoreboard.legend.pending" />
+                            <br />
+                            <span class="label label-danger">X</span> - <spring:message code="scoreboard.legend.attempted" />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <script type="application/javascript">
             $(function() {
+                var teamCoordinates = ${not empty teamCoordinates ? teamCoordinates : '{}'};
+                var teams = ${not empty teamJSON ? teamJSON : '[]'};
+                var problems = ${not empty problemJSON ? problemJSON : '[]'};
+                var mapConfigurations = ${not empty mapConfigurations ? mapConfigurations : '[]'};
                 var ngController = angular.element($("#worldMap")).scope();
-                ngController.renderMap('${r.contextPath}', {});
+                var width = $("#mapContainer").width();
+                ngController.init(teams, problems);
+                var config = ngController.pickSuitableConfiguration(mapConfigurations, width);
+                ngController.renderMap('${r.contextPath}', config, teamCoordinates);
+
+                var height = $("#mapContainer").height();
+                $("#mapSubmenu").height(height);
             });
         </script>
     </jsp:body>

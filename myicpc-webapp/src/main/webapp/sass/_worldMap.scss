@@ -1,0 +1,102 @@
+.map-nav {
+  min-height: 40px;
+  z-index: 10;
+  overflow-x: hidden;
+
+  &>ul>li>a {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  &>ul>li.dropdown>a {
+    padding-left: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .close {
+    position: absolute;
+    right: 0;
+    padding: 9px 20px;
+    z-index: 9999;
+  }
+}
+
+.map-navigation {
+  position: absolute;
+  display: block;
+}
+
+#worldMap {
+  h3 {
+    text-underline: none;
+  }
+}
+
+#mapContainer {
+  path {
+    fill: #aaa;
+    stroke: #fff;
+  }
+
+  circle {
+    fill: darkturquoise;
+    stroke: white;
+  }
+
+  .highligtedComponent {
+    fill: #505050;
+  }
+}
+
+.popover {
+  min-width: 250px;
+}
+
+.popoverCell {
+  text-align: center;
+  min-width: 50px;
+
+  .label {
+    width: 100%;
+    display: block;
+  }
+}
+
+#popoverContainer .popover {
+  max-width: none;
+  background-color: rgba(255, 255, 255, 0.7);
+
+  .popover-title {
+    overflow-x: hidden;
+    background-color: rgba(247, 247, 247, 0.7);
+  }
+}
+
+#mapPopoverPanel {
+  width: 350px;
+  position: absolute;
+  z-index: 500;
+  text-align: left;
+
+  td {
+    padding: 2px;
+  }
+}
+
+@media ( max-width : 400px) {
+  #mapPopoverPanel {
+    width: 250px;
+  }
+}
+
+.map-mobile-control {
+  position: absolute;
+  left: 10px;
+  z-index: 10;
+
+  & > a, .map-mobile-control button {
+    color: #0066FF !important;
+    font-size: 1.1em;
+  }
+}

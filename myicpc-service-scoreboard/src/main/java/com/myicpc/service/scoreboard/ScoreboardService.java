@@ -23,4 +23,6 @@ public interface ScoreboardService extends ScoreboardListener {
     JsonArray getTeamsScorebarTemplate(Contest contest);
 
     JsonObject getTeamMapCoordinates(Contest contest);
+
+    JsonArray getProblemsJSON(Contest contest);
 }

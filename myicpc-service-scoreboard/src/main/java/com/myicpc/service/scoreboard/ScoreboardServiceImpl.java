@@ -4,12 +4,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.LastTeamProblem;
+import com.myicpc.model.eventFeed.Problem;
 import com.myicpc.model.eventFeed.Region;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
 import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.model.teamInfo.University;
 import com.myicpc.repository.eventFeed.LastTeamProblemRepository;
+import com.myicpc.repository.eventFeed.ProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.repository.teamInfo.TeamInfoRepository;
 import com.myicpc.service.listener.ScoreboardListenerAdapter;
@@ -40,6 +42,9 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
 
     @Autowired
     private LastTeamProblemRepository lastTeamProblemRepository;
+
+    @Autowired
+    private ProblemRepository problemRepository;
 
     @Override
     public void onSubmission(TeamProblem teamProblem, List<Team> effectedTeams) {
@@ -219,5 +224,19 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
             }
         }
         return coordinates;
+    }
+
+    @Override
+    public JsonArray getProblemsJSON(Contest contest) {
+        List<Problem> problems = problemRepository.findByContestOrderByCodeAsc(contest);
+        JsonArray root = new JsonArray();
+        for (Problem problem : problems) {
+            JsonObject problemObject = new JsonObject();
+            problemObject.addProperty("id", problem.getId());
+            problemObject.addProperty("code", problem.getCode());
+            problemObject.addProperty("name", problem.getName());
+            root.add(problemObject);
+        }
+        return root;
     }
 }
