@@ -15,6 +15,8 @@ import com.myicpc.service.scoreboard.dto.insight.ReportByJudgement;
 import com.myicpc.service.scoreboard.dto.insight.ReportByLanguage;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +26,8 @@ import java.util.Map;
 /**
  * @author Roman Smetana
  */
+@Service
+@Transactional
 public class LanguageInsightService extends AbstractInsightService<Language> {
     @Autowired
     private LanguageRepository languageRepository;

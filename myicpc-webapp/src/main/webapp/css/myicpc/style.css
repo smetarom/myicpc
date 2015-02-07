@@ -125,6 +125,20 @@
     color: #0066FF !important;
     font-size: 1.1em; }
 
+#insight .navbar {
+  border-radius: 0;
+  top: -10px;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  min-height: 34px;
+  z-index: 1; }
+#insight .navbar-default {
+  background-color: transparent; }
+#insight .navbar-nav > li > a {
+  padding-bottom: 7px;
+  padding-top: 7px; }
+
 .no-underline {
   text-decoration: none;
   border-bottom: none; }

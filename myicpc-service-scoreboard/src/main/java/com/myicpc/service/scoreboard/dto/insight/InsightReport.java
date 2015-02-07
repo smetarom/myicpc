@@ -46,7 +46,7 @@ public abstract class InsightReport {
 	 */
 	protected JsonObject getJSONTeamProblem(final TeamProblem teamProblem) {
 		JsonObject teamProblemJSON = new JsonObject();
-		teamProblemJSON.addProperty("teamId", teamProblem.getTeam().getId());
+		teamProblemJSON.addProperty("teamId", teamProblem.getTeam().getExternalId());
 		teamProblemJSON.addProperty("teamName", teamProblem.getTeam().getName());
 		teamProblemJSON.addProperty("time", teamProblem.getFormattedTime());
 		return teamProblemJSON;

@@ -11,7 +11,7 @@ scorebar.controller('worldMapCtrl', function($scope) {
     config: null,
     projection: null,
     feature: null,
-    isCountryBased: true,
+    isCountryBased: false,
     teamCoorData: null,
     teamsWithCoor: new Array(),
     circleData: new Array(),

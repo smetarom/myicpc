@@ -16,6 +16,8 @@ public interface JudgementRepository extends JpaRepository<Judgement, Long> {
 
     List<Judgement> findByContest(Contest contest);
 
+    List<Judgement> findByContestOrderByNameAsc(Contest contest);
+
     /**
      * load all languages and number of submissions for judgment if there is at
      * least one submission per language

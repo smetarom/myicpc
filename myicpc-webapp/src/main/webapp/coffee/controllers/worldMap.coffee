@@ -9,7 +9,7 @@ scorebar.controller('worldMapCtrl', ($scope) ->
     projection: null,
     feature: null,
     # country/region flag
-    isCountryBased: true,
+    isCountryBased: false,
     # team coordinates
     teamCoorData: null,
     # teams with coordinates
