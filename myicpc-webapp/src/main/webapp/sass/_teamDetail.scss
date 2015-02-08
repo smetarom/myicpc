@@ -1,0 +1,20 @@
+.team-timeline {
+  td.time-cell {
+    border-right: 2px solid #ddd;
+  }
+  &>tbody>tr>td {
+    border-top: 0px #000000 solid;
+  }
+}
+
+#carousel-team-members {
+  .carousel-caption {
+    padding-bottom: 0;
+    color: black;
+    text-shadow: none;
+
+    h3 {
+      white-space:nowrap;
+    }
+  }
+}

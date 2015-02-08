@@ -1,5 +1,6 @@
 package com.myicpc.controller.functions;
 
+import com.myicpc.commons.MyICPCConstants;
 import com.myicpc.commons.utils.MessageUtils;
 import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.model.contest.Contest;
@@ -117,6 +118,10 @@ public class JSPCustomFunctions {
      */
     public static String escapeJavascript(String javascriptText) {
         return StringEscapeUtils.escapeEcmaScript(javascriptText);
+    }
+
+    public static String universityLogoUrl(Long universityExternalId) {
+        return MyICPCConstants.UNIVERSITY_LOGO_URL + universityExternalId;
     }
 
     public static boolean isMapModuleEnabled(Contest contest) {

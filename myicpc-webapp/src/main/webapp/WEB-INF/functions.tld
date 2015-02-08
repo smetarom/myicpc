@@ -53,6 +53,11 @@
         <function-class>com.myicpc.controller.functions.JSPCustomFunctions</function-class>
         <function-signature>java.lang.String escapeJavascript(java.lang.String)</function-signature>
     </function>
+    <function>
+        <name>universityLogoUrl</name>
+        <function-class>com.myicpc.controller.functions.JSPCustomFunctions</function-class>
+        <function-signature>java.lang.String universityLogoUrl(java.lang.Long)</function-signature>
+    </function>
 
     <function>
         <name>mapModuleEnabled</name>

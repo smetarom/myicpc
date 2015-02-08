@@ -19,9 +19,8 @@
   </jsp:attribute>
 
   <jsp:body>
+      <%@ include file="/WEB-INF/views/scoreboard/fragment/teamHomeMenu.jsp"%>
       <div id="teamDetail" ng-app="teamDetail" ng-controller="TeamDeatilCtrl">
-          <%@ include file="/WEB-INF/views/scoreboard/fragment/teamHomeMenu.jsp"%>
-
           <div class="col-sm-6">
               <h3><spring:message code="teamHome.contest.timeline"/></h3>
               <table class="table table-condensed team-timeline">

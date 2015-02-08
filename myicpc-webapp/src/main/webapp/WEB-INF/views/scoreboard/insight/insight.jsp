@@ -16,7 +16,7 @@
 
     <jsp:body>
         <div id="insight" ng-app="insight">
-            <nav class="navbar navbar-default">
+            <nav class="navbar navbar-default top-submenu">
                 <ul class="nav navbar-nav">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><spring:message code="insight.nav.problems" /> <span class="caret"></span></a>
