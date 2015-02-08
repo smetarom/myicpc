@@ -12,6 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Common insight service, which defines the common methods to all
+ * insight services based on event feed
+ *
  * @author Roman Smetana
  */
 public abstract class AbstractInsightService<T extends EntityObject> {
@@ -19,8 +22,19 @@ public abstract class AbstractInsightService<T extends EntityObject> {
     @Autowired
     protected TeamProblemRepository teamProblemRepository;
 
+    /**
+     * Get report for all entities in the contest
+     * @param contest report contest
+     * @return report in JSON
+     */
     public abstract JsonArray reportAll(Contest contest);
 
+    /**
+     * Get report for a given entity
+     * @param entity reported entity
+     * @param contest report contest
+     * @return report in JSON
+     */
     public abstract JsonObject reportSingle(T entity, Contest contest);
 
 }

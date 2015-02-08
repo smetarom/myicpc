@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Service that provides business logic for generating insight report
+ * with focus on submission language
+ *
  * @author Roman Smetana
  */
 @Service
@@ -96,14 +99,6 @@ public class LanguageInsightService extends AbstractInsightService<Language> {
                 arr.add(o);
             }
         }
-        return arr;
-    }
-
-    public JsonArray normalizedReportAll(Contest contest) {
-        JsonArray arr = reportAll(contest);
-
-
-
         return arr;
     }
 

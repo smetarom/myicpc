@@ -125,7 +125,6 @@ public class InsightController extends GeneralController {
 
         JsonObject response = new JsonObject();
         response.add("data", languageInsightService.reportAll(contest));
-        response.add("normalizedData", languageInsightService.normalizedReportAll(contest));
         response.addProperty("title", MessageUtils.getMessage("insight.languages"));
 
         return response.toString();

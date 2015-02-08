@@ -1,22 +1,15 @@
 package com.myicpc.pubsub;
 
-import org.atmosphere.config.service.DeliverTo;
 import org.atmosphere.config.service.ManagedService;
-import org.atmosphere.config.service.Ready;
-import org.atmosphere.cpr.AtmosphereResource;
-import org.atmosphere.cpr.BroadcasterFactory;
-
-import java.util.Objects;
 
 /**
+ * Atmosphere entry point for contest submissions and contest related events
+ *
+ * This endpoint takes care about the WebSocket connections,
+ * which are interested in subscribing to scoreboard channel
+ *
  * @author Roman Smetana
  */
 @ManagedService(path = "{contestCode}/scoreboard")
 public class ScoreboardResource {
-
-//    @Ready
-//    public String onReady(final AtmosphereResource r) {
-//        Object o = BroadcasterFactory.getDefault().lookupAll();
-//        return "{\"aho\": \"dassa\"}";
-//    }
 }

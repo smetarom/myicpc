@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Service that provides business logic for generating insight report
+ * with focus on submission by problems
+ *
  * @author Roman Smetana
  */
 @Service

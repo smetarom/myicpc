@@ -26,25 +26,61 @@ insightApp.config([
   }
 ]);
 
-insightApp.factory('insightService', function() {
+insightApp.factory('insightService', function($http, $interval) {
   var insightService;
   insightService = {};
+
+  /*
+    refresh rate for polling new insight data
+   */
   insightService.refreshRate = 5000;
+
+  /*
+    loads data at the beginning and initiate insight data polling
+    @param url server resource URL
+    @param title temporary title before the title is loaded
+    @param successFn initial success load function
+    @param pollingFn function, which process periodically polled data
+   */
+  insightService.init = function(url, title, successFn, pollingFn) {
+    var completed;
+    $("#insightHeadline").html("" + title);
+    $http.get(url).success(successFn).error(function() {});
+    return completed = $interval(function() {
+      return $http.get(url).success(pollingFn, insightService.refreshRate);
+    });
+  };
+
+  /*
+      get x value for pie chart
+   */
   insightService.xFunction = function() {
     return function(d) {
       return d.key;
     };
   };
+
+  /*
+    get y value for pie chart
+   */
   insightService.yFunction = function() {
     return function(d) {
       return d.value;
     };
   };
+
+  /*
+    get area color for pie chart
+   */
   insightService.areaColor = function() {
     return function(d, i) {
       return d.data.color;
     };
   };
+
+  /*
+    construct a label for a pie chart
+   */
   insightService.toolTipContentFunction = function() {
     return function(key, x, y, e, graph) {
       return '<p><strong>' + key + '</strong>' + ' - ' + Math.round(x) + ' submissions</p>';
@@ -53,40 +89,63 @@ insightApp.factory('insightService', function() {
   return insightService;
 });
 
+
+/*
+  controller for view with all problems
+ */
+
 insightApp.controller('allProblemsCtrl', function($scope, $http, $interval, insightService) {
   $scope.data = {};
   $scope.problems = null;
+
+  /*
+    loads data at the beginning and initiate insight data polling
+    @param contextPath app context path
+    @param contestCode contest code
+    @param title temporary title before the title is loaded
+    @see insightService#init
+   */
   $scope.init = function(contextPath, contestCode, title) {
-    var completed;
-    $("#insightHeadline").html("" + title);
-    $http.get("" + contextPath + "/" + contestCode + "/insight/ajax/all-problems").success(function(data) {
+    var pollingFn, successFn, url;
+    url = "" + contextPath + "/" + contestCode + "/insight/ajax/all-problems";
+    successFn = function(data) {
       var element, _i, _len, _ref;
       _ref = data.data;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         element = _ref[_i];
         $scope.data[element.code] = element.data;
       }
-      $scope.problems = data.problems;
-      return $("#insightHeadline").html(data.title);
-    }).error(function() {});
-    return completed = $interval(function() {
-      return $http.get("" + contextPath + "/" + contestCode + "/insight/ajax/all-problems").success(function(data) {
-        var element, _i, _len, _ref, _results;
-        _ref = data.data;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          element = _ref[_i];
-          _results.push($scope.data[element.code] = element.data);
-        }
-        return _results;
-      });
-    }, insightService.refreshRate);
+      return $scope.problems = data.problems;
+    };
+    pollingFn = function(data) {
+      var element, _i, _len, _ref, _results;
+      _ref = data.data;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        element = _ref[_i];
+        _results.push($scope.data[element.code] = element.data);
+      }
+      return _results;
+    };
+    return insightService.init(url, title, successFn, pollingFn);
   };
+
+  /*
+    get insight data for a given problem
+    @param problemCode code of the problem
+    @return problem insight data if exists
+   */
   $scope.getChartData = function(problemCode) {
     if (($scope.data[problemCode] != null)) {
       return $scope.data[problemCode];
     }
   };
+
+  /*
+    count the total number of submissions per problem
+    @param code of the problem
+    @return total number of submissions
+   */
   $scope.submissionsPerProblem = function(problemCode) {
     var elem, total, _i, _len, _ref;
     total = 0;
@@ -99,71 +158,163 @@ insightApp.controller('allProblemsCtrl', function($scope, $http, $interval, insi
     }
     return total;
   };
+
+  /*
+    @see insightService#xFunction
+   */
   $scope.xFunction = insightService.xFunction;
+
+  /*
+    @see insightService#yFunction
+   */
   $scope.yFunction = insightService.yFunction;
+
+  /*
+    @see insightService#areaColor
+   */
   $scope.areaColor = insightService.areaColor;
+
+  /*
+    @see insightService#toolTipContentFunction
+   */
   return $scope.toolTipContentFunction = insightService.toolTipContentFunction;
 });
+
+
+/*
+  controller for a detailed view of a single problem
+ */
 
 insightApp.controller('problemDetailCtrl', function($scope, $http, $interval, $routeParams, insightService) {
   $scope.data = null;
+
+  /*
+    loads data at the beginning and initiate insight data polling
+    @param contextPath app context path
+    @param contestCode contest code
+    @param title temporary title before the title is loaded
+    @see insightService#init
+   */
   $scope.init = function(contextPath, contestCode, title) {
-    var completed;
+    var pollingFn, successFn, url;
     $("#insightHeadline").html("" + title + " " + $routeParams.problemCode);
-    $http.get("" + contextPath + "/" + contestCode + "/insight/ajax/problem/" + $routeParams.problemCode).success(function(data) {
+    title = "" + title + " " + $routeParams.problemCode;
+    url = "" + contextPath + "/" + contestCode + "/insight/ajax/problem/" + $routeParams.problemCode;
+    successFn = function(data) {
       $scope.data = data.data;
       return $("#insightHeadline").html(data.title);
-    }).error(function() {});
-    return completed = $interval(function() {
-      return $http.get("" + contextPath + "/" + contestCode + "/insight/ajax/problem/" + $routeParams.problemCode).success(function(data) {
-        return $scope.data = data.data;
-      });
-    }, insightService.refreshRate);
+    };
+    pollingFn = function(data) {
+      return $scope.data = data.data;
+    };
+    return insightService.init(url, title, successFn, pollingFn);
   };
+
+  /*
+    @see insightService#xFunction
+   */
   $scope.xFunction = insightService.xFunction;
+
+  /*
+    @see insightService#yFunction
+   */
   $scope.yFunction = insightService.yFunction;
+
+  /*
+    @see insightService#areaColor
+   */
   $scope.areaColor = insightService.areaColor;
+
+  /*
+    @see insightService#toolTipContentFunction
+   */
   return $scope.toolTipContentFunction = insightService.toolTipContentFunction;
 });
 
+
+/*
+  controller for view with all languages
+ */
+
 insightApp.controller('allLanguagesCtrl', function($scope, $http, $interval, insightService) {
   $scope.data = null;
+
+  /*
+    loads data at the beginning and initiate insight data polling
+    @param contextPath app context path
+    @param contestCode contest code
+    @param title temporary title before the title is loaded
+    @see insightService#init
+   */
   return $scope.init = function(contextPath, contestCode, title) {
-    var completed;
-    $("#insightHeadline").html("" + title);
-    $http.get("" + contextPath + "/" + contestCode + "/insight/ajax/all-languages").success(function(data) {
+    var pollingFn, successFn, url;
+    url = "" + contextPath + "/" + contestCode + "/insight/ajax/all-languages";
+    successFn = function(data) {
       $scope.data = data.data;
       return $("#insightHeadline").html(data.title);
-    }).error(function() {});
-    return completed = $interval(function() {
-      return $http.get("" + contextPath + "/" + contestCode + "/insight/ajax/all-languages").success(function(data) {
-        return $scope.data = data.data;
-      });
-    }, insightService.refreshRate);
+    };
+    pollingFn = function(data) {
+      return $scope.data = data.data;
+    };
+    return insightService.init(url, title, successFn, pollingFn);
   };
 });
+
+
+/*
+  controller for a detailed view of a single language
+ */
 
 insightApp.controller('languageDetailCtrl', function($scope, $http, $interval, $routeParams, insightService) {
   $scope.data = null;
   $scope.languageName = $routeParams.languageName;
+
+  /*
+    loads data at the beginning and initiate insight data polling
+    @param contextPath app context path
+    @param contestCode contest code
+    @param title temporary title before the title is loaded
+    @see insightService#init
+   */
   $scope.init = function(contextPath, contestCode, title) {
-    var completed;
-    $("#insightHeadline").html("" + title + " " + $routeParams.languageName);
-    $http.get("" + contextPath + "/" + contestCode + "/insight/ajax/language/" + $routeParams.languageName).success(function(data) {
+    var pollingFn, successFn, url;
+    title = "" + title + " " + $routeParams.languageName;
+    url = "" + contextPath + "/" + contestCode + "/insight/ajax/language/" + $routeParams.languageName;
+    successFn = function(data) {
       $scope.data = data.data;
       return $("#insightHeadline").html(data.title);
-    }).error(function() {});
-    return completed = $interval(function() {
-      return $http.get("" + contextPath + "/" + contestCode + "/insight/ajax/language/" + $routeParams.languageName).success(function(data) {
-        return $scope.data = data.data;
-      });
-    }, insightService.refreshRate);
+    };
+    pollingFn = function(data) {
+      return $scope.data = data.data;
+    };
+    return insightService.init(url, title, successFn, pollingFn);
   };
+
+  /*
+    @see insightService#xFunction
+   */
   $scope.xFunction = insightService.xFunction;
+
+  /*
+    @see insightService#yFunction
+   */
   $scope.yFunction = insightService.yFunction;
+
+  /*
+    @see insightService#areaColor
+   */
   $scope.areaColor = insightService.areaColor;
+
+  /*
+    @see insightService#toolTipContentFunction
+   */
   return $scope.toolTipContentFunction = insightService.toolTipContentFunction;
 });
+
+
+/*
+  controller for a vie with code insight
+ */
 
 insightApp.controller('codeInsightCtrl', function($scope, $http) {
   $scope.data = null;
