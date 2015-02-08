@@ -29,6 +29,7 @@ insightApp.config([
 insightApp.factory('insightService', function() {
   var insightService;
   insightService = {};
+  insightService.refreshRate = 5000;
   insightService.xFunction = function() {
     return function(d) {
       return d.key;
@@ -52,16 +53,51 @@ insightApp.factory('insightService', function() {
   return insightService;
 });
 
-insightApp.controller('allProblemsCtrl', function($scope, $http, insightService) {
-  $scope.data = null;
-  $scope.problems = [];
+insightApp.controller('allProblemsCtrl', function($scope, $http, $interval, insightService) {
+  $scope.data = {};
+  $scope.problems = null;
   $scope.init = function(contextPath, contestCode, title) {
+    var completed;
     $("#insightHeadline").html("" + title);
-    return $http.get("" + contextPath + "/" + contestCode + "/insight/ajax/all-problems").success(function(data) {
-      $scope.data = data.data;
+    $http.get("" + contextPath + "/" + contestCode + "/insight/ajax/all-problems").success(function(data) {
+      var element, _i, _len, _ref;
+      _ref = data.data;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        element = _ref[_i];
+        $scope.data[element.code] = element.data;
+      }
       $scope.problems = data.problems;
       return $("#insightHeadline").html(data.title);
     }).error(function() {});
+    return completed = $interval(function() {
+      return $http.get("" + contextPath + "/" + contestCode + "/insight/ajax/all-problems").success(function(data) {
+        var element, _i, _len, _ref, _results;
+        _ref = data.data;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          element = _ref[_i];
+          _results.push($scope.data[element.code] = element.data);
+        }
+        return _results;
+      });
+    }, insightService.refreshRate);
+  };
+  $scope.getChartData = function(problemCode) {
+    if (($scope.data[problemCode] != null)) {
+      return $scope.data[problemCode];
+    }
+  };
+  $scope.submissionsPerProblem = function(problemCode) {
+    var elem, total, _i, _len, _ref;
+    total = 0;
+    if (($scope.data[problemCode] != null)) {
+      _ref = $scope.data[problemCode];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        elem = _ref[_i];
+        total += elem.value;
+      }
+    }
+    return total;
   };
   $scope.xFunction = insightService.xFunction;
   $scope.yFunction = insightService.yFunction;
@@ -69,15 +105,20 @@ insightApp.controller('allProblemsCtrl', function($scope, $http, insightService)
   return $scope.toolTipContentFunction = insightService.toolTipContentFunction;
 });
 
-insightApp.controller('problemDetailCtrl', function($scope, $http, $routeParams, insightService) {
+insightApp.controller('problemDetailCtrl', function($scope, $http, $interval, $routeParams, insightService) {
   $scope.data = null;
   $scope.init = function(contextPath, contestCode, title) {
+    var completed;
     $("#insightHeadline").html("" + title + " " + $routeParams.problemCode);
-    return $http.get("" + contextPath + "/" + contestCode + "/insight/ajax/problem/" + $routeParams.problemCode).success(function(data) {
-      console.log(data);
+    $http.get("" + contextPath + "/" + contestCode + "/insight/ajax/problem/" + $routeParams.problemCode).success(function(data) {
       $scope.data = data.data;
       return $("#insightHeadline").html(data.title);
     }).error(function() {});
+    return completed = $interval(function() {
+      return $http.get("" + contextPath + "/" + contestCode + "/insight/ajax/problem/" + $routeParams.problemCode).success(function(data) {
+        return $scope.data = data.data;
+      });
+    }, insightService.refreshRate);
   };
   $scope.xFunction = insightService.xFunction;
   $scope.yFunction = insightService.yFunction;
@@ -85,27 +126,38 @@ insightApp.controller('problemDetailCtrl', function($scope, $http, $routeParams,
   return $scope.toolTipContentFunction = insightService.toolTipContentFunction;
 });
 
-insightApp.controller('allLanguagesCtrl', function($scope, $http, insightService) {
+insightApp.controller('allLanguagesCtrl', function($scope, $http, $interval, insightService) {
   $scope.data = null;
   return $scope.init = function(contextPath, contestCode, title) {
+    var completed;
     $("#insightHeadline").html("" + title);
-    return $http.get("" + contextPath + "/" + contestCode + "/insight/ajax/all-languages").success(function(data) {
+    $http.get("" + contextPath + "/" + contestCode + "/insight/ajax/all-languages").success(function(data) {
       $scope.data = data.data;
       return $("#insightHeadline").html(data.title);
     }).error(function() {});
+    return completed = $interval(function() {
+      return $http.get("" + contextPath + "/" + contestCode + "/insight/ajax/all-languages").success(function(data) {
+        return $scope.data = data.data;
+      });
+    }, insightService.refreshRate);
   };
 });
 
-insightApp.controller('languageDetailCtrl', function($scope, $http, $routeParams, insightService) {
+insightApp.controller('languageDetailCtrl', function($scope, $http, $interval, $routeParams, insightService) {
   $scope.data = null;
   $scope.languageName = $routeParams.languageName;
   $scope.init = function(contextPath, contestCode, title) {
+    var completed;
     $("#insightHeadline").html("" + title + " " + $routeParams.languageName);
-    return $http.get("" + contextPath + "/" + contestCode + "/insight/ajax/language/" + $routeParams.languageName).success(function(data) {
-      console.log(data);
+    $http.get("" + contextPath + "/" + contestCode + "/insight/ajax/language/" + $routeParams.languageName).success(function(data) {
       $scope.data = data.data;
       return $("#insightHeadline").html(data.title);
     }).error(function() {});
+    return completed = $interval(function() {
+      return $http.get("" + contextPath + "/" + contestCode + "/insight/ajax/language/" + $routeParams.languageName).success(function(data) {
+        return $scope.data = data.data;
+      });
+    }, insightService.refreshRate);
   };
   $scope.xFunction = insightService.xFunction;
   $scope.yFunction = insightService.yFunction;

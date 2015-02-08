@@ -26,6 +26,8 @@ insightApp.config(['$routeProvider',
 insightApp.factory('insightService', () ->
   insightService = {};
 
+  insightService.refreshRate = 5000
+
   insightService.xFunction = ->
     (d) ->
       d.key
@@ -45,19 +47,37 @@ insightApp.factory('insightService', () ->
   return insightService;
 )
 
-insightApp.controller('allProblemsCtrl', ($scope, $http, insightService) ->
-  $scope.data = null
-  $scope.problems = []
+insightApp.controller('allProblemsCtrl', ($scope, $http, $interval, insightService) ->
+  $scope.data = {}
+  $scope.problems = null
 
   $scope.init = (contextPath, contestCode, title) ->
     $("#insightHeadline").html("#{title}")
     $http.get("#{contextPath}/#{contestCode}/insight/ajax/all-problems").success((data) ->
-      $scope.data = data.data
+      for element in data.data
+        $scope.data[element.code] = element.data
       $scope.problems = data.problems
       $("#insightHeadline").html(data.title)
     ).error(() ->
       # TODO
     )
+    completed = $interval(() ->
+      $http.get("#{contextPath}/#{contestCode}/insight/ajax/all-problems").success((data) ->
+        for element in data.data
+          $scope.data[element.code] = element.data
+      )
+    , insightService.refreshRate);
+
+  $scope.getChartData = (problemCode) ->
+    if ($scope.data[problemCode]?)
+      return $scope.data[problemCode]
+
+  $scope.submissionsPerProblem = (problemCode) ->
+    total = 0
+    if ($scope.data[problemCode]?)
+      for elem in $scope.data[problemCode]
+        total += elem.value
+    return total
 
   $scope.xFunction = insightService.xFunction
 
@@ -68,18 +88,22 @@ insightApp.controller('allProblemsCtrl', ($scope, $http, insightService) ->
   $scope.toolTipContentFunction = insightService.toolTipContentFunction
 )
 
-insightApp.controller('problemDetailCtrl', ($scope, $http, $routeParams, insightService) ->
+insightApp.controller('problemDetailCtrl', ($scope, $http, $interval, $routeParams, insightService) ->
   $scope.data = null
 
   $scope.init = (contextPath, contestCode, title) ->
     $("#insightHeadline").html("#{title} #{$routeParams.problemCode}")
     $http.get("#{contextPath}/#{contestCode}/insight/ajax/problem/#{$routeParams.problemCode}").success((data) ->
-      console.log(data)
       $scope.data = data.data
       $("#insightHeadline").html(data.title)
     ).error(() ->
       # TODO
     )
+    completed = $interval(() ->
+      $http.get("#{contextPath}/#{contestCode}/insight/ajax/problem/#{$routeParams.problemCode}").success((data) ->
+        $scope.data = data.data
+      )
+    , insightService.refreshRate);
 
   $scope.xFunction = insightService.xFunction
 
@@ -91,7 +115,7 @@ insightApp.controller('problemDetailCtrl', ($scope, $http, $routeParams, insight
 
 )
 
-insightApp.controller('allLanguagesCtrl', ($scope, $http, insightService) ->
+insightApp.controller('allLanguagesCtrl', ($scope, $http, $interval, insightService) ->
   $scope.data = null
 
   $scope.init = (contextPath, contestCode, title) ->
@@ -102,21 +126,31 @@ insightApp.controller('allLanguagesCtrl', ($scope, $http, insightService) ->
     ).error(() ->
       # TODO
     )
+    completed = $interval(() ->
+      $http.get("#{contextPath}/#{contestCode}/insight/ajax/all-languages").success((data) ->
+        $scope.data = data.data
+      )
+    , insightService.refreshRate);
 )
 
-insightApp.controller('languageDetailCtrl', ($scope, $http, $routeParams, insightService) ->
+insightApp.controller('languageDetailCtrl', ($scope, $http, $interval, $routeParams, insightService) ->
   $scope.data = null
   $scope.languageName = $routeParams.languageName
 
   $scope.init = (contextPath, contestCode, title) ->
     $("#insightHeadline").html("#{title} #{$routeParams.languageName}")
     $http.get("#{contextPath}/#{contestCode}/insight/ajax/language/#{$routeParams.languageName}").success((data) ->
-      console.log(data)
       $scope.data = data.data
       $("#insightHeadline").html(data.title)
     ).error(() ->
       # TODO
     )
+    completed = $interval(() ->
+      $http.get("#{contextPath}/#{contestCode}/insight/ajax/language/#{$routeParams.languageName}").success((data) ->
+        $scope.data = data.data
+      )
+    , insightService.refreshRate);
+
 
   $scope.xFunction = insightService.xFunction
 

@@ -99,6 +99,14 @@ public class LanguageInsightService extends AbstractInsightService<Language> {
         return arr;
     }
 
+    public JsonArray normalizedReportAll(Contest contest) {
+        JsonArray arr = reportAll(contest);
+
+
+
+        return arr;
+    }
+
     /**
      * Returns a detailed report about a language
      *
