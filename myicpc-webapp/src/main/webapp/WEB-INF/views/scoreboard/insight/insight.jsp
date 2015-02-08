@@ -11,7 +11,7 @@
         <spring:message code="nav.insight"/>
     </jsp:attribute>
     <jsp:attribute name="headline">
-        <span id="insightHeadline"></span>
+        <span id="insightHeadline"><spring:message code="insight.problems" /></span>
     </jsp:attribute>
 
     <jsp:body>

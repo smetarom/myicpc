@@ -26,7 +26,33 @@ insightApp.config([
   }
 ]);
 
-insightApp.controller('allProblemsCtrl', function($scope, $http) {
+insightApp.factory('insightService', function() {
+  var insightService;
+  insightService = {};
+  insightService.xFunction = function() {
+    return function(d) {
+      return d.key;
+    };
+  };
+  insightService.yFunction = function() {
+    return function(d) {
+      return d.value;
+    };
+  };
+  insightService.areaColor = function() {
+    return function(d, i) {
+      return d.data.color;
+    };
+  };
+  insightService.toolTipContentFunction = function() {
+    return function(key, x, y, e, graph) {
+      return '<p><strong>' + key + '</strong>' + ' - ' + Math.round(x) + ' submissions</p>';
+    };
+  };
+  return insightService;
+});
+
+insightApp.controller('allProblemsCtrl', function($scope, $http, insightService) {
   $scope.data = null;
   $scope.problems = [];
   $scope.init = function(contextPath, contestCode, title) {
@@ -37,29 +63,13 @@ insightApp.controller('allProblemsCtrl', function($scope, $http) {
       return $("#insightHeadline").html(data.title);
     }).error(function() {});
   };
-  $scope.xFunction = function() {
-    return function(d) {
-      return d.key;
-    };
-  };
-  $scope.yFunction = function() {
-    return function(d) {
-      return d.value;
-    };
-  };
-  $scope.areaColor = function() {
-    return function(d, i) {
-      return d.data.color;
-    };
-  };
-  return $scope.toolTipContentFunction = function() {
-    return function(key, x, y, e, graph) {
-      return '<p><strong>' + key + '</strong>' + ' - ' + Math.round(x) + ' submissions</p>';
-    };
-  };
+  $scope.xFunction = insightService.xFunction;
+  $scope.yFunction = insightService.yFunction;
+  $scope.areaColor = insightService.areaColor;
+  return $scope.toolTipContentFunction = insightService.toolTipContentFunction;
 });
 
-insightApp.controller('problemDetailCtrl', function($scope, $http, $routeParams) {
+insightApp.controller('problemDetailCtrl', function($scope, $http, $routeParams, insightService) {
   $scope.data = null;
   $scope.init = function(contextPath, contestCode, title) {
     $("#insightHeadline").html("" + title + " " + $routeParams.problemCode);
@@ -69,29 +79,13 @@ insightApp.controller('problemDetailCtrl', function($scope, $http, $routeParams)
       return $("#insightHeadline").html(data.title);
     }).error(function() {});
   };
-  $scope.xFunction = function() {
-    return function(d) {
-      return d.key;
-    };
-  };
-  $scope.yFunction = function() {
-    return function(d) {
-      return d.value;
-    };
-  };
-  $scope.areaColor = function() {
-    return function(d, i) {
-      return d.data.color;
-    };
-  };
-  return $scope.toolTipContentFunction = function() {
-    return function(key, x, y, e, graph) {
-      return '<p><strong>' + key + '</strong>' + ' - ' + Math.round(x) + ' submissions</p>';
-    };
-  };
+  $scope.xFunction = insightService.xFunction;
+  $scope.yFunction = insightService.yFunction;
+  $scope.areaColor = insightService.areaColor;
+  return $scope.toolTipContentFunction = insightService.toolTipContentFunction;
 });
 
-insightApp.controller('allLanguagesCtrl', function($scope, $http) {
+insightApp.controller('allLanguagesCtrl', function($scope, $http, insightService) {
   $scope.data = null;
   return $scope.init = function(contextPath, contestCode, title) {
     $("#insightHeadline").html("" + title);
@@ -102,7 +96,7 @@ insightApp.controller('allLanguagesCtrl', function($scope, $http) {
   };
 });
 
-insightApp.controller('languageDetailCtrl', function($scope, $http, $routeParams) {
+insightApp.controller('languageDetailCtrl', function($scope, $http, $routeParams, insightService) {
   $scope.data = null;
   $scope.languageName = $routeParams.languageName;
   $scope.init = function(contextPath, contestCode, title) {
@@ -113,26 +107,10 @@ insightApp.controller('languageDetailCtrl', function($scope, $http, $routeParams
       return $("#insightHeadline").html(data.title);
     }).error(function() {});
   };
-  $scope.xFunction = function() {
-    return function(d) {
-      return d.key;
-    };
-  };
-  $scope.yFunction = function() {
-    return function(d) {
-      return d.value;
-    };
-  };
-  $scope.areaColor = function() {
-    return function(d, i) {
-      return d.data.color;
-    };
-  };
-  return $scope.toolTipContentFunction = function() {
-    return function(key, x, y, e, graph) {
-      return '<p><strong>' + key + '</strong>' + ' - ' + Math.round(x) + ' submissions</p>';
-    };
-  };
+  $scope.xFunction = insightService.xFunction;
+  $scope.yFunction = insightService.yFunction;
+  $scope.areaColor = insightService.areaColor;
+  return $scope.toolTipContentFunction = insightService.toolTipContentFunction;
 });
 
 insightApp.controller('codeInsightCtrl', function($scope, $http) {

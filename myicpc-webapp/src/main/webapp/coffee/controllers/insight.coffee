@@ -23,7 +23,29 @@ insightApp.config(['$routeProvider',
     });
 ]);
 
-insightApp.controller('allProblemsCtrl', ($scope, $http) ->
+insightApp.factory('insightService', () ->
+  insightService = {};
+
+  insightService.xFunction = ->
+    (d) ->
+      d.key
+
+  insightService.yFunction =  ->
+    (d) ->
+      d.value
+
+  insightService.areaColor =  ->
+    (d, i) ->
+      d.data.color
+
+  insightService.toolTipContentFunction = () ->
+    return (key, x, y, e, graph) ->
+      return '<p><strong>' + key + '</strong>' + ' - ' + Math.round(x) + ' submissions</p>'
+
+  return insightService;
+)
+
+insightApp.controller('allProblemsCtrl', ($scope, $http, insightService) ->
   $scope.data = null
   $scope.problems = []
 
@@ -37,24 +59,16 @@ insightApp.controller('allProblemsCtrl', ($scope, $http) ->
       # TODO
     )
 
-  $scope.xFunction = ->
-    (d) ->
-      d.key
+  $scope.xFunction = insightService.xFunction
 
-  $scope.yFunction =  ->
-    (d) ->
-      d.value
+  $scope.yFunction =  insightService.yFunction
 
-  $scope.areaColor =  ->
-    (d, i) ->
-      d.data.color
+  $scope.areaColor =  insightService.areaColor
 
-  $scope.toolTipContentFunction = () ->
-    return (key, x, y, e, graph) ->
-      return '<p><strong>' + key + '</strong>' + ' - ' + Math.round(x) + ' submissions</p>'
+  $scope.toolTipContentFunction = insightService.toolTipContentFunction
 )
 
-insightApp.controller('problemDetailCtrl', ($scope, $http, $routeParams) ->
+insightApp.controller('problemDetailCtrl', ($scope, $http, $routeParams, insightService) ->
   $scope.data = null
 
   $scope.init = (contextPath, contestCode, title) ->
@@ -67,25 +81,17 @@ insightApp.controller('problemDetailCtrl', ($scope, $http, $routeParams) ->
       # TODO
     )
 
-  $scope.xFunction = ->
-    (d) ->
-      d.key
+  $scope.xFunction = insightService.xFunction
 
-  $scope.yFunction =  ->
-    (d) ->
-      d.value
+  $scope.yFunction =  insightService.yFunction
 
-  $scope.areaColor =  ->
-    (d, i) ->
-      d.data.color
+  $scope.areaColor =  insightService.areaColor
 
-  $scope.toolTipContentFunction = () ->
-    return (key, x, y, e, graph) ->
-      return '<p><strong>' + key + '</strong>' + ' - ' + Math.round(x) + ' submissions</p>'
+  $scope.toolTipContentFunction = insightService.toolTipContentFunction
 
 )
 
-insightApp.controller('allLanguagesCtrl', ($scope, $http) ->
+insightApp.controller('allLanguagesCtrl', ($scope, $http, insightService) ->
   $scope.data = null
 
   $scope.init = (contextPath, contestCode, title) ->
@@ -98,7 +104,7 @@ insightApp.controller('allLanguagesCtrl', ($scope, $http) ->
     )
 )
 
-insightApp.controller('languageDetailCtrl', ($scope, $http, $routeParams) ->
+insightApp.controller('languageDetailCtrl', ($scope, $http, $routeParams, insightService) ->
   $scope.data = null
   $scope.languageName = $routeParams.languageName
 
@@ -112,21 +118,13 @@ insightApp.controller('languageDetailCtrl', ($scope, $http, $routeParams) ->
       # TODO
     )
 
-  $scope.xFunction = ->
-    (d) ->
-      d.key
+  $scope.xFunction = insightService.xFunction
 
-  $scope.yFunction =  ->
-    (d) ->
-      d.value
+  $scope.yFunction =  insightService.yFunction
 
-  $scope.areaColor =  ->
-    (d, i) ->
-      d.data.color
+  $scope.areaColor =  insightService.areaColor
 
-  $scope.toolTipContentFunction = () ->
-    return (key, x, y, e, graph) ->
-      return '<p><strong>' + key + '</strong>' + ' - ' + Math.round(x) + ' submissions</p>'
+  $scope.toolTipContentFunction = insightService.toolTipContentFunction
 )
 
 insightApp.controller('codeInsightCtrl', ($scope, $http) ->
