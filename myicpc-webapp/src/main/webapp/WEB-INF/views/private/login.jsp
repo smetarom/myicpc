@@ -16,6 +16,9 @@
     <h2 class="form-signin-heading">
         <spring:message code="login.pleaseSignIn"/>
     </h2>
+    <c:if test="${not empty logoutSuccess}">
+        <div class="alert alert-info" role="alert"><spring:message code="logout.success" /></div>
+    </c:if>
     <c:if test="${not empty error}">
         <div class="alert alert-danger">
             <spring:message code="login.failed"/>

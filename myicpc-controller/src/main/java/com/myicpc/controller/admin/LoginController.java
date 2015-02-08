@@ -24,15 +24,24 @@ public class LoginController extends GeneralAdminController {
     }
 
     /**
+     * Complete user logout and redirects to login page
+     *
+     * @return view
+     */
+    @RequestMapping(value = "/private/logout")
+    public String logout(final RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("logoutSuccess", true);
+        return "redirect:/private/login";
+    }
+
+    /**
      * Redirects to login page after login failed
      *
-     * @param model
      * @param redirectAttributes
      * @return redirect to login page
      */
     @RequestMapping(value = "/private/loginfailed", method = RequestMethod.GET)
-    public String loginerror(final Model model, final RedirectAttributes redirectAttributes) {
-        model.addAttribute("error", "true");
+    public String loginerror(final RedirectAttributes redirectAttributes) {
         redirectAttributes.addFlashAttribute("error", true);
         return "redirect:/private/login";
     }
