@@ -62,7 +62,7 @@ public abstract class StartEndDateObject extends IdGeneratedContestObject {
 
     @Transient
     public void setLocalEndDate(final Date endDate) {
-        setStartDate(TimeUtils.convertLocalDateToUTC(endDate, contest.getContestSettings().getTimeDifference()));
+        setEndDate(TimeUtils.convertLocalDateToUTC(endDate, contest.getContestSettings().getTimeDifference()));
     }
 
     public boolean isPublished() {

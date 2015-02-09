@@ -1,7 +1,9 @@
 package com.myicpc.model.schedule;
 
 import com.myicpc.model.StartEndDateObject;
+import com.myicpc.validator.annotation.ValidateDateRange;
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.ScriptAssert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,6 +17,7 @@ import java.util.Set;
  */
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "Event_id_seq")
+@ValidateDateRange
 public class Event extends StartEndDateObject {
     private static final long serialVersionUID = -4924079934694291712L;
 

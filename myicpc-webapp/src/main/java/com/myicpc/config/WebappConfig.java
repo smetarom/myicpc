@@ -1,9 +1,18 @@
 package com.myicpc.config;
 
+import com.myicpc.controller.converter.LocationConvertor;
+import com.myicpc.controller.converter.PollOptionConvertor;
+import com.myicpc.controller.converter.QuestChallengeConvertor;
+import com.myicpc.controller.converter.QuestParticipantConvertor;
+import com.myicpc.controller.converter.ScheduleDayConvertor;
+import com.myicpc.controller.converter.TeamConvertor;
+import com.myicpc.controller.converter.TeamInfoConvertor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.accept.ContentNegotiationManager;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -26,6 +35,39 @@ import java.util.List;
 @ComponentScan("com.myicpc.controller")
 public class WebappConfig extends WebMvcConfigurerAdapter {
 
+    @Autowired
+    private LocationConvertor locationConvertor;
+
+    @Autowired
+    private PollOptionConvertor pollOptionConvertor;
+
+    @Autowired
+    private QuestChallengeConvertor questChallengeConvertor;
+
+    @Autowired
+    private QuestParticipantConvertor questParticipantConvertor;
+
+    @Autowired
+    private ScheduleDayConvertor scheduleDayConvertor;
+
+    @Autowired
+    private TeamConvertor teamConvertor;
+
+    @Autowired
+    private TeamInfoConvertor teamInfoConvertor;
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        super.addFormatters(registry);
+        registry.addConverter(locationConvertor);
+        registry.addConverter(pollOptionConvertor);
+        registry.addConverter(questChallengeConvertor);
+        registry.addConverter(questParticipantConvertor);
+        registry.addConverter(scheduleDayConvertor);
+        registry.addConverter(teamConvertor);
+        registry.addConverter(teamInfoConvertor);
+    }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         super.addResourceHandlers(registry);
@@ -42,9 +84,7 @@ public class WebappConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public ViewResolver contentNegotiatingViewResolver(
-            ContentNegotiationManager manager) {
-
+    public ViewResolver contentNegotiatingViewResolver(ContentNegotiationManager manager) {
         List<ViewResolver> resolvers = new ArrayList<>();
 
         InternalResourceViewResolver internalResolver = new InternalResourceViewResolver();

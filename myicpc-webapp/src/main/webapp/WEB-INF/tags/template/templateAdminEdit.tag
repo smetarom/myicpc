@@ -7,6 +7,10 @@
 <%@attribute name="submenu" fragment="true" %>
 
 <t:templateAdmin>
+    <jsp:attribute name="title">
+		<jsp:invoke fragment="title"/>
+	</jsp:attribute>
+
 	<jsp:attribute name="headline">
 		<jsp:invoke fragment="headline"/>
 	</jsp:attribute>

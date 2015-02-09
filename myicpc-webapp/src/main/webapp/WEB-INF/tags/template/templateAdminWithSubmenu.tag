@@ -6,6 +6,7 @@
 <%@attribute name="breadcrumb" fragment="true" %>
 <%@attribute name="submenu" fragment="true" %>
 <%@attribute name="topContent" fragment="true" %>
+<%@attribute name="controls" fragment="true" %>
 
 <t:templateAdmin>
     <jsp:attribute name="title">
@@ -20,6 +21,9 @@
 	    <jsp:invoke fragment="breadcrumb"/>
 	</jsp:attribute>
 
+    <jsp:attribute name="controls">
+	    <jsp:invoke fragment="controls"/>
+	</jsp:attribute>
 
     <jsp:body>
         <jsp:invoke fragment="topContent"/>

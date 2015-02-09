@@ -38,6 +38,11 @@ getSubscribeAddress = (contextPath) ->
 compileHandlebarsTemplate = (id) ->
   return Handlebars.compile($("#" + id).html())
 
+datePickerOptions = {
+  dateFormat: "yy-mm-dd",
+  clockType: 24
+}
+
 convertSecondsToMinutes = (seconds) ->
   seconds // 60
 

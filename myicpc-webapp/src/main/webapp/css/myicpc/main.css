@@ -462,6 +462,12 @@ a.underline {
     font-size: 22px;
 }
 
+.no-items-available-small {
+    font-size: 1.5em;
+    color: gray;
+    text-align: center;
+}
+
 .noSelectedBig, .no-items-available {
     font-size: 1.5em;
     padding: 25px 0;

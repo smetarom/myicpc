@@ -40,6 +40,10 @@ h1 {
     margin-bottom: 0;
 }
 
+hr.divider {
+    margin: 5px 0;
+}
+
 .breadcrumb {
     margin-bottom: 5px;
 }
@@ -106,6 +110,12 @@ dd {
 
 .normal-label {
     font-weight: normal;
+}
+
+.no-items-available-small {
+    font-size: 1.5em;
+    color: gray;
+    text-align: center;
 }
 
 .noSelectedBig, .no-items-available {
