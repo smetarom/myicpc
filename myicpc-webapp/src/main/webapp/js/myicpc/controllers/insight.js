@@ -8,6 +8,9 @@ insightApp.config([
     return $routeProvider.when('/problems', {
       templateUrl: 'insight/template/all-problems',
       controller: 'allProblemsCtrl'
+    }).when('/team-problems', {
+      templateUrl: 'insight/template/team-problems',
+      controller: 'allProblemsCtrl'
     }).when('/problem/:problemCode', {
       templateUrl: 'insight/template/problem-detail',
       controller: 'problemDetailCtrl'
@@ -106,8 +109,18 @@ insightApp.controller('allProblemsCtrl', function($scope, $http, $interval, insi
     @see insightService#init
    */
   $scope.init = function(contextPath, contestCode, title) {
-    var pollingFn, successFn, url;
+    var url;
     url = "" + contextPath + "/" + contestCode + "/insight/ajax/all-problems";
+    return $scope._init(url, contextPath, contestCode, title);
+  };
+  $scope.initForTeam = function(teamId, contextPath, contestCode, title) {
+    var url;
+    url = "" + contextPath + "/" + contestCode + "/insight/ajax/team-problems/" + teamId;
+    console.log(url);
+    return $scope._init(url, contextPath, contestCode, title);
+  };
+  $scope._init = function(url, contextPath, contestCode, title) {
+    var pollingFn, successFn;
     successFn = function(data) {
       var element, _i, _len, _ref;
       _ref = data.data;

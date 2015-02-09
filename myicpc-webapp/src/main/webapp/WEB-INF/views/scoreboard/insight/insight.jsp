@@ -3,7 +3,6 @@
 <t:template>
     <jsp:attribute name="head">
         <%@ include file="/WEB-INF/views/includes/nvd3Dependencies.jsp" %>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.12/angular-route.min.js" defer></script>
         <script src="<c:url value='/js/myicpc/controllers/insight.js'/>" defer></script>
 
     </jsp:attribute>

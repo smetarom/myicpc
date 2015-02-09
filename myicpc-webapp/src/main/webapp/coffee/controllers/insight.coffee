@@ -6,6 +6,9 @@ insightApp.config(['$routeProvider',
     $routeProvider.when('/problems', {
         templateUrl: 'insight/template/all-problems',
         controller: 'allProblemsCtrl'
+    }).when('/team-problems', {
+      templateUrl: 'insight/template/team-problems',
+      controller: 'allProblemsCtrl'
     }).when('/problem/:problemCode', {
       templateUrl: 'insight/template/problem-detail',
       controller: 'problemDetailCtrl'
@@ -96,6 +99,14 @@ insightApp.controller('allProblemsCtrl', ($scope, $http, $interval, insightServi
   ###
   $scope.init = (contextPath, contestCode, title) ->
     url = "#{contextPath}/#{contestCode}/insight/ajax/all-problems"
+    $scope._init(url, contextPath, contestCode, title)
+
+  $scope.initForTeam = (teamId, contextPath, contestCode, title) ->
+    url = "#{contextPath}/#{contestCode}/insight/ajax/team-problems/#{teamId}"
+    console.log(url)
+    $scope._init(url, contextPath, contestCode, title)
+
+  $scope._init = (url, contextPath, contestCode, title) ->
     successFn = (data) ->
       for element in data.data
         $scope.data[element.code] = element.data

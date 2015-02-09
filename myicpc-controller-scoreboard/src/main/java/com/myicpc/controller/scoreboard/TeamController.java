@@ -123,4 +123,31 @@ public class TeamController extends GeneralController {
 
         return "scoreboard/teamInsight";
     }
+
+    @RequestMapping(value = {"/{contestCode}/team/{teamId}/insight/template/team-problems"}, method = RequestMethod.GET)
+    public String teamInsightTemplate(@PathVariable String contestCode, @PathVariable Long teamId, Model model) {
+        Team team = teamRepository.findByExternalId(teamId);
+        Contest contest = getContest(contestCode, model);
+
+        model.addAttribute("team", team);
+        model.addAttribute("isTeamInsight", true);
+
+        return "scoreboard/insight/template/allProblems";
+    }
+
+    @RequestMapping(value = {"/{contestCode}/team/{teamId}/social"}, method = RequestMethod.GET)
+    public String teamSocial(@PathVariable String contestCode, @PathVariable Long teamId, Model model) {
+        TeamInfo teamInfo = teamInfoRepository.findByExternalId(teamId);
+        if (teamInfo == null) {
+            // TODO team not found
+        }
+        Contest contest = getContest(contestCode, model);
+        Team team = teamRepository.findByExternalId(teamId);
+
+        model.addAttribute("teamInfo", teamInfo);
+        model.addAttribute("team", team);
+
+        model.addAttribute("tab", "social");
+        return "scoreboard/teamSocial";
+    }
 }

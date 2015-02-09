@@ -1,11 +1,22 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
 
-<div ng-init="init('${r.contextPath}', '${contest.code}', '<spring:message code="insight.problems" />')"></div>
+<c:if test="${isTeamInsight}">
+    <div ng-init="initForTeam('${team.externalId}', '${r.contextPath}', '${contest.code}', '<spring:message code="insight.problems" />')"></div>
+</c:if>
+<c:if test="${not isTeamInsight}">
+    <div ng-init="init('${r.contextPath}', '${contest.code}', '<spring:message code="insight.problems" />')"></div>
+</c:if>
 
 <div ng-repeat="problem in problems" ng-cloak>
     <div style="position: relative;" class="panel panel-default panel-insight">
         <h2 class="text-center">
-            <a href="#/problem/{{problem.code}}"><spring:message code="problem" /> {{problem.code}}</a>
+            <c:if test="${not isTeamInsight}">
+                <a href="#/problem/{{problem.code}}">
+            </c:if>
+            <spring:message code="problem" /> {{problem.code}}
+            <c:if test="${not isTeamInsight}">
+                </a>
+            </c:if>
         </h2>
 
         <div class="text-center">

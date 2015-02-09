@@ -6,9 +6,11 @@ import com.myicpc.controller.GeneralController;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Language;
 import com.myicpc.model.eventFeed.Problem;
+import com.myicpc.model.eventFeed.Team;
 import com.myicpc.repository.eventFeed.JudgementRepository;
 import com.myicpc.repository.eventFeed.LanguageRepository;
 import com.myicpc.repository.eventFeed.ProblemRepository;
+import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.service.scoreboard.ScoreboardService;
 import com.myicpc.service.scoreboard.insight.LanguageInsightService;
 import com.myicpc.service.scoreboard.insight.ProblemInsightService;
@@ -34,6 +36,9 @@ public class InsightController extends GeneralController {
 
     @Autowired
     private LanguageInsightService languageInsightService;
+
+    @Autowired
+    private TeamRepository teamRepository;
 
     @Autowired
     private ProblemRepository problemRepository;
@@ -99,6 +104,20 @@ public class InsightController extends GeneralController {
 
         JsonObject response = new JsonObject();
         response.add("data", problemInsightService.reportAll(contest));
+        response.add("problems", scoreboardService.getProblemsJSON(contest));
+        response.addProperty("title", MessageUtils.getMessage("insight.problems"));
+
+        return response.toString();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/{contestCode}/insight/ajax/team-problems/{teamId}", method = RequestMethod.GET)
+    public String insightAllTeamProblemsJSON(@PathVariable String contestCode, @PathVariable Long teamId) {
+        Contest contest = getContest(contestCode, null);
+        Team team = teamRepository.findByExternalId(teamId);
+
+        JsonObject response = new JsonObject();
+        response.add("data", problemInsightService.reportAll(team, contest));
         response.add("problems", scoreboardService.getProblemsJSON(contest));
         response.addProperty("title", MessageUtils.getMessage("insight.problems"));
 
