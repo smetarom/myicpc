@@ -1,6 +1,7 @@
 package com.myicpc.service.schedule;
 
 import au.com.bytecode.opencsv.CSVReader;
+import com.google.common.collect.Lists;
 import com.myicpc.commons.MyICPCConstants;
 import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.commons.utils.TimeUtils;
@@ -15,6 +16,7 @@ import com.myicpc.repository.schedule.EventRoleRepository;
 import com.myicpc.repository.schedule.LocationRepository;
 import com.myicpc.repository.schedule.ScheduleDayRepository;
 import com.myicpc.repository.social.NotificationRepository;
+import com.myicpc.service.EntityManagerService;
 import com.myicpc.service.exception.BusinessValidationException;
 import com.myicpc.service.validation.EventRoleValidator;
 import com.myicpc.service.validation.LocationValidator;
@@ -25,14 +27,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.validation.ValidationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -40,7 +51,7 @@ import java.util.Set;
  */
 @Service
 @Transactional
-public class ScheduleService {
+public class ScheduleMngmService {
 
     @Autowired
     private EventRepository eventRepository;
@@ -65,6 +76,8 @@ public class ScheduleService {
 
     @Autowired
     private NotificationRepository notificationRepository;
+
+
 
     public void saveEvent(final Event event) {
         eventRepository.save(event);

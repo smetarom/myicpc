@@ -11,11 +11,10 @@ import com.myicpc.repository.schedule.EventRoleRepository;
 import com.myicpc.repository.schedule.LocationRepository;
 import com.myicpc.repository.schedule.ScheduleDayRepository;
 import com.myicpc.service.exception.BusinessValidationException;
-import com.myicpc.service.schedule.ScheduleService;
+import com.myicpc.service.schedule.ScheduleMngmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -45,7 +44,7 @@ import java.util.Set;
 public class ScheduleAdminController extends GeneralAdminController {
 
     @Autowired
-    private ScheduleService scheduleService;
+    private ScheduleMngmService scheduleMngmService;
 
     @Autowired
     private EventRepository eventRepository;
@@ -121,7 +120,7 @@ public class ScheduleAdminController extends GeneralAdminController {
             return "redirect:/private/" + contestCode + "/schedule";
         }
 
-        scheduleService.deleteEvent(event);
+        scheduleMngmService.deleteEvent(event);
         successMessage(redirectAttributes, "scheduleAdmin.deleteEvent.success", event.getName());
         return "redirect:/private/" + contestCode + "/schedule";
     }
@@ -136,7 +135,7 @@ public class ScheduleAdminController extends GeneralAdminController {
             return "private/schedule/editEvent";
         }
 
-        scheduleService.saveEvent(event);
+        scheduleMngmService.saveEvent(event);
 
         return "redirect:/private/" + contestCode + "/schedule";
     }
@@ -179,7 +178,7 @@ public class ScheduleAdminController extends GeneralAdminController {
             return "redirect:/private" + getContestURL(contestCode) + "/schedule";
         }
         try {
-            scheduleService.deleteLocation(location);
+            scheduleMngmService.deleteLocation(location);
             successMessage(redirectAttributes, "scheduleAdmin.deleteLocation.success", location.getName());
         } catch (BusinessValidationException ex) {
             errorMessage(redirectAttributes, ex.getMessageCode(), ex.getParams());
@@ -197,7 +196,7 @@ public class ScheduleAdminController extends GeneralAdminController {
         }
 
         try {
-            scheduleService.saveLocation(location);
+            scheduleMngmService.saveLocation(location);
         } catch (BusinessValidationException ex) {
             getContest(contestCode, model);
             result.rejectValue("code", ex.getMessageCode());
@@ -247,7 +246,7 @@ public class ScheduleAdminController extends GeneralAdminController {
         }
 
         try {
-            scheduleService.deleteScheduleDay(scheduleDay);
+            scheduleMngmService.deleteScheduleDay(scheduleDay);
             successMessage(redirectAttributes, "scheduleAdmin.deleteScheduleDay.success", scheduleDay.getName());
         } catch (BusinessValidationException ex) {
             errorMessage(redirectAttributes, ex.getMessageCode(), ex.getParams());
@@ -265,7 +264,7 @@ public class ScheduleAdminController extends GeneralAdminController {
         }
 
         try {
-            scheduleService.saveScheduleDay(scheduleDay);
+            scheduleMngmService.saveScheduleDay(scheduleDay);
         } catch (BusinessValidationException ex) {
             getContest(contestCode, model);
             result.rejectValue("dayOrder", ex.getMessageCode());
@@ -313,7 +312,7 @@ public class ScheduleAdminController extends GeneralAdminController {
             return "redirect:/private/" + contestCode + "/schedule";
         }
         try {
-            scheduleService.deleteEventRole(role);
+            scheduleMngmService.deleteEventRole(role);
             successMessage(redirectAttributes, "scheduleAdmin.deleteEventRole.success", role.getName());
         } catch (BusinessValidationException ex) {
             errorMessage(redirectAttributes, ex.getMessageCode(), ex.getParams());
@@ -331,7 +330,7 @@ public class ScheduleAdminController extends GeneralAdminController {
         }
 
         try {
-            scheduleService.saveEventRole(eventRole);
+            scheduleMngmService.saveEventRole(eventRole);
         } catch (BusinessValidationException ex) {
             getContest(contestCode, model);
             result.rejectValue("name", ex.getMessageCode());
@@ -347,7 +346,7 @@ public class ScheduleAdminController extends GeneralAdminController {
                                  final Model model, final RedirectAttributes redirectAttributes) throws IOException, ParseException {
         Contest contest = getContest(contestCode, model);
         try {
-            scheduleService.importSchedule(rolesCSV, daysCSV, locationsCSV, eventsCSV, contest);
+            scheduleMngmService.importSchedule(rolesCSV, daysCSV, locationsCSV, eventsCSV, contest);
 
             successMessage(redirectAttributes, "scheduleAdmin.import.success");
         } catch (ValidationException ex) {
@@ -386,5 +385,4 @@ public class ScheduleAdminController extends GeneralAdminController {
             }
         });
     }
-
 }

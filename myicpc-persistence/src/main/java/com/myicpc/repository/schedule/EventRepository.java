@@ -13,6 +13,8 @@ import java.util.List;
 
 public interface EventRepository extends CrudRepository<Event, Long> {
 
+    List<Event> findByContest(Contest contest);
+
     List<Event> findByContestOrderByStartDateAsc(Contest contest);
 
     @Query("SELECT e FROM Event e WHERE e.endDate > ?1 AND e.contest = ?2")
