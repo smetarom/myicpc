@@ -41,6 +41,10 @@ scoreboard.controller('scoreboardCtrl', ($scope) ->
     return true if not $scope.filterBy?;
     team[$scope.filterBy] is $scope.filterValue
 
+  $scope.toogleTeamProblems = (team) ->
+    team.showProblems = false if !team.showProblems?
+    team.showProblems = team.showProblems == false ? true : false
+
   $scope.clearFilter = () ->
     $scope.filterBy = null
     $scope.filterValue = null

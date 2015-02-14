@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,5 +61,22 @@ public abstract class GeneralController extends GeneralAbstractController {
             }
         }
         return notificationService.getFeaturedNotifications(ignoredFeatured);
+    }
+
+    protected String resolveView(@NotNull String desktopView, String mobileView, SitePreference sitePreference) {
+        return resolveView(desktopView, mobileView, null, sitePreference);
+    }
+
+    protected String resolveView(@NotNull String desktopView, String mobileView, String tabletView, SitePreference sitePreference) {
+        if (sitePreference == null) {
+            return desktopView;
+        }
+        if (sitePreference.isMobile()) {
+            return !StringUtils.isEmpty(mobileView) ? mobileView : desktopView;
+        }
+        if (sitePreference.isTablet()) {
+            return !StringUtils.isEmpty(tabletView) ? tabletView : desktopView;
+        }
+        return desktopView;
     }
 }

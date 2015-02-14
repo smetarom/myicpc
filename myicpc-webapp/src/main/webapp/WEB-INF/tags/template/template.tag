@@ -18,13 +18,6 @@
             </c:if>
                 ${contest.shortName} &middot; MyICPC
         </title>
-        <script type="text/javascript">
-            websocketURL = '127.0.0.1';
-            securedWebsocketURL = window.location.host;
-            if (websocketURL == '') {
-                websocketURL = window.location.host;
-            }
-        </script>
         <jsp:include page="/WEB-INF/views/includes/head.jsp"/>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <jsp:invoke fragment="head" />

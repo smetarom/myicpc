@@ -49,10 +49,10 @@
 
 <%-- MyICPC internal resources --%>
 <link rel="stylesheet" href="<c:url value='/css/bootstrap-tour.min.css'/>" type="text/css">
-<link rel="stylesheet" href="<c:url value='/css/myicpc/main.css'/>" type="text/css">
+<%--<link rel="stylesheet" href="<c:url value='/css/myicpc/main.css'/>" type="text/css">--%>
 <link rel="stylesheet" href="<c:url value='/css/myicpc/style.css'/>" type="text/css">
 <script src="<c:url value='/js/myicpc/functions.js'/>"></script>
-<script src="<c:url value='/js/myicpc/myicpc-config.js'/>" defer></script>
+<%--<script src="<c:url value='/js/myicpc/myicpc-config.js'/>" defer></script>--%>
 <script src="<c:url value='/js/bootstrap/bootstrap-tour.min.js'/>" defer></script>
 
 <!-- FACEBOOK -->

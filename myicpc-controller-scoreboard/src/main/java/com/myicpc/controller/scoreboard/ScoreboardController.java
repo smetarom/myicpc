@@ -14,6 +14,8 @@ import com.myicpc.service.scoreboard.ScoreboardService;
 import com.myicpc.service.scoreboard.problem.ProblemService;
 import com.myicpc.service.scoreboard.team.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.site.SitePreference;
+import org.springframework.mobile.device.site.SitePreferenceUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -47,7 +49,8 @@ public class ScoreboardController extends GeneralController {
     private ProblemRepository problemRepository;
 
     @RequestMapping(value = {"/{contestCode}/scoreboard"}, method = RequestMethod.GET)
-    public String scoreboard(@PathVariable String contestCode, Model model, HttpSession session, HttpServletRequest request, @CookieValue(value = "followedTeams", required = false) String followedTeams) {
+    public String scoreboard(@PathVariable String contestCode, Model model, HttpSession session, HttpServletRequest request,
+                             SitePreference sitePreference, @CookieValue(value = "followedTeams", required = false) String followedTeams) {
         Contest contest = getContest(contestCode, model);
 
         List<Problem> problems = problemService.findByContest(contest);
@@ -57,7 +60,7 @@ public class ScoreboardController extends GeneralController {
         model.addAttribute("numProblems", problems.size());
         model.addAttribute("scoreboardAvailable", true);
         model.addAttribute("sideMenuActive", "scoreboard");
-        return "scoreboard/scoreboard";
+        return resolveView("scoreboard/scoreboard", "scoreboard/scoreboard_mobile", sitePreference);
     }
 
     @RequestMapping(value = {"/{contestCode}/scorebar"}, method = RequestMethod.GET)

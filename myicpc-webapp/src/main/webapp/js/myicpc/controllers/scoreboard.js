@@ -53,6 +53,15 @@ scoreboard.controller('scoreboardCtrl', function($scope) {
     }
     return team[$scope.filterBy] === $scope.filterValue;
   };
+  $scope.toogleTeamProblems = function(team) {
+    var _ref;
+    if (team.showProblems == null) {
+      team.showProblems = false;
+    }
+    return team.showProblems = (_ref = team.showProblems === false) != null ? _ref : {
+      "true": false
+    };
+  };
   $scope.clearFilter = function() {
     $scope.filterBy = null;
     return $scope.filterValue = null;

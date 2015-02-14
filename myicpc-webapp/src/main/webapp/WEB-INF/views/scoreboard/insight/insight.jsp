@@ -41,7 +41,9 @@
                 </ul>
             </nav>
 
-            <div ng-view></div>
+            <div class="clearfix">
+                <div ng-view></div>
+            </div>
         </div>
     </jsp:body>
 

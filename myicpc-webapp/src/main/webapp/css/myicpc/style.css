@@ -1,3 +1,130 @@
+.pin a {
+  color: black; }
+
+.scoreboardRow {
+  font-size: 1.2em; }
+
+.striped-rows > tbody > tr:nth-child(odd), .striped-body > tbody:nth-child(odd) {
+  background-color: #f9f9f9; }
+
+.problemSolved {
+  background-color: #66FF33; }
+
+.problemFailed {
+  background-color: #FF5C33; }
+
+.hightlightedTeam {
+  background-color: orange !important; }
+
+tr.problemRow td {
+  border: 0 black solid !important;
+  padding: 2px !important; }
+
+tr.problemRow > td {
+  padding: 0 !important; }
+
+.label-shadow {
+  background-color: #eee;
+  color: #999; }
+
+tr.scoreboardEvenRow {
+  background-color: #f9f9f9; }
+
+.scoreboard .label {
+  font-size: 11px; }
+
+.label-firstSolved {
+  background-color: #7CFC00; }
+
+.problem-cell > .label {
+  min-width: 45px;
+  max-width: 60px;
+  display: block;
+  padding: 0.3em 0.1em;
+  margin: 0 auto;
+  font-weight: normal; }
+
+.scoreboardLegend {
+  margin: 5px 5px 0; }
+
+.scoreboardLegend > .label {
+  display: inline-block;
+  min-width: 40px; }
+.scoreboardLegend .label {
+  font-size: 11px; }
+
+.scoreboardRow td {
+  overflow-x: hidden; }
+
+#scoreboard-notifications-btn {
+  letter-spacing: 3px; }
+
+#scoreboardNotifications {
+  display: none; }
+
+#sticky-toolbar {
+  position: relative;
+  background-color: #f2f2f2;
+  border-bottom: 1px solid gray;
+  padding: 0 10px;
+  height: 45px;
+  line-height: 45px;
+  z-index: 1003;
+  width: 100%; }
+
+#scorebord-notification-bar {
+  position: fixed;
+  height: 100%;
+  width: 350px;
+  top: 50px;
+  bottom: 0;
+  right: 0;
+  z-index: 1002;
+  display: none;
+  background-color: rgba(1, 1, 1, 0.85);
+  color: white;
+  overflow-y: auto; }
+
+.mobile #scorebord-notification-bar {
+  width: 85%;
+  top: 40px; }
+
+#scorebord-notification-bar-wrapper {
+  overflow-y: auto;
+  padding-bottom: 45px; }
+
+.notification-solved {
+  background-color: rgba(152, 152, 152, 0.5);
+  border-color: gray; }
+
+.contest-time-page {
+  font-size: 1.6em; }
+
+td.ss {
+  border-left: #f0ad4e 7px solid; }
+
+td.s {
+  border-left: #3c763d 7px solid; }
+
+td.sf {
+  border-left: #a94442 7px solid; }
+
+@media (max-width: 992px) {
+  .desktop .table tbody > tr > td {
+    padding: 8px 2px; }
+
+  .hide-region, .hide-attempt {
+    display: none; }
+
+  td.team-name {
+    max-width: 150px;
+    overflow: hidden; }
+
+  .problem-cell > .label {
+    min-width: 25px; } }
+@media (max-width: 768px) {
+  .scoreboard .label {
+    font-size: 1em; } }
 #scorebar .teamInfoHidden {
   display: none; }
 #scorebar .teamInfoVisible {
@@ -125,6 +252,15 @@
     color: #0066FF !important;
     font-size: 1.1em; }
 
+.panel-insight {
+  float: left;
+  margin: 10px;
+  min-width: 300px; }
+
+@media (max-width: 360px) {
+  .panel-insight {
+    min-width: 280px;
+    width: 100%; } }
 .team-timeline td.time-cell {
   border-right: 2px solid #ddd; }
 .team-timeline > tbody > tr > td {
@@ -137,9 +273,16 @@
   #carousel-team-members .carousel-caption h3 {
     white-space: nowrap; }
 
-.no-underline {
-  text-decoration: none;
-  border-bottom: none; }
+body, .modal {
+  padding-top: 50px; }
+  body.mobile, .modal.mobile {
+    padding-top: 78px; }
+
+h3 {
+  border-bottom: 1px gray solid; }
+
+p.justify {
+  text-align: justify; }
 
 th {
   vertical-align: top; }
@@ -148,8 +291,134 @@ td.fit-content {
   width: 1%;
   white-space: nowrap; }
 
+.no-underline {
+  text-decoration: none;
+  border-bottom: none; }
+
+.nowrap {
+  white-space: nowrap; }
+
+.inline-block {
+  display: inline-block !important; }
+
+.responsive {
+  width: 100%;
+  margin-bottom: 15px;
+  overflow-x: auto;
+  overflow-y: hidden; }
+
+.clear {
+  clear: both; }
+
+.center-block {
+  margin: 0 auto;
+  display: block; }
+
+.width100 {
+  width: 100%; }
+
+.width50 {
+  width: 50%; }
+
+.contest-time {
+  margin: 9px 15px;
+  font-size: 22px; }
+
+.page-header {
+  background-color: #f1f1f1;
+  padding: 0 10px;
+  margin: 0; }
+  .page-header h2 {
+    margin: 0;
+    padding: 10px 0; }
+
+@media (max-width: 750px) {
+  .page-header h2 {
+    font-size: 1.4em; }
+
+  h3 {
+    margin: 0;
+    padding: 10px 0px 5px;
+    margin-bottom: 2px;
+    font-size: 1.2em;
+    border-bottom: 1px gray solid; } }
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important; }
+
+#top-menu-nav .navbar-brand:hover, #top-menu-nav .navbar-brand a, #top-menu-nav .navbar-brand .fa, #mobile-top-menu .navbar-brand:hover, #mobile-top-menu .navbar-brand a, #mobile-top-menu .navbar-brand .fa {
+  color: #999;
+  text-decoration: none; }
+#top-menu-nav .navbar-brand a:hover, #top-menu-nav .navbar-brand .fa:hover, #mobile-top-menu .navbar-brand a:hover, #mobile-top-menu .navbar-brand .fa:hover {
+  color: white; }
+
+.open > .main-dropdown-submenu {
+  display: table; }
+
+.main-dropdown-submenu {
+  z-index: 1100;
+  background-color: rgba(1, 1, 1, 0.75);
+  white-space: nowrap;
+  max-width: initial;
+  padding: 0; }
+  .main-dropdown-submenu a {
+    color: white;
+    font-size: 1.2em;
+    padding: 10px 20px;
+    display: block; }
+    .main-dropdown-submenu a .glyphicon, .main-dropdown-submenu a .fa {
+      font-size: 1.4em !important; }
+  .main-dropdown-submenu td {
+    text-align: center;
+    min-width: 125px; }
+
+#main-schedule-submenu, #main-scoreboard-submenu, #main-quest-submenu, #main-misc-submenu {
+  position: fixed;
+  top: 50px;
+  z-index: 1100;
+  background-color: rgba(1, 1, 1, 0.75); }
+
+.mobile #main-schedule-submenu, .mobile #main-scoreboard-submenu, .mobile #main-quest-submenu, .mobile #main-misc-submenu {
+  top: 78px;
+  width: 100%; }
+  .mobile #main-schedule-submenu a, .mobile #main-scoreboard-submenu a, .mobile #main-quest-submenu a, .mobile #main-misc-submenu a {
+    font-size: 1.2em;
+    color: white;
+    padding: 10px 0;
+    display: block; }
+    .mobile #main-schedule-submenu a .glyphicon, .mobile #main-schedule-submenu a .fa, .mobile #main-scoreboard-submenu a .glyphicon, .mobile #main-scoreboard-submenu a .fa, .mobile #main-quest-submenu a .glyphicon, .mobile #main-quest-submenu a .fa, .mobile #main-misc-submenu a .glyphicon, .mobile #main-misc-submenu a .fa {
+      font-size: 1.4em; }
+
+#mobile-top-menu {
+  min-height: 40px; }
+  #mobile-top-menu .navbar-nav > li > a {
+    padding-top: 10px;
+    padding-bottom: 10px; }
+  #mobile-top-menu .navbar-brand {
+    padding-top: 10px;
+    height: 40px; }
+  #mobile-top-menu .navbar-toggle {
+    padding: 4px 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    color: #999;
+    border-width: 0px; }
+
+#mobile-submenu {
+  padding: 5px 0;
+  min-height: 38px;
+  height: 38px;
+  width: 100%;
+  position: fixed;
+  top: 40px;
+  z-index: 900; }
+  #mobile-submenu a {
+    color: #777;
+    font-size: 20px;
+    padding: 0 15px; }
+  #mobile-submenu .active {
+    border-bottom: 3px #2d75a2 solid; }
+    #mobile-submenu .active a {
+      color: #2d75a2; }
 
 .top-submenu.navbar {
   border-radius: 0;

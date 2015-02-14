@@ -1,11 +1,23 @@
+@import 'scoreboard';
 @import 'scorebar';
 @import 'worldMap';
 @import 'insight';
 @import 'teamDetail';
 
-.no-underline {
-  text-decoration: none;
-  border-bottom: none;
+body, .modal {
+  padding-top: 50px;
+
+  &.mobile {
+    padding-top: 78px;
+  }
+}
+
+h3 {
+  border-bottom: 1px gray solid;
+}
+
+p.justify {
+  text-align: justify;
 }
 
 th {
@@ -17,11 +29,192 @@ td.fit-content {
   white-space:nowrap;
 }
 
+.no-underline {
+  text-decoration: none;
+  border-bottom: none;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.inline-block {
+  display: inline-block !important;
+}
+
+.responsive {
+  width: 100%;
+  margin-bottom: 15px;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.clear {
+  clear: both;
+}
+
+.center-block {
+  margin: 0 auto;
+  display: block;
+}
+
+.width100 {
+  width: 100%;
+}
+
+.width50 {
+  width: 50%;
+}
+
+.contest-time {
+  margin: 9px 15px;
+  font-size: 22px;
+}
+
+.page-header {
+  background-color: #f1f1f1;
+  padding: 0 10px;
+  margin: 0;
+
+  h2 {
+    margin: 0;
+    padding: 10px 0;
+  }
+}
+
+@media ( max-width: 750px) {
+  .page-header h2 {
+    font-size: 1.4em;
+  }
+
+  h3 {
+    margin: 0;
+    padding: 10px 0px 5px;
+    margin-bottom: 2px;
+    font-size: 1.2em;
+    border-bottom: 1px gray solid;
+  }
+}
+
 // AngularJS ngCloak feature
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
 
+#top-menu-nav, #mobile-top-menu {
+  .navbar-brand {
+    &:hover, a, .fa {
+      color: #999;
+      text-decoration: none;
+    }
+
+    a:hover, .fa:hover {
+      color: white;
+    }
+  }
+}
+
+.open > .main-dropdown-submenu {
+  display: table;
+}
+
+.main-dropdown-submenu {
+  z-index: 1100;
+  background-color: rgba(1, 1, 1, 0.75);
+  white-space: nowrap;
+  max-width: initial;
+  padding: 0;
+
+  a {
+    color: white;
+    font-size: 1.2em;
+    padding: 10px 20px;
+    display: block;
+
+    .glyphicon, .fa {
+      font-size: 1.4em !important;
+    }
+  }
+
+  td {
+    text-align: center;
+    min-width: 125px;
+  }
+}
+
+#main-schedule-submenu, #main-scoreboard-submenu, #main-quest-submenu, #main-misc-submenu {
+  position: fixed;
+  top: 50px;
+  z-index: 1100;
+  background-color: rgba(1, 1, 1, 0.75);
+}
+
+.mobile {
+  #main-schedule-submenu, #main-scoreboard-submenu, #main-quest-submenu, #main-misc-submenu {
+    top: 78px;
+    width: 100%;
+
+    a {
+      font-size: 1.2em;
+      color: white;
+      padding: 10px 0;
+      display: block;
+
+      .glyphicon, .fa {
+        font-size: 1.4em;
+      }
+    }
+  }
+}
+
+// Shrink the first-level top menu height for mobile devices
+#mobile-top-menu {
+  min-height: 40px;
+
+  .navbar-nav>li>a {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .navbar-brand {
+    padding-top: 10px;
+    height: 40px;
+  }
+
+  .navbar-toggle {
+    padding: 4px 5px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    color: #999;
+    border-width: 0px;
+  }
+}
+
+#mobile-submenu {
+  padding: 5px 0;
+  min-height: 38px;
+  height: 38px;
+  width: 100%;
+  position: fixed;
+  top: 40px;
+  z-index: 900;
+
+  a {
+    color: #777;
+    font-size: 20px;
+    padding: 0 15px;
+  }
+
+  .active {
+    border-bottom: 3px #2d75a2 solid;
+
+    a {
+      color: #2d75a2;
+    }
+  }
+}
+
+// The second level top menu styles
 .top-submenu {
   &.navbar {
     border-radius: 0;
@@ -56,5 +249,4 @@ td.fit-content {
   .container-fluid {
     padding: 0;
   }
-
 }

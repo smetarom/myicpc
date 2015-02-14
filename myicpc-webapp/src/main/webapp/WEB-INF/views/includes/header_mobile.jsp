@@ -1,9 +1,7 @@
-<%@page import="edu.baylor.icpc.myicpc.service.service.ModuleService" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<nav class="navbar navbar-inverse navbar-fixed-top mobile" style="z-index: 1200">
-    <!-- Brand and toggle get grouped for better mobile display -->
+<nav id="mobile-top-menu" class="navbar navbar-inverse navbar-fixed-top mobile" style="z-index: 1200">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
             <span class="glyphicon glyphicon-share-alt"> <spring:message code="share"/></span>
@@ -12,20 +10,18 @@
                 code="app.name"/></a>
     </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav">
-            <%@ include file="/WEB-INF/views/fragment/header_share.jsp" %>
+            <%@ include file="/WEB-INF/views/includes/topMenu/socialShare.jsp" %>
         </ul>
     </div>
-    <!-- /.navbar-collapse -->
 </nav>
 
-<nav id="main-submenu" class="navbar navbar-default">
+<nav id="mobile-submenu" class="navbar navbar-default">
     <table style="width: 100%; text-align: center;">
         <tbody>
         <tr>
-            <c:if test="${moduleSettings.moduleSchedule}">
+            <c:if test="${util:scheduleModuleEnabled(contest)}">
                 <td class="${sideMenuActive eq 'schedule' ? 'active' : '' }">
                     <t:emptyLink id="main-schedule-link" styleClass="side-menu-schedule"><span
                             class="glyphicon glyphicon-calendar"></span></t:emptyLink>
@@ -35,13 +31,13 @@
                 <t:emptyLink id="main-scoreboard-link" styleClass="side-menu-scoreboard"><span
                         class="glyphicon glyphicon-list"></span></t:emptyLink>
             </td>
-            <c:if test="${moduleSettings.moduleQuest}">
+            <c:if test="${util:questModuleEnabled(contest)}">
                 <td class="${sideMenuActive eq 'quest' ? 'active' : '' }">
                     <t:emptyLink id="main-quest-link" styleClass="side-menu-quest"><span
                             class="glyphicon glyphicon-screenshot"></span></t:emptyLink>
                 </td>
             </c:if>
-            <c:if test="${moduleSettings.moduleGallery}">
+            <c:if test="${util:galleryModuleEnabled(contest)}">
                 <td class="${sideMenuActive eq 'gallery' ? 'active' : '' }">
                     <a id="main-gallery-link" href="<spring:url value="/gallery" />" class="side-menu-gallery"><span
                             class="glyphicon glyphicon-camera"
@@ -57,31 +53,35 @@
 
 <div id="main-schedule-submenu" style="display: none;">
     <table class="width100 text-center mobile-submenu">
-        <%@ include file="/WEB-INF/views/fragment/topMenu/scheduleSubmenu.jsp" %>
+        <%@ include file="/WEB-INF/views/includes/topMenu/scheduleSubmenu.jsp" %>
     </table>
 </div>
 
 <div id="main-scoreboard-submenu" style="display: none;">
     <table class="width100 text-center mobile-submenu">
-        <%@ include file="/WEB-INF/views/fragment/topMenu/scoreboardSubmenu.jsp" %>
+        <%@ include file="/WEB-INF/views/includes/topMenu/scoreboardSubmenu.jsp" %>
     </table>
 </div>
 
 <div id="main-quest-submenu" style="display: none;">
     <table class="width100 text-center mobile-submenu">
-        <%@ include file="/WEB-INF/views/fragment/topMenu/questSubmenu.jsp" %>
+        <%@ include file="/WEB-INF/views/includes/topMenu/questSubmenu.jsp" %>
     </table>
 </div>
 
 <div id="main-misc-submenu" style="display: none;">
     <table class="width100 text-center mobile-submenu">
         <tr>
-            <td><c:if test="${moduleSettings.modulePoll}">
-                <t:topSubmenuLink labelCode="nav.polls" url="/polls" icon="glyphicon glyphicon-bullhorn"/>
-            </c:if></td>
-            <td><c:if test="${moduleSettings.moduleRSS}">
-                <t:topSubmenuLink labelCode="nav.rss" url="/rss" icon="fa fa-rss"></t:topSubmenuLink>
-            </c:if></td>
+            <td>
+                <c:if test="${util:pollModuleEnabled(contest)}">
+                    <t:topSubmenuLink labelCode="nav.polls" url="/polls" icon="glyphicon glyphicon-bullhorn"/>
+                </c:if>
+            </td>
+            <td>
+                <c:if test="${util:rssModuleEnabled(contest)}">
+                    <t:topSubmenuLink labelCode="nav.rss" url="/rss" icon="fa fa-rss"></t:topSubmenuLink>
+                </c:if>
+            </td>
         </tr>
         <tr>
             <td><t:topSubmenuLink labelCode="nav.settings" url="/settings" icon="glyphicon glyphicon-cog"/></td>
@@ -121,5 +121,3 @@
         });
     });
 </script>
-
-<%@ include file="/WEB-INF/views/fragment/headerAppendix.jsp" %>

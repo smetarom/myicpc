@@ -1,24 +1,12 @@
-//#insight {
-//  .navbar {
-//    border-radius: 0;
-//    top: -10px;
-//    border-top: none;
-//    border-right: none;
-//    border-left: none;
-//    min-height: 34px;
-//    z-index: 1;
-//
-//  }
-//
-//  .navbar-default {
-//    background-color: transparent;
-//
-//  }
-//
-//  .navbar-nav {
-//    & > li > a {
-//      padding-bottom: 7px;
-//      padding-top: 7px;
-//    }
-//  }
-//}
+.panel-insight {
+  float: left;
+  margin: 10px;
+  min-width: 300px;
+}
+
+@media ( max-width: 360px) {
+  .panel-insight {
+    min-width: 280px;
+    width: 100%;
+  }
+}
