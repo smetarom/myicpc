@@ -1,4 +1,4 @@
-package com.myicpc.controller.admin.com.myicpc.controller;
+package com.myicpc.controller.schedule;
 
 import com.myicpc.commons.utils.CookieUtils;
 import com.myicpc.controller.GeneralController;

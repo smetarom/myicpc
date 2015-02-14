@@ -6,57 +6,60 @@
     <div class="container-fluid">
         <div class="navbar-header">
             <div class="navbar-brand">
-                <a href="<spring:url value="${contestURL}" />" id="homepage-link"><span class="fa fa-home"></span> <spring:message
-                        code="app.name"/></a>
+                <a href="<spring:url value="${contestURL}" />" id="homepage-link">
+                    <t:faIcon icon="home" /> <spring:message code="app.name"/>
+                </a>
             </div>
         </div>
 
         <ul id="top-sub-menu" class="nav navbar-nav">
             <c:if test="${util:scheduleModuleEnabled(contest)}">
                 <li class="${sideMenuActive eq 'schedule' ? 'active' : '' } dropdown">
-                    <t:emptyLink isDropdown="true" styleClass="dropdown-toggle"><span class="text"><span
-                            class="glyphicon glyphicon-calendar"></span> <spring:message code="nav.schedule"/></span> <b
-                            class="caret"></b></t:emptyLink>
+                    <t:emptyLink isDropdown="true" styleClass="dropdown-toggle">
+                        <t:glyphIcon icon="calendar" /> <span class="text"><spring:message code="nav.schedule"/></span> <b class="caret"></b>
+                    </t:emptyLink>
                     <table class="dropdown-menu main-dropdown-submenu">
                         <%@ include file="/WEB-INF/views/includes/topMenu/scheduleSubmenu.jsp" %>
                     </table>
                 </li>
             </c:if>
             <li id="main-menu-scoreboard" class="${sideMenuActive eq 'scoreboard' ? 'active' : '' } dropdown">
-                <t:emptyLink isDropdown="true" styleClass="dropdown-toggle"><span class="glyphicon glyphicon-list"></span>
-                    <span class="text"><spring:message code="nav.scoreboard"/></span> <b class="caret"></b></t:emptyLink>
+                <t:emptyLink isDropdown="true" styleClass="dropdown-toggle">
+                    <t:glyphIcon icon="list" /> <span class="text"><spring:message code="nav.scoreboard"/></span> <b class="caret"></b>
+                </t:emptyLink>
                 <table class="dropdown-menu main-dropdown-submenu">
                     <%@ include file="/WEB-INF/views/includes/topMenu/scoreboardSubmenu.jsp" %>
                 </table>
             </li>
             <c:if test="${util:questModuleEnabled(contest)}">
                 <li id="main-menu-quest" class="${sideMenuActive eq 'quest' ? 'active' : '' } dropdown">
-                    <t:emptyLink isDropdown="true" styleClass="dropdown-toggle"><span
-                            class="glyphicon glyphicon-screenshot"></span> <span class="text"><spring:message
-                            code="nav.quest"/></span> <b class="caret"></b></t:emptyLink>
+                    <t:emptyLink isDropdown="true" styleClass="dropdown-toggle">
+                        <t:glyphIcon icon="screenshot" /> <span class="text"><spring:message code="nav.quest"/></span> <b class="caret"></b>
+                    </t:emptyLink>
                     <table class="dropdown-menu main-dropdown-submenu">
                         <%@ include file="/WEB-INF/views/includes/topMenu/questSubmenu.jsp" %>
                     </table>
                 </li>
             </c:if>
             <c:if test="${util:galleryModuleEnabled(contest)}">
-                <li id="main-menu-gallery" class="${sideMenuActive eq 'gallery' ? 'active' : '' }"><a
-                        href="<spring:url value="/gallery" />"><span class="glyphicon glyphicon-camera"></span> <span
-                        class="text"
-                        ><spring:message code="nav.gallery"/></span></a>
+                <li id="main-menu-gallery" class="${sideMenuActive eq 'gallery' ? 'active' : '' }">
+                    <a href="<spring:url value="${contestURL}/gallery" />">
+                        <t:glyphIcon icon="camera" /> <span class="text"><spring:message code="nav.gallery"/></span>
+                    </a>
                 </li>
             </c:if>
             <c:if test="${util:pollModuleEnabled(contest)}">
-                <li class="${sideMenuActive eq 'poll' ? 'active' : '' }"><a
-                        href="<spring:url value="${contestURL}/polls" />"><span
-                        class="glyphicon glyphicon-bullhorn"></span> <span class="text"><spring:message
-                        code="nav.polls"
-                        /></span></a>
+                <li class="${sideMenuActive eq 'poll' ? 'active' : '' }">
+                    <a href="<spring:url value="${contestURL}/polls" />">
+                        <t:glyphIcon icon="bullhorn" /> <span class="text"><spring:message code="nav.polls"/></span>
+                    </a>
                 </li>
             </c:if>
             <c:if test="${util:rssModuleEnabled(contest)}">
-                <li class="${sideMenuActive eq 'rss' ? 'active' : '' }"><a href="<spring:url value="${contestURL}/rss" />"><span
-                        class="fa fa-rss"></span> <span class="text"><spring:message code="nav.rss"/></span></a>
+                <li class="${sideMenuActive eq 'rss' ? 'active' : '' }">
+                    <a href="<spring:url value="${contestURL}/rss" />">
+                        <t:faIcon icon="rss" /> <span class="text"><spring:message code="nav.rss"/></span>
+                    </a>
                 </li>
             </c:if>
         </ul>
@@ -76,9 +79,9 @@
         </p>
         <ul class="nav navbar-nav navbar-right">
             <li class="hidden">
-                <t:emptyLink id="scorebord-notification-btn"><span class="glyphicon glyphicon-bell"></span> <span
-                        class="hidden-xs hidden-sm text"><spring:message
-                        code="scoreboard.notifications"/></span></t:emptyLink>
+                <t:emptyLink id="scorebord-notification-btn">
+                    <t:glyphIcon icon="bell" /> <span class="hidden-xs hidden-sm text"><spring:message code="scoreboard.notifications"/></span>
+                </t:emptyLink>
             </li>
         </ul>
     </div>

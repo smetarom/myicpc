@@ -1,4 +1,4 @@
-package com.myicpc.controller.admin;
+package com.myicpc.controller.schedule.admin;
 
 import com.myicpc.controller.GeneralAdminController;
 import com.myicpc.model.contest.Contest;

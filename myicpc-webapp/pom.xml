@@ -38,6 +38,12 @@
 
         <dependency>
             <groupId>com.myicpc</groupId>
+            <artifactId>myicpc-controller-social</artifactId>
+            <version>${myicpc-controller-social.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.myicpc</groupId>
             <artifactId>myicpc-pubsub</artifactId>
             <version>${myicpc-pubsub.version}</version>
         </dependency>
