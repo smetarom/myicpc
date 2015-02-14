@@ -1,19 +1,18 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
 
 <t:template>
-
     <jsp:attribute name="title">
-        ${event.name}
+        ${pageHeadline}
     </jsp:attribute>
 
     <jsp:attribute name="headline">
-        ${event.name}
+        ${pageHeadline}
     </jsp:attribute>
 
     <jsp:body>
-        <div class="container">
-            <%@ include file="/WEB-INF/views/schedule/fragment/eventDetail.jsp"%>
-        </div>
+        <jsp:include page="/WEB-INF/views/schedule/fragment/scheduleTable.jsp">
+            <jsp:param name="isMobile" value="true" />
+        </jsp:include>
     </jsp:body>
 
 </t:template>

@@ -1,28 +1,17 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp"%>
 
 <t:template>
+    <jsp:attribute name="title">
+        <spring:message code="venues" />
+    </jsp:attribute>
+
+    <jsp:attribute name="headline">
+        <spring:message code="venues" />
+    </jsp:attribute>
+
 	<jsp:body>
-        <div class="page-header">
-			<h2>
-				<spring:message code="venues" />
-			</h2>	
-		</div>
-		<br />
 		<div class="col-sm-4 col-md-3">
-			<table class="table table-striped">
-				<thead>
-					<tr>
-						<th><spring:message code="venue.list" /></th>
-					</tr>
-				</thead>
-				<tbody>
-					<c:forEach var="venue" items="${venues}">
-							<tr>
-								<td><a href="#${venue.code}" onclick="loadEventContent(${venue.id})">${venue.name}</a></td>
-							</tr>
-					</c:forEach>
-				</tbody>
-			</table>
+            <jsp:include page="/WEB-INF/views/schedule/fragment/venuesTable.jsp" />
 		</div>
 		<div class="col-sm-8 col-md-9" id="venueContainer">
 			<div class="no-items-available">
