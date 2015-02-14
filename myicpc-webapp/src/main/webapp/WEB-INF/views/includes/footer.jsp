@@ -5,18 +5,19 @@
         <t:faIcon icon="envelope-o" /> <spring:message code="feedback"/>
     </button>
 
-    <div id="share-container" style="margin-top: 5px;">
-        <span class="hidden-xs" style="display: inline-block !important;"><spring:message code="footer.follow"/></span>
-        <a href="http://www.twitter.com/icpcnews" title="http://www.twitter.com/icpcnews"
-           target="_blank"
-                > <span class="fa fa-twitter-square"></span>
-        </a> &middot; <a href="http://www.facebook.com/icpcnews" title="http://www.facebook.com/icpcnews"
-                         target="_blank"> <span class="fa fa-facebook-square"></span>
-    </a> &middot; <a href="http://www.youtube.com/user/ICPCNews" title="http://www.youtube.com/user/ICPCNews"
-                     target="_blank"> <span class="fa fa-youtube"></span>
-    </a> &middot; <a href="http://www.instagram.com/icpcnews" title="http://www.instagram.com/icpcnews" target="_blank">
-        <span class="fa fa-instagram"></span>
-    </a>
+    <div id="share-container">
+        <a href="http://www.twitter.com/icpcnews" title="http://www.twitter.com/icpcnews" target="_blank">
+            <t:faIcon icon="twitter-square" />
+        </a> &middot;
+        <a href="http://www.facebook.com/icpcnews" title="http://www.facebook.com/icpcnews" target="_blank">
+            <t:faIcon icon="facebook-square" />
+        </a> &middot;
+        <a href="http://www.youtube.com/user/ICPCNews" title="http://www.youtube.com/user/ICPCNews" target="_blank">
+            <t:faIcon icon="youtube" />
+        </a> &middot;
+        <a href="http://www.instagram.com/icpcnews" title="http://www.instagram.com/icpcnews" target="_blank">
+            <t:faIcon icon="instagram" />
+        </a>
     </div>
 </footer>
 

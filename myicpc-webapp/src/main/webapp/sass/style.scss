@@ -5,6 +5,10 @@
 @import 'insight';
 @import 'teamDetail';
 
+html, body {
+  height: 100%;
+}
+
 body, .modal {
   padding-top: 50px;
 
@@ -89,6 +93,51 @@ td.fit-content {
 // AngularJS ngCloak feature
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
+}
+
+#body {
+  position: relative;
+  display: block;
+  margin: auto;
+  padding-bottom: 85px;
+}
+
+#bodyContainer {
+  min-height: 100%;
+  position: relative;
+}
+
+#footer {
+  background-color: #f2f2f2;
+  border-top: 1px solid #e2e2e2;
+  padding: 10px 15px;
+  margin-top: 20px;
+  width: 100%;
+  font-size: 1em;
+  position: absolute;
+  bottom: 0;
+
+  #share-container {
+    color: gray;
+    text-align: center;
+
+    .fa {
+      font-size: 1.5em;
+    }
+
+    a {
+      color: gray;
+      text-decoration: none;
+
+      &:hover {
+        color: black;
+      }
+    }
+  }
+}
+
+.mobile #footer #share-container {
+  text-align: left;
 }
 
 #top-menu-nav, #mobile-top-menu {
@@ -208,13 +257,12 @@ td.fit-content {
 .top-submenu {
   &.navbar {
     border-radius: 0;
-    top: -10px;
     border-top: none;
     border-right: none;
     border-left: none;
     min-height: 40px;
     z-index: 1;
-
+    margin-bottom: 0;
   }
 
   &.navbar-default {
@@ -239,4 +287,39 @@ td.fit-content {
   .container-fluid {
     padding: 0;
   }
+
+  &.mobile {
+
+    .navbar-nav {
+      margin: 0;
+
+      &>li {
+        float: left;
+      }
+      .open .dropdown-menu {
+        position: static;
+        top: 100%;
+        left: 0;
+        z-index: 1000;
+        float: left;
+        min-width: 160px;
+        list-style: none;
+        border: 1px solid #ccc;
+        border: 1px solid rgba(0,0,0,.15);
+        border-radius: 0;
+      }
+    }
+
+  }
+}
+
+.second-level-submenu {
+  position: relative;
+  top: -10px;
+}
+
+.responsive-second-level-submenu {
+  width: 100%;
+  overflow: visible;
+  overflow-x: auto;
 }

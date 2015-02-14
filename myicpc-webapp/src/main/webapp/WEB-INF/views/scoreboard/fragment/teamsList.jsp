@@ -16,7 +16,7 @@
             <c:forEach var="teamInfo" items="${teamInfos}">
                 <tr>
                     <td>
-                        <a href="<spring:url value="/team/${teamInfo.externalId}" />">
+                        <a href="<spring:url value="${contestURL}/team/${teamInfo.externalId}" />">
                             <c:out value="${teamInfo.contestTeamName}" />
                         </a>
                     </td>
@@ -24,7 +24,7 @@
                         <td class="hidden-xs"><c:out value="${teamInfo.university.name}" /></td>
                     </c:if>
                     <c:if test="${contest.contestSettings.showCountry}">
-                        <td class="hidden-xs"><c:out value="${teamInfo.university.country}" /></td>
+                        <td class="hidden-xs nowrap"><c:out value="${teamInfo.university.country}" /></td>
                     </c:if>
                 </tr>
             </c:forEach>
