@@ -25,7 +25,7 @@
 			</table>
 		</div>
 		<div class="col-sm-8 col-md-9" id="venueContainer">
-			<div class="noSelectedBig">
+			<div class="no-items-available">
 				<spring:message code="venue.noSelected" />
 			</div>
 		</div>

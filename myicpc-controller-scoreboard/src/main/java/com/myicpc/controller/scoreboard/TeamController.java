@@ -20,6 +20,7 @@ import com.myicpc.service.scoreboard.insight.ProblemInsightService;
 import com.myicpc.service.scoreboard.team.TeamService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mobile.device.site.SitePreference;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -59,6 +61,26 @@ public class TeamController extends GeneralController {
 
     @Autowired
     private ContestParticipantRepository contestParticipantRepository;
+
+    @RequestMapping(value = "/{contestCode}/teams", method = RequestMethod.GET)
+    public String teams(@PathVariable String contestCode, @RequestParam(required = false, defaultValue = "grid") String view,
+                        Model model, SitePreference sitePreference) {
+        Contest contest = getContest(contestCode, model);
+
+        List<TeamInfo> teamInfos = teamService.getTeamInfosByContest(contest);
+
+        model.addAttribute("teamInfos", teamInfos);
+        model.addAttribute("sideMenuActive", "scoreboard");
+
+        if (sitePreference.isMobile()) {
+            model.addAttribute("view", "list");
+        } else {
+            model.addAttribute("showSwitch", true);
+            model.addAttribute("view", view);
+        }
+
+        return "scoreboard/teams";
+    }
 
     @RequestMapping(value = { "/{contestCode}/team/{teamId}", "/{contestCode}/team/{teamId}/contest" }, method = RequestMethod.GET)
     public String teamContest(@PathVariable String contestCode, @PathVariable Long teamId, Model model) {

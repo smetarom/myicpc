@@ -6,7 +6,7 @@
 
         <div id="mainScoreboard" class="table-responsive desktop" ng-app ng-controller="CustomScoreboardController">
 
-            <div class="noSelectedBig" ng-hide="teams.length">
+            <div class="no-items-available" ng-hide="teams.length">
                 <spring:message code="nav.scoreboard.empty"/>
             </div>
 

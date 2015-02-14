@@ -95,6 +95,20 @@ public class TeamService {
     private TeamRankHistoryRepository teamRankHistoryRepository;
 
     /**
+     * Get team infos ordered by contest preferences (by team name or university name)
+     *
+     * @param contest
+     * @return
+     */
+    public List<TeamInfo> getTeamInfosByContest(Contest contest) {
+        if (contest.getContestSettings().isShowTeamNames()) {
+            return teamInfoRepository.findByContestOrderByNameAsc(contest);
+        } else {
+            return teamInfoRepository.findByContestOrderByUniversityNameAsc(contest);
+        }
+    }
+
+    /**
      * Synchronize team and university info via web services
      *
      * @throws WebServiceException communication with WS failed

@@ -41,7 +41,7 @@
             <t:emptyLink id="editScheduleRolesBtn" styleClass="alert-link btn btn-primary pull-right"><spring:message code="schedule.editMySchedule.link" /></t:emptyLink>
             <br class="clear" />
             <div id="eventContainer">
-                <div class="noSelectedBig">
+                <div class="no-items-available">
                     <spring:message code="schedule.noSelected" />
                 </div>
             </div>

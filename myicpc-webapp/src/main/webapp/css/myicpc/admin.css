@@ -40,9 +40,7 @@ h1 {
     margin-bottom: 0;
 }
 
-hr.divider {
-    margin: 5px 0;
-}
+
 
 .breadcrumb {
     margin-bottom: 5px;
@@ -125,23 +123,6 @@ dd {
     text-align: center;
 }
 
-.btn-hover {
-    font-weight: normal;
-    color: #333333;
-    cursor: pointer;
-    background-color: inherit;
-    border-color: transparent;
-    background-image: none;
-    box-shadow: none;
-}
-
-.btn-hover-alt {
-    font-weight: normal;
-    color: #ffffff;
-    cursor: pointer;
-    background-color: inherit;
-    border-color: transparent;
-}
 
 /*** POLLS ***/
 .choice-box {

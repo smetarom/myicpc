@@ -33,7 +33,7 @@
     </div>
 
     <div id="moduleDescriptionWrapper" class="col-sm-6">
-        <p class="noSelectedBig"><spring:message code="moduleAdmin.hint" /></p>
+        <p class="no-items-available"><spring:message code="moduleAdmin.hint" /></p>
         <p id="mapModule" style="display: none;"><spring:message code="module.map.description" /></p>
         <p id="codeInsightModule" style="display: none;"><spring:message code="module.codeInsight.description" /></p>
         <p id="scheduleModule" style="display: none;"><spring:message code="module.schedule.description" /></p>
