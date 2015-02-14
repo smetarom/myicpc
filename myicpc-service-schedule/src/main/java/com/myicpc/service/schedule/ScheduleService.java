@@ -1,5 +1,6 @@
 package com.myicpc.service.schedule;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.schedule.Event;
@@ -7,7 +8,9 @@ import com.myicpc.model.schedule.EventRole;
 import com.myicpc.model.schedule.Location;
 import com.myicpc.model.schedule.ScheduleDay;
 import com.myicpc.repository.schedule.EventRepository;
+import com.myicpc.repository.schedule.EventRoleRepository;
 import com.myicpc.service.EntityManagerService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +35,9 @@ import java.util.Map;
 public class ScheduleService extends EntityManagerService {
     @Autowired
     private EventRepository eventRepository;
+
+    @Autowired
+    private EventRoleRepository eventRoleRepository;
 
     /**
      * Returns all events which ends after the given date
@@ -171,5 +177,41 @@ public class ScheduleService extends EntityManagerService {
         Collections.sort(days);
 
         return days;
+    }
+
+    /**
+     * Returns all schedule roles, separated by comma
+     *
+     * @return all schedule roles IDs, separated by comma
+     */
+    public String getAllScheduleRoles(final Contest contest) {
+        List<EventRole> roles = eventRoleRepository.findByContest(contest);
+        if (roles == null || roles.isEmpty()) {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (EventRole eventRole : roles) {
+            sb.append(eventRole.getId()).append(',');
+        }
+        return sb.substring(0, sb.length() - 1);
+    }
+
+    /**
+     * Mapping between {@link com.myicpc.model.schedule.EventRole#id} and if the role is active for the current user
+     *
+     * @param scheduleRoles list of role ids separated by comma
+     * @return
+     */
+    public Map<Long, Boolean> getActiveEventRoleMapping(String scheduleRoles) {
+        Map<Long, Boolean> activeRoles = new HashMap<Long, Boolean>();
+
+        if (!StringUtils.isEmpty(scheduleRoles)) {
+            String[] ss = scheduleRoles.split(",");
+            for (int i = 0; i < ss.length; i++) {
+                activeRoles.put(Long.parseLong(ss[i]), true);
+            }
+        }
+
+        return activeRoles;
     }
 }

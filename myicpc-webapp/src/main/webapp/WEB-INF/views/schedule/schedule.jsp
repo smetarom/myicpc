@@ -38,6 +38,7 @@
                 }
             });
         </script>
+        <%@ include file="/WEB-INF/views/schedule/fragment/scheduleRolesDialog.jsp"%>
 
     </jsp:body>
 
