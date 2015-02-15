@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.myicpc.commons.utils.TimeUtils;
 import com.myicpc.commons.utils.WikiUtils;
 import com.myicpc.enums.GalleryMediaType;
+import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
@@ -17,7 +18,6 @@ import com.myicpc.model.schedule.Event;
 import com.myicpc.model.social.AdminNotification;
 import com.myicpc.model.social.GalleryMedia;
 import com.myicpc.model.social.Notification;
-import com.myicpc.model.social.Notification.NotificationType;
 import com.myicpc.model.social.TwitterMessage;
 import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.repository.social.NotificationRepository;
@@ -32,6 +32,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import twitter4j.Status;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -40,6 +41,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class provides services to manage {@link Notification}
@@ -50,7 +53,7 @@ import java.util.Locale;
 @Transactional
 public class NotificationServiceImpl implements NotificationService {
 
-    private List<NotificationType> hiddenNotificationTypesOnTimeline = new ArrayList<Notification.NotificationType>();
+    private List<NotificationType> hiddenNotificationTypesOnTimeline = new ArrayList<>();
 
     @Autowired
     private NotificationRepository notificationRepository;
@@ -83,7 +86,7 @@ public class NotificationServiceImpl implements NotificationService {
         notificationObject.addProperty("type", notification.getNotificationType().getCode());
         notificationObject.addProperty("title", notification.getTitle());
         notificationObject.addProperty("body", notification.getBody());
-        notificationObject.addProperty("user", notification.getDisplayName());
+        notificationObject.addProperty("user", notification.getAuthorName());
         notificationObject.addProperty("url", notification.getUrl());
         notificationObject.addProperty("entityId", notification.getEntityId());
         notificationObject.addProperty("code", notification.getCode());
@@ -164,6 +167,31 @@ public class NotificationServiceImpl implements NotificationService {
         return notificationRepository.save(builder.build());
     }
 
+    @Override
+    public Notification createNotification(final Status twitterStatus, final Contest contest) {
+        NotificationBuilder builder = new NotificationBuilder();
+        builder.setTitle(twitterStatus.getUser().getScreenName());
+        builder.setBody(parseTweetText(twitterStatus));
+        builder.setHashTags(getHashtagsFromTweet(twitterStatus.getText()));
+        builder.setNotificationType(NotificationType.TWITTER);
+        builder.setExternalId(String.valueOf(twitterStatus.getId()));
+        if (twitterStatus.getRetweetedStatus() != null) {
+            builder.setRetweetedId(twitterStatus.getRetweetedStatus().getId());
+        }
+        builder.setAuthorName(twitterStatus.getUser().getName());
+        builder.setProfilePictureUrl(twitterStatus.getUser().getProfileImageURL());
+        builder.setTimestamp(twitterStatus.getCreatedAt());
+        builder.setContest(contest);
+
+        if (!twitterStatus.isRetweet()) {
+            if (twitterStatus.getMediaEntities() != null && twitterStatus.getMediaEntities().length > 0) {
+                builder.setImageUrl(twitterStatus.getMediaEntities()[0].getMediaURL());
+            }
+        }
+
+        return notificationRepository.save(builder.build());
+    }
+
     public Notification createNotification(final TwitterMessage twitterMessage) {
         NotificationBuilder builder = new NotificationBuilder(twitterMessage);
         builder.setTitle(twitterMessage.getUsername());
@@ -176,7 +204,7 @@ public class NotificationServiceImpl implements NotificationService {
         }
         codeObject.addProperty("fullname", twitterMessage.getUserFullName());
         builder.setCode(codeObject.toString());
-        builder.setDisplayName(twitterMessage.getUserFullName());
+        builder.setAuthorName(twitterMessage.getUserFullName());
         builder.setTimestamp(twitterMessage.getTimestamp());
         builder.setProfilePictureUrl(twitterMessage.getProfileImageUrl());
         builder.setOffensive();
@@ -215,7 +243,7 @@ public class NotificationServiceImpl implements NotificationService {
         builder.setTimestamp(galleryMedia.getTimestamp() == null ? new Date() : galleryMedia.getTimestamp());
         builder.setUrl(galleryMedia.getMediaURL());
         builder.setNotificationType(GalleryMediaType.toNotificationType(galleryMedia.getGalleryMediaType()));
-        builder.setDisplayName(galleryMedia.getDisplayName());
+        builder.setAuthorName(galleryMedia.getDisplayName());
         builder.setProfilePictureUrl(galleryMedia.getProfilePhotoURL());
         builder.setCode("{\"thumbnailUrl\": \"" + galleryMedia.getThumbnailURL() + "\", \"additionalUrl\": \"" + galleryMedia.getAdditionalURL()
                 + "\", \"mediaId\": \"" + galleryMedia.getMediaId() + "\"}");
@@ -249,7 +277,6 @@ public class NotificationServiceImpl implements NotificationService {
         notification.setTitle(submission.getParticipant().getContestParticipant().getTwitterUsername());
         notification.setBody(submission.getEscapedText());
         notification.setNotificationType(submission.getSubmissionType().getNotificationType());
-        notification.setNotificationCategory(Notification.NotificationCategory.QUEST);
         notification.setUrl(submission.getMediaURL());
         notification.setProfilePictureUrl(submission.getParticipant().getContestParticipant().getProfilePictureUrl());
         notification.setTimestamp(new Date());
@@ -272,7 +299,6 @@ public class NotificationServiceImpl implements NotificationService {
         notification.setTitle(challenge.getName());
         notification.setBody(challenge.getNotificationDescription());
         notification.setNotificationType(NotificationType.QUEST_CHALLENGE);
-        notification.setNotificationCategory(Notification.NotificationCategory.QUEST);
         notification.setEntityId(challenge.getId());
         notification.setUrl(challenge.getImageURL());
         notification.setTimestamp(new Date());
@@ -413,11 +439,14 @@ public class NotificationServiceImpl implements NotificationService {
         DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT, Locale.ENGLISH);
         JsonObject notificationObject = new JsonObject();
         notificationObject.addProperty("id", notification.getId());
+        notificationObject.addProperty("externalId", notification.getExternalId());
         notificationObject.addProperty("type", notification.getNotificationType().getCode());
         notificationObject.addProperty("title", notification.getTitle());
         notificationObject.addProperty("body", notification.getBody());
-        notificationObject.addProperty("user", notification.getDisplayName());
+        notificationObject.addProperty("authorName", notification.getAuthorName());
         notificationObject.addProperty("url", notification.getUrl());
+        notificationObject.addProperty("imageUrl", notification.getImageUrl());
+        notificationObject.addProperty("videoUrl", notification.getVideoUrl());
         notificationObject.addProperty("entityId", notification.getEntityId());
         notificationObject.addProperty("code", notification.getCode());
         Date timestamp = TimeUtils.convertUTCDateToLocal(notification.getTimestamp(), notification.getContest().getContestSettings().getTimeDifference());
@@ -480,6 +509,44 @@ public class NotificationServiceImpl implements NotificationService {
         // pollObject.addProperty("choices", poll.getChoices());
 
         return pollObject;
+    }
+
+    /**
+     * Finds Twitter hashtags, usernames, and URLs in the tweet
+     *
+     * @param status
+     *            Twitter tweet
+     * @return tweet message enhanced by HTML tags
+     */
+    public static String parseTweetText(final Status status) {
+        String text = null;
+        if (status.isRetweet() && status.getRetweetedStatus() != null) {
+            text = "RT @" + status.getRetweetedStatus().getUser().getScreenName() + ": " + status.getRetweetedStatus().getText();
+        } else {
+            text = status.getText();
+        }
+        text = text.replaceAll("((https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|])", "<a href='$1'>$1</a>");
+        text = text.replaceAll("@([\\p{L}+0-9-_]+)", "<a href='http://twitter.com/$1'>@$1</a>");
+        text = text.replaceAll("#([\\p{L}+0-9-_]+)", "<a href='https://twitter.com/search/?src=hash&amp;q=%23$1'>#$1</a>");
+        text = text.replaceAll("([\\ud800-\\udbff\\udc00-\\udfff])", "");
+        return text;
+    }
+
+    /**
+     * Gets all hashtags from the tweet body separated by |
+     *
+     * @param tweet
+     *            tweet body
+     * @return hashtags separated by |
+     */
+    public static String getHashtagsFromTweet(final String tweet) {
+        Pattern pattern = Pattern.compile("(#[\\p{L}+0-9-_]+)");
+        Matcher matcher = pattern.matcher(tweet);
+        StringBuilder hashtags = new StringBuilder("|");
+        while (matcher.find()) {
+            hashtags.append(matcher.group().substring(1)).append("|");
+        }
+        return hashtags.toString();
     }
 
 

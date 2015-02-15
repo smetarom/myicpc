@@ -16,12 +16,15 @@ Timeline = {
   supportedNotificationTypes: [],
 
   init: () ->
-    this.supportedNotificationTypes = ["submissionSuccess"]
+    this.supportedNotificationTypes = ["submissionSuccess", "twitter"]
 
     timelineScoreboardTemplate = compileHandlebarsTemplate("timeline-SCOREBOARD_SUCCESS")
+    timelineTwitterTemplate = compileHandlebarsTemplate("timeline-TWITTER")
 
     this.handlerMapping["submissionSuccess"] = (notification) ->
       timelineScoreboardTemplate(notification)
+    this.handlerMapping["twitter"] = (notification) ->
+      timelineTwitterTemplate(notification)
 
 
   updateMainFeed: (data) ->

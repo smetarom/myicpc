@@ -20,7 +20,7 @@ public class SubmissionTile extends NotificationTile {
 
     @Override
     protected void renderAvatar(JspWriter out) throws IOException, JspException {
-        renderAvatarImage(out, "/images/logos/icpc_analytics_square_logo_small.png", "ICPC analytics", 50, 50);
+        renderAvatarImage(out, "/images/logos/icpc_analytics_square_logo_small.png", "ICPC analytics");
     }
 
     @Override

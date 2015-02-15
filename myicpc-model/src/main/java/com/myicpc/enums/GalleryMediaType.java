@@ -49,14 +49,14 @@ public enum GalleryMediaType {
     }
 
     /**
-     * Translate {@link GalleryMediaType} into {@link com.myicpc.model.social.Notification.NotificationType}
+     * Translate {@link GalleryMediaType} into {@link com.myicpc.enums.NotificationType}
      *
      * @param galleryMediaType gallery media type
      * @return notification type
      */
-    public static Notification.NotificationType toNotificationType(GalleryMediaType galleryMediaType) {
+    public static NotificationType toNotificationType(GalleryMediaType galleryMediaType) {
         try {
-            return Notification.NotificationType.valueOf(galleryMediaType.toString());
+            return NotificationType.valueOf(galleryMediaType.toString());
         } catch (IllegalArgumentException | NullPointerException ex) {
             return null;
         }

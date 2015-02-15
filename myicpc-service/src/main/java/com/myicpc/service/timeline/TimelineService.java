@@ -1,9 +1,11 @@
 package com.myicpc.service.timeline;
 
 import com.google.common.collect.Lists;
+import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.Notification;
 import com.myicpc.repository.social.NotificationRepository;
+import com.myicpc.service.utils.lists.NotificationList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,10 +25,7 @@ public class TimelineService {
     /**
      * Notification types presented on the timeline
      */
-    public static final List<Notification.NotificationType> TIMELINE_TYPES = Lists.newArrayList(
-            Notification.NotificationType.SCOREBOARD_SUCCESS,
-            Notification.NotificationType.ANALYST_MESSAGE
-    );
+    public static final List<NotificationType> TIMELINE_TYPES = NotificationList.newList().addScoreboardSuccess().addAnalystMessage().addTwitter();
 
     @Autowired
     private NotificationRepository notificationRepository;

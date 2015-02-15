@@ -19,6 +19,13 @@
             <artifactId>myicpc-service</artifactId>
             <version>${myicpc-service.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.twitter4j</groupId>
+            <artifactId>twitter4j-stream</artifactId>
+            <version>4.0.2</version>
+        </dependency>
+
     </dependencies>
 
 

@@ -1,6 +1,6 @@
 package com.myicpc.service.utils.lists;
 
-import com.myicpc.model.social.Notification.NotificationType;
+import com.myicpc.enums.NotificationType;
 
 import java.util.ArrayList;
 

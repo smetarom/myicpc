@@ -40,6 +40,50 @@ hr.divider {
 .google-map-frame {
   border: none; }
 
+#timeline-notification {
+  display: block;
+  position: fixed;
+  top: 50px;
+  width: 100%;
+  text-align: center;
+  padding: 8px 0;
+  z-index: 999;
+  color: #8a6d3b;
+  font-weight: bold; }
+
+.mobile #timeline-notification {
+  top: 78px; }
+
+.timelineTile {
+  padding: 9px 12px;
+  border-bottom: 1px solid #e1e8ed; }
+  .timelineTile .media-heading a {
+    color: black; }
+  .timelineTile .media-body {
+    padding-left: 10px; }
+    .timelineTile .media-body img {
+      margin-bottom: 10px; }
+  .timelineTile .footer {
+    font-size: 0.9em;
+    color: gray; }
+    .timelineTile .footer a {
+      cursor: pointer; }
+
+#timeline .timeline-loading {
+  text-align: center;
+  font-size: 1.2em;
+  margin: 10px 0; }
+
+.timeline-mobile {
+  background-color: #e9eaed; }
+  .timeline-mobile .timelineTile {
+    background-color: white;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+    margin: 7px 7px;
+    border-radius: 5px; }
+
 .pin a {
   color: black; }
 

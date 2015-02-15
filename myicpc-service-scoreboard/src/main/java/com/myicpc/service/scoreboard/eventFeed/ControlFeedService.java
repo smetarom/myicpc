@@ -2,6 +2,7 @@ package com.myicpc.service.scoreboard.eventFeed;
 
 import com.google.common.collect.Maps;
 import com.myicpc.commons.utils.MessageUtils;
+import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.Notification;
 import com.myicpc.repository.editActivity.EditActivityRepository;
@@ -78,7 +79,7 @@ public class ControlFeedService {
             teamRepository.deleteByContest(contest);
             regionRepository.deleteByContest(contest);
             judgementRepository.deleteByContest(contest);
-            List<Notification.NotificationType> notificationTypes = NotificationList.newList().addScoreboardSuccess().addScoreboardSubmitted().addScoreboardFailed()
+            List<NotificationType> notificationTypes = NotificationList.newList().addScoreboardSuccess().addScoreboardSubmitted().addScoreboardFailed()
                     .addAnalystMessage();
             notificationRepository.deleteScoreboardNotificationsByContest(contest, notificationTypes);
         } catch (Throwable ex) {

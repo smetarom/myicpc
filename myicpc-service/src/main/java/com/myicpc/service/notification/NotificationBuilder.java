@@ -1,5 +1,7 @@
 package com.myicpc.service.notification;
 
+import com.google.common.base.Joiner;
+import com.myicpc.enums.NotificationType;
 import com.myicpc.model.EntityObject;
 import com.myicpc.model.IdGeneratedContestObject;
 import com.myicpc.model.contest.Contest;
@@ -27,7 +29,7 @@ public class NotificationBuilder {
         notification.setContest(contestObject.getContest());
     }
 
-    public NotificationBuilder(final IdGeneratedContestObject contestObject, final Notification.NotificationType notificationType,
+    public NotificationBuilder(final IdGeneratedContestObject contestObject, final NotificationType notificationType,
                                final NotificationRepository notificationRepository) {
         List<Notification> notifications = notificationRepository.findByContestAndEntityIdAndNotificationType(contestObject.getContest(),
                 contestObject.getId(), notificationType);
@@ -53,12 +55,24 @@ public class NotificationBuilder {
         notification.setBody(body);
     }
 
-    public void setNotificationType(final Notification.NotificationType notificationType) {
+    public void setNotificationType(final NotificationType notificationType) {
         notification.setNotificationType(notificationType);
     }
 
     public void setUrl(final String url) {
         notification.setUrl(url);
+    }
+
+    public void setImageUrl(String imageUrl) {
+        notification.setImageUrl(imageUrl);
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        notification.setVideoUrl(videoUrl);
+    }
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        notification.setThumbnailUrl(thumbnailUrl);
     }
 
     public void setTimestamp(final Date timestamp) {
@@ -69,8 +83,8 @@ public class NotificationBuilder {
         notification.setCode(code);
     }
 
-    public void setDisplayName(String displayName) {
-        notification.setDisplayName(displayName);
+    public void setAuthorName(String authorName) {
+        notification.setAuthorName(authorName);
     }
 
     public void setProfilePictureUrl(String profilePictureUrl) {
@@ -79,6 +93,27 @@ public class NotificationBuilder {
 
     public void setContest(final Contest contest) {
         notification.setContest(contest);
+    }
+
+    public void setTeamId(Long teamId) {
+        notification.setTeamId(teamId);
+    }
+
+    public void setHashTags(String hashtags) {
+        notification.setHashtags(hashtags);
+    }
+
+    public void setHashtags(String... hashtags) {
+        String hashtag = "|" + Joiner.on("|").join(hashtags) + "|";
+        notification.setHashtags(hashtag);
+    }
+
+    public void setExternalId(String externalId) {
+        notification.setExternalId(externalId);
+    }
+
+    public void setRetweetedId(Long retweetedId) {
+        notification.setRetweetedId(retweetedId);
     }
 
     public void setOffensive() {

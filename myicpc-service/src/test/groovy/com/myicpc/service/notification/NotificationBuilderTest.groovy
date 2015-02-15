@@ -1,6 +1,7 @@
 package com.myicpc.service.notification
 
 import com.google.common.collect.Lists
+import com.myicpc.enums.NotificationType
 import com.myicpc.model.EntityObject
 import com.myicpc.model.IdGeneratedContestObject
 import com.myicpc.model.contest.Contest
@@ -65,7 +66,7 @@ public class NotificationBuilderTest extends AbstractServiceTest {
     @Test
     public void testNotificationBuilder_Existing() throws Exception {
         Notification notification1 = new Notification(id: 20L);
-        when(notificationRepository.findByContestAndEntityIdAndNotificationType((Contest) anyObject(), anyLong(), (Notification.NotificationType) anyObject()))
+        when(notificationRepository.findByContestAndEntityIdAndNotificationType((Contest) anyObject(), anyLong(), (NotificationType) anyObject()))
                 .thenReturn(Lists.newArrayList(notification1));
 
         IdGeneratedContestObject idGeneratedContestObject = new Team(id: 1L, contest: contest);
@@ -78,7 +79,7 @@ public class NotificationBuilderTest extends AbstractServiceTest {
 
     @Test
     public void testNotificationBuilder_NonPersisted() throws Exception {
-        when(notificationRepository.findByContestAndEntityIdAndNotificationType((Contest) anyObject(), anyLong(), (Notification.NotificationType) anyObject()))
+        when(notificationRepository.findByContestAndEntityIdAndNotificationType((Contest) anyObject(), anyLong(), (NotificationType) anyObject()))
                 .thenReturn(new ArrayList<Notification>());
 
         IdGeneratedContestObject idGeneratedContestObject = new Team(id: 1L, contest: contest);
@@ -142,9 +143,9 @@ public class NotificationBuilderTest extends AbstractServiceTest {
     @Test
     public void testSetDisplayName() throws Exception {
         NotificationBuilder builder = new NotificationBuilder();
-        builder.setDisplayName("John Snow");
+        builder.setAuthorName("John Snow");
 
-        assert builder.build().getDisplayName() == "John Snow"
+        assert builder.build().getAuthorName() == "John Snow"
     }
 
     @Test

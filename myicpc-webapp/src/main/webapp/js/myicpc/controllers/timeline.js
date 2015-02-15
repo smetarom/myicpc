@@ -16,11 +16,15 @@ Timeline = {
   handlerMapping: {},
   supportedNotificationTypes: [],
   init: function() {
-    var timelineScoreboardTemplate;
-    this.supportedNotificationTypes = ["submissionSuccess"];
+    var timelineScoreboardTemplate, timelineTwitterTemplate;
+    this.supportedNotificationTypes = ["submissionSuccess", "twitter"];
     timelineScoreboardTemplate = compileHandlebarsTemplate("timeline-SCOREBOARD_SUCCESS");
-    return this.handlerMapping["submissionSuccess"] = function(notification) {
+    timelineTwitterTemplate = compileHandlebarsTemplate("timeline-TWITTER");
+    this.handlerMapping["submissionSuccess"] = function(notification) {
       return timelineScoreboardTemplate(notification);
+    };
+    return this.handlerMapping["twitter"] = function(notification) {
+      return timelineTwitterTemplate(notification);
     };
   },
   updateMainFeed: function(data) {

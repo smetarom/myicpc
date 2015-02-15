@@ -56,6 +56,7 @@ public abstract class NotificationTile {
         out.print("<div class=\"footer\">");
         renderFooterTitle(out);
         renderFooterTimestamp(out);
+        renderFooterAppendix(out);
         out.print("</div>");
     }
 
@@ -65,8 +66,12 @@ public abstract class NotificationTile {
         out.print(" <span class=\"hidden-xs\"> &middot; " + getTimestamp() + "</span> ");
     }
 
-    protected void renderAvatarImage(JspWriter out, String src, String title, int width, int height) throws IOException, JspException {
-        out.print(String.format("<img class=\"pull-left media-object\" src=\"%s\" alt=\"%s\" width=\"%d\" height=\"%d\">", resolveUrl(src), title, width, height));
+    protected void renderFooterAppendix(JspWriter out) throws IOException, JspException {
+        // do nothing by default
+    }
+
+    protected void renderAvatarImage(JspWriter out, String src, String title) throws IOException, JspException {
+        out.print(String.format("<img class=\"pull-left media-object\" src=\"%s\" alt=\"%s\" width=\"%d\" height=\"%d\">", resolveUrl(src), title, 50, 50));
     }
 
     protected String getTitle() {

@@ -1,5 +1,6 @@
 package com.myicpc.controller;
 
+import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.Notification;
 import org.springframework.ui.Model;
@@ -21,7 +22,7 @@ public class HomeController extends GeneralController {
         notification.setBody("<i>italic</i>");
         notification.setTimestamp(new Date());
         notification.setContest(contest);
-        notification.setNotificationType(Notification.NotificationType.SCOREBOARD_SUCCESS);
+        notification.setNotificationType(NotificationType.SCOREBOARD_SUCCESS);
         model.addAttribute("notification", notification);
         return "home";
     }

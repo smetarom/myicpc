@@ -9,6 +9,7 @@ import com.google.gson.JsonPrimitive;
 import com.myicpc.commons.adapters.JSONAdapter;
 import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.enums.ContestParticipantRole;
+import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.LastTeamProblem;
 import com.myicpc.model.eventFeed.Team;
@@ -450,7 +451,7 @@ public class TeamService {
             map.put(teamProblem.getId(), teamProblem);
         }
 
-        List<Notification.NotificationType> expectedTypes = NotificationList.newList().addScoreboardSuccess().addScoreboardSubmitted().addScoreboardFailed();
+        List<NotificationType> expectedTypes = NotificationList.newList().addScoreboardSuccess().addScoreboardSubmitted().addScoreboardFailed();
         Sort sort = new Sort(Sort.Direction.DESC, "timestamp");
         List<Notification> notifications = notificationRepository.findByEntityIdsAndTypes(teamProblemIds, expectedTypes, sort);
         List<SubmissionDTO> submissionDTOs = new ArrayList<>(notifications.size());

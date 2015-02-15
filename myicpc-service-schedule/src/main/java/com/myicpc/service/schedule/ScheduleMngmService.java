@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.myicpc.commons.MyICPCConstants;
 import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.commons.utils.TimeUtils;
+import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.schedule.Event;
 import com.myicpc.model.schedule.EventRole;
@@ -93,7 +94,7 @@ public class ScheduleMngmService {
     }
 
     public void deleteEvent(final Event event) {
-        notificationRepository.deleteByEntityIdAndNotificationType(event.getId(), Notification.NotificationType.SCHEDULE_EVENT_OPEN);
+        notificationRepository.deleteByEntityIdAndNotificationType(event.getId(), NotificationType.SCHEDULE_EVENT_OPEN);
         eventRepository.delete(event);
     }
 

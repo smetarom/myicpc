@@ -1,6 +1,8 @@
 package com.myicpc.tags.notification;
 
+import com.myicpc.enums.NotificationType;
 import com.myicpc.model.social.Notification;
+import com.myicpc.tags.notification.utils.TwitterTile;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -14,7 +16,7 @@ import java.util.Locale;
  */
 public class NotificationTag extends SimpleTagSupport {
     private Notification notification;
-    private Notification.NotificationType type;
+    private NotificationType type;
     private Locale locale;
 
     public NotificationTag() {
@@ -28,7 +30,7 @@ public class NotificationTag extends SimpleTagSupport {
     }
 
     public void setType(String type) {
-        this.type = Notification.NotificationType.valueOf(type);
+        this.type = NotificationType.valueOf(type);
     }
 
     @Override
@@ -36,7 +38,7 @@ public class NotificationTag extends SimpleTagSupport {
         JspWriter out = getJspContext().getOut();
         boolean isTemplate = true;
 
-        Notification.NotificationType notificationType = null;
+        NotificationType notificationType = null;
         if (notification != null) {
             notificationType = notification.getNotificationType();
             isTemplate = false;
@@ -52,7 +54,7 @@ public class NotificationTag extends SimpleTagSupport {
         }
     }
 
-    protected NotificationTile getNotificationTile(final Notification.NotificationType notificationType, boolean isTemplate) {
+    protected NotificationTile getNotificationTile(final NotificationType notificationType, boolean isTemplate) {
         PageContext pageContext = (PageContext) getJspContext();
         NotificationTile tile = null;
         // submission notification
@@ -61,6 +63,8 @@ public class NotificationTag extends SimpleTagSupport {
                 notificationType.isScoreboardSubmitted() ||
                 notificationType.isAnalyticsMessage()) {
             tile = new SubmissionTile(notification, isTemplate, locale, pageContext);
+        } else if (notificationType.isTwitter()) {
+            tile = new TwitterTile(notification, isTemplate, locale, pageContext);
         }
         // TODO more notification types to come
         return tile;
