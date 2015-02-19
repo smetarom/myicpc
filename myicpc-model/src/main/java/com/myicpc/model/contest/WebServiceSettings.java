@@ -29,6 +29,7 @@ public class WebServiceSettings implements Serializable {
 
     //Instagram
     private String instagramKey;
+    private String instagramSecret;
 
     //Vine
     private String vineEmail;
@@ -98,6 +99,14 @@ public class WebServiceSettings implements Serializable {
 
     public void setInstagramKey(String instagramKey) {
         this.instagramKey = instagramKey;
+    }
+
+    public String getInstagramSecret() {
+        return instagramSecret;
+    }
+
+    public void setInstagramSecret(String instagramSecret) {
+        this.instagramSecret = instagramSecret;
     }
 
     public String getVineEmail() {

@@ -22,7 +22,7 @@
                             <c:forEach var="contest" items="${contests}">
                                 <tr>
                                     <td><a href="<spring:url value="/private/${contest.code}" />">${contest.name} </a></td>
-                                    <td class="text-right"><fmt:formatDate value="${contest.startTime}" type="both"/></td>
+                                    <td class="text-right"><span class="nowrap"><fmt:formatDate value="${contest.startTime}" type="both"/></span></td>
                                 </tr>
                             </c:forEach>
                             </tbody>
