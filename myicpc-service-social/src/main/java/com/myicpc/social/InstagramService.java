@@ -14,6 +14,7 @@ import com.myicpc.model.social.BlacklistedUser;
 import com.myicpc.model.social.Notification;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.service.exception.WebServiceException;
+import com.myicpc.service.notification.NotificationBuilder;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Consts;
@@ -132,34 +133,35 @@ public class InstagramService extends ASocialService {
                     return list;
                 }
                 String mediaType = mediaAdapter.getString("type");
-                notification = new Notification();
-                notification.setNotificationType(NotificationType.INSTAGRAM);
+                NotificationBuilder builder = new NotificationBuilder();
+                builder.setNotificationType(NotificationType.INSTAGRAM);
+                builder.setContest(contest);
 
-                notification.setExternalId(id);
-                notification.setUrl(mediaAdapter.getString("link"));
+                builder.setExternalId(id);
+                builder.setUrl(mediaAdapter.getString("link"));
 
                 JSONAdapter userAdapter = new JSONAdapter(mediaAdapter.get("user"));
                 String fullname = userAdapter.getString("full_name");
                 String username = userAdapter.getString("username");
-                notification.setAuthorName(StringUtils.isEmpty(fullname) ? username : fullname);
-                notification.setProfilePictureUrl(userAdapter.getString("profile_picture"));
-                notification.setTimestamp(new Date(mediaAdapter.getLong("created_time") * 1000));
-                notification.setTitle(username);
-                notification.setBody(mediaAdapter.getStringFromObject("caption", "text"));
+                builder.setAuthorName(StringUtils.isEmpty(fullname) ? username : fullname);
+                builder.setProfilePictureUrl(userAdapter.getString("profile_picture"));
+                builder.setTimestamp(new Date(mediaAdapter.getLong("created_time") * 1000));
+                builder.setTitle(username);
+                builder.setBody(mediaAdapter.getStringFromObject("caption", "text"));
                 if ("image".equalsIgnoreCase(mediaType)) {
-                    notification.setImageUrl(mediaAdapter.getStringFromObject("images", "standard_resolution", "url"));
+                    builder.setImageUrl(mediaAdapter.getStringFromObject("images", "standard_resolution", "url"));
                 } else if ("video".equalsIgnoreCase(mediaType)) {
-                    notification.setVideoUrl(mediaAdapter.getStringFromObject("videos", "standard_resolution", "url"));
+                    builder.setVideoUrl(mediaAdapter.getStringFromObject("videos", "standard_resolution", "url"));
                 }
-                notification.setThumbnailUrl(mediaAdapter.getStringFromObject("images", "thumbnail", "url"));
+                builder.setThumbnailUrl(mediaAdapter.getStringFromObject("images", "thumbnail", "url"));
 
                 String[] tags = mediaAdapter.getJsonArrayValues("tags");
                 // TODO complete quest hashtag
-                notification.setHashtags(createHashtags(tags, contest.getHashtag(), null));
+                builder.setHashtags(createHashtags(tags, contest.getHashtag(), null));
                 // TODO
 //                instagramMedia.setUserId(userAdapter.getString("id"));
 
-                list.add(notification);
+                list.add(builder.build());
             }
 
             // if the result has next page
@@ -176,24 +178,7 @@ public class InstagramService extends ASocialService {
         return list;
     }
 
-    private String createHashtags(String[] tags, String contestHashtag, String questHashtag) {
-        StringBuffer tagString = new StringBuffer("|");
-        for (String tag : tags) {
-            tagString.append(tag).append('|');
-        }
-        if (tagString.length() > 255) {
-            tagString = new StringBuffer("|");
-            tagString.append(contestHashtag).append("|");
-            if (!StringUtils.isEmpty(questHashtag)) {
-                for (String tag : tags) {
-                    if (tag.startsWith(questHashtag)) {
-                        tagString.append(tag).append('|');
-                    }
-                }
-            }
-        }
-        return tagString.toString();
-    }
+
 
     private String getJson() {
         String json = "{\n" +
