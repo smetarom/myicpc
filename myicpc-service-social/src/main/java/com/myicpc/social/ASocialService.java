@@ -8,6 +8,7 @@ import com.myicpc.repository.social.BlacklistedUserRepository;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.service.notification.NotificationService;
 import com.myicpc.service.publish.PublishService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashSet;
@@ -38,16 +39,35 @@ public abstract class ASocialService {
      * @param blacklist
      *            list of blacklisted usernames
      */
-    protected void saveSearchList(List<Notification> notifications, BlacklistedUser.BlacklistedUserType blacklistedUserType, Contest contest) {
+    protected void  saveSearchList(List<Notification> notifications, BlacklistedUser.BlacklistedUserType blacklistedUserType, Contest contest) {
         Set<String> blacklist = new HashSet<>(blacklistedUserRepository.getUsernameByBlacklistedUserType(blacklistedUserType));
 
         for (int i = notifications.size() - 1; i >= 0; i--) {
             Notification notification = notifications.get(i);
             if (!blacklist.contains(notification.getTitle())) {
                 notification.setContest(contest);
-                notificationRepository.save(notifications.get(i));
+                notificationRepository.save(notification);
                 publishService.broadcastNotification(notification, contest);
             }
         }
+    }
+
+    protected String createHashtags(String[] tags, String contestHashtag, String questHashtag) {
+        StringBuffer tagString = new StringBuffer("|");
+        for (String tag : tags) {
+            tagString.append(tag).append('|');
+        }
+        if (tagString.length() > 255) {
+            tagString = new StringBuffer("|");
+            tagString.append(contestHashtag).append("|");
+            if (!StringUtils.isEmpty(questHashtag)) {
+                for (String tag : tags) {
+                    if (tag.startsWith(questHashtag)) {
+                        tagString.append(tag).append('|');
+                    }
+                }
+            }
+        }
+        return tagString.toString();
     }
 }

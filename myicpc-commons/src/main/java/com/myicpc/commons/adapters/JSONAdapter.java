@@ -119,6 +119,33 @@ public class JSONAdapter {
 		return defaultValue;
 	}
 
+    /**
+     * convenient method to get element as a boolean value.
+     *
+     * @param key
+     *            name of the member
+     * @return get this element as a boolean value, or false if not present
+     */
+    public boolean getBoolean(String key) {
+        return getBoolean(key, false);
+    }
+
+    /**
+     * convenient method to get element as a boolean value.
+     *
+     * @param key
+     *            name of the member
+     * @param defaultValue
+     *            default value if the key is not in the JSON object
+     * @return get this element as a boolean value.
+     */
+    public boolean getBoolean(String key, boolean defaultValue) {
+        if (jsonObject.has(key)) {
+            return jsonObject.get(key).getAsBoolean();
+        }
+        return defaultValue;
+    }
+
 	/**
 	 * convenient method to get element as a long value.
 	 * 

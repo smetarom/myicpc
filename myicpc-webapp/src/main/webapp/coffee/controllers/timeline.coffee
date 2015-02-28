@@ -73,11 +73,19 @@ Timeline = {
             $(elem).hide().prependTo($("#timeline-body")).slideDown(settings.duration).effect("highlight", {}, settings.duration)
         else
           $(elem).appendTo($("#timeline-body"))
-
-
-
-
 }
 
 updateTimeline = (data, ngController) ->
   Timeline.updateMainFeed(data)
+
+videoAutoplayOnScroll = () ->
+  firstPlaying = false
+  $("video").each(() ->
+    video = this
+    if (isElementVisible(video, 40) && !firstPlaying)
+      firstPlaying = true
+      video.play()
+    else
+      video.pause()
+  )
+  return

@@ -9,7 +9,9 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 
@@ -47,9 +49,9 @@ public class WebServiceUtils {
         return entity.getContent();
     }
 
-    public static void releaseConnection(HttpGet httpGet) {
-        if (httpGet != null) {
-            httpGet.releaseConnection();
+    public static void releaseConnection(HttpRequestBase httpRequest) {
+        if (httpRequest != null) {
+            httpRequest.releaseConnection();
         }
     }
 }

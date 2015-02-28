@@ -43,7 +43,7 @@ public abstract class SocialTile extends NotificationTile {
 
     protected void renderMedia(JspWriter out) throws IOException, JspException {
         String imageFormat = "<img src=\"%s\" alt=\"\" class=\"img-responsive\" />";
-        String videoFormat = "<video src=\"%s\" controls width=\"100%%\">\n" +
+        String videoFormat = "<video src=\"%s\" controls muted loop width=\"100%%\">\n" +
                 "  Your browser does not support the video player.\n" +
                 "</video>";
         if (isTemplate) {

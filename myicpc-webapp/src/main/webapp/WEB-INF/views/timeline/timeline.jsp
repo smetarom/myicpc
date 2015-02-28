@@ -55,6 +55,7 @@
                 $(function() {
                     Timeline.init();
                     startSubscribe('${r.contextPath}', '${contest.code}', 'notification', updateTimeline, null);
+                    videoAutoplayOnScroll();
 
                     $(window).scroll(function() {
                         if($(window).scrollTop() === $(document).height() - $(window).height() && $('#timeline .timeline-loading').hasClass('hidden')) {
@@ -64,6 +65,7 @@
                             Timeline.displayPendingNotification();
                         }
                     });
+                    $(window).scroll(videoAutoplayOnScroll);
                 });
             </script>
         </div>

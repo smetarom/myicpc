@@ -224,21 +224,21 @@ public class ContestAdminController extends GeneralAdminController {
 
     protected List<ImmutablePair<String, String>> getWizardMenuItems(boolean editMode) {
         List<ImmutablePair<String, String>> items = Lists.newArrayList();
-        items.add(new ImmutablePair<String, String>("Initialize", getMessage("contestAdmin.wizard.stepInit")));
-        items.add(new ImmutablePair<String, String>("ContestInfo", getMessage("contestAdmin.wizard.stepContestInfo")));
-        items.add(new ImmutablePair<String, String>("EventFeed", getMessage("contestAdmin.wizard.stepEventFeed")));
+        items.add(new ImmutablePair<>("Initialize", getMessage("contestAdmin.wizard.stepInit")));
+        items.add(new ImmutablePair<>("ContestInfo", getMessage("contestAdmin.wizard.stepContestInfo")));
+        items.add(new ImmutablePair<>("EventFeed", getMessage("contestAdmin.wizard.stepEventFeed")));
         if (editMode) {
-            items.add(new ImmutablePair<String, String>("Modules", getMessage("contestAdmin.wizard.stepModules")));
+            items.add(new ImmutablePair<>("Modules", getMessage("contestAdmin.wizard.stepModules")));
         }
-        items.add(new ImmutablePair<String, String>("TeamEdit", getMessage("contestAdmin.wizard.stepTeamEdit")));
-//        items.add(new ImmutablePair<String, String>("TeamPictures", getMessage("contestAdmin.wizard.stepTeamPictures")));
-//        items.add(new ImmutablePair<String, String>("Map", getMessage("contestAdmin.wizard.stepMap")));
-        items.add(new ImmutablePair<String, String>("Twitter", getMessage("contestAdmin.wizard.stepTwitter")));
-        items.add(new ImmutablePair<String, String>("Instagram", getMessage("contestAdmin.wizard.stepInstagram")));
-//        items.add(new ImmutablePair<String, String>("Vine", getMessage("contestAdmin.wizard.stepVine")));
-//        items.add(new ImmutablePair<String, String>("Youtube", getMessage("contestAdmin.wizard.stepYoutube")));
+        items.add(new ImmutablePair<>("TeamEdit", getMessage("contestAdmin.wizard.stepTeamEdit")));
+//        items.add(new ImmutablePair<>("TeamPictures", getMessage("contestAdmin.wizard.stepTeamPictures")));
+//        items.add(new ImmutablePair<>("Map", getMessage("contestAdmin.wizard.stepMap")));
+        items.add(new ImmutablePair<>("Twitter", getMessage("contestAdmin.wizard.stepTwitter")));
+        items.add(new ImmutablePair<>("Instagram", getMessage("contestAdmin.wizard.stepInstagram")));
+        items.add(new ImmutablePair<>("Vine", getMessage("contestAdmin.wizard.stepVine")));
+//        items.add(new ImmutablePair<>("Youtube", getMessage("contestAdmin.wizard.stepYoutube")));
         if (!editMode) {
-            items.add(new ImmutablePair<String, String>("Summary", getMessage("contestAdmin.wizard.stepSummary")));
+            items.add(new ImmutablePair<>("Summary", getMessage("contestAdmin.wizard.stepSummary")));
         }
 
         return items;

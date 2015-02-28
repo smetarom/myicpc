@@ -13,6 +13,9 @@ public class JSPUtils {
     public static String resolveUrl(
             String url, PageContext pageContext)
             throws JspException {
+        if (url == null) {
+            return null;
+        }
         // don't touch absolute URLs
         if (isAbsoluteUrl(url)) {
             return url;

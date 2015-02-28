@@ -60,3 +60,7 @@ formatContestTime = (seconds) ->
   minutes = "0" + minutes if minutes < 10
 
   return minus + hours + ":" + minutes;
+
+isElementVisible = (elem, offset = 0) ->
+  $e = $(elem);
+  $(window).scrollTop()+window.innerHeight + offset >$e.offset().top && $(window).scrollTop() + offset <$e.offset().top+$e.height();

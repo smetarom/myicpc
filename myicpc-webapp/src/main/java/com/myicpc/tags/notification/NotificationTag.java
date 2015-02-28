@@ -66,6 +66,8 @@ public class NotificationTag extends SimpleTagSupport {
             tile = new TwitterTile(notification, isTemplate, locale, pageContext);
         } else if (notificationType.isInstagram()) {
             tile = new InstagramTile(notification, isTemplate, locale, pageContext);
+        } else if (notificationType.isVine()) {
+            tile = new VineTile(notification, isTemplate, locale, pageContext);
         }
         // TODO more notification types to come
         return tile;
