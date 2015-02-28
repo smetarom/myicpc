@@ -1,0 +1,31 @@
+a.gallery-thumbnail {
+  margin: 5px;
+  display: inline-block;
+  position: relative;
+}
+
+.play-button {
+  position: absolute;
+  line-height: 250px;
+  text-align: center;
+  min-width: 100%;
+  font-size: 4em;
+  color: white;
+  cursor: pointer;
+}
+
+#galleryPopupContent {
+  padding: 0;
+
+  .gallery-content {
+    text-align: center;
+    background-color: #000000;
+  }
+
+  video {
+    padding: 5px 0 0;
+    max-width: 450px;
+    width: 100%;
+    margin: 0 auto;
+  }
+}

@@ -153,7 +153,7 @@ public class InstagramService extends ASocialService {
                 } else if ("video".equalsIgnoreCase(mediaType)) {
                     builder.setVideoUrl(mediaAdapter.getStringFromObject("videos", "standard_resolution", "url"));
                 }
-                builder.setThumbnailUrl(mediaAdapter.getStringFromObject("images", "thumbnail", "url"));
+                builder.setThumbnailUrl(mediaAdapter.getStringFromObject("images", "low_resolution", "url"));
 
                 String[] tags = mediaAdapter.getJsonArrayValues("tags");
                 // TODO complete quest hashtag

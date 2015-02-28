@@ -48,7 +48,7 @@ public abstract class SocialTile extends NotificationTile {
                 "</video>";
         if (isTemplate) {
             out.print(String.format(imageFormat, "{{imageUrl}}"));
-            out.print(String.format(imageFormat, "{{videoUrl}}"));
+            out.print(String.format(videoFormat, "{{videoUrl}}"));
         } else {
             if (!StringUtils.isEmpty(notification.getVideoUrl())) {
                 out.print(String.format(videoFormat, notification.getVideoUrl()));

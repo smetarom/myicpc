@@ -67,6 +67,7 @@ public class TwitterService extends ASocialService {
         publishService.broadcastNotification(notification, contest);
     }
 
+    @Transactional
     public Notification createNotification(final Status twitterStatus, final Contest contest) {
         NotificationBuilder builder = new NotificationBuilder();
         builder.setTitle(twitterStatus.getUser().getScreenName());
@@ -84,7 +85,9 @@ public class TwitterService extends ASocialService {
 
         if (!twitterStatus.isRetweet()) {
             if (twitterStatus.getMediaEntities() != null && twitterStatus.getMediaEntities().length > 0) {
-                builder.setImageUrl(twitterStatus.getMediaEntities()[0].getMediaURL());
+                String imageUrl = twitterStatus.getMediaEntities()[0].getMediaURL();
+                builder.setThumbnailUrl(imageUrl + ":small");
+                builder.setImageUrl(imageUrl);
             }
         }
 
@@ -98,7 +101,7 @@ public class TwitterService extends ASocialService {
      *            Twitter tweet
      * @return tweet message enhanced by HTML tags
      */
-    public static String parseTweetText(final Status status) {
+    protected static String parseTweetText(final Status status) {
         String text = null;
         if (status.isRetweet() && status.getRetweetedStatus() != null) {
             text = "RT @" + status.getRetweetedStatus().getUser().getScreenName() + ": " + status.getRetweetedStatus().getText();
@@ -119,7 +122,7 @@ public class TwitterService extends ASocialService {
      *            tweet body
      * @return hashtags separated by |
      */
-    public static String getHashtagsFromTweet(final String tweet) {
+    protected static String getHashtagsFromTweet(final String tweet) {
         Pattern pattern = Pattern.compile("(#[\\p{L}+0-9-_]+)");
         Matcher matcher = pattern.matcher(tweet);
         StringBuilder hashtags = new StringBuilder("|");
