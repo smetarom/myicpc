@@ -66,27 +66,35 @@ public class GlobalSettings implements Serializable {
         settingsMap.put(Globals.GlobalsColumn.DEFAULT_MAP_CONFIG, defaultMapConfig);
     }
 
-    public String getUniversityLogosURL() {
+    public String getUniversityLogosUrl() {
         return settingsMap.get(Globals.GlobalsColumn.UNIVERSITY_LOGOS_URL);
     }
 
-    public void setUniversityLogosURL(String universityLogosURL) {
+    public void setUniversityLogosUrl(String universityLogosURL) {
         settingsMap.put(Globals.GlobalsColumn.UNIVERSITY_LOGOS_URL, universityLogosURL);
     }
 
-    public String getTeamPicturesURL() {
+    public String getTeamPicturesUrl() {
         return settingsMap.get(Globals.GlobalsColumn.TEAM_PICTURES_URL);
     }
 
-    public void setTeamPicturesURL(String teamPicturesURL) {
+    public void setTeamPicturesUrl(String teamPicturesURL) {
         settingsMap.put(Globals.GlobalsColumn.TEAM_PICTURES_URL, teamPicturesURL);
     }
 
-    public String getContestManagementSystemURL() {
+    public String getContestManagementSystemUrl() {
         return settingsMap.get(Globals.GlobalsColumn.CONTEST_MANAGEMENT_SYSTEM_URL);
     }
 
-    public void setContestManagementSystemURL(String contestManagementSystemURL) {
+    public void setContestManagementSystemUrl(String contestManagementSystemURL) {
         settingsMap.put(Globals.GlobalsColumn.CONTEST_MANAGEMENT_SYSTEM_URL, contestManagementSystemURL);
+    }
+
+    public String getCallbackUrl() {
+        return settingsMap.get(Globals.GlobalsColumn.CALLBACK_URL);
+    }
+
+    public void setCallbackUrl(String callbackUrl) {
+        settingsMap.put(Globals.GlobalsColumn.CALLBACK_URL, callbackUrl);
     }
 }

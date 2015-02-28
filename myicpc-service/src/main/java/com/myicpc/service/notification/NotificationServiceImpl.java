@@ -167,30 +167,6 @@ public class NotificationServiceImpl implements NotificationService {
         return notificationRepository.save(builder.build());
     }
 
-    @Override
-    public Notification createNotification(final Status twitterStatus, final Contest contest) {
-        NotificationBuilder builder = new NotificationBuilder();
-        builder.setTitle(twitterStatus.getUser().getScreenName());
-        builder.setBody(parseTweetText(twitterStatus));
-        builder.setHashTags(getHashtagsFromTweet(twitterStatus.getText()));
-        builder.setNotificationType(NotificationType.TWITTER);
-        builder.setExternalId(String.valueOf(twitterStatus.getId()));
-        if (twitterStatus.getRetweetedStatus() != null) {
-            builder.setRetweetedId(twitterStatus.getRetweetedStatus().getId());
-        }
-        builder.setAuthorName(twitterStatus.getUser().getName());
-        builder.setProfilePictureUrl(twitterStatus.getUser().getProfileImageURL());
-        builder.setTimestamp(twitterStatus.getCreatedAt());
-        builder.setContest(contest);
-
-        if (!twitterStatus.isRetweet()) {
-            if (twitterStatus.getMediaEntities() != null && twitterStatus.getMediaEntities().length > 0) {
-                builder.setImageUrl(twitterStatus.getMediaEntities()[0].getMediaURL());
-            }
-        }
-
-        return notificationRepository.save(builder.build());
-    }
 
     public Notification createNotification(final TwitterMessage twitterMessage) {
         NotificationBuilder builder = new NotificationBuilder(twitterMessage);
@@ -510,44 +486,4 @@ public class NotificationServiceImpl implements NotificationService {
 
         return pollObject;
     }
-
-    /**
-     * Finds Twitter hashtags, usernames, and URLs in the tweet
-     *
-     * @param status
-     *            Twitter tweet
-     * @return tweet message enhanced by HTML tags
-     */
-    public static String parseTweetText(final Status status) {
-        String text = null;
-        if (status.isRetweet() && status.getRetweetedStatus() != null) {
-            text = "RT @" + status.getRetweetedStatus().getUser().getScreenName() + ": " + status.getRetweetedStatus().getText();
-        } else {
-            text = status.getText();
-        }
-        text = text.replaceAll("((https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|])", "<a href='$1'>$1</a>");
-        text = text.replaceAll("@([\\p{L}+0-9-_]+)", "<a href='http://twitter.com/$1'>@$1</a>");
-        text = text.replaceAll("#([\\p{L}+0-9-_]+)", "<a href='https://twitter.com/search/?src=hash&amp;q=%23$1'>#$1</a>");
-        text = text.replaceAll("([\\ud800-\\udbff\\udc00-\\udfff])", "");
-        return text;
-    }
-
-    /**
-     * Gets all hashtags from the tweet body separated by |
-     *
-     * @param tweet
-     *            tweet body
-     * @return hashtags separated by |
-     */
-    public static String getHashtagsFromTweet(final String tweet) {
-        Pattern pattern = Pattern.compile("(#[\\p{L}+0-9-_]+)");
-        Matcher matcher = pattern.matcher(tweet);
-        StringBuilder hashtags = new StringBuilder("|");
-        while (matcher.find()) {
-            hashtags.append(matcher.group().substring(1)).append("|");
-        }
-        return hashtags.toString();
-    }
-
-
 }

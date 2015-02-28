@@ -46,4 +46,10 @@ public class WebServiceUtils {
         HttpEntity entity = response.getEntity();
         return entity.getContent();
     }
+
+    public static void releaseConnection(HttpGet httpGet) {
+        if (httpGet != null) {
+            httpGet.releaseConnection();
+        }
+    }
 }

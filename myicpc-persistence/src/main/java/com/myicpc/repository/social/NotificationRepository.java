@@ -17,7 +17,7 @@ import java.util.List;
 public interface NotificationRepository extends PagingAndSortingRepository<Notification, Long> {
     List<Notification> findByContestAndEntityIdAndNotificationType(Contest contest, Long entityId, NotificationType notificationType);
 
-    List<Notification> findByContestAndExternalIdAndNotificationType(Contest contest, String externalId, NotificationType notificationType);
+    Notification findByContestAndExternalIdAndNotificationType(Contest contest, String externalId, NotificationType notificationType);
 
     @Query("SELECT n FROM Notification n WHERE n.entityId IN ?1 AND n.notificationType IN ?2")
     List<Notification> findByEntityIdsAndTypes(List<Long> entityIds, List<NotificationType> notificationTypes, Sort sort);

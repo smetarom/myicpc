@@ -2,6 +2,7 @@ package com.myicpc.controller.social;
 
 import com.myicpc.controller.GeneralController;
 import com.myicpc.model.contest.Contest;
+import com.myicpc.social.InstagramService;
 import com.myicpc.social.TwitterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,8 @@ import twitter4j.StatusAdapter;
 import twitter4j.TwitterException;
 import twitter4j.json.DataObjectFactory;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Random;
 
 /**
@@ -23,7 +26,19 @@ import java.util.Random;
 public class TestSocialController extends GeneralController {
 
     @Autowired
+    private InstagramService instagramService;
+
+    @Autowired
     private TwitterService twitterService;
+
+    @RequestMapping(value = "/{contestCode}/instagram/subscribe", method = RequestMethod.GET)
+    public String instagramSub(@PathVariable final String contestCode) throws IOException, URISyntaxException {
+        Contest contest = getContest(contestCode, null);
+        String url = "http://localhost:8080/myicpc/CTU-Open-2013/gallery";
+        instagramService.startSubscription(contest, url);
+        return null;
+    }
+
 
     @RequestMapping(value = "/{contestCode}/twitter/start", method = RequestMethod.GET)
     public String editContest(@PathVariable final String contestCode) {
@@ -33,6 +48,7 @@ public class TestSocialController extends GeneralController {
 
         return "redirect:"+getContestURL(contestCode);
     }
+
     @RequestMapping(value = "/{contestCode}/twitter/send", method = RequestMethod.GET)
     public String sendTweet(@PathVariable final String contestCode) throws TwitterException {
         Contest contest = getContest(contestCode, null);

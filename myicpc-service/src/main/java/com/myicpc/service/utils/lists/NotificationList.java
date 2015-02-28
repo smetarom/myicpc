@@ -56,8 +56,8 @@ public class NotificationList extends ArrayList<NotificationType> {
         return this;
     }
 
-    public NotificationList addInstagramImage() {
-        this.add(NotificationType.INSTAGRAM_IMAGE);
+    public NotificationList addInstagram() {
+        this.add(NotificationType.INSTAGRAM);
         return this;
     }
 

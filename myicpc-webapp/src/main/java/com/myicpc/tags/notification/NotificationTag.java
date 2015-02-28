@@ -2,7 +2,6 @@ package com.myicpc.tags.notification;
 
 import com.myicpc.enums.NotificationType;
 import com.myicpc.model.social.Notification;
-import com.myicpc.tags.notification.utils.TwitterTile;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -65,6 +64,8 @@ public class NotificationTag extends SimpleTagSupport {
             tile = new SubmissionTile(notification, isTemplate, locale, pageContext);
         } else if (notificationType.isTwitter()) {
             tile = new TwitterTile(notification, isTemplate, locale, pageContext);
+        } else if (notificationType.isInstagram()) {
+            tile = new InstagramTile(notification, isTemplate, locale, pageContext);
         }
         // TODO more notification types to come
         return tile;

@@ -43,7 +43,7 @@ public class GlobalSettingsService {
         try (InputStream settingsInputStream = GlobalSettingsService.class.getClassLoader().getResourceAsStream("defaultSettings.properties")) {
             conf.load(settingsInputStream);
             globalSettings.setDefaultMapConfig(conf.getProperty("mapConfig"));
-            globalSettings.setUniversityLogosURL(conf.getProperty("universityLogosURL"));
+            globalSettings.setUniversityLogosUrl(conf.getProperty("universityLogosURL"));
         } catch (IOException e) {
             logger.warn("Cannot find configuration file defaultSettings.properties");
         }

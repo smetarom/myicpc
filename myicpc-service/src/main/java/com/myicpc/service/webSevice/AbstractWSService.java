@@ -38,7 +38,7 @@ public abstract class AbstractWSService {
      * @throws IOException
      */
     public Object connectCM(String url, final Contest contest) throws IOException {
-        return connectCM(globalSettingsService.getGlobalSettings().getContestManagementSystemURL(), url, contest);
+        return connectCM(globalSettingsService.getGlobalSettings().getContestManagementSystemUrl(), url, contest);
     }
 
     /**

@@ -24,6 +24,7 @@ import java.util.Map.Entry;
  */
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "Notification_id_seq")
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"contestId", "externalId", "notificationType"})})
 public class Notification extends IdGeneratedContestObject {
     private static final Logger logger = LoggerFactory.getLogger(Notification.class);
     private static final long serialVersionUID = 7111388236875951578L;

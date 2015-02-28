@@ -1,6 +1,5 @@
 package com.myicpc.service.timeline;
 
-import com.google.common.collect.Lists;
 import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.Notification;
@@ -25,7 +24,11 @@ public class TimelineService {
     /**
      * Notification types presented on the timeline
      */
-    public static final List<NotificationType> TIMELINE_TYPES = NotificationList.newList().addScoreboardSuccess().addAnalystMessage().addTwitter();
+    public static final List<NotificationType> TIMELINE_TYPES = NotificationList.newList()
+            .addScoreboardSuccess()
+            .addAnalystMessage()
+            .addTwitter()
+            .addInstagram();
 
     @Autowired
     private NotificationRepository notificationRepository;

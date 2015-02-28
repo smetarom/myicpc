@@ -27,5 +27,4 @@ public interface NotificationService extends ScoreboardListener {
 
     public List<Notification> getFeaturedNotifications(List<Long> ignoredFeatured);
 
-    public Notification createNotification(Status twitterStatus, Contest contest);
 }

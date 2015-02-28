@@ -56,6 +56,6 @@ public class TeamWSService extends AbstractWSService {
         if (StringUtils.isEmpty(publicURLKey)) {
             return null;
         }
-        return "http://" + globalSettingsService.getGlobalSettings().getContestManagementSystemURL() + "/ICPCID/IMG/" + publicURLKey;
+        return "http://" + globalSettingsService.getGlobalSettings().getContestManagementSystemUrl() + "/ICPCID/IMG/" + publicURLKey;
     }
 }

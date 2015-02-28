@@ -15,7 +15,7 @@ public enum NotificationType {
     GALLERY("Gallery", "Gallery", "ga"),
     VINE("Vine", "Vine", "vi"),
     INSTAGRAM_VIDEO("Instagram", "Instagram video", "iv"),
-    INSTAGRAM_IMAGE("Instagram", "Instagram photo", "im"),
+    INSTAGRAM("Instagram", "Instagram photo", "im"),
     POLL_OPEN("Poll", "Poll open", "po"),
     POLL_CLOSE("Poll", "Poll close", "pc"),
     YOUTUBE_VIDEO("YouTube", "YouTube", "yt"),
@@ -93,8 +93,8 @@ public enum NotificationType {
         return this == INSTAGRAM_VIDEO;
     }
 
-    public boolean isInstagramImage() {
-        return this == INSTAGRAM_IMAGE;
+    public boolean isInstagram() {
+        return this == INSTAGRAM;
     }
 
     public boolean isPollOpen() {

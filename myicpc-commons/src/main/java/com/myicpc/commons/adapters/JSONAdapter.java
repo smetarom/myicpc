@@ -31,7 +31,7 @@ public class JSONAdapter {
 	}
 
 	/**
-	 * Convenience method to check if a member with the specified name is
+	 * convenient method to check if a member with the specified name is
 	 * present in this object.
 	 * 
 	 * @param key
@@ -44,7 +44,7 @@ public class JSONAdapter {
 	}
 
 	/**
-	 * convenience method to get element as a string value.
+	 * convenient method to get element as a string value.
 	 * 
 	 * @param key
 	 *            name of the member
@@ -55,7 +55,7 @@ public class JSONAdapter {
 	}
 
 	/**
-	 * convenience method to get element as a string value.
+	 * convenient method to get element as a string value.
 	 * 
 	 * @param key
 	 *            name of the member
@@ -68,7 +68,7 @@ public class JSONAdapter {
 	}
 
 	/**
-	 * convenience method to get element as a string value.
+	 * convenient method to get element as a string value.
 	 * 
 	 * @param key
 	 *            name of the member
@@ -93,7 +93,7 @@ public class JSONAdapter {
 	}
 
 	/**
-	 * convenience method to get element as a double value.
+	 * convenient method to get element as a double value.
 	 * 
 	 * @param key
 	 *            name of the member
@@ -104,7 +104,7 @@ public class JSONAdapter {
 	}
 
 	/**
-	 * convenience method to get element as a double value.
+	 * convenient method to get element as a double value.
 	 * 
 	 * @param key
 	 *            name of the member
@@ -120,7 +120,7 @@ public class JSONAdapter {
 	}
 
 	/**
-	 * convenience method to get element as a long value.
+	 * convenient method to get element as a long value.
 	 * 
 	 * @param key
 	 *            name of the member
@@ -131,7 +131,7 @@ public class JSONAdapter {
 	}
 
 	/**
-	 * convenience method to get element as a long value.
+	 * convenient method to get element as a long value.
 	 * 
 	 * @param key
 	 *            name of the member
@@ -147,7 +147,7 @@ public class JSONAdapter {
 	}
 
 	/**
-	 * convenience method to get element as an integer value.
+	 * convenient method to get element as an integer value.
 	 * 
 	 * @param key
 	 *            name of the member
@@ -158,7 +158,7 @@ public class JSONAdapter {
 	}
 
 	/**
-	 * convenience method to get element as an integer value.
+	 * convenient method to get element as an integer value.
 	 * 
 	 * @param key
 	 *            name of the member
@@ -174,7 +174,7 @@ public class JSONAdapter {
 	}
 
 	/**
-	 * convenience method to get element as a JSON array.
+	 * convenient method to get element as a JSON array.
 	 * 
 	 * @param key
 	 *            name of the member
@@ -188,7 +188,7 @@ public class JSONAdapter {
 	}
 
 	/**
-	 * convenience method to get element as a string value from inner object
+	 * convenient method to get element as a string value from inner object
 	 * 
 	 * @param objectKey
 	 *            object name of the member
@@ -204,7 +204,7 @@ public class JSONAdapter {
 	}
 
 	/**
-	 * convenience method to get element as a string value from inner-inner
+	 * convenient method to get element as a string value from inner-inner
 	 * object
 	 * 
 	 * @param objectKey1
@@ -225,5 +225,24 @@ public class JSONAdapter {
 		}
 		return null;
 	}
+
+    /**
+     * method to get values of array with primitive types
+     *
+     * @param key name of the member
+     * @return primitive value array
+     */
+    public String[] getJsonArrayValues(String key) {
+        if (jsonObject.has(key)) {
+            JsonArray arr = getJsonArray(key);
+            String[] values = new String[arr.size()];
+            int i = 0;
+            for (JsonElement elem : arr) {
+                values[i++] = elem.getAsString();
+            }
+            return values;
+        }
+        return new String[0];
+    }
 
 }

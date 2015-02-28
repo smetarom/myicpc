@@ -1,30 +1,59 @@
 package com.myicpc.social;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
+import com.myicpc.commons.adapters.JSONAdapter;
+import com.myicpc.commons.utils.FormatUtils;
+import com.myicpc.commons.utils.WebServiceUtils;
+import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
+import com.myicpc.model.social.BlacklistedUser;
+import com.myicpc.model.social.Notification;
+import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.service.exception.WebServiceException;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Consts;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * @author Roman Smetana
  */
 @Service
+@Transactional
 public class InstagramService extends ASocialService {
+    private static final Logger logger = LoggerFactory.getLogger(InstagramService.class);
+    private static final String INSTAGRAM_RECENT_TAG_URL = "https://api.instagram.com/v1/tags/%s/media/recent";
+    private static final Integer INSTAGRAM_MAX_PAGES = 3;
+
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     public void startSubscription(final Contest contest, String callbackUrl) throws URISyntaxException, IOException {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
@@ -45,12 +74,128 @@ public class InstagramService extends ASocialService {
             httpPost.setEntity(entity);
 
             CloseableHttpResponse response = httpclient.execute(httpPost);
-            System.out.println(response.getStatusLine().getStatusCode());
+            if (response.getStatusLine().getStatusCode() == 200) {
+                logger.info("Instagram subscription of tag {} was created", contest.getHashtag());
+            } else {
+                logger.error("Instagram subscription of tag {} failed. Reason: {}", contest.getHashtag(), response.getStatusLine().getReasonPhrase());
+            }
             response.close();
         }
     }
 
     public void getNewPosts(final Contest contest) throws WebServiceException {
+        if (StringUtils.isEmpty(contest.getWebServiceSettings().getInstagramKey())) {
+            return;
+        }
+
+        List<NameValuePair> params = new ArrayList<>(2);
+        params.add(new BasicNameValuePair("client_id", contest.getWebServiceSettings().getInstagramKey()));
+        String paramsString = URLEncodedUtils.format(params, FormatUtils.DEFAULT_ENCODING);
+        String url = String.format(INSTAGRAM_RECENT_TAG_URL, contest.getHashtag()) + "?" + paramsString;
+        List<Notification> notifications = getByHashTag(contest, url, 1);
+        
+        saveSearchList(notifications, BlacklistedUser.BlacklistedUserType.INSTAGRAM, contest);
+    }
+
+    protected List<Notification> getByHashTag(final Contest contest, String url, int page) throws WebServiceException {
+        HttpGet httpGet = null;
+        try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+            httpGet = new HttpGet(url);
+
+            HttpResponse response = httpclient.execute(httpGet);
+            HttpEntity entity = response.getEntity();
+
+            return parseInstagramResponse(contest, IOUtils.toString(entity.getContent(), FormatUtils.DEFAULT_ENCODING), page);
+        } catch (IOException ex) {
+            throw new WebServiceException(ex);
+        } finally {
+            WebServiceUtils.releaseConnection(httpGet);
+        }
+    }
+
+    protected List<Notification> parseInstagramResponse(final Contest contest, String json, int page) throws WebServiceException {
+        if (page > INSTAGRAM_MAX_PAGES) {
+            return new ArrayList<>();
+        }
+        List<Notification> list = new ArrayList<>();
+
+        try {
+            JsonObject root = new JsonParser().parse(json).getAsJsonObject();
+            JsonArray data = root.getAsJsonArray("data");
+            // process each received JSON record
+            for (JsonElement jsonElement : data) {
+                JSONAdapter mediaAdapter = new JSONAdapter(jsonElement);
+                String id = mediaAdapter.getString("id");
+
+                Notification notification = notificationRepository.findByContestAndExternalIdAndNotificationType(contest, id, NotificationType.INSTAGRAM);
+                if (notification != null) {
+                    return list;
+                }
+                String mediaType = mediaAdapter.getString("type");
+                notification = new Notification();
+                notification.setNotificationType(NotificationType.INSTAGRAM);
+
+                notification.setExternalId(id);
+                notification.setUrl(mediaAdapter.getString("link"));
+
+                JSONAdapter userAdapter = new JSONAdapter(mediaAdapter.get("user"));
+                String fullname = userAdapter.getString("full_name");
+                String username = userAdapter.getString("username");
+                notification.setAuthorName(StringUtils.isEmpty(fullname) ? username : fullname);
+                notification.setProfilePictureUrl(userAdapter.getString("profile_picture"));
+                notification.setTimestamp(new Date(mediaAdapter.getLong("created_time") * 1000));
+                notification.setTitle(username);
+                notification.setBody(mediaAdapter.getStringFromObject("caption", "text"));
+                if ("image".equalsIgnoreCase(mediaType)) {
+                    notification.setImageUrl(mediaAdapter.getStringFromObject("images", "standard_resolution", "url"));
+                } else if ("video".equalsIgnoreCase(mediaType)) {
+                    notification.setVideoUrl(mediaAdapter.getStringFromObject("videos", "standard_resolution", "url"));
+                }
+                notification.setThumbnailUrl(mediaAdapter.getStringFromObject("images", "thumbnail", "url"));
+
+                String[] tags = mediaAdapter.getJsonArrayValues("tags");
+                // TODO complete quest hashtag
+                notification.setHashtags(createHashtags(tags, contest.getHashtag(), null));
+                // TODO
+//                instagramMedia.setUserId(userAdapter.getString("id"));
+
+                list.add(notification);
+            }
+
+            // if the result has next page
+            if (root.get("pagination").getAsJsonObject().get("next_url") != null) {
+                List<Notification> nextPage = getByHashTag(contest, root.get("pagination").getAsJsonObject().get("next_url").getAsString(), page + 1);
+                if (nextPage != null && !nextPage.isEmpty()) {
+                    list.addAll(nextPage);
+                }
+            }
+        } catch (JsonParseException ex) {
+            throw new WebServiceException("Error parsing JSON: " + json, ex);
+        }
+
+        return list;
+    }
+
+    private String createHashtags(String[] tags, String contestHashtag, String questHashtag) {
+        StringBuffer tagString = new StringBuffer("|");
+        for (String tag : tags) {
+            tagString.append(tag).append('|');
+        }
+        if (tagString.length() > 255) {
+            tagString = new StringBuffer("|");
+            tagString.append(contestHashtag).append("|");
+            if (!StringUtils.isEmpty(questHashtag)) {
+                for (String tag : tags) {
+                    if (tag.startsWith(questHashtag)) {
+                        tagString.append(tag).append('|');
+                    }
+                }
+            }
+        }
+        return tagString.toString();
+    }
+
+    private String getJson() {
         String json = "{\n" +
                 "      \"attribution\": null,\n" +
                 "      \"tags\":  [\n" +
@@ -114,10 +259,7 @@ public class InstagramService extends ASocialService {
                 "        \"id\": \"506822770\"\n" +
                 "      }\n" +
                 "    }";
-        
-
+        return json;
     }
-
-
 
 }

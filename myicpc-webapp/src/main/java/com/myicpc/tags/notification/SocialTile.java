@@ -1,6 +1,5 @@
 package com.myicpc.tags.notification;
 
-import com.myicpc.commons.utils.MessageUtils;
 import com.myicpc.model.social.Notification;
 import org.apache.commons.lang3.StringUtils;
 
@@ -20,17 +19,41 @@ public abstract class SocialTile extends NotificationTile {
     }
 
     @Override
-    protected void renderBody(JspWriter out) throws IOException, JspException {
-        super.renderBody(out);
-        renderImage(out);
+    protected String getTitle() {
+        Object[] params = new Object[2];
+        if (isTemplate) {
+            params[0] = "{{authorName}}";
+            params[1] = "{{title}}";
+        } else {
+            params[0] = notification.getAuthorName();
+            params[1] = notification.getTitle();
+        }
+        return String.format(getTitleFormat(), params);
     }
 
-    protected void renderImage(JspWriter out) throws IOException, JspException {
+    protected String  getTitleFormat() {
+        return "%s <small>%s</small>";
+    }
+
+    @Override
+    protected void renderBody(JspWriter out) throws IOException, JspException {
+        super.renderBody(out);
+        renderMedia(out);
+    }
+
+    protected void renderMedia(JspWriter out) throws IOException, JspException {
+        String imageFormat = "<img src=\"%s\" alt=\"\" class=\"img-responsive\" />";
+        String videoFormat = "<video src=\"%s\" controls width=\"100%%\">\n" +
+                "  Your browser does not support the video player.\n" +
+                "</video>";
         if (isTemplate) {
-            out.print(String.format("<img src=\"%s\" alt=\"\" class=\"img-responsive\" />", "{{imageUrl}}"));
+            out.print(String.format(imageFormat, "{{imageUrl}}"));
+            out.print(String.format(imageFormat, "{{videoUrl}}"));
         } else {
-            if (!StringUtils.isEmpty(notification.getImageUrl())) {
-                out.print(String.format("<img src=\"%s\" alt=\"\" class=\"img-responsive\" />", notification.getImageUrl()));
+            if (!StringUtils.isEmpty(notification.getVideoUrl())) {
+                out.print(String.format(videoFormat, notification.getVideoUrl()));
+            } else if (!StringUtils.isEmpty(notification.getImageUrl())) {
+                out.print(String.format(imageFormat, notification.getImageUrl()));
             }
         }
     }

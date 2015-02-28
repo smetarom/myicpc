@@ -40,7 +40,7 @@ public class PersistenceAppConfig {
         JndiDataSourceLookup dataLookup = new JndiDataSourceLookup();
         dataLookup.setResourceRef(true);
 
-        DataSource dataSource = dataLookup.getDataSource("jdbc/myicpc2DB");
+        DataSource dataSource = dataLookup.getDataSource("java:jboss/datasources/PostgreSQLDS");
         return dataSource;
     }
 

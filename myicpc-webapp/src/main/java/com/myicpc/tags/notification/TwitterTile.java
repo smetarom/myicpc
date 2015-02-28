@@ -1,4 +1,4 @@
-package com.myicpc.tags.notification.utils;
+package com.myicpc.tags.notification;
 
 import com.myicpc.commons.utils.MessageUtils;
 import com.myicpc.model.social.Notification;
@@ -20,16 +20,8 @@ public class TwitterTile extends SocialTile {
     }
 
     @Override
-    protected String getTitle() {
-        Object[] params = new Object[2];
-        if (isTemplate) {
-            params[0] = "{{authorName}}";
-            params[1] = "{{title}}";
-        } else {
-            params[0] = notification.getAuthorName();
-            params[1] = notification.getTitle();
-        }
-        return String.format("%s <small>@%s</small>", params);
+    protected String getTitleFormat() {
+        return "%s <small>@%s</small>";
     }
 
     @Override
