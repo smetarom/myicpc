@@ -135,6 +135,10 @@
         <path>/WEB-INF/tags/form/springInput.tag</path>
     </tag-file>
     <tag-file>
+        <name>springInputWithButton</name>
+        <path>/WEB-INF/tags/form/springInputWithButton.tag</path>
+    </tag-file>
+    <tag-file>
         <name>springMultiSelect</name>
         <path>/WEB-INF/tags/form/springMultiSelect.tag</path>
     </tag-file>

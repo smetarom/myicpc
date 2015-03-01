@@ -236,6 +236,7 @@ public class ContestAdminController extends GeneralAdminController {
         items.add(new ImmutablePair<>("Twitter", getMessage("contestAdmin.wizard.stepTwitter")));
         items.add(new ImmutablePair<>("Instagram", getMessage("contestAdmin.wizard.stepInstagram")));
         items.add(new ImmutablePair<>("Vine", getMessage("contestAdmin.wizard.stepVine")));
+        items.add(new ImmutablePair<>("Picasa", getMessage("contestAdmin.wizard.stepPicasa")));
 //        items.add(new ImmutablePair<>("Youtube", getMessage("contestAdmin.wizard.stepYoutube")));
         if (!editMode) {
             items.add(new ImmutablePair<>("Summary", getMessage("contestAdmin.wizard.stepSummary")));

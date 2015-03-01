@@ -37,6 +37,9 @@
                 </h2>
             </div>
         </c:if>
+
+        <%@ include file="/WEB-INF/views/includes/messages.jsp" %>
+
         <div id="body" class="clearfix">
             <jsp:doBody/>
         </div>

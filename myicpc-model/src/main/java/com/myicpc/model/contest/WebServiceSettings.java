@@ -36,6 +36,11 @@ public class WebServiceSettings implements Serializable {
     private String vinePassword;
 
     private boolean showPicasaPhotos;
+    private String showPhotosUsername;
+    private String picasaUsername;
+    private String picasaPassword;
+    private String picasaCrowdAlbumId;
+    private String picasaPrivateAlbumId;
 
     public String getWsCMToken() {
         return wsCMToken;
@@ -133,4 +138,43 @@ public class WebServiceSettings implements Serializable {
         this.showPicasaPhotos = showPicasaPhotos;
     }
 
+    public String getShowPhotosUsername() {
+        return showPhotosUsername;
+    }
+
+    public void setShowPhotosUsername(String showPhotosUsername) {
+        this.showPhotosUsername = showPhotosUsername;
+    }
+
+    public String getPicasaUsername() {
+        return picasaUsername;
+    }
+
+    public void setPicasaUsername(String picasaUsername) {
+        this.picasaUsername = picasaUsername;
+    }
+
+    public String getPicasaPassword() {
+        return picasaPassword;
+    }
+
+    public void setPicasaPassword(String picasaPassword) {
+        this.picasaPassword = picasaPassword;
+    }
+
+    public String getPicasaCrowdAlbumId() {
+        return picasaCrowdAlbumId;
+    }
+
+    public void setPicasaCrowdAlbumId(String picasaCrowdAlbumId) {
+        this.picasaCrowdAlbumId = picasaCrowdAlbumId;
+    }
+
+    public String getPicasaPrivateAlbumId() {
+        return picasaPrivateAlbumId;
+    }
+
+    public void setPicasaPrivateAlbumId(String picasaPrivateAlbumId) {
+        this.picasaPrivateAlbumId = picasaPrivateAlbumId;
+    }
 }

@@ -47,7 +47,7 @@ public class NotificationList extends ArrayList<NotificationType> {
     }
 
     public NotificationList addGallery() {
-        this.add(NotificationType.GALLERY);
+        this.add(NotificationType.PICASA);
         return this;
     }
 

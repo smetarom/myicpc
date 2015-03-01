@@ -12,7 +12,7 @@ public enum NotificationType {
     TWITTER("Tweet", "Twitter", "twitter"),
     ARTICLE("Article", "Article", "a"),
     ADMIN_NOTIFICATION("Admin notification", "Admin notification", "an"),
-    GALLERY("Gallery", "Gallery", "ga"),
+    PICASA("Gallery", "Gallery", "ga"),
     VINE("Vine", "Vine", "vi"),
     INSTAGRAM_VIDEO("Instagram", "Instagram video", "iv"),
     INSTAGRAM("Instagram", "Instagram photo", "im"),
@@ -81,8 +81,8 @@ public enum NotificationType {
         return this == ADMIN_NOTIFICATION;
     }
 
-    public boolean isGallery() {
-        return this == GALLERY;
+    public boolean isPicasa() {
+        return this == PICASA;
     }
 
     public boolean isVine() {
