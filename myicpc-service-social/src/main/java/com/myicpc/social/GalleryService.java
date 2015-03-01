@@ -30,7 +30,8 @@ public class GalleryService {
     public static final List<NotificationType> GALLERY_TYPES = NotificationList.newList()
             .addTwitter()
             .addInstagram()
-            .addVine();
+            .addVine()
+            .addPicasa();
 
     public List<Notification> getGalleryNotifications(final Contest contest) {
         Page<Notification> timelineNotifications = notificationRepository.findByGalleryNotificationTypesOrderByIdDesc(GALLERY_TYPES, contest, DEFAULT_PAGEABLE);

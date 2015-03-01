@@ -29,7 +29,8 @@ public class TimelineService {
             .addAnalystMessage()
             .addTwitter()
             .addInstagram()
-            .addVine();
+            .addVine()
+            .addPicasa();
 
     @Autowired
     private NotificationRepository notificationRepository;

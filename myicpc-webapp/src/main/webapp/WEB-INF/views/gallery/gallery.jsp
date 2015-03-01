@@ -141,7 +141,7 @@
             Your browser does not support the video player.
         </video>
     {{else}}
-        <img src="{{imageUrl}}" alt="{{authorName}}" class="img-responsive">
+        <img src="{{imageUrl}}" alt="{{authorName}}" class="img-responsive center-block">
     {{/if}}
 </div>
 <div class="col-sm-4">

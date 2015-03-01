@@ -74,6 +74,10 @@ public abstract class NotificationTile {
         out.print(String.format("<img class=\"pull-left media-object\" src=\"%s\" alt=\"%s\" width=\"%d\" height=\"%d\">", resolveUrl(src), title, 50, 50));
     }
 
+    protected void renderAvatarIcon(JspWriter out, String iconClass) throws IOException, JspException {
+        out.print(String.format("<span class=\"pull-left media-object %s\" style=\"font-size: 2.5em; width: 50px;\"></span>", iconClass));
+    }
+
     protected String getTitle() {
         return isTemplate ? "{{title}}" : notification.getTitle();
     }
