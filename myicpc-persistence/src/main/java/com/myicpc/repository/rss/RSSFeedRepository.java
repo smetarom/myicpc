@@ -13,6 +13,4 @@ public interface RSSFeedRepository extends CrudRepository<RSSFeed, Long> {
     @Query(value = "SELECT rf FROM RSSFeed rf ORDER BY rf.name ASC")
     Iterable<RSSFeed> findAllOrderByNameAsc();
 
-    RSSFeed findBySlug(String slug);
-
 }

@@ -1,4 +1,4 @@
-package com.myicpc.social;
+package com.myicpc.social.gallery;
 
 import com.google.gdata.client.photos.PicasawebService;
 import com.google.gdata.data.PlainTextConstruct;

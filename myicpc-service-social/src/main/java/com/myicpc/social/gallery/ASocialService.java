@@ -1,4 +1,4 @@
-package com.myicpc.social;
+package com.myicpc.social.gallery;
 
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.BlacklistedUser;

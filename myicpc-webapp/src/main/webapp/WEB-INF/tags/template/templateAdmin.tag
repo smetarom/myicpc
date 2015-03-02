@@ -41,14 +41,14 @@
         </c:if>
     </div>
     <div id="body" class="wrapper clearfix">
+        <%@ include file="/WEB-INF/views/includes/messages.jsp" %>
+
         <c:if test="${not empty controls}">
             <div class="pull-right">
                 <jsp:invoke fragment="controls" />
             </div>
             <br class="clear" />
         </c:if>
-
-        <%@ include file="/WEB-INF/views/includes/messages.jsp" %>
 
         <jsp:doBody/>
     </div>

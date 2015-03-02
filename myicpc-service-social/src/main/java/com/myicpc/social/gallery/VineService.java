@@ -1,4 +1,4 @@
-package com.myicpc.social;
+package com.myicpc.social.gallery;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

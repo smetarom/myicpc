@@ -14,7 +14,7 @@ import java.util.List;
  * @author Roman Smetana
  */
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"slug"}))
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"url", "contestId"}))
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "RSSFeed_id_seq")
 public class RSSFeed extends IdGeneratedContestObject {
     private static final long serialVersionUID = -5305396635139792677L;
@@ -24,14 +24,8 @@ public class RSSFeed extends IdGeneratedContestObject {
      */
     private String name;
     /**
-     * Slug of the name of the feed
-     */
-    private String slug;
-    /**
      * Feed URL
      */
-    @NotNull
-    @Column(unique = true)
     private String url;
     /**
      * Base URL to the source
@@ -71,14 +65,6 @@ public class RSSFeed extends IdGeneratedContestObject {
 
     public void setName(final String name) {
         this.name = name;
-    }
-
-    public String getSlug() {
-        return slug;
-    }
-
-    public void setSlug(final String slug) {
-        this.slug = slug;
     }
 
     public String getUrl() {

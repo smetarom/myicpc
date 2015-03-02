@@ -1,11 +1,10 @@
-package com.myicpc.social;
+package com.myicpc.social.gallery;
 
 import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.BlacklistedUser;
 import com.myicpc.model.social.Notification;
 import com.myicpc.service.notification.NotificationBuilder;
-import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,6 @@ import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

@@ -27,7 +27,7 @@
 
     <jsp:body>
         <jsp:invoke fragment="topContent"/>
-        <div class="row">
+        <div class="clearfix">
             <div class="col-sm-8">
                 <jsp:doBody/>
             </div>
