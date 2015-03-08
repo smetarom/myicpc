@@ -69,6 +69,7 @@ public class ContestAdminController extends GeneralAdminController {
         Contest contest = new Contest();
         contest.getContestSettings().setYear(Calendar.getInstance().get(Calendar.YEAR));
         contest.getContestSettings().setShowTeamNames(true);
+        contest.getQuestConfiguration().setHashtagPrefix(getMessage("quest.hashtag.default"));
 
         return createContest(1, contest, model);
     }
@@ -231,6 +232,7 @@ public class ContestAdminController extends GeneralAdminController {
             items.add(new ImmutablePair<>("Modules", getMessage("contestAdmin.wizard.stepModules")));
         }
         items.add(new ImmutablePair<>("TeamEdit", getMessage("contestAdmin.wizard.stepTeamEdit")));
+        items.add(new ImmutablePair<>("Quest", getMessage("contestAdmin.wizard.stepQuest")));
 //        items.add(new ImmutablePair<>("TeamPictures", getMessage("contestAdmin.wizard.stepTeamPictures")));
 //        items.add(new ImmutablePair<>("Map", getMessage("contestAdmin.wizard.stepMap")));
         items.add(new ImmutablePair<>("Twitter", getMessage("contestAdmin.wizard.stepTwitter")));

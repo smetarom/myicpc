@@ -1,6 +1,7 @@
 package com.myicpc.model.quest;
 
 import com.myicpc.model.StartEndDateObject;
+import com.myicpc.validator.annotation.ValidateDateRange;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -17,6 +18,7 @@ import java.util.List;
  */
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "QuestChallange_id_seq")
+@ValidateDateRange
 public class QuestChallenge extends StartEndDateObject {
     private static final long serialVersionUID = -7014437159443310905L;
 

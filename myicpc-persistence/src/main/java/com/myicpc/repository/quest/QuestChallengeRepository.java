@@ -4,13 +4,14 @@ import com.myicpc.model.contest.Contest;
 import com.myicpc.model.quest.QuestChallenge;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Date;
 import java.util.List;
 
-public interface QuestChallengeRepository extends CrudRepository<QuestChallenge, Long> {
+public interface QuestChallengeRepository extends JpaRepository<QuestChallenge, Long> {
     List<QuestChallenge> findByContest(Contest contest, Sort sort);
 
     List<QuestChallenge> findByContestOrderByNameAsc(Contest contest);

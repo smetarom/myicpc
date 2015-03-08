@@ -26,6 +26,8 @@
         <module>myicpc-controller-schedule</module>
         <module>myicpc-controller-social</module>
         <module>myicpc-service-social</module>
+        <module>myicpc-controller-quest</module>
+        <module>myicpc-service-quest</module>
     </modules>
 
     <properties>
@@ -33,10 +35,12 @@
         <myicpc-service-scoreboard.version>2.0.0</myicpc-service-scoreboard.version>
         <myicpc-service-schedule.version>2.0.0</myicpc-service-schedule.version>
         <myicpc-service-social.version>2.0.0</myicpc-service-social.version>
+        <myicpc-service-quest.version>2.0.0</myicpc-service-quest.version>
         <myicpc-controller.version>2.0.0</myicpc-controller.version>
         <myicpc-controller-scoreboard.version>2.0.0</myicpc-controller-scoreboard.version>
         <myicpc-controller-schedule.version>2.0.0</myicpc-controller-schedule.version>
         <myicpc-controller-social.version>2.0.0</myicpc-controller-social.version>
+        <myicpc-controller-quest.version>2.0.0</myicpc-controller-quest.version>
         <myicpc-pubsub.version>2.0.0</myicpc-pubsub.version>
         <myicpc-persistence.version>2.0.0</myicpc-persistence.version>
         <myicpc-model.version>2.0.0</myicpc-model.version>

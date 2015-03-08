@@ -44,6 +44,12 @@
 
         <dependency>
             <groupId>com.myicpc</groupId>
+            <artifactId>myicpc-controller-quest</artifactId>
+            <version>${myicpc-controller-quest.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.myicpc</groupId>
             <artifactId>myicpc-pubsub</artifactId>
             <version>${myicpc-pubsub.version}</version>
         </dependency>
