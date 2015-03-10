@@ -252,8 +252,8 @@ public class NotificationServiceImpl implements NotificationService {
         Notification notification = new Notification();
         notification.setTitle(submission.getParticipant().getContestParticipant().getTwitterUsername());
         notification.setBody(submission.getEscapedText());
-        notification.setNotificationType(submission.getSubmissionType().getNotificationType());
-        notification.setUrl(submission.getMediaURL());
+//        notification.setNotificationType(submission.getSubmissionType().getNotificationType());
+//        notification.setUrl(submission.getMediaURL());
         notification.setProfilePictureUrl(submission.getParticipant().getContestParticipant().getProfilePictureUrl());
         notification.setTimestamp(new Date());
 

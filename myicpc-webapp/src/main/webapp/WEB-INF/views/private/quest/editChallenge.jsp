@@ -1,6 +1,10 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp"%>
 
 <t:templateAdminEdit>
+    <jsp:attribute name="title">
+		${headlineTitle}
+	</jsp:attribute>
+
 	<jsp:attribute name="headline">
 		${headlineTitle}
 	</jsp:attribute>

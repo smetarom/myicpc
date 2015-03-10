@@ -25,6 +25,24 @@
         </attribute>
     </tag>
 
+    <tag>
+        <name>questSubmission</name>
+        <tag-class>com.myicpc.tags.quest.QuestSubmissionTag</tag-class>
+        <body-content>scriptless</body-content>
+        <attribute>
+            <name>submission</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.myicpc.model.quest.QuestSubmission</type>
+        </attribute>
+        <attribute>
+            <name>showDescription</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Boolean</type>
+        </attribute>
+    </tag>
+
     <!-- JSP templates -->
     <tag-file>
         <name>alert</name>

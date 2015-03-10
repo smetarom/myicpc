@@ -1,6 +1,10 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp"%>
 
 <t:templateAdmin>
+    <jsp:attribute name="title">
+		<spring:message code="questAdmin.title" />
+	</jsp:attribute>
+
 	<jsp:attribute name="headline">
 		<spring:message code="questAdmin.title" />
 	</jsp:attribute>
@@ -8,6 +12,10 @@
 	<jsp:attribute name="breadcrumb">
 	    <li class="active"><spring:message code="nav.admin.quest" /></li>
 	</jsp:attribute>
+
+    <jsp:attribute name="controls">
+        <a href='<spring:url value="/private${contestURL}/quest/challenge/create" />' class="btn btn-default btn-hover"><t:glyphIcon icon="plus"/> <spring:message code="questAdmin.createBtn" /></a>
+    </jsp:attribute>
 
     <jsp:body>
         <div class="row">
@@ -39,8 +47,6 @@
                     </c:forEach>
                     </tbody>
                 </table>
-
-                <a href='<spring:url value="/private${contestURL}/quest/challenge/create" />' class="btn btn-primary"><spring:message code="questAdmin.createBtn" /></a>
             </div>
         </div>
     </jsp:body>

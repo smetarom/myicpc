@@ -1,7 +1,7 @@
 package com.myicpc.tags.notification;
 
 import com.myicpc.model.social.Notification;
-import com.myicpc.tags.notification.utils.JSPUtils;
+import com.myicpc.tags.utils.JSPUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.jsp.JspException;

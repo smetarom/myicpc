@@ -9,6 +9,9 @@ import javax.servlet.jsp.PageContext;
 import java.io.IOException;
 import java.util.Locale;
 
+import static com.myicpc.tags.utils.TagConstants.IMAGE_FORMAT;
+import static com.myicpc.tags.utils.TagConstants.VIDEO_FORMAT;
+
 /**
  * @author Roman Smetana
  */
@@ -42,18 +45,14 @@ public abstract class SocialTile extends NotificationTile {
     }
 
     protected void renderMedia(JspWriter out) throws IOException, JspException {
-        String imageFormat = "<img src=\"%s\" alt=\"\" class=\"img-responsive center-block\" />";
-        String videoFormat = "<video src=\"%s\" controls muted loop width=\"100%%\">\n" +
-                "  Your browser does not support the video player.\n" +
-                "</video>";
         if (isTemplate) {
-            out.print(String.format(imageFormat, "{{imageUrl}}"));
-            out.print(String.format(videoFormat, "{{videoUrl}}"));
+            out.print(String.format(IMAGE_FORMAT, "{{imageUrl}}"));
+            out.print(String.format(VIDEO_FORMAT, "{{videoUrl}}"));
         } else {
             if (!StringUtils.isEmpty(notification.getVideoUrl())) {
-                out.print(String.format(videoFormat, notification.getVideoUrl()));
+                out.print(String.format(VIDEO_FORMAT, notification.getVideoUrl()));
             } else if (!StringUtils.isEmpty(notification.getImageUrl())) {
-                out.print(String.format(imageFormat, notification.getImageUrl()));
+                out.print(String.format(IMAGE_FORMAT, notification.getImageUrl()));
             }
         }
     }

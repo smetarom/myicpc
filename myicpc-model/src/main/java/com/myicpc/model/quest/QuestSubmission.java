@@ -33,26 +33,6 @@ public class QuestSubmission extends IdGeneratedObject {
     private static final long serialVersionUID = 3688412990863522876L;
 
     /**
-     * Type of the {@link QuestSubmission}
-     *
-     * @author Roman Smetana
-     */
-    public enum QuestSubmissionType {
-        INVISIBLE(null), TWITTER(NotificationType.QUEST_VOTE_WINNER_TWITTER), INSTAGRAM_IMAGE(NotificationType.QUEST_VOTE_WINNER_INSTAGRAM_IMAGE), INSTAGRAM_VIDEO(
-                NotificationType.QUEST_VOTE_INSTAGRAM_VIDEO), VINE(NotificationType.QUEST_VOTE_WINNER_VINE);
-
-        private NotificationType notificationType;
-
-        private QuestSubmissionType(final NotificationType notificationType) {
-            this.notificationType = notificationType;
-        }
-
-        public NotificationType getNotificationType() {
-            return notificationType;
-        }
-    }
-
-    /**
      * State of the {@link QuestSubmission}
      *
      * @author Roman Smetana
@@ -115,7 +95,12 @@ public class QuestSubmission extends IdGeneratedObject {
     /**
      * URL of image/video or other media
      */
-    private String mediaURL;
+    private String imageUrl;
+
+    /**
+     * URL of video or other media
+     */
+    private String videoUrl;
 
     /**
      * Reason why the submission was rejected
@@ -132,6 +117,7 @@ public class QuestSubmission extends IdGeneratedObject {
      * Submission for {@link QuestChallenge}
      */
     @ManyToOne
+    @NotNull
     @JoinColumn(name = "challengeId")
     private QuestChallenge challenge;
 
@@ -139,6 +125,7 @@ public class QuestSubmission extends IdGeneratedObject {
      * Submitted by {@link QuestParticipant}
      */
     @ManyToOne
+    @NotNull
     @JoinColumn(name = "participantId")
     private QuestParticipant participant;
 
@@ -148,13 +135,6 @@ public class QuestSubmission extends IdGeneratedObject {
     @NotNull
     @Enumerated(EnumType.STRING)
     private QuestSubmissionState submissionState;
-
-    /**
-     * Submission type
-     */
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private QuestSubmissionType submissionType;
 
     /**
      * Submission state in the voting system
@@ -194,12 +174,20 @@ public class QuestSubmission extends IdGeneratedObject {
         this.text = text;
     }
 
-    public String getMediaURL() {
-        return mediaURL;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setMediaURL(final String mediaURL) {
-        this.mediaURL = mediaURL;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
     }
 
     public Date getCreated() {
@@ -240,14 +228,6 @@ public class QuestSubmission extends IdGeneratedObject {
 
     public void setSubmissionState(final QuestSubmissionState submissionState) {
         this.submissionState = submissionState;
-    }
-
-    public QuestSubmissionType getSubmissionType() {
-        return submissionType;
-    }
-
-    public void setSubmissionType(final QuestSubmissionType submissionType) {
-        this.submissionType = submissionType;
     }
 
     public VoteSubmissionState getVoteSubmissionState() {

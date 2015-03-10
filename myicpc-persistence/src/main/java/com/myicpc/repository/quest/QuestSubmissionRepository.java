@@ -19,7 +19,7 @@ public interface QuestSubmissionRepository extends PagingAndSortingRepository<Qu
     @Query("SELECT qs FROM QuestSubmission qs WHERE qs.submissionState = 'ACCEPTED' AND qs.voteSubmissionState = 'IN_PROGRESS' AND qs.challenge.contest = ?1")
     List<QuestSubmission> getVoteInProgressSubmissions(Contest contest);
 
-    @Query("SELECT qs FROM QuestSubmission qs WHERE qs.participant = ?1 AND qs.submissionType != 'INVISIBLE' ORDER BY qs.created DESC")
+    @Query("SELECT qs FROM QuestSubmission qs WHERE qs.participant = ?1 ORDER BY qs.created DESC")
     List<QuestSubmission> getLatestSubmisionsByParticipant(QuestParticipant participant, Pageable pageable);
 
     @Query("SELECT COUNT(qs) FROM QuestSubmission qs WHERE qs.voteSubmissionState = 'VOTE_WINNER' AND qs.challenge.contest = ?1")
@@ -35,7 +35,7 @@ public interface QuestSubmissionRepository extends PagingAndSortingRepository<Qu
 
     List<QuestSubmission> findByExternalId(String externalId);
 
-    @Query("SELECT qs FROM QuestSubmission qs WHERE qs.submissionType != 'INVISIBLE' ORDER BY RANDOM()")
+    @Query("SELECT qs FROM QuestSubmission qs ORDER BY RANDOM()")
     List<QuestSubmission> getRandomQuestSubmissions(Pageable pageable);
 
     @Query("SELECT qs FROM QuestSubmission qs WHERE qs.submissionState = ?1 ORDER BY RANDOM()")
@@ -47,7 +47,7 @@ public interface QuestSubmissionRepository extends PagingAndSortingRepository<Qu
     @Query("SELECT qs FROM QuestSubmission qs WHERE qs.submissionState = 'ACCEPTED' AND qs.voteSubmissionState = 'IN_PROGRESS'")
     List<QuestSubmission> getVoteInProgressSubmissions();
 
-    @Query("SELECT qs FROM QuestSubmission qs WHERE qs.submissionState = 'ACCEPTED' AND qs.submissionType != 'INVISIBLE' AND qs.voteSubmissionState IS NULL ORDER BY RANDOM()")
+    @Query("SELECT qs FROM QuestSubmission qs WHERE qs.submissionState = 'ACCEPTED' AND qs.voteSubmissionState IS NULL ORDER BY RANDOM()")
     List<QuestSubmission> getVoteEligableSubmissions(Pageable pageable);
 
     @Query("SELECT COUNT(qs) FROM QuestSubmission qs WHERE qs.participant.id = ?1")

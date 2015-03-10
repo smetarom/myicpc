@@ -6,9 +6,10 @@
 
 <%@ attribute name="action" required="true" %>
 <%@ attribute name="styleClass" %>
+<%@ attribute name="style" %>
 <%@ attribute name="fileUpload" type="java.lang.Boolean" %>
 
-<form class="form-horizontal ${styleClass}" method="post" action="<spring:url value="${action}"/>${fileUpload ? '?'.concat(_csrf.parameterName).concat('=').concat(_csrf.token) : ''}"  ${fileUpload ? 'enctype="multipart/form-data"' : ''}>
+<form class="form-horizontal ${styleClass}" style="${style}" method="post" action="<spring:url value="${action}"/>${fileUpload ? '?'.concat(_csrf.parameterName).concat('=').concat(_csrf.token) : ''}"  ${fileUpload ? 'enctype="multipart/form-data"' : ''}>
     <jsp:doBody/>
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>

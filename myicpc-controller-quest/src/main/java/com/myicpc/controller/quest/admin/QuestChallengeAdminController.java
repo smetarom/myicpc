@@ -1,4 +1,4 @@
-package com.myicpc.controller.quest;
+package com.myicpc.controller.quest.admin;
 
 import com.myicpc.controller.GeneralAdminController;
 import com.myicpc.model.contest.Contest;
@@ -26,8 +26,8 @@ import javax.validation.Valid;
  * @author Roman Smetana
  */
 @Controller
-@SessionAttributes({ "challenge", "submissionFilter" })
-public class QuestAdminController extends GeneralAdminController {
+@SessionAttributes("challenge")
+public class QuestChallengeAdminController extends GeneralAdminController {
 
     @Autowired
     private QuestMngmService questMngmService;

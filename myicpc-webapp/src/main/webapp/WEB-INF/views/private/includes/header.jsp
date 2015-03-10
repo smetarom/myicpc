@@ -43,6 +43,7 @@
                     <ul class="dropdown-menu">
                         <c:if test="${util:questModuleEnabled(contest)}">
                             <li><a href='<spring:url value="/private${contestURL}/quest/challenges" />'><spring:message code="nav.admin.challenges" /></a></li>
+                            <li><a href='<spring:url value="/private${contestURL}/quest/leaderboards" />'><spring:message code="nav.admin.quest.leaderboards" /></a></li>
                             <li><a href='<spring:url value="/private${contestURL}/quest/participants" />'><spring:message code="nav.admin.quest.participants" /></a></li>
                             <li><a href='<spring:url value="/private${contestURL}/quest/submissions" />'><spring:message code="nav.admin.quest.submissions" /></a></li>
                             <li><a href='<spring:url value="/private${contestURL}/quest/votes" />'><spring:message code="nav.admin.quest.votes" /></a></li>

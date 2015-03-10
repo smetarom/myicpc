@@ -1,4 +1,4 @@
-package com.myicpc.tags.notification.utils;
+package com.myicpc.tags.utils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
