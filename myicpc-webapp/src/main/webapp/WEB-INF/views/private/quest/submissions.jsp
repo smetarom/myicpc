@@ -95,7 +95,7 @@
                         </t:plainForm>
                     </div>
                 </div>
-                <c:if test="${status.index % 3 == 2}">
+                <c:if test="${util:isNLine(status, 2, 3)}">
                     <br class="clear" />
                 </c:if>
             </c:forEach>

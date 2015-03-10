@@ -20,11 +20,15 @@
                 <li role="presentation" class="active"><a href="#in-progress" aria-controls="home" role="tab" data-toggle="pill"><spring:message code="questAdmin.votes.inProgress.title" /></a></li>
                 <li role="presentation"><a href="#history" aria-controls="profile" role="tab" data-toggle="pill"><spring:message code="questAdmin.votes.winners.title" /></a></li>
             </ul>
-
+            <br/>
             <!-- Tab panes -->
             <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="in-progress">.tyuy..</div>
-                <div role="tabpanel" class="tab-pane" id="history">..dsas.</div>
+                <div role="tabpanel" class="tab-pane active" id="in-progress">
+                    <%@ include file="/WEB-INF/views/private/quest/fragment/votesInProgress.jsp"%>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="history">
+                    <%@ include file="/WEB-INF/views/private/quest/fragment/voteWinners.jsp"%>
+                </div>
             </div>
 
         </div>

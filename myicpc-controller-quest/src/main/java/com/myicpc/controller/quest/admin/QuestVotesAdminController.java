@@ -4,6 +4,7 @@ import com.myicpc.controller.GeneralAdminController;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.quest.QuestLeaderboard;
 import com.myicpc.repository.quest.QuestLeaderboardRepository;
+import com.myicpc.repository.quest.QuestSubmissionRepository;
 import com.myicpc.service.quest.QuestMngmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,12 +28,14 @@ import java.util.Arrays;
 public class QuestVotesAdminController extends GeneralAdminController {
 
     @Autowired
-    private QuestMngmService questMngmService;
+    private QuestSubmissionRepository submissionRepository;
 
     @RequestMapping(value = "/private/{contestCode}/quest/votes", method = RequestMethod.GET)
     public String submissions(@PathVariable final String contestCode, Model model) {
         Contest contest = getContest(contestCode, model);
 
+        model.addAttribute("inProgressVoteSubmissions", submissionRepository.getVoteInProgressSubmissions(contest));
+        model.addAttribute("winnerVoteSubmissions", submissionRepository.getVoteWinnersSubmissions(contest));
 
         return "private/quest/votes";
     }
