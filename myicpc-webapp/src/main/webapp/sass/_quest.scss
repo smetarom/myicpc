@@ -1,0 +1,65 @@
+.quest-info {
+  position: relative;
+  top: -10px;
+  border-radius: 0;
+  margin-bottom: 0;
+  padding: 0 5px;
+}
+
+#quest-challanges-carousel {
+  .carousel-control {
+    width: 10%;
+    color: black;
+
+    &.left {
+      background-image: none;
+
+      &:hover {
+        background-image: -webkit-linear-gradient(left, color-stop(rgba(0, 0, 0, .1) 0), color-stop(rgba(0, 0, 0, .0001) 100%));
+        background-image: linear-gradient(to right, rgba(0, 0, 0, .1) 0, rgba(0, 0, 0, .0001) 100%);
+      }
+    }
+
+    &.right {
+      background-image: none;
+
+      &:hover {
+        background-image: -webkit-linear-gradient(left, color-stop(rgba(0, 0, 0, .0001) 0), color-stop(rgba(0, 0, 0, .1) 100%));
+        background-image: linear-gradient(to right, rgba(0, 0, 0, .0001) 0, rgba(0, 0, 0, .1) 100%);
+      }
+    }
+  }
+
+  .challenge-description {
+    margin: 5px 20px 40px;
+
+    p {
+      margin-right: 25px;
+      margin-left: 25px;
+      text-align: justify;
+    }
+  }
+
+  .carousel-indicators {
+    bottom: 0;
+
+    li, .active {
+      border-color: black;
+    }
+  }
+}
+
+#vote-panel {
+  .thumbnail {
+    background-color: #eee;
+  }
+
+  img {
+    margin-bottom: 5px;
+  }
+}
+
+.challenge-info-small {
+  font-size: 85%;
+  color: gray;
+}

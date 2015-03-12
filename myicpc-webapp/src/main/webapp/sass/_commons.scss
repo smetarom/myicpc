@@ -45,6 +45,20 @@ hr.divider {
   border-color: transparent;
 }
 
+.table-menu {
+  a {
+    display: block;
+    text-decoration: none;
+  }
+}
+
 .google-map-frame {
   border: none;
+}
+
+.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display:         flex;
 }

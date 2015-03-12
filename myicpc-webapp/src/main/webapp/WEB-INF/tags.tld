@@ -41,6 +41,12 @@
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.Boolean</type>
         </attribute>
+        <attribute>
+            <name>videoAutoplay</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.Boolean</type>
+        </attribute>
     </tag>
 
     <!-- JSP templates -->

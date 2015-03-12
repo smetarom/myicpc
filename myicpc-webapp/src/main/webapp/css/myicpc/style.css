@@ -37,8 +37,18 @@ hr.divider {
   background-color: inherit;
   border-color: transparent; }
 
+.table-menu a {
+  display: block;
+  text-decoration: none; }
+
 .google-map-frame {
   border: none; }
+
+.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex; }
 
 #timeline-notification {
   display: block;
@@ -370,6 +380,46 @@ a.gallery-thumbnail {
     max-width: 450px;
     width: 100%;
     margin: 0 auto; }
+
+.quest-info {
+  position: relative;
+  top: -10px;
+  border-radius: 0;
+  margin-bottom: 0;
+  padding: 0 5px; }
+
+#quest-challanges-carousel .carousel-control {
+  width: 10%;
+  color: black; }
+  #quest-challanges-carousel .carousel-control.left {
+    background-image: none; }
+    #quest-challanges-carousel .carousel-control.left:hover {
+      background-image: -webkit-linear-gradient(left, color-stop(rgba(0, 0, 0, 0.1) 0), color-stop(rgba(0, 0, 0, 0.0001) 100%));
+      background-image: linear-gradient(to right, rgba(0, 0, 0, 0.1) 0, rgba(0, 0, 0, 0.0001) 100%); }
+  #quest-challanges-carousel .carousel-control.right {
+    background-image: none; }
+    #quest-challanges-carousel .carousel-control.right:hover {
+      background-image: -webkit-linear-gradient(left, color-stop(rgba(0, 0, 0, 0.0001) 0), color-stop(rgba(0, 0, 0, 0.1) 100%));
+      background-image: linear-gradient(to right, rgba(0, 0, 0, 0.0001) 0, rgba(0, 0, 0, 0.1) 100%); }
+#quest-challanges-carousel .challenge-description {
+  margin: 5px 20px 40px; }
+  #quest-challanges-carousel .challenge-description p {
+    margin-right: 25px;
+    margin-left: 25px;
+    text-align: justify; }
+#quest-challanges-carousel .carousel-indicators {
+  bottom: 0; }
+  #quest-challanges-carousel .carousel-indicators li, #quest-challanges-carousel .carousel-indicators .active {
+    border-color: black; }
+
+#vote-panel .thumbnail {
+  background-color: #eee; }
+#vote-panel img {
+  margin-bottom: 5px; }
+
+.challenge-info-small {
+  font-size: 85%;
+  color: gray; }
 
 .team-timeline td.time-cell {
   border-right: 2px solid #ddd; }

@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import static com.myicpc.tags.utils.TagConstants.IMAGE_FORMAT;
 import static com.myicpc.tags.utils.TagConstants.VIDEO_FORMAT;
+import static com.myicpc.tags.utils.TagConstants.VIDEO_FORMAT_AUTOPLAY;
 
 /**
  * @author Roman Smetana
@@ -17,6 +18,7 @@ import static com.myicpc.tags.utils.TagConstants.VIDEO_FORMAT;
 public class QuestSubmissionTag extends SimpleTagSupport {
     private QuestSubmission questSubmission;
     private boolean showDescription = true;
+    private boolean videoAutoplay;
 
     public void setSubmission(QuestSubmission questSubmission) {
         this.questSubmission = questSubmission;
@@ -24,6 +26,10 @@ public class QuestSubmissionTag extends SimpleTagSupport {
 
     public void setShowDescription(boolean showDescription) {
         this.showDescription = showDescription;
+    }
+
+    public void setVideoAutoplay(boolean videoAutoplay) {
+        this.videoAutoplay = videoAutoplay;
     }
 
     @Override
@@ -35,7 +41,8 @@ public class QuestSubmissionTag extends SimpleTagSupport {
                 out.write(String.format("<p>%s</p>",questSubmission.getText()));
             }
             if (!StringUtils.isEmpty(questSubmission.getVideoUrl())) {
-                out.print(String.format(VIDEO_FORMAT, questSubmission.getVideoUrl()));
+                String format = videoAutoplay ? VIDEO_FORMAT_AUTOPLAY : VIDEO_FORMAT;
+                out.print(String.format(format, questSubmission.getVideoUrl()));
             } else if (!StringUtils.isEmpty(questSubmission.getImageUrl())) {
                 out.print(String.format(IMAGE_FORMAT, questSubmission.getImageUrl()));
             }

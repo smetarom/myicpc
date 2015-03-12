@@ -14,6 +14,7 @@ public class QuestConfiguration extends IdGeneratedObject {
 
     private Integer pointsForVote;
     private String hashtagPrefix;
+    private String instructionUrl;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "mapConfiguration")
     private Contest contest;
@@ -32,6 +33,14 @@ public class QuestConfiguration extends IdGeneratedObject {
 
     public void setHashtagPrefix(String hashtagPrefix) {
         this.hashtagPrefix = hashtagPrefix;
+    }
+
+    public String getInstructionUrl() {
+        return instructionUrl;
+    }
+
+    public void setInstructionUrl(String instructionUrl) {
+        this.instructionUrl = instructionUrl;
     }
 
     public Contest getContest() {

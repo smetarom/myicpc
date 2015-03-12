@@ -61,6 +61,29 @@ formatContestTime = (seconds) ->
 
   return minus + hours + ":" + minutes;
 
+###
+ Convert seconds into hours and minutes and seconds
+ @param seconds number of seconds
+ @returns time in format HH:MM:SS
+###
+convertSecondsToHHMMSS = (seconds) ->
+  hours = Math.floor(seconds / 3600)
+  seconds %= 3600
+  minutes = Math.floor(seconds / 60)
+  seconds %= 60
+  s = ""
+  if (hours)
+    if (hours < 10)
+      hours = "0" + hours
+    s = hours + ":"
+
+  if (minutes < 10)
+    minutes = "0"+minutes
+  s += minutes+":"
+  if (seconds < 10)
+    seconds = "0"+seconds
+  return s + seconds
+
 isElementVisible = (elem, offset = 0) ->
   $e = $(elem);
   $(window).scrollTop()+window.innerHeight + offset >$e.offset().top && $(window).scrollTop() + offset <$e.offset().top+$e.height();
