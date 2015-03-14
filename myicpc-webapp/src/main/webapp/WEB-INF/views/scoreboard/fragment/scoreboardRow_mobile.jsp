@@ -6,10 +6,10 @@
             <span class="glyphicon" ng-class="{true:'glyphicon-star', 'undefined':'glyphicon-star-empty', false:'glyphicon-star-empty'}[team.followed]"></span>
         </a>
     </td>
-    <td class="team-rank"><strong>{{team.teamRank}}</strong></td>
-    <td class="nowrap team-name"><strong><a href="<spring:url value="/team/{{team.teamId}}"/>">{{team.teamName}}</a></strong></td>
-    <td class="text-center total-solved"><strong>{{team.nSolved}}</strong></td>
-    <td class="text-center total-time"><strong>{{team.totalTime}}</strong></td>
+    <td class="team-rank">{{team.teamRank}}</td>
+    <td class="nowrap team-name"><a href="<spring:url value="${contestURL}/team/{{team.teamId}}"/>">{{team.teamName}}</a></td>
+    <td class="text-center total-solved">{{team.nSolved}}</td>
+    <td class="text-center total-time">{{team.totalTime}}</td>
 </tr>
 <tr id="team_{{team.teamId}}_problems" class="problemRow" ng-show="team.showProblems">
     <td colspan="5">

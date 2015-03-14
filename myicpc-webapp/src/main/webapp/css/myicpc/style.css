@@ -107,11 +107,13 @@ a.block {
     margin: 7px 7px;
     border-radius: 5px; }
 
+#mainScoreboard.mobile {
+  font-size: 0.9em; }
+  #mainScoreboard.mobile .mobile-problem-cell {
+    font-size: 0.7em; }
+
 .pin a {
   color: black; }
-
-.scoreboardRow {
-  font-size: 1.2em; }
 
 .striped-rows > tbody > tr:nth-child(odd), .striped-body > tbody:nth-child(odd) {
   background-color: #f9f9f9; }

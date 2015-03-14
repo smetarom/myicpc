@@ -6,7 +6,7 @@
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
             <span class="glyphicon glyphicon-share-alt"> <spring:message code="share"/></span>
         </button>
-        <a class="navbar-brand" href='<spring:url value="/" />'><span class="fa fa-home"></span> <spring:message
+        <a class="navbar-brand" href='<spring:url value="${contestURL}/" />'><span class="fa fa-home"></span> <spring:message
                 code="app.name"/></a>
     </div>
 
@@ -39,12 +39,12 @@
             </c:if>
             <c:if test="${util:galleryModuleEnabled(contest)}">
                 <td class="${sideMenuActive eq 'gallery' ? 'active' : '' }">
-                    <a id="main-gallery-link" href="<spring:url value="/gallery" />" class="side-menu-gallery"><span
+                    <a id="main-gallery-link" href="<spring:url value="${contestURL}/gallery" />" class="side-menu-gallery"><span
                             class="glyphicon glyphicon-camera"
                             ></span></a>
                 </td>
             </c:if>
-            <td><t:emptyLink id="main-misc-link" styleClass="side-menu-gallery"><span
+            <td><t:emptyLink id="main-misc-link" styleClass="side-menu-misc"><span
                     class="fa fa-ellipsis-v"></span></t:emptyLink>
         </tr>
         </tbody>

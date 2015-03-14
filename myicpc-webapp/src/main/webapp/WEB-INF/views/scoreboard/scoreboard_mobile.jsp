@@ -20,7 +20,7 @@
         </c:if>
         <c:if test="${scoreboardAvailable}">
             <div ng-app="scoreboard">
-            <div id="mainScoreboard" class="table-responsive desktop" ng-controller="scoreboardCtrl">
+            <div id="mainScoreboard" class="mobile" ng-controller="scoreboardCtrl">
                 <div ng-show="filterBy" ng-cloak>
                     <strong><spring:message code="filtredBy" />:</strong>
                     <a href="javascript:void(0)" ng-click="clearFilter()" ng-show="isFilteredBy('regionId')">
@@ -33,7 +33,7 @@
                         <span class="label label-default">&times; <spring:message code="scoreboard.country" /></span>
                     </a>
                 </div>
-                <table class="table striped-rows scoreboard" ng-cloak>
+                <table class="table striped-body scoreboard" ng-cloak>
                     <thead>
                         <tr>
                             <th></th>

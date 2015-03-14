@@ -1,9 +1,13 @@
-.pin a {
-  color: black;
+#mainScoreboard.mobile {
+  font-size: 0.9em;
+
+  .mobile-problem-cell {
+    font-size: 0.7em;
+  }
 }
 
-.scoreboardRow {
-  font-size: 1.2em;
+.pin a {
+  color: black;
 }
 
 .striped-rows > tbody > tr:nth-child(odd), .striped-body > tbody:nth-child(odd) {
