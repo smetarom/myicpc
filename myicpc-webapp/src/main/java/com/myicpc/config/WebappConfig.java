@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.mobile.device.DeviceHandlerMethodArgumentResolver;
 import org.springframework.mobile.device.DeviceResolverHandlerInterceptor;
 import org.springframework.mobile.device.site.SitePreferenceHandlerInterceptor;
 import org.springframework.mobile.device.site.SitePreferenceHandlerMethodArgumentResolver;
@@ -120,6 +121,11 @@ public class WebappConfig extends WebMvcConfigurerAdapter {
     }
 
     @Bean
+    public DeviceHandlerMethodArgumentResolver deviceHandlerMethodArgumentResolver() {
+        return new DeviceHandlerMethodArgumentResolver();
+    }
+
+    @Bean
     public SitePreferenceHandlerInterceptor sitePreferenceHandlerInterceptor() {
         return new SitePreferenceHandlerInterceptor();
     }
@@ -136,6 +142,7 @@ public class WebappConfig extends WebMvcConfigurerAdapter {
     }
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(deviceHandlerMethodArgumentResolver());
         argumentResolvers.add(sitePreferenceHandlerMethodArgumentResolver());
     }
 }

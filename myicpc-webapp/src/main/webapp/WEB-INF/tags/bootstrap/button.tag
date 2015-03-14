@@ -35,7 +35,9 @@
 </c:if>
 
 <c:if test="${not empty modalOpenId}">
-    <button type="button" class="btn btn-${context} ${styleClass}" data-toggle="modal" data-target="#${modalOpenId}">
+    <button type="button" class="btn btn-${context} ${styleClass}" data-toggle="modal"
+            data-target="#${modalOpenId}"
+            ${empty onclick ? '' : 'onclick="'.concat(onclick).concat('"')}>
         <jsp:doBody />
     </button>
 </c:if>

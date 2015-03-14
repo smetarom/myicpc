@@ -1,3 +1,15 @@
+.twitter-color {
+  color: #55acee;
+}
+
+.vine-color {
+  color: #00b488;
+}
+
+.instagram-color {
+  color: #3f729b;
+}
+
 hr.divider {
   margin: 5px 0;
 }
@@ -50,6 +62,11 @@ hr.divider {
     display: block;
     text-decoration: none;
   }
+}
+
+a.block {
+  display: block;
+  text-decoration: none;
 }
 
 .google-map-frame {

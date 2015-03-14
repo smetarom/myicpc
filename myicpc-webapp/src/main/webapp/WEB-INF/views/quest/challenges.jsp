@@ -12,10 +12,10 @@
         <%@ include file="/WEB-INF/views/quest/fragment/questInfo.jsp" %>
 
         <c:if test="${not empty challenges}">
-            <div class="col-sm-4">
+            <div class="col-sm-4 col-md-3">
                 <%@ include file="/WEB-INF/views/quest/fragment/challengeSubmenu.jsp" %>
             </div>
-            <div class="col-sm-8" id="challengeContainer">
+            <div class="col-sm-8 col-md-9" id="challengeContainer">
                 <div class="no-items-available">
                     <spring:message code="quest.challanges.noSelected" />
                 </div>

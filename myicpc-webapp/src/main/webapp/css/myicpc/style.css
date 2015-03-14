@@ -1,3 +1,12 @@
+.twitter-color {
+  color: #55acee; }
+
+.vine-color {
+  color: #00b488; }
+
+.instagram-color {
+  color: #3f729b; }
+
 hr.divider {
   margin: 5px 0; }
 
@@ -38,6 +47,10 @@ hr.divider {
   border-color: transparent; }
 
 .table-menu a {
+  display: block;
+  text-decoration: none; }
+
+a.block {
   display: block;
   text-decoration: none; }
 
@@ -420,6 +433,25 @@ a.gallery-thumbnail {
 .challenge-info-small {
   font-size: 85%;
   color: gray; }
+
+.quest-submissions table {
+  margin-bottom: 5px; }
+  .quest-submissions table > tbody > tr > td {
+    padding: 2px 0; }
+    .quest-submissions table > tbody > tr > td:first-child {
+      width: 55px; }
+.quest-submissions button {
+  margin: 0 auto;
+  display: block; }
+
+#participateInChallenge .alert {
+  margin-bottom: 10px;
+  padding: 5px; }
+#participateInChallenge .quest-participate {
+  padding: 0 5px; }
+  #participateInChallenge .quest-participate a {
+    font-size: 2em;
+    margin-bottom: 10px; }
 
 .team-timeline td.time-cell {
   border-right: 2px solid #ddd; }
