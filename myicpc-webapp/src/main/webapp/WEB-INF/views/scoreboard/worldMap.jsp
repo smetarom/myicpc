@@ -68,11 +68,13 @@
                 var config = ngController.pickSuitableConfiguration(mapConfigurations, width);
                 ngController.renderMap('${r.contextPath}', config, teamCoordinates);
 
-                var height = $( window ).height() - 55;
-                if (height < 300) {
-                    height = $("#mapContainer").height();
+                if (!$("body").hasClass("mobile")) {
+                    var height = $(window).height() - 55;
+                    if (height < 300) {
+                        height = $("#mapContainer").height();
+                    }
+                    $("#mapSubmenu").height(height);
                 }
-                $("#mapSubmenu").height(height);
 
                 startSubscribe('${r.contextPath}', '${contest.code}', 'scoreboard', updateWorldMap, ngController);
             });

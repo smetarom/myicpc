@@ -83,6 +83,8 @@ scorebar.controller('worldMapCtrl', ($scope) ->
       if (width > configurations[i].width)
         return configurations[i]
 
+    return configurations[0] if configurations.length > 0
+
   $scope.updateAllTeams = () ->
     for team in $scope.teams
       $scope.updateTeamOnMap(team)
@@ -135,7 +137,7 @@ scorebar.controller('worldMapCtrl', ($scope) ->
     currentScale = $scope.config.scale
     currentTranslate = $scope.config.translate
     # create map svg
-    svg = d3.select("#mapContainer").append("svg:svg").attr("width", $scope.config.width).attr("height", $scope.config.height);
+    svg = d3.select("#mapContainer").append("svg:svg").attr("width", $scope.config.width).attr("height", $scope.config.height).style("width", $scope.config.width).style("height", $scope.config.height);
 
     # create projection
     $scope.config.projection = d3.geo.mercator().scale(currentScale).translate(currentTranslate);

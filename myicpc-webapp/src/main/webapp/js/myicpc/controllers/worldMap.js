@@ -114,6 +114,9 @@ scorebar.controller('worldMapCtrl', function($scope) {
         return configurations[i];
       }
     }
+    if (configurations.length > 0) {
+      return configurations[0];
+    }
   };
   $scope.updateAllTeams = function() {
     var team, _i, _len, _ref, _results;
@@ -165,7 +168,7 @@ scorebar.controller('worldMapCtrl', function($scope) {
     $scope.config.legendYTextBottomCorner = $scope.config.height - 40;
     currentScale = $scope.config.scale;
     currentTranslate = $scope.config.translate;
-    svg = d3.select("#mapContainer").append("svg:svg").attr("width", $scope.config.width).attr("height", $scope.config.height);
+    svg = d3.select("#mapContainer").append("svg:svg").attr("width", $scope.config.width).attr("height", $scope.config.height).style("width", $scope.config.width).style("height", $scope.config.height);
     $scope.config.projection = d3.geo.mercator().scale(currentScale).translate(currentTranslate);
     path = d3.geo.path().projection($scope.config.projection);
     d3.json(appPath + "/maps/world-countries.json", function(collection) {

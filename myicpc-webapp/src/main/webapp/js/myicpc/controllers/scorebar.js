@@ -54,8 +54,8 @@ scorebar.controller('scorebarCtrl', function($scope) {
     chartWidth = width - $scope.config.teamNameOffset;
     $scope.config.problemBarSize = (chartWidth - $scope.config.space - 2 * $scope.config.zeroBar) / $scope.problemCount;
     height = $scope.config.bigBarCount * ($scope.config.bigBarSize + $scope.config.space) + ($scope.teamCount - $scope.config.bigBarCount) * ($scope.config.barSize + $scope.config.space) + 60;
-    d3.select("#d3chart svg").attr("width", width).attr("height", height);
-    $scope.drawLegend();
+    d3.select("#scorebar-chart svg").attr("width", width).attr("height", height).style("width", width).style("height", height);
+    $scope.drawLegend(width);
     $scope.drawXAxis(chartWidth);
     _ref = $scope.teams;
     _results = [];
@@ -69,9 +69,10 @@ scorebar.controller('scorebarCtrl', function($scope) {
   /*
     Draw scorebar legend
    */
-  $scope.drawLegend = function() {
-    var legend;
-    legend = d3.select("#scorebar-legend g.canvas");
+  $scope.drawLegend = function(width) {
+    var legend, legendHeight;
+    legendHeight = 18;
+    legend = d3.select("#scorebar-legend g.canvas").attr("width", width).attr("height", legendHeight).style("width", width).style("height", legendHeight);
     legend.append("rect").attr("y", $scope.config.barLegendY).attr("width", $scope.config.barlegendSize).attr("height", $scope.config.barSize).attr("class", "passed");
     legend.append("rect").attr("y", $scope.config.barLegendY).attr("width", $scope.config.barlegendSize).attr("x", $scope.config.barlegendSize + $scope.config.barLegendBeforText + $scope.config.barLegendTextWidth).attr("height", $scope.config.barSize).attr("class", "failed");
     legend.append("text").attr("x", $scope.config.barlegendSize + $scope.config.barLegendBeforText).attr("y", $scope.config.barLegendYText).attr("text-anchor", "start").attr("class", "legend-label").text("# solved");

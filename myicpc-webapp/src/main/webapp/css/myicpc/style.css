@@ -30,6 +30,9 @@ hr.divider {
 .no-border-radius {
   border-radius: 0; }
 
+.zero-padding {
+  padding: 0; }
+
 .btn-hover {
   font-weight: normal;
   color: #333333;

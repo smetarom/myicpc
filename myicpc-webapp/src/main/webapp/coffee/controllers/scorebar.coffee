@@ -72,9 +72,9 @@ scorebar.controller('scorebarCtrl', ($scope) ->
     $scope.config.problemBarSize = (chartWidth - $scope.config.space - 2 * $scope.config.zeroBar) / $scope.problemCount
     height = $scope.config.bigBarCount * ($scope.config.bigBarSize + $scope.config.space) + ($scope.teamCount - $scope.config.bigBarCount) * ($scope.config.barSize + $scope.config.space) + 60
 
-    d3.select("#d3chart svg").attr("width", width).attr("height", height)
+    d3.select("#scorebar-chart svg").attr("width", width).attr("height", height).style("width", width).style("height", height)
 
-    $scope.drawLegend()
+    $scope.drawLegend(width)
     $scope.drawXAxis(chartWidth)
 
     $scope.drawTeamBar(team) for team in $scope.teams
@@ -82,8 +82,9 @@ scorebar.controller('scorebarCtrl', ($scope) ->
   ###
     Draw scorebar legend
   ###
-  $scope.drawLegend = () ->
-    legend =d3.select("#scorebar-legend g.canvas")
+  $scope.drawLegend = (width) ->
+    legendHeight = 18
+    legend =d3.select("#scorebar-legend g.canvas").attr("width", width).attr("height", legendHeight).style("width", width).style("height", legendHeight)
 
     # draw color rectangles
     legend.append("rect").attr("y", $scope.config.barLegendY).attr("width", $scope.config.barlegendSize).attr("height", $scope.config.barSize).attr("class", "passed");
