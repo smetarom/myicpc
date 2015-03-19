@@ -1,10 +1,13 @@
-package com.myicpc.service.contest
+package com.myicpc.service.contest;
 
-import com.myicpc.model.contest.Contest
-import org.junit.Before
-import org.mockito.Mock
+import com.myicpc.model.contest.Contest;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.mockito.Mock;
 
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class CMServiceTest {
     private static final String CONTEST_CODE = "CTU-OPEN-2013";
