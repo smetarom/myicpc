@@ -1,7 +1,7 @@
 package com.myicpc.repository.editActivity;
 
 import com.myicpc.model.contest.Contest;
-import com.myicpc.model.editActivity.EditActivity;
+import com.myicpc.model.editActivity.CodeInsightActivity;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface EditActivityRepository extends CrudRepository<EditActivity, Long> {
-    EditActivity findByExternalId(Long externalId);
+public interface CodeInsightActivityRepository extends CrudRepository<CodeInsightActivity, Long> {
+    CodeInsightActivity findByExternalId(Long externalId);
 
     /**
      * @return maximum number of round for edit activity
@@ -18,7 +18,7 @@ public interface EditActivityRepository extends CrudRepository<EditActivity, Lon
     @Query("SELECT MAX(ea.round) FROM EditActivity ea")
     Long findMaxRound();
 
-    List<EditActivity> findByRoundBetween(int min, int max);
+    List<CodeInsightActivity> findByRoundBetween(int min, int max);
 
     @Transactional
     @Modifying

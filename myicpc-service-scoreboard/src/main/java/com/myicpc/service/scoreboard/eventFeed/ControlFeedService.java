@@ -4,8 +4,7 @@ import com.google.common.collect.Maps;
 import com.myicpc.commons.utils.MessageUtils;
 import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.model.social.Notification;
-import com.myicpc.repository.editActivity.EditActivityRepository;
+import com.myicpc.repository.editActivity.CodeInsightActivityRepository;
 import com.myicpc.repository.eventFeed.*;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.service.scoreboard.exception.EventFeedException;
@@ -56,7 +55,7 @@ public class ControlFeedService {
     private LastTeamProblemRepository lastTeamProblemRepository;
 
     @Autowired
-    private EditActivityRepository editActivityRepository;
+    private CodeInsightActivityRepository codeInsightActivityRepository;
 
     @Autowired
     private NotificationRepository notificationRepository;
@@ -74,7 +73,7 @@ public class ControlFeedService {
             teamProblemRepository.deleteByContest(contest);
             teamRankHistoryRepository.deleteByContest(contest);
             eventFeedControlRepository.deleteByContest(contest);
-            editActivityRepository.deleteByContest(contest);
+            codeInsightActivityRepository.deleteByContest(contest);
             problemRepository.deleteByContest(contest);
             teamRepository.deleteByContest(contest);
             regionRepository.deleteByContest(contest);

@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "EditActivity_id_seq")
-public class EditActivity extends IdGeneratedObject {
+public class CodeInsightActivity extends IdGeneratedObject {
     private static final long serialVersionUID = 5398398010855681655L;
 
     @Column(unique = true)
@@ -33,10 +33,6 @@ public class EditActivity extends IdGeneratedObject {
      * Size of the file in bytes
      */
     private long fileSize;
-    /**
-     * Internal counter, to which round this activity belongs
-     */
-    private int round;
     /**
      * Time, when the submission was submitted
      */
@@ -93,14 +89,6 @@ public class EditActivity extends IdGeneratedObject {
 
     public void setFileSize(final long fileSize) {
         this.fileSize = fileSize;
-    }
-
-    public int getRound() {
-        return round;
-    }
-
-    public void setRound(final int round) {
-        this.round = round;
     }
 
     public int getModifyTime() {

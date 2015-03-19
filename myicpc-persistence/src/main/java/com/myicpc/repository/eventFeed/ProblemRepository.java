@@ -14,6 +14,8 @@ import java.util.List;
 public interface ProblemRepository extends JpaRepository<Problem, Long> {
     Problem findByCodeAndContest(String code, Contest contest);
 
+    Problem findByCodeIgnoreCaseAndContest(String code, Contest contest);
+
     Problem findBySystemIdAndContest(Long systemId, Contest contest);
 
     List<Problem> findByContestOrderByCodeAsc(Contest contest);
