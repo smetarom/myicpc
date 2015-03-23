@@ -1,4 +1,4 @@
-package com.myicpc.model.editActivity;
+package com.myicpc.model.codeInsight;
 
 import com.myicpc.model.IdGeneratedObject;
 import com.myicpc.model.eventFeed.Language;

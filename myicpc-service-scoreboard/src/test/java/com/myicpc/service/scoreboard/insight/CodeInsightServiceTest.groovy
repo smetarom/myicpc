@@ -2,7 +2,7 @@ package com.myicpc.service.scoreboard.insight
 
 import com.myicpc.commons.utils.FormatUtils
 import com.myicpc.model.contest.Contest
-import com.myicpc.model.editActivity.CodeInsightActivity
+import com.myicpc.model.codeInsight.CodeInsightActivity
 import com.myicpc.model.eventFeed.Language
 import com.myicpc.model.eventFeed.Problem
 import com.myicpc.model.eventFeed.Team
@@ -13,7 +13,6 @@ import com.myicpc.repository.eventFeed.TeamRepository
 import com.myicpc.service.scoreboard.exception.CodeInsightException
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
-import org.junit.Test
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
