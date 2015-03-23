@@ -26,12 +26,9 @@ public class NotificationBuilderTest extends AbstractServiceTest {
     private NotificationRepository notificationRepository;
 
     @Before
-    public void initMocks(){
-        MockitoAnnotations.initMocks(this);
-    }
-
-    @Before
     public void setUp() {
+        MockitoAnnotations.initMocks(this);
+
         contest = new Contest(id: 13L);
     }
 
@@ -49,7 +46,7 @@ public class NotificationBuilderTest extends AbstractServiceTest {
         NotificationBuilder builder = new NotificationBuilder(entityObject);
         Notification notification = builder.build();
 
-        assert entityObject.getId() == notification.getEntityId()
+        Assert.assertEquals(entityObject.getId(), notification.getEntityId());
     }
 
     @Test
@@ -59,22 +56,23 @@ public class NotificationBuilderTest extends AbstractServiceTest {
         NotificationBuilder builder = new NotificationBuilder(idGeneratedContestObject);
         Notification notification = builder.build();
 
-        assert idGeneratedContestObject.getId() == notification.getEntityId()
-        assert idGeneratedContestObject.getContest() == notification.getContest()
+        Assert.assertEquals(idGeneratedContestObject.getId(), notification.getEntityId());
+        Assert.assertEquals(idGeneratedContestObject.getContest(), notification.getContest());
     }
 
     @Test
     public void testNotificationBuilder_Existing() throws Exception {
-        Notification notification1 = new Notification(id: 20L);
+        Notification sampleNotification = new Notification(id: 20L);
+
         when(notificationRepository.findByContestAndEntityIdAndNotificationType((Contest) anyObject(), anyLong(), (NotificationType) anyObject()))
-                .thenReturn(Lists.newArrayList(notification1));
+                .thenReturn(Lists.newArrayList(sampleNotification));
 
         IdGeneratedContestObject idGeneratedContestObject = new Team(id: 1L, contest: contest);
 
         NotificationBuilder builder = new NotificationBuilder(idGeneratedContestObject, null, notificationRepository);
         Notification notification = builder.build();
 
-        assert notification == notification1
+        Assert.assertEquals(notification, sampleNotification);
     }
 
     @Test
@@ -87,81 +85,65 @@ public class NotificationBuilderTest extends AbstractServiceTest {
         NotificationBuilder builder = new NotificationBuilder(idGeneratedContestObject, null, notificationRepository);
         Notification notification = builder.build();
 
-        assert notification.getTimestamp() != null
-        assert idGeneratedContestObject.getId() == notification.getEntityId()
-        assert idGeneratedContestObject.getContest() == notification.getContest()
+        Assert.assertNotNull(notification.getTimestamp());
+        Assert.assertEquals(idGeneratedContestObject.getId(), notification.getEntityId());
+        Assert.assertEquals(idGeneratedContestObject.getContest(), notification.getContest());
     }
 
 
     @Test
     public void testSetTitle() throws Exception {
-        NotificationBuilder builder = new NotificationBuilder();
-        builder.setTitle("A title");
-        assert builder.build().getTitle() == "A title"
+        NotificationBuilder builder = new NotificationBuilder(title: "A title");
+        Assert.assertEquals("A title", builder.build().getTitle());
     }
 
     @Test
     public void testSetBody() throws Exception {
-        NotificationBuilder builder = new NotificationBuilder();
-        builder.setBody("A body");
-        assert builder.build().getBody() == "A body"
+        NotificationBuilder builder = new NotificationBuilder(body: "A body");
+        Assert.assertEquals("A body", builder.build().getBody());
     }
 
     @Test
     public void testSetNotificationType() throws Exception {
-        NotificationBuilder builder = new NotificationBuilder();
-        builder.setNotificationType(Notification.NotificationType.ADMIN_NOTIFICATION);
-
-        assert builder.build().getNotificationType() == Notification.NotificationType.ADMIN_NOTIFICATION
+        NotificationBuilder builder = new NotificationBuilder(notificationType: NotificationType.ADMIN_NOTIFICATION);
+        Assert.assertEquals(NotificationType.ADMIN_NOTIFICATION, builder.build().getNotificationType());
     }
 
     @Test
     public void testSetUrl() throws Exception {
-        NotificationBuilder builder = new NotificationBuilder();
-        builder.setUrl("https://www.google.com");
-
-        assert builder.build().getUrl() == "https://www.google.com"
+        NotificationBuilder builder = new NotificationBuilder(url: "https://www.google.com");
+        Assert.assertEquals("https://www.google.com", builder.build().getUrl());
     }
 
     @Test
     public void testSetTimestamp() throws Exception {
         Date timestamp = new Date();
-        NotificationBuilder builder = new NotificationBuilder();
-        builder.setTimestamp(timestamp);
-
-        assert builder.build().getTimestamp() == timestamp
+        NotificationBuilder builder = new NotificationBuilder(timestamp: timestamp);
+        Assert.assertEquals(timestamp, builder.build().getTimestamp());
     }
 
     @Test
     public void testSetCode() throws Exception {
-        NotificationBuilder builder = new NotificationBuilder();
-        builder.setCode("{\"key\":\"value\"}");
-
-        assert builder.build().getCode() == "{\"key\":\"value\"}"
+        NotificationBuilder builder = new NotificationBuilder(code: "{\"key\":\"value\"}");
+        Assert.assertEquals("{\"key\":\"value\"}", builder.build().getCode());
     }
 
     @Test
     public void testSetDisplayName() throws Exception {
-        NotificationBuilder builder = new NotificationBuilder();
-        builder.setAuthorName("John Snow");
-
-        assert builder.build().getAuthorName() == "John Snow"
+        NotificationBuilder builder = new NotificationBuilder(authorName: "John Snow");
+        Assert.assertEquals("John Snow", builder.build().getAuthorName());
     }
 
     @Test
     public void testSetProfilePictureUrl() throws Exception {
-        NotificationBuilder builder = new NotificationBuilder();
-        builder.setProfilePictureUrl("https://www.google.com");
-
-        assert builder.build().getProfilePictureUrl() == "https://www.google.com"
+        NotificationBuilder builder = new NotificationBuilder(profilePictureUrl: "https://www.google.com");
+        Assert.assertEquals("https://www.google.com", builder.build().getProfilePictureUrl());
     }
 
     @Test
     public void testSetContest() throws Exception {
-        NotificationBuilder builder = new NotificationBuilder();
-        builder.setContest(contest);
-
-        assert builder.build().getContest() == contest
+        NotificationBuilder builder = new NotificationBuilder(contest: contest);
+        Assert.assertEquals(contest, builder.build().getContest());
     }
 
     @Test

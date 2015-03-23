@@ -17,7 +17,7 @@ import static org.mockito.Matchers.anyString
 import static org.mockito.Mockito.when
 
 @Test
-public class ContestServiceTest extends AbstractServiceTest {
+public class ContestServiceTest {
     private static final String CONTEST_CODE = "CTU-OPEN-2013";
 
     @InjectMocks

@@ -89,8 +89,6 @@ public class CMService {
     private String connectCM(final String server, final String url, final Contest contest) throws IOException {
         HttpGet httpGet = null;
         try {
-            System.out.println(contest.getWebServiceSettings()
-                    .getWsCMToken());
             CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
             credentialsProvider.setCredentials(new AuthScope(server, 443), new UsernamePasswordCredentials(contest.getWebServiceSettings()
                     .getWsCMToken(), ""));
