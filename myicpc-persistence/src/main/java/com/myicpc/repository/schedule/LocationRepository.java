@@ -10,9 +10,5 @@ import java.util.List;
 public interface LocationRepository extends CrudRepository<Location, Long> {
     List<Location> findByContestOrderByNameAsc(Contest contest);
 
-    // ----
-    @Query("SELECT l FROM Location l ORDER BY l.name")
-    List<Location> findAllOrderByNameAsc();
-
     Location findByCode(String code);
 }
