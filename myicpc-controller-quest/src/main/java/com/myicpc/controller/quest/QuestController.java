@@ -3,10 +3,12 @@ package com.myicpc.controller.quest;
 import com.myicpc.controller.GeneralController;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.quest.QuestChallenge;
+import com.myicpc.model.quest.QuestLeaderboard;
 import com.myicpc.model.quest.QuestParticipant;
 import com.myicpc.model.quest.QuestSubmission;
 import com.myicpc.model.teamInfo.ContestParticipant;
 import com.myicpc.repository.quest.QuestChallengeRepository;
+import com.myicpc.repository.quest.QuestLeaderboardRepository;
 import com.myicpc.repository.quest.QuestSubmissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.Device;
@@ -36,6 +38,9 @@ public class QuestController extends GeneralController {
 
     @Autowired
     private QuestChallengeRepository challengeRepository;
+
+    @Autowired
+    private QuestLeaderboardRepository leaderboardRepository;
 
     @RequestMapping(value = "/{contestCode}/quest", method = RequestMethod.GET)
     public String questHomepage(@PathVariable final String contestCode, Model model) {
@@ -82,6 +87,17 @@ public class QuestController extends GeneralController {
             return "redirect:" + getContestURL(contestCode) + "/quest/challenges";
         }
         return "quest/fragment/challengeDetail";
+    }
+
+    @RequestMapping(value = "/{contestCode}/quest/leaderboard", method = RequestMethod.GET)
+    public String leaderboard(@PathVariable final String contestCode, Model model) {
+        Contest contest = getContest(contestCode, model);
+
+        List<QuestLeaderboard> leaderboards = leaderboardRepository.findByContestAndPublishedOrderByNameAsc(contest, true);
+
+        model.addAttribute("leaderboards", leaderboards);
+
+        return "quest/leaderboard";
     }
 
     private void initiateChallengeDetailModel(final String challengeId, final String contestCode, final Model model, Device device) {

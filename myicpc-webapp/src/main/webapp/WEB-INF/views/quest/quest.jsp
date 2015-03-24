@@ -41,7 +41,7 @@
                         <c:forEach var="challenge" items="${challenges}" varStatus="status">
                             <div class="item ${status.index == 0 ? 'active' : ''}">
                                 <c:if test="${not empty challenge.imageURL}">
-                                    <img src="${challenge.imageURL}" alt="${challenge.name}" class="center-block" onerror='this.style.display = "none"'>
+                                    <img src="${challenge.imageURL}" alt="${challenge.name}" class="center-block img-responsive" onerror='this.style.display = "none"'>
                                 </c:if>
                                 <div class="challenge-description">
                                     <h4>

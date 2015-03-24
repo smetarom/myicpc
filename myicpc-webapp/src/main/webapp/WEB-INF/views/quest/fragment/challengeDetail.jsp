@@ -6,6 +6,9 @@
 
 <div class="col-sm-12">
     <div class="center-block" style="max-width: 500px">
+        <c:if test="${not empty challenge.imageURL}">
+            <img src="${challenge.imageURL}" alt="${challenge.name}" class="center-block img-responsive" onerror='this.style.display = "none"'>
+        </c:if>
         <p>${challenge.description}</p>
     </div>
     <div class="text-center">

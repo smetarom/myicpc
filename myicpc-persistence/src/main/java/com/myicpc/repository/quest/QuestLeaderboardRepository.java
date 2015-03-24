@@ -8,4 +8,7 @@ import java.util.List;
 
 public interface QuestLeaderboardRepository extends JpaRepository<QuestLeaderboard, Long> {
     List<QuestLeaderboard> findByContestOrderByNameAsc(Contest contest);
+
+    List<QuestLeaderboard> findByContestAndPublishedOrderByNameAsc(Contest contest, boolean published);
+
 }
