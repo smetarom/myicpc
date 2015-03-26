@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
  * @author Roman Smetana
  */
 @Entity
-@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "EditActivity_id_seq")
+@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "CodeInsightActivity_id_seq")
 public class CodeInsightActivity extends IdGeneratedObject {
     private static final long serialVersionUID = 5398398010855681655L;
 

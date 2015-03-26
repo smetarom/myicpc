@@ -1,4 +1,4 @@
-package com.myicpc.repository.editActivity;
+package com.myicpc.repository.codeInsight;
 
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.codeInsight.CodeInsightActivity;

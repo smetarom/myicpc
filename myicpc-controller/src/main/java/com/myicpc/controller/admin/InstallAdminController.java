@@ -100,7 +100,6 @@ public class InstallAdminController extends GeneralAdminController {
         return "/private/install/newInstall";
     }
 
-    @Transactional
     @RequestMapping(value = "/private/install/summary", method = RequestMethod.POST)
     public String processSummary(@ModelAttribute("adminUser") SystemUser adminUser, @ModelAttribute("globalSettings") GlobalSettings globalSettings, RedirectAttributes redirectAttributes) {
         adminUser.getStringRoles().add(UserRoleEnum.ROLE_ADMIN.toString());

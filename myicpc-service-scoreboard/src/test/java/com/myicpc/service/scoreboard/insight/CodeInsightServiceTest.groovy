@@ -6,7 +6,7 @@ import com.myicpc.model.codeInsight.CodeInsightActivity
 import com.myicpc.model.eventFeed.Language
 import com.myicpc.model.eventFeed.Problem
 import com.myicpc.model.eventFeed.Team
-import com.myicpc.repository.editActivity.CodeInsightActivityRepository
+import com.myicpc.repository.codeInsight.CodeInsightActivityRepository
 import com.myicpc.repository.eventFeed.LanguageRepository
 import com.myicpc.repository.eventFeed.ProblemRepository
 import com.myicpc.repository.eventFeed.TeamRepository

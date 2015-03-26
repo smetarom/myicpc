@@ -3,6 +3,7 @@ package com.myicpc.controller;
 import com.myicpc.commons.utils.MessageUtils;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.service.contest.ContestService;
+import com.myicpc.service.exception.ContestNotFoundException;
 import com.myicpc.service.exception.ModuleDisabledException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -63,6 +64,21 @@ public abstract class GeneralAbstractController {
     public ModelAndView handleModuleDisabledException(ModuleDisabledException ex) {
         ModelAndView modelAndView = new ModelAndView("errorDisabledModule");
         modelAndView.addObject("exception", ex);
+        return modelAndView;
+    }
+
+    /**
+     * Handles {@link Exception}
+     *
+     * @param ex exception
+     * @return model and view of exception
+     */
+    @ExceptionHandler(ContestNotFoundException.class)
+    public ModelAndView handleException(ContestNotFoundException ex) {
+        logger.error("Error Contest Not Found", ex);
+        ModelAndView modelAndView = new ModelAndView("error/contestNotFound");
+        modelAndView.addObject("exception", ex);
+        extendExceptionHandling(modelAndView);
         return modelAndView;
     }
 

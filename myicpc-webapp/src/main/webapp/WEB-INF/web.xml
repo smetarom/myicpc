@@ -105,4 +105,9 @@
         </jsp-property-group>
     </jsp-config>
 
+    <error-page>
+        <exception-type>com.myicpc.service.exception.ContestNotFoundException</exception-type >
+        <location>/contest-not-found</location>
+    </error-page>
+
 </web-app>
