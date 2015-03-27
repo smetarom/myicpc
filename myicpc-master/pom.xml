@@ -13,37 +13,42 @@
     <version>${myicpc-master.version}</version>
     <name>MyICPC Master</name>
 
-    <properties>
-        <version.wildfly>8.0.0.Beta1</version.wildfly>
-        <version.jboss.spec.javaee.7.0>1.0.0.Final</version.jboss.spec.javaee.7.0>
-    </properties>
-
-    <!-- As this is deployed as a jar, there is no need to mark dependencies
-        as provided, as they won't be packaged anyway -->
     <dependencies>
-        <dependency>
-            <groupId>org.jboss.spec</groupId>
-            <artifactId>jboss-javaee-7.0</artifactId>
-            <version>${version.jboss.spec.javaee.7.0}</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.wildfly</groupId>
-            <artifactId>wildfly-ejb-client-bom</artifactId>
-            <version>${version.wildfly}</version>
-            <scope>import</scope>
-            <type>pom</type>
-        </dependency>
-
         <dependency>
             <groupId>org.jboss.msc</groupId>
             <artifactId>jboss-msc</artifactId>
             <version>1.2.4.Final</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-server</artifactId>
+            <version>8.2.0.Final</version>
+        </dependency>
 
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-clustering-singleton</artifactId>
+            <version>8.2.0.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-clustering-common</artifactId>
+            <version>8.2.0.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.spec.javax.ejb</groupId>
+            <artifactId>jboss-ejb-api_3.1_spec</artifactId>
+            <version>1.0.2.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging-annotations</artifactId>
+            <version>1.2.1.Final</version>
+        </dependency>
     </dependencies>
 
 

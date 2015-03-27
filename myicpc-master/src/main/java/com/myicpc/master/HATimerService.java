@@ -7,25 +7,27 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import org.jboss.as.server.ServerEnvironment;
-import org.jboss.logging.Logger;
 import org.jboss.msc.service.Service;
 import org.jboss.msc.service.ServiceName;
 import org.jboss.msc.service.StartContext;
 import org.jboss.msc.service.StartException;
 import org.jboss.msc.service.StopContext;
 import org.jboss.msc.value.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author <a href="mailto:wfink@redhat.com">Wolf-Dieter Fink</a>
  * @author <a href="mailto:ralf.battenfeld@bluewin.ch">Ralf Battenfeld</a>
  */
 public class HATimerService implements Service<Environment> {
+    private static final Logger logger = LoggerFactory.getLogger(HATimerService.class);
+
     public static final ServiceName DEFAULT_SERVICE_NAME = ServiceName.JBOSS.append("quickstart", "ha", "singleton", "default");
     public static final ServiceName QUORUM_SERVICE_NAME = ServiceName.JBOSS.append("quickstart", "ha", "singleton", "quorum");
     public static final String NODE_1 = "nodeOne";
     public static final String NODE_2 = "nodeTwo";
 
-    private static final Logger LOGGER = Logger.getLogger(HATimerService.class);    
     private final Value<ServerEnvironment> env;
     private final AtomicBoolean started = new AtomicBoolean(false);
 
@@ -46,7 +48,7 @@ public class HATimerService implements Service<Environment> {
         if (!started.compareAndSet(false, true)) {
             throw new StartException("The service is still started!");
         }
-        LOGGER.info("Start HASingleton timer service '" + this.getClass().getName() + "'");
+        logger.info("Start HASingleton timer service '" + this.getClass().getName() + "'");
         
         try {
             InitialContext ic = new InitialContext();
@@ -59,14 +61,14 @@ public class HATimerService implements Service<Environment> {
     @Override
     public void stop(StopContext context) {
         if (!started.compareAndSet(true, false)) {
-            LOGGER.warn("The service '" + this.getClass().getName() + "' is not active!");
+            logger.warn("The service '" + this.getClass().getName() + "' is not active!");
         } else {
-            LOGGER.info("Stop HASingleton timer service '" + this.getClass().getName() + "'");
+            logger.info("Stop HASingleton timer service '" + this.getClass().getName() + "'");
             try {
                 InitialContext ic = new InitialContext();
                 ((Scheduler) ic.lookup("global/wildfly-cluster-ha-singleton-service/SchedulerBean!org.jboss.as.quickstarts.cluster.hasingleton.service.ejb.Scheduler")).stop();
             } catch (NamingException e) {
-                LOGGER.error("Could not stop timer", e);
+                logger.error("Could not stop timer", e);
             }
         }
     }
