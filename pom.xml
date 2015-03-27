@@ -28,6 +28,7 @@
         <module>myicpc-service-social</module>
         <module>myicpc-controller-quest</module>
         <module>myicpc-service-quest</module>
+        <module>myicpc-master</module>
     </modules>
 
     <properties>
@@ -46,6 +47,7 @@
         <myicpc-model.version>2.0.0</myicpc-model.version>
         <myicpc-commons.version>2.0.0</myicpc-commons.version>
         <myicpc-security.version>2.0.0</myicpc-security.version>
+        <myicpc-master.version>2.0.0</myicpc-master.version>
 
         <atmosphere-runtime.version>2.2.4</atmosphere-runtime.version>
         <spring-framework.version>4.1.3.RELEASE</spring-framework.version>
