@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<contest>
+    <info>
+        <title>Test Contest</title>
+        <scoreboard-freeze-length>00:30:00</scoreboard-freeze-length>
+        <starttime>1426350079.18</starttime>
+        <length>02:00:00</length>
+        <started>True</started>
+        <penalty>20</penalty>
+    </info>
+</contest>

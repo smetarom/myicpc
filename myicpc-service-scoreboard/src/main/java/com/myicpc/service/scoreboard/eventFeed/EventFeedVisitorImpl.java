@@ -58,7 +58,7 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
         xmlContest.mergeTo(contest);
         // TODO remove timestamp, it is here for testing purposes
         contest.setStartTime(new Date());
-        contest = contestRepository.saveAndFlush(contest);
+        contestRepository.saveAndFlush(contest);
     }
 
     @Override

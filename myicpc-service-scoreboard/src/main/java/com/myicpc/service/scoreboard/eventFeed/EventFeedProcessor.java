@@ -74,21 +74,6 @@ public class EventFeedProcessor {
         }
     }
 
-    public void initContest() {
-        Contest contest = new Contest();
-        ContestSettings contestSettings = new ContestSettings();
-        contestSettings.setEventFeedURL("http://myicpc.baylor.edu/simulator/2015/events");
-        contestSettings.setEventFeedUsername("myicpc");
-        contestSettings.setEventFeedPassword("br1sket");
-        contestSettings.setScoreboardStrategyType(FeedRunStrategyType.NATIVE);
-        contestSettings.setGenerateMessages(true);
-        contest.setName("2014 World Finals");
-        contest.setCode("WF-2014");
-        contest.setExternalId(1811L);
-        contest.setContestSettings(contestSettings);
-        contestRepository.save(contest);
-    }
-
     @Async
     public Future<Void> runEventFeed(final Contest contest) {
         ContestSettings contestSettings = contest.getContestSettings();
