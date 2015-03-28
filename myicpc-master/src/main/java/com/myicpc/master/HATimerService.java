@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
  */
 public class HATimerService implements Service<Environment> {
     private static final Logger logger = LoggerFactory.getLogger(HATimerService.class);
+    private static final String SCHEDULER_LOOKUP = "global/myicpc/SchedulerBean!com.myicpc.master.Scheduler";
 
     public static final ServiceName DEFAULT_SERVICE_NAME = ServiceName.JBOSS.append("quickstart", "ha", "singleton", "default");
     public static final ServiceName QUORUM_SERVICE_NAME = ServiceName.JBOSS.append("quickstart", "ha", "singleton", "quorum");
@@ -52,7 +53,7 @@ public class HATimerService implements Service<Environment> {
         
         try {
             InitialContext ic = new InitialContext();
-            ((Scheduler) ic.lookup("global/wildfly-cluster-ha-singleton-service/SchedulerBean!org.jboss.as.quickstarts.cluster.hasingleton.service.ejb.Scheduler")).initialize("HASingleton timer @" + this.env.getValue().getNodeName() + " " + new Date());
+            ((Scheduler) ic.lookup(SCHEDULER_LOOKUP)).initialize("HASingleton timer @" + this.env.getValue().getNodeName() + " " + new Date());
         } catch (NamingException e) {
             throw new StartException("Could not initialize timer", e);
         }
@@ -66,7 +67,7 @@ public class HATimerService implements Service<Environment> {
             logger.info("Stop HASingleton timer service '" + this.getClass().getName() + "'");
             try {
                 InitialContext ic = new InitialContext();
-                ((Scheduler) ic.lookup("global/wildfly-cluster-ha-singleton-service/SchedulerBean!org.jboss.as.quickstarts.cluster.hasingleton.service.ejb.Scheduler")).stop();
+                ((Scheduler) ic.lookup(SCHEDULER_LOOKUP)).stop();
             } catch (NamingException e) {
                 logger.error("Could not stop timer", e);
             }

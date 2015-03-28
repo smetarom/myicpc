@@ -1,5 +1,8 @@
 package com.myicpc.master;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.annotation.Resource;
 import javax.ejb.ScheduleExpression;
 import javax.ejb.Singleton;
@@ -7,8 +10,6 @@ import javax.ejb.Timeout;
 import javax.ejb.Timer;
 import javax.ejb.TimerConfig;
 import javax.ejb.TimerService;
-
-import org.jboss.logging.Logger;
 
 
 /**
@@ -18,13 +19,13 @@ import org.jboss.logging.Logger;
  */
 @Singleton
 public class SchedulerBean implements Scheduler {
-    private static Logger LOGGER = Logger.getLogger(SchedulerBean.class);
+    private static final Logger logger = LoggerFactory.getLogger(HATimerService.class);
     @Resource
     private TimerService timerService;
 
     @Timeout
     public void scheduler(Timer timer) {
-        LOGGER.info("HASingletonTimer: Info=" + timer.getInfo());
+        logger.info("HASingletonTimer: Info=" + timer.getInfo());
     }
 
     @Override
@@ -38,9 +39,9 @@ public class SchedulerBean implements Scheduler {
 
     @Override
     public void stop() {
-        LOGGER.info("Stop all existing HASingleton timers");
+        logger.info("Stop all existing HASingleton timers");
         for (Timer timer : timerService.getTimers()) {
-            LOGGER.trace("Stop HASingleton timer: " + timer.getInfo());
+            logger.trace("Stop HASingleton timer: " + timer.getInfo());
             timer.cancel();
         }
     }
