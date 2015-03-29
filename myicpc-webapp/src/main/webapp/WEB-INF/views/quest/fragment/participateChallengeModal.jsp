@@ -37,14 +37,14 @@
 
 <script type="text/javascript">
 	function showParticipateChallenge(hashtag, title) {
-		$("#participateInChallengeLabel").html('<spring:message code="quest.participate" /> ' + title);
-		<c:if test="${currentDevice.normal}">
-			$("#twitterParticipateInChallenge").prop("href", 'http://twitter.com/intent/tweet?hashtags='+hashtag+',${contest.hashtag}');
-		</c:if>
-		<c:if test="${not currentDevice.normal}">
-		 	$("#twitterParticipateInChallenge").prop("href", 'twitter://post?message=%23'+hashtag+' %23${contest.hashtag}');
-		</c:if>
-		$(".hashtagsParticipateInChallenge").html('#' + hashtag + ' #${defaultHashtag}');
+		<%--$("#participateInChallengeLabel").html('<spring:message code="quest.participate" /> ' + title);--%>
+		<%--<c:if test="${currentDevice.normal}">--%>
+			<%--$("#twitterParticipateInChallenge").prop("href", 'http://twitter.com/intent/tweet?hashtags='+hashtag+',${contest.hashtag}');--%>
+		<%--</c:if>--%>
+		<%--<c:if test="${not currentDevice.normal}">--%>
+		 	<%--$("#twitterParticipateInChallenge").prop("href", 'twitter://post?message=%23'+hashtag+' %23${contest.hashtag}');--%>
+		<%--</c:if>--%>
+		<%--$(".hashtagsParticipateInChallenge").html('#' + hashtag + ' #${defaultHashtag}');--%>
 
 		$("#participateInChallenge").modal('show');
 	}

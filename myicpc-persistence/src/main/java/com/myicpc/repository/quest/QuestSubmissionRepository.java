@@ -7,17 +7,23 @@ import com.myicpc.model.quest.QuestSubmission;
 import com.myicpc.model.teamInfo.ContestParticipant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
-public interface QuestSubmissionRepository extends PagingAndSortingRepository<QuestSubmission, Long> {
+public interface QuestSubmissionRepository extends JpaRepository<QuestSubmission, Long> {
     @Query("SELECT qs FROM QuestSubmission qs WHERE qs.submissionState = 'ACCEPTED' AND qs.voteSubmissionState = 'VOTE_WINNER' AND qs.challenge.contest = ?1")
     List<QuestSubmission> getVoteWinnersSubmissions(Contest contest);
 
     @Query("SELECT qs FROM QuestSubmission qs WHERE qs.submissionState = 'ACCEPTED' AND qs.voteSubmissionState = 'IN_PROGRESS' AND qs.challenge.contest = ?1")
-    List<QuestSubmission> getVoteInProgressSubmissions(Contest contest);
+    List<QuestSubmission> getVotesInProgressSubmissions(Contest contest);
+
+    @Query("SELECT MAX(qs.notificationId) FROM QuestSubmission qs WHERE qs.challenge.contest = ?1")
+    Long getMaxNotificationId(Contest contest);
+
+    List<QuestSubmission> findByChallengeAndSubmissionStateOrderByCreatedDesc(QuestChallenge challenge, QuestSubmission.QuestSubmissionState submissionState);
 
     @Query("SELECT qs FROM QuestSubmission qs WHERE qs.participant = ?1 ORDER BY qs.created DESC")
     List<QuestSubmission> getLatestSubmisionsByParticipant(QuestParticipant participant, Pageable pageable);
@@ -32,8 +38,6 @@ public interface QuestSubmissionRepository extends PagingAndSortingRepository<Qu
     QuestSubmission findByChallengeAndParticipant(QuestChallenge challenge, QuestParticipant participant);
 
     List<QuestSubmission> findBySubmissionState(QuestSubmission.QuestSubmissionState submissionState);
-
-    List<QuestSubmission> findByExternalId(String externalId);
 
     @Query("SELECT qs FROM QuestSubmission qs ORDER BY RANDOM()")
     List<QuestSubmission> getRandomQuestSubmissions(Pageable pageable);

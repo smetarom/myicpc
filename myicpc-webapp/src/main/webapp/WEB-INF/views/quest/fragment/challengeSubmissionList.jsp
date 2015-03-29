@@ -6,6 +6,8 @@
             <td><img src="${submission.participant.contestParticipant.profilePictureUrl}" alt="${submission.participant.contestParticipant.fullname}" width="50" height="50"></td>
             <td>
                 <strong>${submission.participant.contestParticipant.fullname}</strong>
+                <br/>
+                <fmt:formatDate value="${submission.created}" type="both" />
             </td>
         </tr>
     </c:forEach>

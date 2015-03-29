@@ -81,9 +81,9 @@ public class QuestSubmission extends IdGeneratedObject {
     private int votes = 0;
 
     /**
-     * Social media ID, from which we received the submission
+     * {@link com.myicpc.model.social.Notification} ID, from which we received the submission
      */
-    private String externalId;
+    private Long notificationId;
 
     /**
      * Text of the submission
@@ -158,12 +158,12 @@ public class QuestSubmission extends IdGeneratedObject {
         this.votes = votePoints;
     }
 
-    public String getExternalId() {
-        return externalId;
+    public Long getNotificationId() {
+        return notificationId;
     }
 
-    public void setExternalId(final String externalId) {
-        this.externalId = externalId;
+    public void setNotificationId(final Long notificationId) {
+        this.notificationId = notificationId;
     }
 
     public String getText() {

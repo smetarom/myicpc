@@ -11,26 +11,28 @@
     <jsp:body>
         <%@ include file="/WEB-INF/views/quest/fragment/questInfo.jsp" %>
 
-        <div class="col-sm-12">
-            <div id="vote-panel" class=" clearfix">
-                <div class="pull-right">
-                    <t:button styleClass="btn-hover" onclick="$('#vote-panel').hide()"><spring:message code="quest.vote.hide" /></t:button>
-                </div>
-                <br class="clear"/>
-                <div class="row-eq-height">
-                    <c:forEach var="submission" items="${voteCandidates}">
-                        <div class="col-sm-3 thumbnail">
-                            <div>
-                                <t:questSubmission submission="${submission}" videoAutoplay="true" />
-                                <p class="text-center">
-                                    <t:button context="primary"><spring:message code="vote" /></t:button>
-                                </p>
+        <c:if test="${not empty voteCandidates}">
+            <div class="col-sm-12">
+                <div id="vote-panel" class=" clearfix">
+                    <div class="pull-right">
+                        <t:button styleClass="btn-hover" onclick="$('#vote-panel').hide()"><spring:message code="quest.vote.hide" /></t:button>
+                    </div>
+                    <br class="clear"/>
+                    <div class="row-eq-height">
+                        <c:forEach var="submission" items="${voteCandidates}">
+                            <div class="col-sm-3 thumbnail">
+                                <div>
+                                    <t:questSubmission submission="${submission}" videoAutoplay="true" />
+                                    <p class="text-center">
+                                        <t:button context="primary"><spring:message code="vote" /></t:button>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                    </c:forEach>
+                        </c:forEach>
+                    </div>
                 </div>
             </div>
-        </div>
+        </c:if>
 
         <div class="col-sm-6">
             <h3><spring:message code="quest.challenge.title" /></h3>

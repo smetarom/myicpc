@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.List;
 
 public interface QuestChallengeRepository extends JpaRepository<QuestChallenge, Long> {
+    List<QuestChallenge> findByContest(Contest contest);
+
     List<QuestChallenge> findByContest(Contest contest, Sort sort);
 
     List<QuestChallenge> findByContestOrderByNameAsc(Contest contest);

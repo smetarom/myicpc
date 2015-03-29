@@ -4,16 +4,13 @@ import com.myicpc.controller.GeneralController;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.quest.QuestChallenge;
 import com.myicpc.model.quest.QuestLeaderboard;
-import com.myicpc.model.quest.QuestParticipant;
 import com.myicpc.model.quest.QuestSubmission;
-import com.myicpc.model.teamInfo.ContestParticipant;
+import com.myicpc.model.quest.QuestSubmission.QuestSubmissionState;
 import com.myicpc.repository.quest.QuestChallengeRepository;
 import com.myicpc.repository.quest.QuestLeaderboardRepository;
 import com.myicpc.repository.quest.QuestSubmissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.Device;
-import org.springframework.mobile.device.DeviceResolver;
-import org.springframework.mobile.device.DeviceUtils;
 import org.springframework.mobile.device.site.SitePreference;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -47,7 +43,7 @@ public class QuestController extends GeneralController {
         Contest contest = getContest(contestCode, model);
 
         List<QuestChallenge> challenges = challengeRepository.findByContestAvailableChallenges(new Date(), contest);
-        List<QuestSubmission> list = submissionRepository.getVoteInProgressSubmissions(contest);
+        List<QuestSubmission> list = submissionRepository.getVotesInProgressSubmissions(contest);
         if (list.size() >= 4) {
             model.addAttribute("voteCandidates", list);
         }
@@ -69,7 +65,18 @@ public class QuestController extends GeneralController {
     @RequestMapping(value = "/{contestCode}/quest/challenge/{challengeId}", method = RequestMethod.GET)
     public String questChallengeDetail(@PathVariable final String contestCode, @PathVariable String challengeId, Model model, RedirectAttributes redirectAttributes, final Device device) {
         try {
-            initiateChallengeDetailModel(challengeId, contestCode, model, device);
+            QuestChallenge challenge = initiateChallengeDetailModel(challengeId, contestCode, model, device);
+            // TODO [rs] could it be more optimized than return the whole list
+            List<QuestChallenge> challenges = challengeRepository.findOpenChallengesByContestOrderByName(new Date(), challenge.getContest());
+            int index = challenges.indexOf(challenge);
+            if (index != -1 && challenges.size() > 1) {
+                int prevIndex = index > 0 ? index - 1 : challenges.size() - 1;
+                int nextIndex = index < challenges.size() - 1 ? index + 1 : 0;
+                model.addAttribute("prevChallenge", challenges.get(prevIndex));
+                model.addAttribute("nextChallenge", challenges.get(nextIndex));
+            } else {
+                model.addAttribute("disablePagination", true);
+            }
         } catch (EntityNotFoundException e) {
             errorMessage(redirectAttributes, "quest.challenge.notFound");
             return "redirect:" + getContestURL(contestCode) + "/quest/challenges";
@@ -100,7 +107,7 @@ public class QuestController extends GeneralController {
         return "quest/leaderboard";
     }
 
-    private void initiateChallengeDetailModel(final String challengeId, final String contestCode, final Model model, Device device) {
+    private QuestChallenge initiateChallengeDetailModel(final String challengeId, final String contestCode, final Model model, Device device) {
         Contest contest = getContest(contestCode, model);
 
         QuestChallenge challenge;
@@ -116,34 +123,11 @@ public class QuestController extends GeneralController {
         }
         model.addAttribute("device", device);
         model.addAttribute("challenge", challenge);
-        model.addAttribute("acceptedSubmissions", mock(8));
-        model.addAttribute("pendingSubmissions", mock(4));
-        model.addAttribute("rejectedSubmissions", mock(2));
-    }
+        model.addAttribute("acceptedSubmissions", submissionRepository.findByChallengeAndSubmissionStateOrderByCreatedDesc(challenge, QuestSubmissionState.ACCEPTED));
+        model.addAttribute("pendingSubmissions", submissionRepository.findByChallengeAndSubmissionStateOrderByCreatedDesc(challenge, QuestSubmissionState.PENDING));
+        model.addAttribute("rejectedSubmissions", submissionRepository.findByChallengeAndSubmissionStateOrderByCreatedDesc(challenge, QuestSubmissionState.REJECTED));
 
-
-    private List<QuestSubmission> mock(int g) {
-        List<QuestSubmission> submissions = new ArrayList<>();
-
-        Object[] data = new Object[] {
-                "Roman",  "Smetana", "https://instagramimages-a.akamaihd.net/profiles/profile_4396850_75sq_1374919240.jpg"
-        };
-
-        QuestSubmission submission = new QuestSubmission();
-        QuestParticipant questParticipant = new QuestParticipant();
-        ContestParticipant contestParticipant = new ContestParticipant();
-        contestParticipant.setFirstname((String) data[0]);
-        contestParticipant.setLastname((String) data[1]);
-        contestParticipant.setProfilePictureUrl((String) data[2]);
-        questParticipant.setContestParticipant(contestParticipant);
-        submission.setParticipant(questParticipant);
-
-
-        for (int i = 0; i < g; i++) {
-            submissions.add(submission);
-        }
-
-        return submissions;
+        return challenge;
     }
 
 }

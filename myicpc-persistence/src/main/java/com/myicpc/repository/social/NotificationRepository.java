@@ -46,9 +46,27 @@ public interface NotificationRepository extends PagingAndSortingRepository<Notif
     @Query("SELECT n FROM Notification n WHERE n.notificationType IN ?2 AND n.contest = ?3 AND n.id < ?1 AND n.videoUrl IS NOT NULL ORDER BY n.id DESC")
     Page<Notification> findByVideosNotificationTypesFromNotificationIdOrderByIdDesc(Long lastNotificationId, List<NotificationType> notificationTypes, Contest contest, Pageable pageable);
 
-
     @Query("SELECT n FROM Notification n WHERE n.body LIKE ?1 AND n.body LIKE ?2 AND n.contest = ?3")
     Page<Notification> findNotificationsByContainingTextAndContest(String text1, String text2, Contest contest, Pageable pageable);
+
+    /**
+     * Finds all notifications which contains both hashtags
+     * @param hashtag1 the first hashtag
+     * @param hashtag2 the second hashtag
+     * @return notifications with hashtags
+     */
+    @Query(value = "SELECT n FROM Notification n WHERE UPPER(n.hashtags) LIKE UPPER(?1) AND UPPER(n.hashtags) LIKE UPPER(?2) ORDER BY n.id DESC")
+    List<Notification> findByHashTags(String hashtag1, String hashtag2);
+
+    /**
+     * Finds all notifications which contains both hashtags and have ID higher than {@code sinceId}
+     * @param hashtag1 the first hashtag
+     * @param hashtag2 the second hashtag
+     * @param sinceId since ID criteria
+     * @return notifications with hashtags and newer than {@code sinceId}
+     */
+    @Query(value = "SELECT n FROM Notification n WHERE UPPER(n.hashtags) LIKE UPPER(?1) AND UPPER(n.hashtags) LIKE UPPER(?2) AND n.id > ?3 ORDER BY n.id DESC")
+    List<Notification> findByHashTagsSinceId(String hashtag1, String hashtag2, long sinceId);
 
     // ---
 

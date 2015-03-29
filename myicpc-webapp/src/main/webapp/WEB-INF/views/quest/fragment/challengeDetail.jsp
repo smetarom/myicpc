@@ -19,23 +19,29 @@
 </div>
 <br class="clear"/>
 <br/>
-<div class="col-sm-4 quest-submissions">
-    <h4><t:glyphIcon icon="ok" /><spring:message code="quest.status.accepted" /></h4>
-    <c:set var="submissions" value="${acceptedSubmissions}" />
-    <%@ include file="/WEB-INF/views/quest/fragment/challengeSubmissionList.jsp" %>
-</div>
-<div class="col-sm-4 quest-submissions">
-    <h4><t:glyphIcon icon="time" /><spring:message code="quest.status.pending" /></h4>
+<c:if test="${not empty acceptedSubmissions}">
+    <div class="col-sm-4 quest-submissions">
+        <h4><t:glyphIcon icon="ok" /><spring:message code="quest.status.accepted" /></h4>
+        <c:set var="submissions" value="${acceptedSubmissions}" />
+        <%@ include file="/WEB-INF/views/quest/fragment/challengeSubmissionList.jsp" %>
+    </div>
+</c:if>
+<c:if test="${not empty pendingSubmissions}">
+    <div class="col-sm-4 quest-submissions">
+        <h4><t:glyphIcon icon="time" /><spring:message code="quest.status.pending" /></h4>
 
-    <c:set var="submissions" value="${pendingSubmissions}" />
-    <%@ include file="/WEB-INF/views/quest/fragment/challengeSubmissionList.jsp" %>
-</div>
-<div class="col-sm-4 quest-submissions">
-    <h4><t:glyphIcon icon="remove" /><spring:message code="quest.status.rejected" /></h4>
+        <c:set var="submissions" value="${pendingSubmissions}" />
+        <%@ include file="/WEB-INF/views/quest/fragment/challengeSubmissionList.jsp" %>
+    </div>
+</c:if>
+<c:if test="${not empty rejectedSubmissions}">
+    <div class="col-sm-4 quest-submissions">
+        <h4><t:glyphIcon icon="remove" /><spring:message code="quest.status.rejected" /></h4>
 
-    <c:set var="submissions" value="${rejectedSubmissions}" />
-    <%@ include file="/WEB-INF/views/quest/fragment/challengeSubmissionList.jsp" %>
-</div>
+        <c:set var="submissions" value="${rejectedSubmissions}" />
+        <%@ include file="/WEB-INF/views/quest/fragment/challengeSubmissionList.jsp" %>
+    </div>
+</c:if>
 
 <script type="application/javascript">
     function toggleSubmissionList(tableId) {

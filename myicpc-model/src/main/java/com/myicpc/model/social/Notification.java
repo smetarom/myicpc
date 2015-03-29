@@ -57,6 +57,10 @@ public class Notification extends IdGeneratedContestObject {
      */
     private String thumbnailUrl;
     /**
+     * Author username
+     */
+    private String authorUsername;
+    /**
      * Author display name
      */
     private String authorName;
@@ -65,7 +69,7 @@ public class Notification extends IdGeneratedContestObject {
      */
     private String profilePictureUrl;
     /**
-     * Tweet hashtags separated by |
+     * Hashtags separated by |
      */
     private String hashtags;
     /**
@@ -169,6 +173,14 @@ public class Notification extends IdGeneratedContestObject {
 
     public void setThumbnailUrl(String thumbnailUrl) {
         this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public String getAuthorUsername() {
+        return authorUsername;
+    }
+
+    public void setAuthorUsername(String authorUsername) {
+        this.authorUsername = authorUsername;
     }
 
     public String getAuthorName() {

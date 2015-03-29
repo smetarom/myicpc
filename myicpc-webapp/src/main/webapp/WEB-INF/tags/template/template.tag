@@ -7,6 +7,7 @@
 <%@attribute name="title" fragment="true" %>
 <%@attribute name="head" fragment="true" %>
 <%@attribute name="headline" fragment="true" %>
+<%@attribute name="headlineRight" fragment="true" %>
 
 <compress:html compressCss="true">
     <!DOCTYPE html>
@@ -31,7 +32,12 @@
             <jsp:include page="/WEB-INF/views/includes/header_mobile.jsp"/>
         </c:if>
         <c:if test="${not empty headline}">
-            <div class="page-header" style="margin-bottom: 10px;">
+            <div class="page-header clearfix" style="margin-bottom: 10px;">
+                <c:if test="${not empty headline}">
+                    <div class="pull-right">
+                        <jsp:invoke fragment="headlineRight" />
+                    </div>
+                </c:if>
                 <h2>
                     <jsp:invoke fragment="headline" />
                 </h2>
