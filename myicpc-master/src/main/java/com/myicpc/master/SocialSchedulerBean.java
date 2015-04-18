@@ -1,5 +1,7 @@
 package com.myicpc.master;
 
+import com.myicpc.master.dao.ContestDao;
+import com.myicpc.master.service.TwitterService;
 import com.myicpc.model.contest.Contest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +13,10 @@ import javax.ejb.Timeout;
 import javax.ejb.Timer;
 import javax.ejb.TimerConfig;
 import javax.ejb.TimerService;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
 /**
  * A simple example to demonstrate a implementation of a cluster-wide singleton timer.
@@ -25,18 +29,24 @@ public class SocialSchedulerBean implements SocialScheduler {
     @Resource
     private TimerService timerService;
 
-    @PersistenceContext(name = "MasterMyICPC")
-    private EntityManager em;
+    @Inject
+    private ContestDao contestDao;
+
+    @Inject
+    private TwitterService twitterService;
 
     @Timeout
     public void scheduler(Timer timer) {
-        Contest contest = em.find(Contest.class, 1L);
-        logger.info(contest.getName());
         logger.info("HASingletonTimer: Info=" + timer.getInfo());
     }
 
     @Override
     public void initialize(String info) {
+        List<Contest> activeContests = contestDao.getActiveContests();
+        for (Contest contest : activeContests) {
+            twitterService.startTwitterStreaming(contest);
+        }
+
         ScheduleExpression sexpr = new ScheduleExpression();
         // set schedule to every 10 seconds for demonstration
         sexpr.hour("*").minute("*").second("0/10");

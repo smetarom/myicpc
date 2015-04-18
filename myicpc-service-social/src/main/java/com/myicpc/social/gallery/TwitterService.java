@@ -70,7 +70,7 @@ public class TwitterService extends ASocialService {
         NotificationBuilder builder = new NotificationBuilder();
         builder.setTitle(twitterStatus.getUser().getScreenName());
         builder.setBody(parseTweetText(twitterStatus));
-        builder.setHashTags(getHashtagsFromTweet(twitterStatus.getText()));
+        builder.setHashtag(getHashtagsFromTweet(twitterStatus.getText()));
         builder.setNotificationType(NotificationType.TWITTER);
         builder.setExternalId(String.valueOf(twitterStatus.getId()));
         if (twitterStatus.getRetweetedStatus() != null) {

@@ -28,7 +28,7 @@
         <module>myicpc-service-social</module>
         <module>myicpc-controller-quest</module>
         <module>myicpc-service-quest</module>
-        <!--<module>myicpc-master</module>-->
+        <module>myicpc-master</module>
     </modules>
 
     <properties>

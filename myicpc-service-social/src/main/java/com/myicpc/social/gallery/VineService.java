@@ -192,7 +192,7 @@ public class VineService extends ASocialService {
                     tags[i++] = tagAdapter.getString("tag");
                 }
                 // TODO complete quest hashtag
-                builder.setHashTags(createHashtags(tags, contest.getHashtag(), null));
+                builder.setHashtag(createHashtags(tags, contest.getHashtag(), null));
 
                 list.add(builder.build());
             }

@@ -99,7 +99,7 @@ public class NotificationBuilder {
         notification.setTeamId(teamId);
     }
 
-    public void setHashTags(String hashtags) {
+    public void setHashtag(String hashtags) {
         notification.setHashtags(hashtags);
     }
 
