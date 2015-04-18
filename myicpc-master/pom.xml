@@ -16,6 +16,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.myicpc</groupId>
+            <artifactId>myicpc-model</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.jboss.msc</groupId>
             <artifactId>jboss-msc</artifactId>
             <version>1.2.4.Final</version>
@@ -41,11 +47,9 @@
     </dependencies>
 
     <build>
-        <finalName>myicpc-master</finalName>
+        <finalName>master-myicpc</finalName>
         <plugins>
             <plugin>
-                <!-- must include ejb-plugin to change the EJB version from
-                    2.1 to 3.0 -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-ejb-plugin</artifactId>
                 <version>2.5</version>
@@ -61,6 +65,21 @@
                     </archive>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 

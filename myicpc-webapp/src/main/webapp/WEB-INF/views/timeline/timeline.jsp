@@ -52,8 +52,14 @@
             </div>
 
             <script type="application/javascript">
+                function timelineAcceptPost(post) {
+                    var supportedNotificationTypes = ["submissionSuccess", "twitter"];
+                    return supportedNotificationTypes.indexOf(post.type) != -1;
+                }
+
                 $(function() {
                     Timeline.init();
+                    Timeline.acceptFunction = timelineAcceptPost;
                     startSubscribe('${r.contextPath}', '${contest.code}', 'notification', updateTimeline, null);
                     videoAutoplayOnScroll();
 
@@ -61,7 +67,6 @@
                         if($(window).scrollTop() === $(document).height() - $(window).height() && $('#timeline .timeline-loading').hasClass('hidden')) {
 
                         } else if($(window).scrollTop() === 0) {
-                            console.log('adsdas')
                             Timeline.displayPendingNotification();
                         }
                     });

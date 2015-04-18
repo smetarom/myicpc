@@ -10,7 +10,7 @@ public abstract class EntityManagerService {
     /**
      * Entity manager
      */
-    @PersistenceContext
+    @PersistenceContext(name = "MyICPC")
     protected EntityManager em;
 
     protected EntityManager getEntityManager() {

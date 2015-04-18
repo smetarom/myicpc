@@ -26,10 +26,12 @@ Timeline = {
     this.handlerMapping["twitter"] = (notification) ->
       timelineTwitterTemplate(notification)
 
+  acceptFunction: (data) ->
+    return true
 
   updateMainFeed: (data) ->
     # ignore unwanted notifications
-    if (data.type in this.supportedNotificationTypes)
+    if this.acceptFunction(data)
       if ($(window).scrollTop() == 0)
         this.addNotificationToTimeline(data)
       else
@@ -75,8 +77,8 @@ Timeline = {
           $(elem).appendTo($("#timeline-body"))
 }
 
-updateTimeline = (data, ngController) ->
-  Timeline.updateMainFeed(data)
+updateTimeline = (data, acceptFunction, ngController) ->
+  Timeline.updateMainFeed(data, acceptFunction)
 
 videoAutoplayOnScroll = () ->
   firstPlaying = false

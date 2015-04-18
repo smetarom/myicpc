@@ -60,11 +60,11 @@
             <version>${myicpc-security.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.myicpc</groupId>
-            <artifactId>myicpc-master</artifactId>
-            <version>${myicpc-master.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.myicpc</groupId>-->
+            <!--<artifactId>myicpc-master</artifactId>-->
+            <!--<version>${myicpc-master.version}</version>-->
+        <!--</dependency>-->
 
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>

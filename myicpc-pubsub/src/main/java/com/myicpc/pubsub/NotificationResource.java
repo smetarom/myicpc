@@ -1,6 +1,7 @@
 package com.myicpc.pubsub;
 
 import org.atmosphere.config.service.ManagedService;
+import org.atmosphere.plugin.redis.RedisBroadcaster;
 
 /**
  * Atmosphere entry point for notification
@@ -10,6 +11,9 @@ import org.atmosphere.config.service.ManagedService;
  *
  * @author Roman Smetana
  */
-@ManagedService(path = "{contestCode}/notification")
+@ManagedService(
+        path = "{contestCode}/notification",
+        broadcaster = RedisBroadcaster.class
+)
 public class NotificationResource {
 }

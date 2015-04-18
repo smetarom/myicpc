@@ -6,9 +6,12 @@ import com.myicpc.model.quest.QuestChallenge;
 import com.myicpc.model.quest.QuestLeaderboard;
 import com.myicpc.model.quest.QuestSubmission;
 import com.myicpc.model.quest.QuestSubmission.QuestSubmissionState;
+import com.myicpc.model.social.Notification;
 import com.myicpc.repository.quest.QuestChallengeRepository;
 import com.myicpc.repository.quest.QuestLeaderboardRepository;
 import com.myicpc.repository.quest.QuestSubmissionRepository;
+import com.myicpc.service.quest.QuestService;
+import com.myicpc.service.timeline.TimelineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.Device;
 import org.springframework.mobile.device.site.SitePreference;
@@ -30,6 +33,9 @@ import java.util.List;
 public class QuestController extends GeneralController {
 
     @Autowired
+    private QuestService questService;
+
+    @Autowired
     private QuestSubmissionRepository submissionRepository;
 
     @Autowired
@@ -42,13 +48,17 @@ public class QuestController extends GeneralController {
     public String questHomepage(@PathVariable final String contestCode, Model model) {
         Contest contest = getContest(contestCode, model);
 
-        List<QuestChallenge> challenges = challengeRepository.findByContestAvailableChallenges(new Date(), contest);
         List<QuestSubmission> list = submissionRepository.getVotesInProgressSubmissions(contest);
         if (list.size() >= 4) {
             model.addAttribute("voteCandidates", list);
         }
 
+        List<QuestChallenge> challenges = challengeRepository.findByContestAvailableChallenges(new Date(), contest);
         model.addAttribute("challenges", challenges);
+
+        List<Notification> questNotifications = questService.getQuestNotifications(contest);
+        model.addAttribute("notifications", questNotifications);
+        model.addAttribute("availableNotificationTypes", QuestService.QUEST_TIMELINE_TYPES);
 
         return "quest/quest";
     }

@@ -104,6 +104,10 @@
 
         <div class="col-sm-6">
             <h3><spring:message code="quest.feed.title" /></h3>
+
+            <c:forEach items="${notifications}" var="notification">
+                <t:notification notification="${notification}" />
+            </c:forEach>
         </div>
 
 

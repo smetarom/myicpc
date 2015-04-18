@@ -1,6 +1,5 @@
 package com.myicpc.master;
 
-
 import org.jboss.as.server.ServerEnvironment;
 import org.jboss.as.server.ServerEnvironmentService;
 import org.jboss.msc.service.ServiceActivator;
@@ -21,12 +20,12 @@ public class HATimerServiceActivator implements ServiceActivator {
 
     private static final String CONTAINER_NAME = "server";
     private static final String CACHE_NAME = "default";
-    public static final String PREFERRED_NODE = HATimerService.NODE_2;
+//    public static final String PREFERRED_NODE = HATimerService.NODE_2;
 
     @Override
     public void activate(ServiceActivatorContext context) {
         install(HATimerService.DEFAULT_SERVICE_NAME, 1, context);
-        install(HATimerService.QUORUM_SERVICE_NAME, 2, context);
+//        install(HATimerService.QUORUM_SERVICE_NAME, 2, context);
     }
 
     private static void install(ServiceName name, int quorum, ServiceActivatorContext context) {
@@ -35,7 +34,7 @@ public class HATimerServiceActivator implements ServiceActivator {
         ServiceController<?> factoryService = context.getServiceRegistry().getRequiredService(SingletonServiceBuilderFactory.SERVICE_NAME.append(CONTAINER_NAME, CACHE_NAME));
         SingletonServiceBuilderFactory factory = (SingletonServiceBuilderFactory) factoryService.getValue();
         factory.createSingletonServiceBuilder(name, service)
-            .electionPolicy(new PreferredSingletonElectionPolicy(new SimpleSingletonElectionPolicy(), new NamePreference(PREFERRED_NODE + "/" + CONTAINER_NAME)))
+//            .electionPolicy(new PreferredSingletonElectionPolicy(new SimpleSingletonElectionPolicy(), new NamePreference(PREFERRED_NODE + "/" + CONTAINER_NAME)))
             .requireQuorum(quorum)
             .build(context.getServiceTarget())
                 .addDependency(ServerEnvironmentService.SERVICE_NAME, ServerEnvironment.class, env)

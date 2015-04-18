@@ -1,6 +1,7 @@
 package com.myicpc.pubsub;
 
 import org.atmosphere.config.service.ManagedService;
+import org.atmosphere.plugin.redis.RedisBroadcaster;
 
 /**
  * Atmosphere entry point for contest submissions and contest related events
@@ -10,6 +11,9 @@ import org.atmosphere.config.service.ManagedService;
  *
  * @author Roman Smetana
  */
-@ManagedService(path = "{contestCode}/scoreboard")
+@ManagedService(
+        path = "{contestCode}/scoreboard",
+        broadcaster = RedisBroadcaster.class
+)
 public class ScoreboardResource {
 }

@@ -1,5 +1,6 @@
 package com.myicpc.master;
 
+import com.myicpc.model.contest.Contest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +11,8 @@ import javax.ejb.Timeout;
 import javax.ejb.Timer;
 import javax.ejb.TimerConfig;
 import javax.ejb.TimerService;
-
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  * A simple example to demonstrate a implementation of a cluster-wide singleton timer.
@@ -18,13 +20,18 @@ import javax.ejb.TimerService;
  * @author <a href="mailto:wfink@redhat.com">Wolf-Dieter Fink</a>
  */
 @Singleton
-public class SchedulerBean implements Scheduler {
+public class SocialSchedulerBean implements SocialScheduler {
     private static final Logger logger = LoggerFactory.getLogger(HATimerService.class);
     @Resource
     private TimerService timerService;
 
+    @PersistenceContext(name = "MasterMyICPC")
+    private EntityManager em;
+
     @Timeout
     public void scheduler(Timer timer) {
+        Contest contest = em.find(Contest.class, 1L);
+        logger.info(contest.getName());
         logger.info("HASingletonTimer: Info=" + timer.getInfo());
     }
 
