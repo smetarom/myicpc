@@ -59,6 +59,7 @@ public class QuestController extends GeneralController {
         List<Notification> questNotifications = questService.getQuestNotifications(contest);
         model.addAttribute("notifications", questNotifications);
         model.addAttribute("availableNotificationTypes", QuestService.QUEST_TIMELINE_TYPES);
+        model.addAttribute("questHashtag", "#" + contest.getQuestConfiguration().getHashtagPrefix());
 
         return "quest/quest";
     }

@@ -13,11 +13,10 @@ Timeline = {
     "timeline.pendingNotifications.other": " new notifications",
   },
   handlerMapping: {},
-  supportedNotificationTypes: [],
+  ignoreScrolling: false,
+
 
   init: () ->
-    this.supportedNotificationTypes = ["submissionSuccess", "twitter"]
-
     timelineScoreboardTemplate = compileHandlebarsTemplate("timeline-SCOREBOARD_SUCCESS")
     timelineTwitterTemplate = compileHandlebarsTemplate("timeline-TWITTER")
 
@@ -32,7 +31,7 @@ Timeline = {
   updateMainFeed: (data) ->
     # ignore unwanted notifications
     if this.acceptFunction(data)
-      if ($(window).scrollTop() == 0)
+      if (this.ignoreScrolling || $(window).scrollTop() == 0)
         this.addNotificationToTimeline(data)
       else
         this.pendingNotificationsCount += 1

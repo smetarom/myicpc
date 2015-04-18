@@ -36,7 +36,10 @@ getSubscribeAddress = (contextPath) ->
   window.location.protocol + "//" + window.location.hostname + ':' + window.location.port + contextPath + 'pubsub/'
 
 compileHandlebarsTemplate = (id) ->
-  return Handlebars.compile($("#" + id).html())
+  elem = $("#" + id);
+  if elem.length != 0
+    return Handlebars.compile(elem.html())
+  return null
 
 datePickerOptions = {
   dateFormat: "yy-mm-dd",

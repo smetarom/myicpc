@@ -8,6 +8,10 @@
         <spring:message code="nav.quest" />
     </jsp:attribute>
 
+    <jsp:attribute name="head">
+        <script src="<c:url value='/js/myicpc/controllers/timeline.js'/>" defer></script>
+    </jsp:attribute>
+
     <jsp:body>
         <%@ include file="/WEB-INF/views/quest/fragment/questInfo.jsp" %>
 
@@ -96,7 +100,7 @@
                 </script>
             </c:if>
             <c:if test="${empty challenges}">
-                <div class="noSelectedBig">
+                <div class="no-items-available">
                     <spring:message code="quest.challenge.noResult" />
                 </div>
             </c:if>
@@ -105,11 +109,35 @@
         <div class="col-sm-6">
             <h3><spring:message code="quest.feed.title" /></h3>
 
-            <c:forEach items="${notifications}" var="notification">
-                <t:notification notification="${notification}" />
-            </c:forEach>
+            <%@ include file="/WEB-INF/views/timeline/timelineNotificationTemplates.jsp"%>
+            <div id="timeline-body">
+                <c:forEach items="${notifications}" var="notification">
+                    <t:notification notification="${notification}" />
+                </c:forEach>
+            </div>
         </div>
 
+        <script type="application/javascript">
+            function timelineAcceptPost(post) {
+                var supportedNotificationTypes = ["twitter"];
+                if (supportedNotificationTypes.indexOf(post.type) == -1) {
+                    return false;
+                }
+                var questHashtag = '${not empty questHashtag ? questHashtag : '#Quest'}';
+                console.log(post.body.search(new RegExp(questHashtag, "i")));
+                return post.body.search(new RegExp(questHashtag, "i")) != -1;
+            }
+
+            $(function() {
+                Timeline.init();
+                Timeline.ignoreScrolling = true;
+                Timeline.acceptFunction = timelineAcceptPost;
+                startSubscribe('${r.contextPath}', '${contest.code}', 'notification', updateTimeline, null);
+                videoAutoplayOnScroll();
+
+                $(window).scroll(videoAutoplayOnScroll);
+            });
+        </script>
 
     </jsp:body>
 </t:template>

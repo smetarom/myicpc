@@ -33,10 +33,15 @@ startSubscribe = function(contextPath, contestCode, channel, processMethod, ngCo
   var connectedSocket, request, socket;
   socket = $.atmosphere;
   request = new AtmosphereRequest(getSubscribeAddress(contextPath) + contestCode + "/" + channel, function(response) {
-    var result;
-    result = $.parseJSON(response.responseBody);
-    console.log(result);
-    return processMethod(result, ngController);
+    var error, result;
+    try {
+      result = $.parseJSON(response.responseBody);
+      console.log(result);
+      return processMethod(result, ngController);
+    } catch (_error) {
+      error = _error;
+      return console.log("An error occurred while parsing the JSON Data: " + response.responseBody + "; Error: " + error);
+    }
   });
   return connectedSocket = socket.subscribe(request);
 };
@@ -47,7 +52,12 @@ getSubscribeAddress = function(contextPath) {
 };
 
 compileHandlebarsTemplate = function(id) {
-  return Handlebars.compile($("#" + id).html());
+  var elem;
+  elem = $("#" + id);
+  if (elem.length !== 0) {
+    return Handlebars.compile(elem.html());
+  }
+  return null;
 };
 
 datePickerOptions = {
