@@ -7,7 +7,6 @@ import com.myicpc.model.rss.RSSMessage;
 import com.myicpc.repository.rss.RSSFeedRepository;
 import com.myicpc.repository.rss.RSSMessageRepository;
 import com.myicpc.service.exception.WebServiceException;
-import com.myicpc.social.gallery.PicasaService;
 import com.myicpc.social.rss.RssService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

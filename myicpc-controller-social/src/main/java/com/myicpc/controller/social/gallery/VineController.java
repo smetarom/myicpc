@@ -4,7 +4,7 @@ import com.myicpc.controller.GeneralController;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.service.exception.WebServiceException;
 import com.myicpc.service.settings.GlobalSettingsService;
-import com.myicpc.social.gallery.VineService;
+import com.myicpc.social.service.VineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

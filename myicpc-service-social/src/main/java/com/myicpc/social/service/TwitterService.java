@@ -1,4 +1,4 @@
-package com.myicpc.social.gallery;
+package com.myicpc.social.service;
 
 import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
@@ -25,18 +25,47 @@ import java.util.regex.Pattern;
  * @author Roman Smetana
  */
 @Service
+@Transactional
 public class TwitterService extends ASocialService {
     private static final Logger logger = LoggerFactory.getLogger(TwitterService.class);
+
+    public void processReceivedNotification(final Notification receivedNotification) {
+        Contest contest = contestRepository.getOne(receivedNotification.getContest().getId());
+        Notification existingTweets = notificationRepository.findByContestAndExternalIdAndNotificationType(contest, String.valueOf(receivedNotification.getExternalId()), NotificationType.TWITTER);
+
+        if (existingTweets != null) {
+            logger.info("Skip tweet " + receivedNotification.getExternalId() + " because of duplication.");
+            return;
+        }
+
+        BlacklistedUser blacklistedUser = blacklistedUserRepository.findByUsernameAndBlacklistedUserType(receivedNotification.getAuthorUsername(), BlacklistedUser.BlacklistedUserType.TWITTER);
+        // skip, if user is in the blacklist
+        if (blacklistedUser != null) {
+            return;
+        }
+        // TODO resolve what to do with retweets
+//        if (receivedNotification.getRetweetedId() != null) {
+//            // skip, if author of retweeted tweet is in the blacklist
+//            blacklistedUser = blacklistedUserRepository.findByUsernameAndBlacklistedUserType(status.getRetweetedStatus().getUser().getScreenName(), BlacklistedUser.BlacklistedUserType.TWITTER);
+//            if (blacklistedUser != null) {
+//                return;
+//            }
+//        }
+
+        receivedNotification.setContest(contest);
+        notificationRepository.save(receivedNotification);
+        publishService.broadcastNotification(receivedNotification, contest);
+    }
 
     public void startTwitterStreaming(Contest contest) {
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setOAuthConsumerKey(contest.getWebServiceSettings().getTwitterConsumerKey())
-            .setOAuthConsumerSecret(contest.getWebServiceSettings().getTwitterConsumerSecret())
-            .setOAuthAccessToken(contest.getWebServiceSettings().getTwitterAccessToken())
-            .setOAuthAccessTokenSecret(contest.getWebServiceSettings().getTwitterAccessTokenSecret());
+                .setOAuthConsumerSecret(contest.getWebServiceSettings().getTwitterConsumerSecret())
+                .setOAuthAccessToken(contest.getWebServiceSettings().getTwitterAccessToken())
+                .setOAuthAccessTokenSecret(contest.getWebServiceSettings().getTwitterAccessTokenSecret());
         TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
         twitterStream.addListener(new TwitterStatusListener(contest));
-        twitterStream.filter(new FilterQuery(0, null, new String[] { "#" + contest.getHashtag() }));
+        twitterStream.filter(new FilterQuery(0, null, new String[]{"#" + contest.getHashtag()}));
     }
 
     @Transactional
@@ -95,8 +124,7 @@ public class TwitterService extends ASocialService {
     /**
      * Finds Twitter hashtags, usernames, and URLs in the tweet
      *
-     * @param status
-     *            Twitter tweet
+     * @param status Twitter tweet
      * @return tweet message enhanced by HTML tags
      */
     protected static String parseTweetText(final Status status) {
@@ -116,8 +144,7 @@ public class TwitterService extends ASocialService {
     /**
      * Gets all hashtags from the tweet body separated by |
      *
-     * @param tweet
-     *            tweet body
+     * @param tweet tweet body
      * @return hashtags separated by |
      */
     protected static String getHashtagsFromTweet(final String tweet) {

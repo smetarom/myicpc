@@ -1,4 +1,4 @@
-package com.myicpc.social.gallery;
+package com.myicpc.social.service;
 
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.BlacklistedUser;
@@ -27,6 +27,9 @@ public abstract class ASocialService {
 
     @Autowired
     protected NotificationRepository notificationRepository;
+
+    @Autowired
+    protected ContestRepository contestRepository;
 
     @Autowired
     protected PublishService publishService;

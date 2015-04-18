@@ -2,8 +2,8 @@ package com.myicpc.controller.social;
 
 import com.myicpc.controller.GeneralController;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.social.gallery.InstagramService;
-import com.myicpc.social.gallery.TwitterService;
+import com.myicpc.social.service.InstagramService;
+import com.myicpc.social.service.TwitterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;

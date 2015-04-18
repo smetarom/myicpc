@@ -5,7 +5,7 @@ import com.myicpc.model.contest.Contest;
 import com.myicpc.service.dto.GlobalSettings;
 import com.myicpc.service.exception.WebServiceException;
 import com.myicpc.service.settings.GlobalSettingsService;
-import com.myicpc.social.gallery.InstagramService;
+import com.myicpc.social.service.InstagramService;
 import com.myicpc.social.dto.InstagramUpdate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

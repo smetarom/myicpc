@@ -40,7 +40,7 @@ public class TwitterService extends GeneralService {
                 .setOAuthAccessTokenSecret(contest.getWebServiceSettings().getTwitterAccessTokenSecret());
         TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
         twitterStream.addListener(new TwitterStatusListener(contest));
-        twitterStream.filter(new FilterQuery(0, null, new String[] { "#" + contest.getHashtag() }));
+        twitterStream.filter(new FilterQuery(0, null, new String[]{"#" + contest.getHashtag()}));
 
     }
 
@@ -71,6 +71,14 @@ public class TwitterService extends GeneralService {
             notification.setProfilePictureUrl(status.getUser().getProfileImageURL());
             notification.setTimestamp(status.getCreatedAt());
             notification.setContest(contest);
+
+            if (!status.isRetweet()) {
+                if (status.getMediaEntities() != null && status.getMediaEntities().length > 0) {
+                    String imageUrl = status.getMediaEntities()[0].getMediaURL();
+                    notification.setThumbnailUrl(imageUrl + ":small");
+                    notification.setImageUrl(imageUrl);
+                }
+            }
 
             // send the received notification
             TwitterService.this.sendSocialNotification(notification);

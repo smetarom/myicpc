@@ -1,4 +1,4 @@
-package com.myicpc.social.gallery;
+package com.myicpc.social.service;
 
 import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;

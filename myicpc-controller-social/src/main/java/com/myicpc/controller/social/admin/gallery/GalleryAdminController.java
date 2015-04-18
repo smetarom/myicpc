@@ -3,7 +3,7 @@ package com.myicpc.controller.social.admin.gallery;
 import com.myicpc.controller.GeneralController;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.service.exception.WebServiceException;
-import com.myicpc.social.gallery.PicasaService;
+import com.myicpc.social.service.PicasaService;
 import com.myicpc.social.dto.PicasaPhoto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
