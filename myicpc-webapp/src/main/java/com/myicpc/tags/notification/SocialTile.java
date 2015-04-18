@@ -1,6 +1,7 @@
 package com.myicpc.tags.notification;
 
 import com.myicpc.model.social.Notification;
+import com.myicpc.tags.utils.HandlebarsUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.jsp.JspException;
@@ -46,8 +47,8 @@ public abstract class SocialTile extends NotificationTile {
 
     protected void renderMedia(JspWriter out) throws IOException, JspException {
         if (isTemplate) {
-            out.print(String.format(IMAGE_FORMAT, "{{imageUrl}}"));
-            out.print(String.format(VIDEO_FORMAT, "{{videoUrl}}"));
+            out.print(HandlebarsUtils.displayIfNotEmtpy("imageUrl", String.format(IMAGE_FORMAT, "{{imageUrl}}")));
+            out.print(HandlebarsUtils.displayIfNotEmtpy("videoUrl", String.format(VIDEO_FORMAT, "{{videoUrl}}")));
         } else {
             if (!StringUtils.isEmpty(notification.getVideoUrl())) {
                 out.print(String.format(VIDEO_FORMAT, notification.getVideoUrl()));
