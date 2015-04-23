@@ -119,7 +119,7 @@
 
         <script type="application/javascript">
             function timelineAcceptPost(post) {
-                var supportedNotificationTypes = ["twitter"];
+                var supportedNotificationTypes = ["twitter", "vine"];
                 if (supportedNotificationTypes.indexOf(post.type) == -1) {
                     return false;
                 }

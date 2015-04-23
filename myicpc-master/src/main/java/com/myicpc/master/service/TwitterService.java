@@ -19,9 +19,13 @@ import twitter4j.conf.ConfigurationBuilder;
 
 import javax.annotation.Resource;
 import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.Queue;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,6 +35,7 @@ import java.util.regex.Pattern;
 @Singleton
 public class TwitterService extends GeneralService {
     private static final Logger logger = LoggerFactory.getLogger(TwitterService.class);
+    private static ConcurrentMap<Long, TwitterStream> streamMapping = new ConcurrentHashMap<>();
 
     public void startTwitterStreaming(Contest contest) {
         ConfigurationBuilder cb = new ConfigurationBuilder();
@@ -42,6 +47,22 @@ public class TwitterService extends GeneralService {
         twitterStream.addListener(new TwitterStatusListener(contest));
         twitterStream.filter(new FilterQuery(0, null, new String[]{"#" + contest.getHashtag()}));
 
+        streamMapping.put(contest.getId(), twitterStream);
+    }
+
+    public void stopTwitterStreaming(Contest contest) {
+        TwitterStream twitterStream = streamMapping.get(contest.getId());
+        if (twitterStream != null) {
+            twitterStream.shutdown();
+            streamMapping.remove(contest.getId());
+        }
+    }
+
+    public void stopAllTwitterStreams() {
+        for (Map.Entry<Long, TwitterStream> entry : streamMapping.entrySet()) {
+            entry.getValue().shutdown();
+            streamMapping.remove(entry.getKey());
+        }
     }
 
     class TwitterStatusListener extends StatusAdapter {

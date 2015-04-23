@@ -62,6 +62,13 @@
             <artifactId>jboss-ejb-api_3.1_spec</artifactId>
             <version>1.0.2.Final</version>
         </dependency>
+
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.7</version>
+        </dependency>
+
     </dependencies>
 
     <build>
