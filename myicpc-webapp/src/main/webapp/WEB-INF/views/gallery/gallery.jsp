@@ -76,6 +76,7 @@
                 context['videoUrl'] = $(tile).data('video-url');
                 context['authorName'] = $(tile).data('author-name');
                 context['avatarUrl'] = $(tile).data('author-avatar');
+                context['text'] = $(tile).data('text');
 
                 $("#galleryPopupContent").html(modalTemplate(context));
                 currentTile = tile;
@@ -106,8 +107,10 @@
                 $.get(url, {'since-notification-id': lastNotificationId, 'media': currentMedia}, function( data ) {
                     if (data.trim() === "") {
                         $(".load-more-btn").addClass('hidden');
+                        return false;
                     }
                     $("#galleryTiles").append(data);
+                    return true;
                 });
             }
 
@@ -150,9 +153,19 @@
         <button type="button" class="btn btn-link" data-dismiss="modal"><t:glyphIcon icon="th" /></button>
         <button type="button" onclick="nextTile();" class="btn btn-link"><spring:message code="next" /> <t:glyphIcon icon="arrow-right" /></button>
     </div>
-    <div>
-        <img src="{{avatarUrl}}" alt="{{authorName}}" width="50" height="50"> {{authorName}}
-    </div>
+    <table>
+        <tr>
+            <td>
+                <img src="{{avatarUrl}}" alt="{{authorName}}" width="50" height="50">
+            </td>
+            <td class="gallery-detail-author"><strong>{{authorName}}</strong></td>
+        </tr>
+    </table>
+
+    <p>
+        {{{text}}}
+    </p>
+
     <div>
         <a href="{{originalUrl}}" target="_blank" class="btn btn-primary btn-block"><spring:message code="view.originalPost" /></a>
     </div>

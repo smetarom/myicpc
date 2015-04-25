@@ -33,6 +33,9 @@ hr.divider {
 .zero-padding {
   padding: 0; }
 
+.valign-top {
+  vertical-align: top; }
+
 .btn-hover {
   font-weight: normal;
   color: #333333;
@@ -398,6 +401,10 @@ a.gallery-thumbnail {
     max-width: 450px;
     width: 100%;
     margin: 0 auto; }
+
+.gallery-detail-author {
+  vertical-align: top;
+  padding-left: 7px; }
 
 .quest-info {
   position: relative;

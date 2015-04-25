@@ -5,6 +5,7 @@
        data-image-url="${notification.imageUrl}"
        data-video-url="${notification.videoUrl}"
        data-url="${notification.url}"
+       data-text="${util:escapeJavascript(notification.body)}"
        data-author-name="${notification.authorName}"
        data-author-avatar="${notification.profilePictureUrl}">
         <c:if test="${not empty notification.videoUrl}">
