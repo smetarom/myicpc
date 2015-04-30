@@ -1,6 +1,6 @@
 package com.myicpc.service.scoreboard.eventFeed;
 
-import com.myicpc.enums.FeedRunStrategyType;
+import com.myicpc.dto.eventFeed.visitor.EventFeedVisitor;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.contest.ContestSettings;
 import com.myicpc.model.eventFeed.EventFeedControl;
@@ -9,22 +9,21 @@ import com.myicpc.repository.eventFeed.EventFeedControlRepository;
 import com.myicpc.repository.eventFeed.ProblemRepository;
 import com.myicpc.repository.eventFeed.RegionRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
-import com.myicpc.service.scoreboard.eventFeed.dto.ClarificationXML;
-import com.myicpc.service.scoreboard.eventFeed.dto.ContestXML;
-import com.myicpc.service.scoreboard.eventFeed.dto.FinalizedXML;
-import com.myicpc.service.scoreboard.eventFeed.dto.JudgementXML;
-import com.myicpc.service.scoreboard.eventFeed.dto.LanguageXML;
-import com.myicpc.service.scoreboard.eventFeed.dto.ProblemXML;
-import com.myicpc.service.scoreboard.eventFeed.dto.RegionXML;
-import com.myicpc.service.scoreboard.eventFeed.dto.TeamProblemXML;
-import com.myicpc.service.scoreboard.eventFeed.dto.TeamXML;
-import com.myicpc.service.scoreboard.eventFeed.dto.TestcaseXML;
-import com.myicpc.service.scoreboard.eventFeed.dto.XMLEntity;
-import com.myicpc.service.scoreboard.eventFeed.dto.convertor.ProblemConverter;
-import com.myicpc.service.scoreboard.eventFeed.dto.convertor.TeamConverter;
+import com.myicpc.dto.eventFeed.ClarificationXML;
+import com.myicpc.dto.eventFeed.ContestXML;
+import com.myicpc.dto.eventFeed.FinalizedXML;
+import com.myicpc.dto.eventFeed.JudgementXML;
+import com.myicpc.dto.eventFeed.LanguageXML;
+import com.myicpc.dto.eventFeed.ProblemXML;
+import com.myicpc.dto.eventFeed.RegionXML;
+import com.myicpc.dto.eventFeed.TeamProblemXML;
+import com.myicpc.dto.eventFeed.TeamXML;
+import com.myicpc.dto.eventFeed.TestcaseXML;
+import com.myicpc.dto.eventFeed.XMLEntity;
+import com.myicpc.dto.eventFeed.convertor.ProblemConverter;
+import com.myicpc.dto.eventFeed.convertor.TeamConverter;
 import com.myicpc.service.scoreboard.exception.EventFeedException;
 import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -109,8 +108,8 @@ public class EventFeedProcessor {
         xStream.ignoreUnknownElements();
         xStream.processAnnotations(new Class[]{ContestXML.class, LanguageXML.class, RegionXML.class, JudgementXML.class, ProblemXML.class, TeamXML.class,
                 TeamProblemXML.class, TestcaseXML.class, FinalizedXML.class, ClarificationXML.class});
-        xStream.registerLocalConverter(TeamProblemXML.class, "problem", new ProblemConverter(problemRepository, contest));
-        xStream.registerLocalConverter(TeamProblemXML.class, "team", new TeamConverter(teamRepository, contest));
+//        xStream.registerLocalConverter(TeamProblemXML.class, "problem", new ProblemConverter(problemRepository, contest));
+//        xStream.registerLocalConverter(TeamProblemXML.class, "team", new TeamConverter(teamRepository, contest));
         ObjectInputStream in = xStream.createObjectInputStream(reader);
         try {
             while (true) {

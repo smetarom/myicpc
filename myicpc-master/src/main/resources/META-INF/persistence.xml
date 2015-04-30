@@ -8,7 +8,8 @@
 
     <persistence-unit name="MasterMyICPC">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <jta-data-source>java:jboss/datasources/MasterMyICPCDS</jta-data-source>
+        <!--<jta-data-source>java:jboss/datasources/MasterMyICPCDS</jta-data-source>-->
+        <jta-data-source>java:jboss/datasources/PostgreSQLDS</jta-data-source>
 
         <class>com.myicpc.model.contest.Contest</class>
         <class>com.myicpc.model.contest.ContestSettings</class>

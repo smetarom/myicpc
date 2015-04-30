@@ -20,6 +20,17 @@ a.gallery-thumbnail {
   .gallery-content {
     text-align: center;
     background-color: #000000;
+    min-height: 400px;
+    display: table;
+
+    & > div {
+      display: table-cell;
+      vertical-align: middle;
+    }
+
+    @media screen and (max-width: 400px) {
+      width: 300px;
+    }
   }
 
   video {

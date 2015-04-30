@@ -1,13 +1,23 @@
 package com.myicpc.service.scoreboard.eventFeed;
 
 import com.myicpc.commons.utils.FormatUtils;
+import com.myicpc.dto.eventFeed.AnalystMessageXML;
+import com.myicpc.dto.eventFeed.ContestXML;
+import com.myicpc.dto.eventFeed.FinalizedXML;
+import com.myicpc.dto.eventFeed.JudgementXML;
+import com.myicpc.dto.eventFeed.LanguageXML;
+import com.myicpc.dto.eventFeed.ProblemXML;
+import com.myicpc.dto.eventFeed.RegionXML;
+import com.myicpc.dto.eventFeed.TeamProblemXML;
+import com.myicpc.dto.eventFeed.TeamXML;
+import com.myicpc.dto.eventFeed.TestcaseXML;
+import com.myicpc.dto.eventFeed.visitor.EventFeedVisitor;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.*;
 import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.repository.contest.ContestRepository;
 import com.myicpc.repository.eventFeed.*;
 import com.myicpc.repository.teamInfo.TeamInfoRepository;
-import com.myicpc.service.scoreboard.eventFeed.dto.*;
 import com.myicpc.service.scoreboard.exception.EventFeedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

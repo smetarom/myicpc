@@ -395,7 +395,15 @@ a.gallery-thumbnail {
   padding: 0; }
   #galleryPopupContent .gallery-content {
     text-align: center;
-    background-color: #000000; }
+    background-color: #000000;
+    min-height: 400px;
+    display: table; }
+    #galleryPopupContent .gallery-content > div {
+      display: table-cell;
+      vertical-align: middle; }
+    @media screen and (max-width: 400px) {
+      #galleryPopupContent .gallery-content {
+        width: 300px; } }
   #galleryPopupContent video {
     padding: 5px 0 0;
     max-width: 450px;

@@ -71,6 +71,7 @@
             function showGalleryModal(tile) {
                 var modalTemplate = compileHandlebarsTemplate("gallery-modal-template");
                 var context = {};
+                context['notificationId'] = $(tile).data('id');
                 context['originalUrl'] = $(tile).data('url');
                 context['imageUrl'] = $(tile).data('image-url');
                 context['videoUrl'] = $(tile).data('video-url');
@@ -101,6 +102,11 @@
                     showGalleryModal(nextTile);
                     currentTile = nextTile;
                 }
+                $("#gallery-content").empty();
+            }
+
+            function loadingTile() {
+                $("#gallery-submenu").empty();
             }
 
             function loadMore(url) {
@@ -112,6 +118,13 @@
                     $("#galleryTiles").append(data);
                     return true;
                 });
+            }
+
+            function removeOnError(elem, id) {
+                console.log($(elem));
+                $(elem).parent().remove();
+//                elem.remove();
+                $.post("<spring:url value="${contestURL}/gallery/remove/" />" + id);
             }
 
             $('#galleryPopup').on('hide.bs.modal', function () {
@@ -128,7 +141,6 @@
             });
 
             $(window).scroll(function() {
-                console.log($(".load-more-btn").hasClass('hidden'))
                 if($(window).scrollTop() == $(document).height() - $(window).height() && !$(".load-more-btn").hasClass('hidden')) {
 
                     $(".load-more-btn").removeClass('hidden');
@@ -139,15 +151,17 @@
 
 <script id="gallery-modal-template" type="text/x-jquery-tmpl">
 <div class="col-sm-8 gallery-content">
-    {{#if videoUrl}}
-        <video src="{{videoUrl}}" controls autoplay width="100%" >
-            Your browser does not support the video player.
-        </video>
-    {{else}}
-        <img src="{{imageUrl}}" alt="{{authorName}}" class="img-responsive center-block">
-    {{/if}}
+    <div>
+        {{#if videoUrl}}
+            <video src="{{videoUrl}}" controls autoplay width="100%" onerror="removeOnError(this, {{notificationId}})">
+                Your browser does not support the video player.
+            </video>
+        {{else}}
+            <img src="{{imageUrl}}" alt="{{authorName}}" class="img-responsive center-block" onerror="removeOnError(this, {{notificationId}})">
+        {{/if}}
+    </div>
 </div>
-<div class="col-sm-4">
+<div class="col-sm-4 gallery-submenu">
     <div class="text-center">
         <button type="button" onclick="previousTile();" class="btn btn-link"><t:glyphIcon icon="arrow-left" /> <spring:message code="previous" /></button>
         <button type="button" class="btn btn-link" data-dismiss="modal"><t:glyphIcon icon="th" /></button>
@@ -161,10 +175,6 @@
             <td class="gallery-detail-author"><strong>{{authorName}}</strong></td>
         </tr>
     </table>
-
-    <p>
-        {{{text}}}
-    </p>
 
     <div>
         <a href="{{originalUrl}}" target="_blank" class="btn btn-primary btn-block"><spring:message code="view.originalPost" /></a>

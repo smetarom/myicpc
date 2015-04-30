@@ -6,6 +6,7 @@ import com.myicpc.model.social.Notification;
 import com.myicpc.service.exception.WebServiceException;
 import com.myicpc.social.service.GalleryService;
 import com.myicpc.social.service.PicasaService;
+import com.myicpc.social.service.StaleCheckerService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,9 @@ public class GalleryController extends GeneralController {
 
     @Autowired
     private PicasaService picasaService;
+
+    @Autowired
+    private StaleCheckerService staleCheckerService;
 
     @RequestMapping(value = "/{contestCode}/gallery", method = RequestMethod.GET)
     public String gallery(@PathVariable String contestCode, Model model) {
@@ -131,6 +135,15 @@ public class GalleryController extends GeneralController {
         }
 
         return "redirect:" + getContestURL(contestCode) + "/gallery";
+    }
+
+    @RequestMapping(value = "/{contestCode}/gallery/remove/{notificationId}", method = RequestMethod.POST)
+    public void removeStaleMedia(@PathVariable final String contestCode, @PathVariable final Long notificationId){
+        try {
+            staleCheckerService.checkNotification(notificationId);
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
     }
 
 

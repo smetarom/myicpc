@@ -1,18 +1,16 @@
 package com.myicpc.service.scoreboard.eventFeed
 
+import com.myicpc.dto.eventFeed.visitor.EventFeedVisitor
 import com.myicpc.model.contest.Contest
 import com.myicpc.model.eventFeed.EventFeedControl
-import com.myicpc.service.scoreboard.eventFeed.dto.ContestXML
+import com.myicpc.dto.eventFeed.ContestXML
 import org.mockito.InjectMocks
 import org.mockito.Matchers
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import org.mockito.invocation.InvocationOnMock
 import org.mockito.stubbing.Answer
 
-import static org.mockito.Matchers.any
-import static org.mockito.Matchers.anyObject
 import static org.mockito.Mockito.when
 
 /**

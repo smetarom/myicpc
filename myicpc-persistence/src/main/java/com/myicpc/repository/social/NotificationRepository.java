@@ -40,22 +40,22 @@ public interface NotificationRepository extends PagingAndSortingRepository<Notif
     @Query("SELECT n FROM Notification n WHERE n.notificationType IN ?2 AND n.contest = ?3 AND n.id < ?1 ORDER BY n.id DESC")
     Page<Notification> findByNotificationTypesFromNotificationIdOrderByIdDesc(Long lastNotificationId, List<NotificationType> notificationTypes, Contest contest, Pageable pageable);
 
-    @Query("SELECT n FROM Notification n WHERE n.notificationType IN ?1 AND n.contest = ?2 AND (n.imageUrl IS NOT NULL OR n.videoUrl IS NOT NULL) ORDER BY n.id DESC")
+    @Query("SELECT n FROM Notification n WHERE n.notificationType IN ?1 AND n.contest = ?2 AND (n.imageUrl IS NOT NULL OR n.videoUrl IS NOT NULL) AND n.deleted = false ORDER BY n.id DESC")
     Page<Notification> findByGalleryNotificationTypesOrderByIdDesc(List<NotificationType> notificationTypes, Contest contest, Pageable pageable);
 
-    @Query("SELECT n FROM Notification n WHERE n.notificationType IN ?2 AND n.contest = ?3 AND n.id < ?1 AND (n.imageUrl IS NOT NULL OR n.videoUrl IS NOT NULL) ORDER BY n.id DESC")
+    @Query("SELECT n FROM Notification n WHERE n.notificationType IN ?2 AND n.contest = ?3 AND n.id < ?1 AND (n.imageUrl IS NOT NULL OR n.videoUrl IS NOT NULL) AND n.deleted = false ORDER BY n.id DESC")
     Page<Notification> findByGalleryNotificationTypesFromNotificationIdOrderByIdDesc(Long lastNotificationId, List<NotificationType> notificationTypes, Contest contest, Pageable pageable);
 
-    @Query("SELECT n FROM Notification n WHERE n.notificationType IN ?1 AND n.contest = ?2 AND n.imageUrl IS NOT NULL AND n.videoUrl IS NULL ORDER BY n.id DESC")
+    @Query("SELECT n FROM Notification n WHERE n.notificationType IN ?1 AND n.contest = ?2 AND n.imageUrl IS NOT NULL AND n.videoUrl IS NULL AND n.deleted = false ORDER BY n.id DESC")
     Page<Notification> findByPhotosNotificationTypesOrderByIdDesc(List<NotificationType> notificationTypes, Contest contest, Pageable pageable);
 
-    @Query("SELECT n FROM Notification n WHERE n.notificationType IN ?2 AND n.contest = ?3 AND n.id < ?1 AND n.imageUrl IS NOT NULL AND n.videoUrl IS NULL ORDER BY n.id DESC")
+    @Query("SELECT n FROM Notification n WHERE n.notificationType IN ?2 AND n.contest = ?3 AND n.id < ?1 AND n.imageUrl IS NOT NULL AND n.videoUrl IS NULL AND n.deleted = false ORDER BY n.id DESC")
     Page<Notification> findByPhotosNotificationTypesFromNotificationIdOrderByIdDesc(Long lastNotificationId, List<NotificationType> notificationTypes, Contest contest, Pageable pageable);
 
-    @Query("SELECT n FROM Notification n WHERE n.notificationType IN ?1 AND n.contest = ?2 AND n.videoUrl IS NOT NULL ORDER BY n.id DESC")
+    @Query("SELECT n FROM Notification n WHERE n.notificationType IN ?1 AND n.contest = ?2 AND n.videoUrl IS NOT NULL AND n.deleted = false ORDER BY n.id DESC")
     Page<Notification> findByVideosNotificationTypesOrderByIdDesc(List<NotificationType> notificationTypes, Contest contest, Pageable pageable);
 
-    @Query("SELECT n FROM Notification n WHERE n.notificationType IN ?2 AND n.contest = ?3 AND n.id < ?1 AND n.videoUrl IS NOT NULL ORDER BY n.id DESC")
+    @Query("SELECT n FROM Notification n WHERE n.notificationType IN ?2 AND n.contest = ?3 AND n.id < ?1 AND n.videoUrl IS NOT NULL AND n.deleted = false ORDER BY n.id DESC")
     Page<Notification> findByVideosNotificationTypesFromNotificationIdOrderByIdDesc(Long lastNotificationId, List<NotificationType> notificationTypes, Contest contest, Pageable pageable);
 
     @Query("SELECT n FROM Notification n WHERE n.body LIKE ?1 AND n.body LIKE ?2 AND n.contest = ?3")
