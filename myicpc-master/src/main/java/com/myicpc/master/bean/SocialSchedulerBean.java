@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
+import javax.ejb.Local;
 import javax.ejb.ScheduleExpression;
 import javax.ejb.Singleton;
 import javax.ejb.Timeout;
@@ -21,16 +22,20 @@ import javax.inject.Inject;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * A simple example to demonstrate a implementation of a cluster-wide singleton timer.
  *
  * @author <a href="mailto:wfink@redhat.com">Wolf-Dieter Fink</a>
  */
-@Singleton
+@Singleton(name = "SocialSchedulerBean")
+@Local(IMasterBean.class)
 public class SocialSchedulerBean implements IMasterBean {
     private static final Logger logger = LoggerFactory.getLogger(HATimerService.class);
     private static final ConcurrentMap<Long, String> hashtagMapping = new ConcurrentHashMap<>();
+
+    private final AtomicBoolean started = new AtomicBoolean(false);
 
     @Resource
     private TimerService timerService;
@@ -56,6 +61,7 @@ public class SocialSchedulerBean implements IMasterBean {
         }
 
         logger.info("HASingletonTimer: Info=" + timer.getInfo());
+        started.set(true);
     }
 
     @Override
@@ -81,6 +87,12 @@ public class SocialSchedulerBean implements IMasterBean {
             timer.cancel();
         }
         twitterService.stopAllTwitterStreams();
+        started.set(false);
+    }
+
+    @Override
+    public AtomicBoolean getStarted() {
+        return started;
     }
 
     private void handleHashtagUpdate(String expectedHashtag, Contest contest) {

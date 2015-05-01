@@ -155,22 +155,27 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
     @Transactional
     public void visit(TeamProblemXML xmlTeamProblem, Contest contest) {
 
-        TeamProblem persistedTeamProblem = teamProblemRepository.findBySystemIdAndTeamContest(xmlTeamProblem.getSystemId(), contest);
+        TeamProblem teamProblem = teamProblemRepository.findBySystemIdAndTeamContest(xmlTeamProblem.getSystemId(), contest);
 
-        // skip 'fresh' submission if it is already persisted
-        if ("fresh".equalsIgnoreCase(persistedTeamProblem.getStatus()) && persistedTeamProblem != null) {
-            logger.info("Skipping 'fresh' run {} in contest {}", xmlTeamProblem.getSystemId(), contest.getId());
-            return;
-        }
-        // skip 'done' submission, if there is already persisted
-        if (Double.compare(persistedTeamProblem.getTime(), xmlTeamProblem.getTime()) == 0) {
-            logger.info("Skipping 'done' run {} in contest {}", xmlTeamProblem.getSystemId(), contest.getId());
-            return;
+        if (teamProblem != null) {
+            // skip 'fresh' submission if it is already persisted
+            if ("fresh".equalsIgnoreCase(teamProblem.getStatus())) {
+                logger.info("Skipping 'fresh' run {} in contest {}", xmlTeamProblem.getSystemId(), contest.getId());
+                return;
+            }
+
+            // skip 'done' submission, if there is already persisted
+            if ("done".equalsIgnoreCase(teamProblem.getStatus()) && Double.compare(teamProblem.getTime(), xmlTeamProblem.getTime()) == 0) {
+                logger.info("Skipping 'done' run {} in contest {}", xmlTeamProblem.getSystemId(), contest.getId());
+                return;
+            }
         }
 
         try {
             FeedRunStrategy strategy = selectStrategy(contest);
-            TeamProblem teamProblem = new TeamProblem();
+            if (teamProblem == null) {
+                teamProblem = new TeamProblem();
+            }
             xmlTeamProblem.mergeTo(teamProblem);
             teamProblem = strategy.executeTeamProblem(teamProblem, contest);
 

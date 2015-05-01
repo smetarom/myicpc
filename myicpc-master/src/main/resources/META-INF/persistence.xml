@@ -17,6 +17,15 @@
         <class>com.myicpc.model.contest.ModuleConfiguration</class>
         <class>com.myicpc.model.contest.QuestConfiguration</class>
         <class>com.myicpc.model.contest.WebServiceSettings</class>
+        <class>com.myicpc.model.eventFeed.Judgement</class>
+        <class>com.myicpc.model.eventFeed.Language</class>
+        <class>com.myicpc.model.eventFeed.LastTeamProblem</class>
+        <class>com.myicpc.model.eventFeed.Problem</class>
+        <class>com.myicpc.model.eventFeed.Region</class>
+        <class>com.myicpc.model.eventFeed.Team</class>
+        <class>com.myicpc.model.eventFeed.TeamProblem</class>
+        <class>com.myicpc.model.eventFeed.TeamRankHistory</class>
+        <class>com.myicpc.model.social.Notification</class>
 
         <validation-mode>NONE</validation-mode>
         <properties>

@@ -2,6 +2,8 @@ package com.myicpc.master.service.scoreboard;
 
 import com.myicpc.dto.eventFeed.ClarificationXML;
 import com.myicpc.dto.eventFeed.ContestXML;
+import com.myicpc.dto.eventFeed.EventFeedCommand;
+import com.myicpc.dto.eventFeed.EventFeedResponse;
 import com.myicpc.dto.eventFeed.FinalizedXML;
 import com.myicpc.dto.eventFeed.JudgementXML;
 import com.myicpc.dto.eventFeed.LanguageXML;
@@ -13,6 +15,9 @@ import com.myicpc.dto.eventFeed.TestcaseXML;
 import com.myicpc.dto.eventFeed.XMLEntity;
 import com.myicpc.dto.eventFeed.convertor.ProblemConverter;
 import com.myicpc.dto.eventFeed.convertor.TeamConverter;
+import com.myicpc.master.bean.IMasterBean;
+import com.myicpc.master.dao.ContestDao;
+import com.myicpc.master.dao.EventFeedDao;
 import com.myicpc.master.exception.EventFeedException;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.contest.ContestSettings;
@@ -37,10 +42,13 @@ import org.springframework.scheduling.annotation.AsyncResult;
 
 import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
+import javax.jms.Message;
 import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
@@ -60,14 +68,23 @@ import java.util.concurrent.Future;
  * @author Roman Smetana
  */
 @Stateless
-public class ScoreboardService {
-    private static final Logger logger = LoggerFactory.getLogger(ScoreboardService.class);
+public class EventFeedService {
+    private static final Logger logger = LoggerFactory.getLogger(EventFeedService.class);
 
     @Resource(mappedName = "java:/ConnectionFactory")
     private ConnectionFactory connectionFactory;
 
     @Resource(lookup = "java:/jms/queue/EventFeedQueue")
     private Queue eventFeedQueue;
+
+    @EJB(beanName = "ScoreboardBean")
+    private IMasterBean scoreboardBean;
+
+    @Inject
+    private EventFeedDao eventFeedDao;
+
+    @Inject
+    private ContestDao contestDao;
 
     @Asynchronous
     public Future<Void> runEventFeed(final Contest contest) {
@@ -119,13 +136,13 @@ public class ScoreboardService {
         xStream.registerLocalConverter(TeamProblemXML.class, "problem", new ProblemConverter(contest) {
             @Override
             public Object fromString(String value) {
-                return null;
+                return eventFeedDao.getProblemBySystemId(value, contest.getId());
             }
         });
         xStream.registerLocalConverter(TeamProblemXML.class, "team", new TeamConverter(contest) {
             @Override
             public Object fromString(String value) {
-                return null;
+                return eventFeedDao.getTeamBySystemId(value, contest.getId());
             }
         });
         return xStream;
@@ -201,6 +218,61 @@ public class ScoreboardService {
 
         // TODO remove log or improve
         logger.info("Event feed send " + event);
+    }
+
+    public synchronized void processReceivedCommand(ObjectMessage rcvMessage, final EventFeedCommand command) {
+        System.out.println("Scoreboard bean " + scoreboardBean.getStarted());
+        // if this bean is running
+        if (scoreboardBean.getStarted().get()) {
+            Contest contest = contestDao.getContestById(command.getContestId());
+            // stop feed
+            stopFeed(contest);
+            // truncate data if requested
+            if (command.isTruncateDatabase()) {
+                truncateEventFeedData(contest);
+            }
+            // start feed if requested
+            if (command.isStart()) {
+                startFeed(contest);
+            }
+
+            // response to the command
+//            Connection connection = null;
+//
+//            try {
+//                connection = connectionFactory.createConnection();
+//                Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+//
+//                MessageProducer replyProducer = session.createProducer(rcvMessage.getJMSReplyTo());
+//                connection.start();
+//
+//                ObjectMessage response = session.createObjectMessage(new EventFeedResponse(200));
+//                response.setJMSCorrelationID(rcvMessage.getJMSCorrelationID());
+//                replyProducer.send(response);
+//            } catch (JMSException e) {
+//                logger.error("Event feed control response not send.", e);
+//            } finally {
+//                if (connection != null) {
+//                    try {
+//                        connection.close();
+//                    } catch (JMSException e) {
+//                    }
+//                }
+//            }
+
+        }
+    }
+
+    protected void stopFeed(final Contest contest) {
+
+    }
+
+    protected void truncateEventFeedData(final Contest contest) {
+        eventFeedDao.deleteAllEventFeedData(contest);
+    }
+
+    protected void startFeed(final Contest contest) {
+
     }
 
 }

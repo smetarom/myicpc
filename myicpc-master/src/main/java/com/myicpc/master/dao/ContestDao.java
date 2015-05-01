@@ -12,6 +12,10 @@ import java.util.List;
 @Stateless
 public class ContestDao extends GeneralDao {
 
+    public Contest getContestById(Long contestId) {
+        return em.find(Contest.class, contestId);
+    }
+
     public List<Contest> getActiveContests() {
         TypedQuery<Contest> query = em.createQuery("FROM Contest c", Contest.class);
         return query.getResultList();
