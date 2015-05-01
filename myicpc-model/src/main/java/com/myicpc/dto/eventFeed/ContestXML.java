@@ -4,7 +4,6 @@ import com.myicpc.dto.eventFeed.convertor.TimeConverter;
 import com.myicpc.dto.eventFeed.convertor.TimestampConverter;
 import com.myicpc.dto.eventFeed.visitor.EventFeedVisitor;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.model.eventFeed.EventFeedControl;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
 
@@ -35,8 +34,8 @@ public class ContestXML extends XMLEntity<Contest> {
     }
 
     @Override
-    public void accept(EventFeedVisitor visitor, Contest contest, EventFeedControl eventFeedControl) {
-        visitor.visit(this, contest, eventFeedControl);
+    public void accept(EventFeedVisitor visitor, Contest contest) {
+        visitor.visit(this, contest);
     }
 
     public String getTitle() {

@@ -2,7 +2,6 @@ package com.myicpc.dto.eventFeed;
 
 import com.myicpc.dto.eventFeed.visitor.EventFeedVisitor;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.model.eventFeed.EventFeedControl;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
@@ -17,7 +16,7 @@ public class ClarificationXML extends XMLEntity<Void> {
     }
 
     @Override
-    public void accept(EventFeedVisitor visitor, Contest contest, EventFeedControl eventFeedControl) {
+    public void accept(EventFeedVisitor visitor, Contest contest) {
         // do not process clarification
     }
 }

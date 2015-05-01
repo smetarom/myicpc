@@ -66,8 +66,8 @@ public class ScoreboardService {
     @Resource(mappedName = "java:/ConnectionFactory")
     private ConnectionFactory connectionFactory;
 
-    @Resource(lookup = "java:/jms/queue/SocialNotificationQueue")
-    private Queue socialQueue;
+    @Resource(lookup = "java:/jms/queue/EventFeedQueue")
+    private Queue eventFeedQueue;
 
     @Asynchronous
     public Future<Void> runEventFeed(final Contest contest) {
@@ -87,7 +87,10 @@ public class ScoreboardService {
                         }
                         try {
                             XMLEntity elem = (XMLEntity) objectInputStream.readObject();
-                            sendEventFeedNotification(elem);
+                            if (!(elem instanceof TestcaseXML)) {
+                                elem.setContestId(contest.getId());
+                                sendEventFeedNotification(elem);
+                            }
                         } catch (ClassNotFoundException e) {
                             logger.warn("XML parsing class not found", e);
                         }
@@ -96,7 +99,7 @@ public class ScoreboardService {
                     logger.info("Event feed parsing is done.");
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("Communication error with Event feed provider.", e);
             } catch (EventFeedException e) {
                 logger.error("Event feed connection failed. Reason: " + e.getMessage());
             }
@@ -180,7 +183,7 @@ public class ScoreboardService {
             connection = connectionFactory.createConnection();
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
-            MessageProducer producer = session.createProducer(socialQueue);
+            MessageProducer producer = session.createProducer(eventFeedQueue);
             connection.start();
 
             ObjectMessage notificationMessage = session.createObjectMessage(event);

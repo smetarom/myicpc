@@ -2,7 +2,6 @@ package com.myicpc.dto.eventFeed;
 
 import com.myicpc.dto.eventFeed.visitor.EventFeedVisitor;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.model.eventFeed.EventFeedControl;
 import com.myicpc.model.eventFeed.Judgement;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -22,8 +21,8 @@ public class JudgementXML extends XMLEntity<Judgement> {
     }
 
     @Override
-    public void accept(EventFeedVisitor visitor, Contest contest, EventFeedControl eventFeedControl) {
-        visitor.visit(this, contest, eventFeedControl);
+    public void accept(EventFeedVisitor visitor, Contest contest) {
+        visitor.visit(this, contest);
     }
 
     public String getAcronym() {

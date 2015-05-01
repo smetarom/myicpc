@@ -79,6 +79,7 @@ public abstract class FeedRunStrategy {
             if (tp == null) {
                 tp = teamProblemRepository.save(teamProblem);
             }
+            // otherwise update it
             changeLastSubmissionByTeam(tp);
             tp.setJudged(teamProblem.getJudged());
             tp.setSolved(teamProblem.getSolved());

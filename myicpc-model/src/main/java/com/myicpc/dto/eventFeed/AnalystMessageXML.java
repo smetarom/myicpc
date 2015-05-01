@@ -2,7 +2,6 @@ package com.myicpc.dto.eventFeed;
 
 import com.myicpc.dto.eventFeed.visitor.EventFeedVisitor;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.model.eventFeed.EventFeedControl;
 import com.myicpc.model.social.Notification;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -25,8 +24,8 @@ public class AnalystMessageXML extends XMLEntity<Notification> {
     }
 
     @Override
-    public void accept(EventFeedVisitor visitor, Contest contest, EventFeedControl eventFeedControl) {
-        visitor.visit(this, contest, eventFeedControl);
+    public void accept(EventFeedVisitor visitor, Contest contest) {
+        visitor.visit(this, contest);
     }
 
     public Long getRunId() {

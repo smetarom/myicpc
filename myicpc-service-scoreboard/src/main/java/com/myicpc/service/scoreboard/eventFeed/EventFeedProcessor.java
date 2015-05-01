@@ -20,8 +20,6 @@ import com.myicpc.dto.eventFeed.TeamProblemXML;
 import com.myicpc.dto.eventFeed.TeamXML;
 import com.myicpc.dto.eventFeed.TestcaseXML;
 import com.myicpc.dto.eventFeed.XMLEntity;
-import com.myicpc.dto.eventFeed.convertor.ProblemConverter;
-import com.myicpc.dto.eventFeed.convertor.TeamConverter;
 import com.myicpc.service.scoreboard.exception.EventFeedException;
 import com.thoughtworks.xstream.XStream;
 import org.apache.commons.io.IOUtils;
@@ -117,8 +115,11 @@ public class EventFeedProcessor {
                     logger.info("Event feed reader for contest " + contest.getCode() + " was interrupted.");
                     break;
                 }
+                // Ignore testcases
                 XMLEntity elem = (XMLEntity) in.readObject();
-                elem.accept(eventFeedVisitor, contest, eventFeedControl);
+                if (!(elem instanceof TestcaseXML)) {
+                    elem.accept(eventFeedVisitor, contest);
+                }
             }
         } catch (EOFException ex) {
             logger.info("Event feed parsing is done.");

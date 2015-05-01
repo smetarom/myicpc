@@ -13,10 +13,20 @@ import com.myicpc.dto.eventFeed.TeamXML;
 import com.myicpc.dto.eventFeed.TestcaseXML;
 import com.myicpc.dto.eventFeed.visitor.EventFeedVisitor;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.model.eventFeed.*;
+import com.myicpc.model.eventFeed.Judgement;
+import com.myicpc.model.eventFeed.Language;
+import com.myicpc.model.eventFeed.Problem;
+import com.myicpc.model.eventFeed.Region;
+import com.myicpc.model.eventFeed.Team;
+import com.myicpc.model.eventFeed.TeamProblem;
 import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.repository.contest.ContestRepository;
-import com.myicpc.repository.eventFeed.*;
+import com.myicpc.repository.eventFeed.JudgementRepository;
+import com.myicpc.repository.eventFeed.LanguageRepository;
+import com.myicpc.repository.eventFeed.ProblemRepository;
+import com.myicpc.repository.eventFeed.RegionRepository;
+import com.myicpc.repository.eventFeed.TeamProblemRepository;
+import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.repository.teamInfo.TeamInfoRepository;
 import com.myicpc.service.scoreboard.exception.EventFeedException;
 import org.slf4j.Logger;
@@ -58,12 +68,9 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
     @Autowired
     private TeamProblemRepository teamProblemRepository;
 
-    @Autowired
-    private EventFeedControlRepository eventFeedControlRepository;
-
     @Override
     @Transactional
-    public void visit(final ContestXML xmlContest, Contest contest, EventFeedControl eventFeedControl) {
+    public void visit(final ContestXML xmlContest, Contest contest) {
         contest = contestRepository.findOne(contest.getId());
         xmlContest.mergeTo(contest);
         // TODO remove timestamp, it is here for testing purposes
@@ -73,7 +80,7 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
 
     @Override
     @Transactional
-    public void visit(LanguageXML xmlLanguage, Contest contest, EventFeedControl eventFeedControl) {
+    public void visit(LanguageXML xmlLanguage, Contest contest) {
         Language language = languageRepository.findByName(xmlLanguage.getName());
         if (language == null) {
             language = new Language();
@@ -85,7 +92,7 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
 
     @Override
     @Transactional
-    public void visit(RegionXML xmlRegion, Contest contest, EventFeedControl eventFeedControl) {
+    public void visit(RegionXML xmlRegion, Contest contest) {
         Region region = regionRepository.findByNameAndContest(xmlRegion.getName(), contest);
         if (region == null) {
             region = new Region();
@@ -99,7 +106,7 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
 
     @Override
     @Transactional
-    public void visit(JudgementXML xmlJudgement, Contest contest, EventFeedControl eventFeedControl) {
+    public void visit(JudgementXML xmlJudgement, Contest contest) {
         Judgement judgement = judgementRepository.findByCodeAndContest(xmlJudgement.getAcronym(), contest);
         if (judgement == null) {
             judgement = new Judgement();
@@ -114,7 +121,7 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
 
     @Override
     @Transactional
-    public void visit(ProblemXML xmlProblem, Contest contest, EventFeedControl eventFeedControl) {
+    public void visit(ProblemXML xmlProblem, Contest contest) {
         Problem problem = problemRepository.findBySystemIdAndContest(xmlProblem.getSystemId(), contest);
         if (problem == null) {
             problem = new Problem();
@@ -128,7 +135,7 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
 
     @Override
     @Transactional
-    public void visit(TeamXML xmlTeam, Contest contest, EventFeedControl eventFeedControl) {
+    public void visit(TeamXML xmlTeam, Contest contest) {
         Team team = teamRepository.findBySystemIdAndContest(xmlTeam.getId(), contest);
         if (team == null) {
             team = new Team();
@@ -146,31 +153,56 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
 
     @Override
     @Transactional
-    public void visit(TeamProblemXML xmlTeamProblem, Contest contest, EventFeedControl eventFeedControl) {
-        try {
-           if (eventFeedControl.getSkippedRuns() < eventFeedControl.getRunsToSkip()) {
-                eventFeedControl.increaseSkippedRuns();
-                logger.info("Skipped {} out of {} runs", eventFeedControl.getSkippedRuns(), eventFeedControl.getRunsToSkip());
-            } else {
-                FeedRunStrategy strategy = selectStrategy(contest);
-                TeamProblem teamProblem = new TeamProblem();
-                xmlTeamProblem.mergeTo(teamProblem);
-                teamProblem = strategy.executeTeamProblem(teamProblem, contest);
+    public void visit(TeamProblemXML xmlTeamProblem, Contest contest) {
 
-                eventFeedControl = eventFeedControlRepository.findOne(eventFeedControl.getId());
-                eventFeedControl.increaseProcessedRunsCounter();
-                eventFeedControlRepository.save(eventFeedControl);
-                logger.info("Run " + teamProblem.getSystemId() + " processed for team " + teamProblem.getTeam().getSystemId());
-            }
+        TeamProblem persistedTeamProblem = teamProblemRepository.findBySystemIdAndTeamContest(xmlTeamProblem.getSystemId(), contest);
+
+        // skip 'fresh' submission if it is already persisted
+        if ("fresh".equalsIgnoreCase(persistedTeamProblem.getStatus()) && persistedTeamProblem != null) {
+            logger.info("Skipping 'fresh' run {} in contest {}", xmlTeamProblem.getSystemId(), contest.getId());
+            return;
+        }
+        // skip 'done' submission, if there is already persisted
+        if (Double.compare(persistedTeamProblem.getTime(), xmlTeamProblem.getTime()) == 0) {
+            logger.info("Skipping 'done' run {} in contest {}", xmlTeamProblem.getSystemId(), contest.getId());
+            return;
+        }
+
+        try {
+            FeedRunStrategy strategy = selectStrategy(contest);
+            TeamProblem teamProblem = new TeamProblem();
+            xmlTeamProblem.mergeTo(teamProblem);
+            teamProblem = strategy.executeTeamProblem(teamProblem, contest);
+
+            logger.info("Run " + teamProblem.getSystemId() + " processed for team " + teamProblem.getTeam().getSystemId());
         } catch (EventFeedException ex) {
             logger.error(ex.getMessage(), ex);
         }
+
+//        try {
+//           if (eventFeedControl.getSkippedRuns() < eventFeedControl.getRunsToSkip()) {
+//                eventFeedControl.increaseSkippedRuns();
+//                logger.info("Skipped {} out of {} runs", eventFeedControl.getSkippedRuns(), eventFeedControl.getRunsToSkip());
+//            } else {
+//                FeedRunStrategy strategy = selectStrategy(contest);
+//                TeamProblem teamProblem = new TeamProblem();
+//                xmlTeamProblem.mergeTo(teamProblem);
+//                teamProblem = strategy.executeTeamProblem(teamProblem, contest);
+//
+//                eventFeedControl = eventFeedControlRepository.findOne(eventFeedControl.getId());
+//                eventFeedControl.increaseProcessedRunsCounter();
+//                eventFeedControlRepository.save(eventFeedControl);
+//                logger.info("Run " + teamProblem.getSystemId() + " processed for team " + teamProblem.getTeam().getSystemId());
+//            }
+//        } catch (EventFeedException ex) {
+//            logger.error(ex.getMessage(), ex);
+//        }
 
     }
 
     @Override
     @Transactional
-    public void visit(TestcaseXML xmlTestcase, Contest contest, EventFeedControl eventFeedControl) {
+    public void visit(TestcaseXML xmlTestcase, Contest contest) {
         TeamProblem teamProblem = teamProblemRepository.findBySystemIdAndTeamContest(xmlTestcase.getSystemId(), contest);
         if (teamProblem != null) {
             xmlTestcase.mergeTo(teamProblem);
@@ -179,13 +211,13 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
 
     @Override
     @Transactional
-    public void visit(AnalystMessageXML analystMessage, Contest contest, EventFeedControl eventFeedControl) {
+    public void visit(AnalystMessageXML analystMessage, Contest contest) {
         // TODO handle analyst message
     }
 
     @Override
     @Transactional
-    public void visit(FinalizedXML finalizedXML, Contest contest, EventFeedControl eventFeedControl) {
+    public void visit(FinalizedXML finalizedXML, Contest contest) {
         // TODO do something useful with finalized information
     }
 

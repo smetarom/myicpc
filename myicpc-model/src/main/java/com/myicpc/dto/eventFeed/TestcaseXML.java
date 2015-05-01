@@ -2,7 +2,6 @@ package com.myicpc.dto.eventFeed;
 
 import com.myicpc.dto.eventFeed.visitor.EventFeedVisitor;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.model.eventFeed.EventFeedControl;
 import com.myicpc.model.eventFeed.TeamProblem;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -38,8 +37,8 @@ public class TestcaseXML extends XMLEntity<TeamProblem> {
     }
 
     @Override
-    public void accept(EventFeedVisitor visitor, Contest contest, EventFeedControl eventFeedControl) {
-        visitor.visit(this, contest, eventFeedControl);
+    public void accept(EventFeedVisitor visitor, Contest contest) {
+        visitor.visit(this, contest);
     }
 
     public Long getSystemId() {
