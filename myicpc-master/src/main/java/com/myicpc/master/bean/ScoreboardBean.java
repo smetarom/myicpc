@@ -34,7 +34,7 @@ public class ScoreboardBean implements IMasterBean {
         List<Contest> activeContests = contestDao.getActiveContests();
         for (Contest contest : activeContests) {
             System.out.println(contest.getName());
-            eventFeedService.runEventFeed(contest);
+            eventFeedService.startEventFeed(contest);
         }
         started.set(true);
     }

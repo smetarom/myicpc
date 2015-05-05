@@ -1,5 +1,6 @@
 package com.myicpc.master.service.scoreboard;
 
+import com.google.common.collect.Maps;
 import com.myicpc.dto.eventFeed.ClarificationXML;
 import com.myicpc.dto.eventFeed.ContestXML;
 import com.myicpc.dto.eventFeed.EventFeedCommand;
@@ -62,6 +63,8 @@ import java.io.Reader;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 /**
@@ -70,6 +73,7 @@ import java.util.concurrent.Future;
 @Stateless
 public class EventFeedService {
     private static final Logger logger = LoggerFactory.getLogger(EventFeedService.class);
+    private static final ConcurrentMap<Long, Future<Void>> runningFeedProcessors = Maps.newConcurrentMap();
 
     @Resource(mappedName = "java:/ConnectionFactory")
     private ConnectionFactory connectionFactory;
@@ -86,138 +90,28 @@ public class EventFeedService {
     @Inject
     private ContestDao contestDao;
 
-    @Asynchronous
-    public Future<Void> runEventFeed(final Contest contest) {
-        ContestSettings contestSettings = contest.getContestSettings();
-        if (contestSettings != null && !StringUtils.isEmpty(contestSettings.getEventFeedURL())) {
-            // TODO load latest event feed control from db
+    @Inject
+    private EventFeedProcessor eventFeedProcessor;
 
-            try (InputStream in = connectToCDS(contestSettings);
-                 Reader reader = new InputStreamReader(in)) {
-                XStream xStream = createEventFeedParser(contest);
-                ObjectInputStream objectInputStream = xStream.createObjectInputStream(reader);
-                try {
-                    while (true) {
-                        if (Thread.interrupted()) {
-                            logger.info("Event feed reader for contest " + contest.getCode() + " was interrupted.");
-                            break;
-                        }
-                        try {
-                            XMLEntity elem = (XMLEntity) objectInputStream.readObject();
-                            if (!(elem instanceof TestcaseXML)) {
-                                elem.setContestId(contest.getId());
-                                sendEventFeedNotification(elem);
-                            }
-                        } catch (ClassNotFoundException e) {
-                            logger.warn("XML parsing class not found", e);
-                        }
-                    }
-                } catch (EOFException ex) {
-                    logger.info("Event feed parsing is done.");
-                }
-            } catch (IOException e) {
-                logger.error("Communication error with Event feed provider.", e);
-            } catch (EventFeedException e) {
-                logger.error("Event feed connection failed. Reason: " + e.getMessage());
-            }
-
-        } else {
-            logger.error("Event feed settings is not correct for contest " + contest.getName());
+    public void startEventFeed(final Contest contest) {
+        Future<Void> running = runningFeedProcessors.get(contest.getId());
+        if (running != null && !running.isDone()) {
+            // TODO logging
+            return;
         }
-
-        return new AsyncResult<>(null);
+        Future<Void> newFeedProcessor = eventFeedProcessor.runEventFeed(contest);
+        runningFeedProcessors.put(contest.getId(), newFeedProcessor);
     }
 
-    private XStream createEventFeedParser(final Contest contest) {
-        XStream xStream = new XStream();
-        xStream.ignoreUnknownElements();
-        xStream.processAnnotations(new Class[]{ContestXML.class, LanguageXML.class, RegionXML.class, JudgementXML.class, ProblemXML.class, TeamXML.class,
-                TeamProblemXML.class, TestcaseXML.class, FinalizedXML.class, ClarificationXML.class});
-        xStream.registerLocalConverter(TeamProblemXML.class, "problem", new ProblemConverter(contest) {
-            @Override
-            public Object fromString(String value) {
-                return eventFeedDao.getProblemBySystemId(value, contest.getId());
-            }
-        });
-        xStream.registerLocalConverter(TeamProblemXML.class, "team", new TeamConverter(contest) {
-            @Override
-            public Object fromString(String value) {
-                return eventFeedDao.getTeamBySystemId(value, contest.getId());
-            }
-        });
-        return xStream;
-    }
-
-    /**
-     * Connect to CDS server
-     *
-     * @return stream with response
-     * @throws java.io.IOException
-     */
-    protected InputStream connectToCDS(final ContestSettings contestSettings) throws IOException, EventFeedException {
-        String url = contestSettings.getEventFeedURL();
-        String username = contestSettings.getEventFeedUsername();
-        String password = contestSettings.getEventFeedPassword();
-        if (StringUtils.isEmpty(url)) {
-            return null;
-        }
-
-        CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        if (!StringUtils.isEmpty(username)) {
-            credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(username, password));
-        }
-
-        // Build connection client
-        HttpClientBuilder clientBuilder = HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider);
-
-        // Turn off host verification in SSL
-        SSLContextBuilder builder = new SSLContextBuilder();
-        try {
-            builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
-            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(builder.build());
-            clientBuilder.setSSLSocketFactory(sslsf);
-        } catch (NoSuchAlgorithmException | KeyManagementException | KeyStoreException e) {
-            logger.error("Error during disabling Event feed SSL checks", e);
-        }
-
-        // TODO http client is not closed!
-        CloseableHttpClient client = clientBuilder.build();
-        HttpGet request = new HttpGet(url);
-
-        HttpResponse response = client.execute(request);
-        StatusLine statusLine = response.getStatusLine();
-        if (statusLine.getStatusCode() != 200) {
-            throw new EventFeedException(statusLine.getReasonPhrase());
-        }
-        HttpEntity entity = response.getEntity();
-        return entity.getContent();
-    }
-
-    protected <T extends XMLEntity> void sendEventFeedNotification(final T event) {
-        Connection connection = null;
-
-        try {
-            connection = connectionFactory.createConnection();
-            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-
-            MessageProducer producer = session.createProducer(eventFeedQueue);
-            connection.start();
-
-            ObjectMessage notificationMessage = session.createObjectMessage(event);
-            producer.send(notificationMessage);
-        } catch (JMSException e) {
-            logger.error("Event feeed JMS notification not send.", e);
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (JMSException e) {
-                }
+    public void stopEventFeed(Contest contest) {
+        Future<Void> running = runningFeedProcessors.get(contest.getId());
+        if (running != null && !running.isDone()) {
+            boolean cancelled = running.cancel(true);
+            if (!cancelled) {
+                // TODO logging
+                return;
             }
         }
-
-        // TODO remove log or improve
-        logger.info("Event feed send " + event);
     }
 
     public synchronized void processReceivedCommand(ObjectMessage rcvMessage, final EventFeedCommand command) {
@@ -226,14 +120,14 @@ public class EventFeedService {
         if (scoreboardBean.getStarted().get()) {
             Contest contest = contestDao.getContestById(command.getContestId());
             // stop feed
-            stopFeed(contest);
+            stopEventFeed(contest);
             // truncate data if requested
             if (command.isTruncateDatabase()) {
                 truncateEventFeedData(contest);
             }
             // start feed if requested
             if (command.isStart()) {
-                startFeed(contest);
+                startEventFeed(contest);
             }
 
             // response to the command
@@ -263,16 +157,8 @@ public class EventFeedService {
         }
     }
 
-    protected void stopFeed(final Contest contest) {
-
-    }
-
     protected void truncateEventFeedData(final Contest contest) {
         eventFeedDao.deleteAllEventFeedData(contest);
-    }
-
-    protected void startFeed(final Contest contest) {
-
     }
 
 }

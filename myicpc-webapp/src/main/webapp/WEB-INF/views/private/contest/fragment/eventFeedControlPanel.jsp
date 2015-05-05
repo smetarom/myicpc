@@ -23,6 +23,13 @@
           <t:helpIcon helpTextCode="admin.panel.feed.resume.hint" />
         </t:plainForm>
       </div>
+      <div class="col-sm-6">
+        <t:plainForm action="/private${contestURL}/feed/stop">
+          <spring:message var="confirmMsg" code="admin.panel.feed.reset.confirm" />
+          <t:button type="submit" context="danger" onclick="return confirm('${confirmMsg}');"><spring:message code="admin.panel.feed.reset" /></t:button>
+          <t:helpIcon helpTextCode="admin.panel.feed.reset.hint" />
+        </t:plainForm>
+      </div>
     </div>
 
   </jsp:body>

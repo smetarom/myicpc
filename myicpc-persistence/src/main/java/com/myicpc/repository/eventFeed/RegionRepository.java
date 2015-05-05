@@ -2,6 +2,7 @@ package com.myicpc.repository.eventFeed;
 
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Region;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -9,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public interface RegionRepository extends CrudRepository<Region, Long> {
+public interface RegionRepository extends JpaRepository<Region, Long> {
     Region findByName(String name);
 
     Region findByNameAndContest(String name, Contest contest);

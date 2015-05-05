@@ -8,8 +8,7 @@ import com.myicpc.commons.enums.GeneralEnum;
 public enum FeedRunStrategyType implements GeneralEnum {
     POLLING("feed.strategy.type.polling", "Long-polling"),
     NATIVE("feed.strategy.type.native", "Computed by MyICPC"),
-    UNSORTED_JSON("feed.strategy.type.unsorted", "Unsorted JSON scoreboard"),
-    SORTED_JSON("feed.strategy.type.sorted", "Sorted JSON scoreboard");
+    JSON("feed.strategy.type.json", "JSON scoreboard"),;
 
     private String label;
     private String code;

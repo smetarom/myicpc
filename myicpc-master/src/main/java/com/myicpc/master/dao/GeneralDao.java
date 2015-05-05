@@ -10,4 +10,12 @@ public class GeneralDao {
 
     @PersistenceContext(name = "MasterMyICPC")
     protected EntityManager em;
+
+    public <T> T save(T entity) {
+        return em.merge(entity);
+    }
+
+    public void flush() {
+        em.flush();
+    }
 }

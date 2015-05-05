@@ -85,7 +85,7 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
         if (language == null) {
             language = new Language();
             xmlLanguage.mergeTo(language);
-            language = languageRepository.save(language);
+            language = languageRepository.saveAndFlush(language);
             logger.info("Language " + language.getName() + " created");
         }
     }
@@ -99,7 +99,7 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
             xmlRegion.mergeTo(region);
             region.setShortName(FormatUtils.getRegionShortName(region.getName()));
             region.setContest(contest);
-            region = regionRepository.save(region);
+            region = regionRepository.saveAndFlush(region);
             logger.info("Region " + region.getName() + " created");
         }
     }
@@ -114,7 +114,7 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
             // TODO get color
 //            judgement.setColor(GlobalUtils.getJudgementColor(judgement.getCode()));
             judgement.setContest(contest);
-            judgement = judgementRepository.save(judgement);
+            judgement = judgementRepository.saveAndFlush(judgement);
             logger.info("Judgement " + judgement.getName() + " created");
         }
     }
@@ -128,7 +128,7 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
             xmlProblem.mergeTo(problem);
             problem.setCode(Character.toString((char) (64 + problem.getSystemId())));
             problem.setContest(contest);
-            problem = problemRepository.save(problem);
+            problem = problemRepository.saveAndFlush(problem);
             logger.info("Problem " + problem.getCode() + " created");
         }
     }
@@ -146,7 +146,7 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
             team.setContest(contest);
             TeamInfo teamInfo = teamInfoRepository.findByExternalIdAndContest(team.getExternalId(), contest);
             team.setTeamInfo(teamInfo);
-            team = teamRepository.save(team);
+            team = teamRepository.saveAndFlush(team);
             logger.info("Team " + team.getSystemId() + " created");
         }
     }
