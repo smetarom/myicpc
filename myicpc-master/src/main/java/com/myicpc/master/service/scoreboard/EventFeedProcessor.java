@@ -1,6 +1,7 @@
 package com.myicpc.master.service.scoreboard;
 
 import com.google.common.collect.Maps;
+import com.myicpc.commons.utils.WebServiceUtils;
 import com.myicpc.dto.eventFeed.ClarificationXML;
 import com.myicpc.dto.eventFeed.ContestXML;
 import com.myicpc.dto.eventFeed.FinalizedXML;
@@ -172,39 +173,8 @@ public class EventFeedProcessor {
         String url = contestSettings.getEventFeedURL();
         String username = contestSettings.getEventFeedUsername();
         String password = contestSettings.getEventFeedPassword();
-        if (StringUtils.isEmpty(url)) {
-            return null;
-        }
 
-        CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
-        if (!StringUtils.isEmpty(username)) {
-            credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(username, password));
-        }
-
-        // Build connection client
-        HttpClientBuilder clientBuilder = HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider);
-
-        // Turn off host verification in SSL
-        SSLContextBuilder builder = new SSLContextBuilder();
-        try {
-            builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
-            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(builder.build());
-            clientBuilder.setSSLSocketFactory(sslsf);
-        } catch (NoSuchAlgorithmException | KeyManagementException | KeyStoreException e) {
-            logger.error("Error during disabling Event feed SSL checks", e);
-        }
-
-        // TODO http client is not closed!
-        CloseableHttpClient client = clientBuilder.build();
-        HttpGet request = new HttpGet(url);
-
-        HttpResponse response = client.execute(request);
-        StatusLine statusLine = response.getStatusLine();
-        if (statusLine.getStatusCode() != 200) {
-            throw new EventFeedException(statusLine.getReasonPhrase());
-        }
-        HttpEntity entity = response.getEntity();
-        return entity.getContent();
+        return WebServiceUtils.connectCDS(url, username, password);
     }
 
     protected <T extends XMLEntity> void sendEventFeedNotification(final T event) {

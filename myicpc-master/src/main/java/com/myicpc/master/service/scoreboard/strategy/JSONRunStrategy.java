@@ -5,14 +5,19 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.myicpc.commons.adapters.JSONAdapter;
+import com.myicpc.commons.utils.FormatUtils;
+import com.myicpc.commons.utils.WebServiceUtils;
 import com.myicpc.master.exception.EventFeedException;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.Stateless;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,9 +36,19 @@ public class JSONRunStrategy extends FeedRunStrategy {
         return synchronizeWithJSON(teamProblemFromDB, contest);
     }
 
-    protected String getJSONContent() {
-        // TODO finish
-        return null;
+    protected String getJSONContent(final Contest contest) throws EventFeedException {
+        String jsonScoreboardURL = contest.getContestSettings().getJSONScoreboardURL();
+        if (StringUtils.isEmpty(jsonScoreboardURL)) {
+            throw new EventFeedException("Empty JSON scoreboard URL");
+        }
+        String username = contest.getContestSettings().getEventFeedUsername();
+        String password = contest.getContestSettings().getEventFeedPassword();
+
+        try {
+            return IOUtils.toString(WebServiceUtils.connectCDS(jsonScoreboardURL, username, password), FormatUtils.DEFAULT_ENCODING);
+        } catch (IOException e) {
+            throw new EventFeedException(e.getMessage(), e);
+        }
     }
 
     protected List<Team> synchronizeWithJSON(final TeamProblem teamProblemFromDB, final Contest contest) throws EventFeedException {
@@ -42,7 +57,7 @@ public class JSONRunStrategy extends FeedRunStrategy {
             Iterable<Team> teams = eventFeedDao.findTeamByContest(contest);
 
             // parse JSON scoreboard
-            JsonObject root = new JsonParser().parse(getJSONContent()).getAsJsonObject();
+            JsonObject root = new JsonParser().parse(getJSONContent(contest)).getAsJsonObject();
 
             JsonArray arr = root.getAsJsonArray("scoreboard");
             List<Team> teamsToBroadcast = new ArrayList<Team>();
@@ -51,7 +66,7 @@ public class JSONRunStrategy extends FeedRunStrategy {
             // Mapping between team and its ID, for faster lookup
             Map<Long, Team> teamMap = new HashMap<Long, Team>();
             for (Team team : teams) {
-                teamMap.put(team.getId(), team);
+                teamMap.put(team.getSystemId(), team);
             }
 
             while (jsonIterator.hasNext()) {
@@ -88,8 +103,12 @@ public class JSONRunStrategy extends FeedRunStrategy {
 
         // this is the team, who submitted
         if (team.getId().equals(teamProblemFromDB.getTeam().getId())) {
-            team.setProblemsSolved(teamAdapter.getInteger("solved"));
-            team.setTotalTime(teamAdapter.getInteger("score"));
+            Integer solved = teamAdapter.getInteger("solved");
+            Integer score = teamAdapter.getInteger("score");
+            team.setProblemsSolved(solved);
+            teamProblemFromDB.getTeam().setProblemsSolved(solved);
+            team.setTotalTime(score);
+            teamProblemFromDB.getTeam().setTotalTime(score);
             JsonElement elem = teamAdapter.get(teamProblemFromDB.getProblem().getCode());
             // problem by letter code is found
             if (elem != null) {

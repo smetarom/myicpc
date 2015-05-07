@@ -19,7 +19,7 @@
 <script type="application/javascript">
     function hideJSONUrlField() {
         var selected = $("#contestSettings\\.scoreboardStrategyType").val();
-        if (selected === "UNSORTED_JSON" || selected === "SORTED_JSON") {
+        if (selected === "JSON") {
             $("#JSONUrlField").show();
         } else {
             $("#JSONUrlField").hide();

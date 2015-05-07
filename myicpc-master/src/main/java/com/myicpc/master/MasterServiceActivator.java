@@ -21,10 +21,10 @@ public class MasterServiceActivator implements ServiceActivator {
     public void activate(ServiceActivatorContext context) {
         InjectedValue<ServerEnvironment> socialEnvironment = new InjectedValue<>();
         // TODO uncomment
-//        install(new HATimerService(socialEnvironment), HATimerService.SOCIAL_SERVICE_NAME, socialEnvironment, context);
+        install(new HATimerService(socialEnvironment), HATimerService.SOCIAL_SERVICE_NAME, socialEnvironment, context);
 
         InjectedValue<ServerEnvironment> scoreboardEnvironment = new InjectedValue<>();
-        install(new ScoreboardMasterService(socialEnvironment), ScoreboardMasterService.SCOREBOARD_SERVICE_NAME, scoreboardEnvironment, context);
+//        install(new ScoreboardMasterService(socialEnvironment), ScoreboardMasterService.SCOREBOARD_SERVICE_NAME, scoreboardEnvironment, context);
     }
 
     private static void install(GeneralMasterService masterService, ServiceName name, InjectedValue<ServerEnvironment> env, ServiceActivatorContext context) {
