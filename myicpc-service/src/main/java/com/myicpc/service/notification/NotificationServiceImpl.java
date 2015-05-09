@@ -32,7 +32,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import twitter4j.Status;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -41,8 +40,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * This class provides services to manage {@link Notification}
@@ -162,7 +159,7 @@ public class NotificationServiceImpl implements NotificationService {
         NotificationBuilder builder = new NotificationBuilder();
         builder.setTitle(analystMessageDTO.getTitle());
         builder.setBody(analystMessageDTO.getMessage());
-        builder.setNotificationType(NotificationType.ANALYST_MESSAGE);
+        builder.setNotificationType(NotificationType.ANALYST_TEAM_MESSAGE);
 
         return notificationRepository.save(builder.build());
     }

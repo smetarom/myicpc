@@ -210,6 +210,7 @@ public class TeamService {
                     externalIdTeamMap.put(team.getExternalId(), team);
                 }
 
+                int imported = 0;
                 // Iterate through all JSON representations of teams
                 for (JsonElement teamJE : teamArray) {
                     // Tries to find a team by externalReservationId in the database
@@ -241,6 +242,12 @@ public class TeamService {
 
                     // process team members and assign them to the team
                     parsePeople(teamInfo, teamAdapter);
+
+                    // flush after 10 imported teams to improve performance
+                    imported++;
+                    if (imported % 10 == 0) {
+                        teamRepository.flush();
+                    }
 
                     logger.info("CM import: team " + teamInfo.getExternalId());
                 }

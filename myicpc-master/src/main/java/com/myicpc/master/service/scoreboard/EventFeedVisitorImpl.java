@@ -13,10 +13,11 @@ import com.myicpc.dto.eventFeed.RegionXML;
 import com.myicpc.dto.eventFeed.TeamProblemXML;
 import com.myicpc.dto.eventFeed.TeamXML;
 import com.myicpc.dto.eventFeed.TestcaseXML;
-import com.myicpc.dto.eventFeed.XMLEntity;
 import com.myicpc.dto.eventFeed.visitor.EventFeedMessage;
 import com.myicpc.master.dao.EventFeedDao;
+import com.myicpc.master.dao.NotificationDao;
 import com.myicpc.master.exception.EventFeedException;
+import com.myicpc.master.service.NotificationService;
 import com.myicpc.master.service.scoreboard.strategy.FeedRunStrategy;
 import com.myicpc.master.service.scoreboard.strategy.JSONRunStrategy;
 import com.myicpc.master.service.scoreboard.strategy.NativeRunStrategy;
@@ -27,7 +28,9 @@ import com.myicpc.model.eventFeed.Problem;
 import com.myicpc.model.eventFeed.Region;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
+import com.myicpc.model.social.Notification;
 import com.myicpc.model.teamInfo.TeamInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,10 +66,16 @@ public class EventFeedVisitorImpl implements EventFeedLocal {
     private EventFeedDao eventFeedDao;
 
     @Inject
+    private NotificationDao notificationDao;
+
+    @Inject
     private NativeRunStrategy nativeRunStrategy;
 
     @Inject
     private JSONRunStrategy jsonRunStrategy;
+
+    @Inject
+    private NotificationService notificationService;
 
     @Override
     public void visit(ContestXML xmlContest, Contest contest) {
@@ -190,11 +199,46 @@ public class EventFeedVisitorImpl implements EventFeedLocal {
 
     @Override
     public void visit(AnalystMessageXML analystMessage, Contest contest) {
-        EventFeedMessage eventFeedMessage = new EventFeedMessage(analystMessage.getRunId(),
-                analystMessage.getTeamId(),
-                analystMessage.getTitle(),
-                analystMessage.getMessage());
-        sendEventFeedNotification(eventFeedMessage);
+        logger.info("Analyst msg: "+analystMessage.getMessage());
+        if (StringUtils.isEmpty(analystMessage.getMessage())) {
+            // skip, if the message is empty
+            return;
+        }
+        Notification notification = null;
+        if (analystMessage.getRunId() != null) { // notification for submission
+            TeamProblem teamProblem = eventFeedDao.findTeamProblemBySystemIdAndTeamContest(analystMessage.getRunId(), contest);
+            // if team submission exists and message does not exist
+            if (teamProblem != null
+                    && notificationDao.getAnalystSubmissionMessageCount(teamProblem, analystMessage.getMessage()) == 0) {
+                if (teamProblem.getJudged()) {
+                    if (teamProblem.getSolved()) {
+                        notification = notificationService.createOnTeamSubmissionSuccess(teamProblem, analystMessage.getMessage());
+                    } else {
+                        notification = notificationService.createOnTeamSubmissionFailed(teamProblem, analystMessage.getMessage());
+                    }
+                } else {
+                    notification = notificationService.createOnTeamSubmissionSubmitted(teamProblem, analystMessage.getMessage());
+                }
+            }
+        } else if (analystMessage.getTeamId() != null) { // notification for a team
+            Team team = eventFeedDao.findTeamBySystemIdAndContest(analystMessage.getTeamId(), contest);
+            if (team != null
+                    && notificationDao.getAnalystTeamMessageCount(team, analystMessage.getMessage()) == 0) {
+                notification = notificationService.createTeamAnalyticsMessage(team, analystMessage.getMessage());
+            }
+
+        } else { // general analytics notification
+            if (notificationDao.getAnalystGeneralMessageCount(contest, analystMessage.getMessage()) == 0) {
+                Contest msgContest = eventFeedDao.findOne(Contest.class, contest.getId());
+                notification = notificationService.createAnalyticsMessage(msgContest, analystMessage.getMessage());
+            }
+        }
+
+        if (notification != null) {
+            eventFeedDao.saveContestEntity(notification);
+            EventFeedMessage eventFeedMessage = new EventFeedMessage(notification);
+            sendEventFeedNotification(eventFeedMessage);
+        }
     }
 
     @Override

@@ -102,7 +102,7 @@ public class NotificationList extends ArrayList<NotificationType> {
     }
 
     public NotificationList addAnalystMessage() {
-        this.add(NotificationType.ANALYST_MESSAGE);
+        this.add(NotificationType.ANALYST_TEAM_MESSAGE);
         return this;
     }
 }

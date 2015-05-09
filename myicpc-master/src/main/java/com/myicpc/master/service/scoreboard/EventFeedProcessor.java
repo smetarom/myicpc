@@ -2,6 +2,7 @@ package com.myicpc.master.service.scoreboard;
 
 import com.google.common.collect.Maps;
 import com.myicpc.commons.utils.WebServiceUtils;
+import com.myicpc.dto.eventFeed.AnalystMessageXML;
 import com.myicpc.dto.eventFeed.ClarificationXML;
 import com.myicpc.dto.eventFeed.ContestXML;
 import com.myicpc.dto.eventFeed.FinalizedXML;
@@ -106,7 +107,6 @@ public class EventFeedProcessor {
                             System.out.println("Feed finished 2");
                             return new AsyncResult<>(null);
                         }
-                        System.out.println(sessionContext.wasCancelCalled());
                         try {
                             XMLEntity elem = (XMLEntity) objectInputStream.readObject();
                             if (!(elem instanceof TestcaseXML)) {
@@ -147,7 +147,7 @@ public class EventFeedProcessor {
         XStream xStream = new XStream();
         xStream.ignoreUnknownElements();
         xStream.processAnnotations(new Class[]{ContestXML.class, LanguageXML.class, RegionXML.class, JudgementXML.class, ProblemXML.class, TeamXML.class,
-                TeamProblemXML.class, TestcaseXML.class, FinalizedXML.class, ClarificationXML.class});
+                TeamProblemXML.class, TestcaseXML.class, FinalizedXML.class, AnalystMessageXML.class, ClarificationXML.class});
         xStream.registerLocalConverter(TeamProblemXML.class, "problem", new ProblemConverter(contest) {
             @Override
             public Object fromString(String value) {

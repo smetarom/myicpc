@@ -9,13 +9,15 @@ public enum NotificationType {
     SCOREBOARD_SUCCESS("Scoreboard", "Scoreboard success", "submissionSuccess"),
     SCOREBOARD_FAILED("Scoreboard", "Scoreboard failed", "submissionFailed"),
     SCOREBOARD_SUBMIT("Scoreboard", "Scoreboard submitted", "submissionSubmitted"),
+    ANALYST_TEAM_MESSAGE("Analytics Message", "Analytics Message", "analystTeamMsg"),
+    ANALYST_MESSAGE("Analytics Message", "Analytics Message", "analystMsg"),
     TWITTER("Tweet", "Twitter", "twitter"),
     ARTICLE("Article", "Article", "a"),
     ADMIN_NOTIFICATION("Admin notification", "Admin notification", "an"),
     PICASA("Gallery", "Gallery", "ga"),
-    VINE("Vine", "Vine", "vi"),
+    VINE("Vine", "Vine", "vine"),
     INSTAGRAM_VIDEO("Instagram", "Instagram video", "iv"),
-    INSTAGRAM("Instagram", "Instagram photo", "im"),
+    INSTAGRAM("Instagram", "Instagram photo", "instagram"),
     POLL_OPEN("Poll", "Poll open", "po"),
     POLL_CLOSE("Poll", "Poll close", "pc"),
     YOUTUBE_VIDEO("YouTube", "YouTube", "yt"),
@@ -24,8 +26,7 @@ public enum NotificationType {
     QUEST_VOTE_WINNER_VINE("Quest vote winner", "Quest vote winner", "qvwv"),
     QUEST_VOTE_WINNER_INSTAGRAM_IMAGE("Quest vote winner", "Quest vote winner", "qvwim"),
     QUEST_VOTE_INSTAGRAM_VIDEO("Quest vote winner", "Quest vote winner", "qvwiv"),
-    QUEST_CHALLENGE("Quest challenge", "Quest challenge", "qch"),
-    ANALYST_MESSAGE("Analytics Message", "Analytics Message", "ame");
+    QUEST_CHALLENGE("Quest challenge", "Quest challenge", "qch");
     /**
      * Human readable name of notification type
      */
@@ -118,7 +119,7 @@ public enum NotificationType {
     }
 
     public boolean isAnalyticsMessage() {
-        return this == ANALYST_MESSAGE;
+        return this == ANALYST_TEAM_MESSAGE;
     }
 
 }

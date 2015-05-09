@@ -20,7 +20,6 @@ public class MasterServiceActivator implements ServiceActivator {
     @Override
     public void activate(ServiceActivatorContext context) {
         InjectedValue<ServerEnvironment> socialEnvironment = new InjectedValue<>();
-        // TODO uncomment
         install(new HATimerService(socialEnvironment), HATimerService.SOCIAL_SERVICE_NAME, socialEnvironment, context);
 
         InjectedValue<ServerEnvironment> scoreboardEnvironment = new InjectedValue<>();

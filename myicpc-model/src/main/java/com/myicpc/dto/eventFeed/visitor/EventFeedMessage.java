@@ -1,36 +1,19 @@
 package com.myicpc.dto.eventFeed.visitor;
 
 import com.myicpc.dto.eventFeed.EventFeedEvent;
+import com.myicpc.model.social.Notification;
 
 /**
  * @author Roman Smetana
  */
 public class EventFeedMessage implements EventFeedEvent {
-    private Long runId;
-    private Long teamId;
-    private String title;
-    private String message;
+    private Notification notification;
 
-    public EventFeedMessage(Long runId, Long teamId, String title, String message) {
-        this.runId = runId;
-        this.teamId = teamId;
-        this.title = title;
-        this.message = message;
+    public EventFeedMessage(Notification notification) {
+        this.notification = notification;
     }
 
-    public Long getRunId() {
-        return runId;
-    }
-
-    public Long getTeamId() {
-        return teamId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getMessage() {
-        return message;
+    public Notification getNotification() {
+        return notification;
     }
 }
