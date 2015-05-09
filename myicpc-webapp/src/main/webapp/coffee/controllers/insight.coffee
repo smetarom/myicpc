@@ -29,11 +29,12 @@ insightApp.config(['$routeProvider',
 # create a common service for all insight pages
 insightApp.factory('insightService', ($http, $interval) ->
   insightService = {};
+  promise = null;
 
   ###
     refresh rate for polling new insight data
   ###
-  insightService.refreshRate = 5000
+  insightService.refreshRate = 15000
 
   ###
     loads data at the beginning and initiate insight data polling
@@ -43,13 +44,17 @@ insightApp.factory('insightService', ($http, $interval) ->
     @param pollingFn function, which process periodically polled data
   ###
   insightService.init = (url, title, successFn, pollingFn) ->
+    if promise?
+      $interval.cancel(promise)
+    console.log(promise);
     $("#insightHeadline").html("#{title}")
     $http.get(url).success(successFn)
     .error(() ->
       # TODO
     )
-    completed = $interval(() ->
-      $http.get(url).success(pollingFn, insightService.refreshRate));
+    promise = $interval(() ->
+      $http.get(url).success(pollingFn)
+    , insightService.refreshRate);
 
   ###
       get x value for pie chart

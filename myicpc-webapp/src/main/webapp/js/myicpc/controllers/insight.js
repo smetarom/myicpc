@@ -30,13 +30,14 @@ insightApp.config([
 ]);
 
 insightApp.factory('insightService', function($http, $interval) {
-  var insightService;
+  var insightService, promise;
   insightService = {};
+  promise = null;
 
   /*
     refresh rate for polling new insight data
    */
-  insightService.refreshRate = 5000;
+  insightService.refreshRate = 15000;
 
   /*
     loads data at the beginning and initiate insight data polling
@@ -46,12 +47,15 @@ insightApp.factory('insightService', function($http, $interval) {
     @param pollingFn function, which process periodically polled data
    */
   insightService.init = function(url, title, successFn, pollingFn) {
-    var completed;
+    if (promise != null) {
+      $interval.cancel(promise);
+    }
+    console.log(promise);
     $("#insightHeadline").html("" + title);
     $http.get(url).success(successFn).error(function() {});
-    return completed = $interval(function() {
-      return $http.get(url).success(pollingFn, insightService.refreshRate);
-    });
+    return promise = $interval(function() {
+      return $http.get(url).success(pollingFn);
+    }, insightService.refreshRate);
   };
 
   /*
