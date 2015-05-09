@@ -118,8 +118,12 @@ public enum NotificationType {
         return this == QUEST_CHALLENGE;
     }
 
-    public boolean isAnalyticsMessage() {
+    public boolean isTeamAnalyticsMessage() {
         return this == ANALYST_TEAM_MESSAGE;
+    }
+
+    public boolean isAnalyticsMessage() {
+        return this == ANALYST_MESSAGE;
     }
 
 }

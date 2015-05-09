@@ -60,6 +60,7 @@ public class NotificationTag extends SimpleTagSupport {
         if (notificationType.isScoreboardSuccess() ||
                 notificationType.isScoreboardFailed() ||
                 notificationType.isScoreboardSubmitted() ||
+                notificationType.isTeamAnalyticsMessage() ||
                 notificationType.isAnalyticsMessage()) {
             tile = new SubmissionTile(notification, isTemplate, locale, pageContext);
         } else if (notificationType.isTwitter()) {

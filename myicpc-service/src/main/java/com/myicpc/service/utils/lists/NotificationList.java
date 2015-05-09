@@ -101,8 +101,13 @@ public class NotificationList extends ArrayList<NotificationType> {
         return this;
     }
 
-    public NotificationList addAnalystMessage() {
+    public NotificationList addTeamAnalystMessage() {
         this.add(NotificationType.ANALYST_TEAM_MESSAGE);
+        return this;
+    }
+
+    public NotificationList addAnalystMessage() {
+        this.add(NotificationType.ANALYST_MESSAGE);
         return this;
     }
 }

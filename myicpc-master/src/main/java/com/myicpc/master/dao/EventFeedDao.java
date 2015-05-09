@@ -32,7 +32,15 @@ public class EventFeedDao extends GeneralDao {
         deleteContestEntity("DELETE FROM Region r WHERE r.contest.id = :contestId", contest.getId());
         deleteContestEntity("DELETE FROM Judgement j WHERE j.contest.id = :contestId", contest.getId());
 
-        // TODO delete notifications
+        // delete notifications generated from event feed
+        deleteContestEntity("DELETE FROM Notification n WHERE n.contest.id = :contestId " +
+                "AND n.notificationType IN (" +
+                    "'SCOREBOARD_SUCCESS'," +
+                    "'SCOREBOARD_FAILED'," +
+                    "'SCOREBOARD_SUBMIT'," +
+                    "'ANALYST_TEAM_MESSAGE'," +
+                    "'ANALYST_MESSAGE'" +
+                ")", contest.getId());
     }
 
     public <T extends IdGeneratedObject> T saveContestEntity(T object) {

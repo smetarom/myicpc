@@ -9,6 +9,7 @@ import com.myicpc.dto.eventFeed.visitor.EventFeedVisitor;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
+import com.myicpc.model.social.Notification;
 import com.myicpc.repository.contest.ContestRepository;
 import com.myicpc.service.publish.PublishService;
 import org.slf4j.Logger;
@@ -27,6 +28,9 @@ public class EventFeedNotificationReceiver {
     private static final Logger logger = LoggerFactory.getLogger(EventFeedNotificationReceiver.class);
 
     @Autowired
+    private ContestRepository contestRepository;
+
+    @Autowired
     private PublishService publishService;
 
     @JmsListener(destination = "java:/jms/queue/EventFeedQueue")
@@ -34,7 +38,7 @@ public class EventFeedNotificationReceiver {
         if (event instanceof EventFeedSubmission) {
             onSubmission((EventFeedSubmission) event);
         } else if (event instanceof EventFeedMessage) {
-            // TODO process notifications
+            onNotification(((EventFeedMessage) event).getNotification());
         }
     }
 
@@ -71,5 +75,13 @@ public class EventFeedNotificationReceiver {
         tpObject.add("teams", teamsObject);
 
         publishService.broadcastTeamProblem(tpObject, teamSubmission.getTeam().getContest().getCode());
+    }
+
+    public void onNotification(Notification notification) {
+        if (notification == null) {
+            return;
+        }
+        Contest contest = contestRepository.findOne(notification.getContest().getId());
+        publishService.broadcastNotification(notification, contest);
     }
 }

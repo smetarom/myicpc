@@ -26,10 +26,11 @@ public class TimelineService {
      */
     public static final List<NotificationType> TIMELINE_TYPES = NotificationList.newList()
             .addScoreboardSuccess()
+            .addTeamAnalystMessage()
             .addAnalystMessage()
-            .addTwitter()
-            .addInstagram()
-            .addVine()
+//            .addTwitter()
+//            .addInstagram()
+//            .addVine()
             .addPicasa();
 
     @Autowired

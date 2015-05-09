@@ -199,7 +199,6 @@ public class EventFeedVisitorImpl implements EventFeedLocal {
 
     @Override
     public void visit(AnalystMessageXML analystMessage, Contest contest) {
-        logger.info("Analyst msg: "+analystMessage.getMessage());
         if (StringUtils.isEmpty(analystMessage.getMessage())) {
             // skip, if the message is empty
             return;
