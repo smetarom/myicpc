@@ -278,8 +278,5 @@ public class EventFeedVisitorImpl implements EventFeedLocal {
                 }
             }
         }
-
-        // TODO remove log or improve
-        logger.info("Event feed send " + event);
     }
 }

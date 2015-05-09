@@ -55,6 +55,10 @@
         <path>/WEB-INF/tags/bootstrap/alert.tag</path>
     </tag-file>
     <tag-file>
+        <name>submitButton</name>
+        <path>/WEB-INF/tags/bootstrap/submitButton.tag</path>
+    </tag-file>
+    <tag-file>
         <name>button</name>
         <path>/WEB-INF/tags/bootstrap/button.tag</path>
     </tag-file>

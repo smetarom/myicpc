@@ -58,6 +58,11 @@ public class ControlFeedService {
         sendControlCommand(command);
     }
 
+    public void clearEventFeed(final Contest contest) throws EventFeedException {
+        EventFeedCommand command = new EventFeedCommand(contest.getId(), true, false);
+        sendControlCommand(command);
+    }
+
     private void sendControlCommand(final EventFeedCommand command) {
 
         jmsTemplate.convertAndSend(command);

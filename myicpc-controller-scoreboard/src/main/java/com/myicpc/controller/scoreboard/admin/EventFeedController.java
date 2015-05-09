@@ -36,20 +36,6 @@ public class EventFeedController extends GeneralAdminController {
         return "private/contest/fragment/eventFeedControlPanel";
     }
 
-    @RequestMapping(value = "/private/{contestCode}/feed/stop", method = RequestMethod.POST)
-    public String stopFeed(@PathVariable final String contestCode, final RedirectAttributes redirectAttributes) {
-        Contest contest = getContest(contestCode, null);
-
-        try {
-            controlFeedService.stopEventFeed(contest);
-            successMessage(redirectAttributes, "admin.panel.feed.reset.success");
-        } catch (EventFeedException ex) {
-            errorMessage(redirectAttributes, ex);
-        }
-
-        return "redirect:/private"+ getContestURL(contestCode) + "/home";
-    }
-
     @RequestMapping(value = "/private/{contestCode}/feed/restart", method = RequestMethod.POST)
     public String restartFeed(@PathVariable final String contestCode, final RedirectAttributes redirectAttributes) {
         Contest contest = getContest(contestCode, null);
@@ -71,6 +57,34 @@ public class EventFeedController extends GeneralAdminController {
         try {
             controlFeedService.resumeEventFeed(contest);
             successMessage(redirectAttributes, "admin.panel.feed.resume.success");
+        } catch (EventFeedException ex) {
+            errorMessage(redirectAttributes, ex);
+        }
+
+        return "redirect:/private"+ getContestURL(contestCode) + "/home";
+    }
+
+    @RequestMapping(value = "/private/{contestCode}/feed/stop", method = RequestMethod.POST)
+    public String stopFeed(@PathVariable final String contestCode, final RedirectAttributes redirectAttributes) {
+        Contest contest = getContest(contestCode, null);
+
+        try {
+            controlFeedService.stopEventFeed(contest);
+            successMessage(redirectAttributes, "admin.panel.feed.stop.success");
+        } catch (EventFeedException ex) {
+            errorMessage(redirectAttributes, ex);
+        }
+
+        return "redirect:/private"+ getContestURL(contestCode) + "/home";
+    }
+
+    @RequestMapping(value = "/private/{contestCode}/feed/clear", method = RequestMethod.POST)
+    public String clearFeed(@PathVariable final String contestCode, final RedirectAttributes redirectAttributes) {
+        Contest contest = getContest(contestCode, null);
+
+        try {
+            controlFeedService.clearEventFeed(contest);
+            successMessage(redirectAttributes, "admin.panel.feed.clear.success");
         } catch (EventFeedException ex) {
             errorMessage(redirectAttributes, ex);
         }
