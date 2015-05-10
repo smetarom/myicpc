@@ -61,11 +61,6 @@ public class NotificationList extends ArrayList<NotificationType> {
         return this;
     }
 
-    public NotificationList addInstagramVideo() {
-        this.add(NotificationType.INSTAGRAM_VIDEO);
-        return this;
-    }
-
     public NotificationList addPollOpen() {
         this.add(NotificationType.POLL_OPEN);
         return this;

@@ -1,5 +1,6 @@
 package com.myicpc.social.receiver;
 
+import com.myicpc.enums.NotificationType;
 import com.myicpc.model.social.Notification;
 import com.myicpc.social.service.TwitterService;
 import com.myicpc.social.service.VineService;
@@ -21,11 +22,14 @@ public class SocialNotificationReceiver {
 
     @JmsListener(destination = "java:/jms/queue/SocialNotificationQueue")
     public void processSocialNotification(Notification notification) {
-        if (notification.getNotificationType() != null) {
-            if (notification.getNotificationType().isTwitter()) {
+        NotificationType notificationType = notification.getNotificationType();
+        if (notificationType != null) {
+            if (notificationType.isTwitter()) {
                 twitterService.processReceivedNotification(notification);
-            } else if (notification.getNotificationType().isVine()) {
+            } else if (notificationType.isVine()) {
                 vineService.processReceivedNotification(notification);
+            } else if (notificationType.isQuestChallenge()) {
+
             }
         }
     }

@@ -4,6 +4,7 @@ import com.myicpc.master.HATimerService;
 import com.myicpc.master.dao.ContestDao;
 import com.myicpc.master.exception.AuthenticationException;
 import com.myicpc.master.exception.WebServiceException;
+import com.myicpc.master.service.quest.QuestService;
 import com.myicpc.master.service.social.TwitterService;
 import com.myicpc.master.service.social.VineService;
 import com.myicpc.model.contest.Contest;
@@ -49,6 +50,9 @@ public class SocialSchedulerBean implements IMasterBean {
     @Inject
     private VineService vineService;
 
+    @Inject
+    private QuestService questService;
+
     @Timeout
     public void scheduler(Timer timer) {
         List<Contest> activeContests = contestDao.getActiveContests();
@@ -57,7 +61,7 @@ public class SocialSchedulerBean implements IMasterBean {
             handleHashtagUpdate(expectedHashtag, contest);
 
             processVineUpdates(contest);
-
+            processOpenQuestChallenge(contest);
         }
 
         logger.info("HASingletonTimer: Info=" + timer.getInfo());
@@ -119,5 +123,9 @@ public class SocialSchedulerBean implements IMasterBean {
         } catch (AuthenticationException e) {
             logger.error("Vine login failed.", e);
         }
+    }
+
+    private void processOpenQuestChallenge(final Contest contest) {
+        questService.processNewOpenQuestChallenges(contest);
     }
 }

@@ -56,7 +56,7 @@ public class Team extends IdGeneratedContestObject {
     private Integer totalTime;
 
     @OneToOne(optional = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "externalIdLinToTeamInfo", referencedColumnName = "externalId")
+    @JoinColumn(name = "teamInfoId", referencedColumnName = "externalId")
     private TeamInfo teamInfo;
 
     /**

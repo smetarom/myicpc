@@ -1,20 +1,27 @@
 package com.myicpc.service.quest;
 
 import com.myicpc.enums.ContestParticipantRole;
+import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.quest.QuestChallenge;
 import com.myicpc.model.quest.QuestParticipant;
 import com.myicpc.model.quest.QuestSubmission;
 import com.myicpc.model.quest.QuestSubmission.QuestSubmissionState;
+import com.myicpc.model.social.Notification;
+import com.myicpc.repository.contest.ContestRepository;
 import com.myicpc.repository.quest.QuestChallengeRepository;
 import com.myicpc.repository.quest.QuestParticipantRepository;
 import com.myicpc.repository.quest.QuestSubmissionRepository;
+import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.service.EntityManagerService;
 import com.myicpc.service.exception.BusinessValidationException;
+import com.myicpc.service.publish.PublishService;
 import com.myicpc.service.quest.dto.QuestSubmissionFilter;
 import com.myicpc.service.validation.QuestChallengeValidator;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -40,6 +47,10 @@ import java.util.Map;
 @Service
 @Transactional
 public class QuestMngmService extends EntityManagerService {
+    private static final Logger logger = LoggerFactory.getLogger(QuestMngmService.class);
+
+    @Autowired
+    private ContestRepository contestRepository;
 
     @Autowired
     private QuestChallengeRepository challengeRepository;
@@ -52,6 +63,12 @@ public class QuestMngmService extends EntityManagerService {
 
     @Autowired
     private QuestChallengeValidator challengeValidator;
+
+    @Autowired
+    private NotificationRepository notificationRepository;
+
+    @Autowired
+    private PublishService publishService;
 
     public QuestChallenge updateQuestChallenge(final QuestChallenge challenge) throws BusinessValidationException {
         challengeValidator.validate(challenge);
@@ -228,5 +245,19 @@ public class QuestMngmService extends EntityManagerService {
 
     public List<ContestParticipantRole> getAllContestParticipantRoles() {
         return Arrays.asList(ContestParticipantRole.values());
+    }
+
+    public void processReceivedNotification(final Notification receivedNotification) {
+        Contest contest = contestRepository.getOne(receivedNotification.getContest().getId());
+        Notification existingNotification = notificationRepository.findByContestAndExternalIdAndNotificationType(contest, receivedNotification.getExternalId(), NotificationType.VINE);
+
+        if (existingNotification != null) {
+            logger.info("Skip quest challenge " + receivedNotification.getExternalId() + " because of duplication.");
+            return;
+        }
+
+        receivedNotification.setContest(contest);
+        notificationRepository.save(receivedNotification);
+        publishService.broadcastNotification(receivedNotification, contest);
     }
 }

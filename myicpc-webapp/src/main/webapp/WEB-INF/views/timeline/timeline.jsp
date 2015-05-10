@@ -36,6 +36,8 @@
                     <li><a href="#"><t:glyphIcon icon="bullhorn" /> 2 unanswered polls</a></li>
                 </ul>
                 <hr />
+                <%@ include file="/WEB-INF/views/timeline/timelineQuest.jsp"%>
+                <hr />
                 <%@ include file="/WEB-INF/views/timeline/timelineUpcomingEvents.jsp"%>
                 <hr />
                 <%@ include file="/WEB-INF/views/timeline/timelineFollowedTeams.jsp"%>

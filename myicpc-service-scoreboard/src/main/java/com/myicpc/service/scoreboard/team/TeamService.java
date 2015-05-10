@@ -453,6 +453,12 @@ public class TeamService {
         List<Long> teamProblemIds = new ArrayList<>();
         Map<Long, TeamProblem> map = new HashMap<>();
         List<TeamProblem> teamProblems = teamProblemRepository.findByTeam(team);
+
+        if (teamProblems.isEmpty()) {
+            // no submissions found
+            return new ArrayList<>();
+        }
+
         for (TeamProblem teamProblem : teamProblems) {
             teamProblemIds.add(teamProblem.getId());
             map.put(teamProblem.getId(), teamProblem);
