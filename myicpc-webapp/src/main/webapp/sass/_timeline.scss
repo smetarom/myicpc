@@ -57,3 +57,14 @@
     border-radius: 5px;
   }
 }
+
+.timeline-carousel {
+  .item div.content {
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: justify;
+    height: 150px;
+    overflow-y: auto;
+    margin-bottom: 5px;
+  }
+}

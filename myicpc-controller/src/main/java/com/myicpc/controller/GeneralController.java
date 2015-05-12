@@ -3,7 +3,6 @@ package com.myicpc.controller;
 import com.myicpc.commons.utils.CookieUtils;
 import com.myicpc.model.social.Notification;
 import com.myicpc.service.notification.NotificationService;
-import com.myicpc.service.notification.NotificationServiceImpl;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.site.SitePreference;

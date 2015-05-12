@@ -3,15 +3,12 @@ package com.myicpc.service.publish;
 import com.google.gson.JsonObject;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.Notification;
-import com.myicpc.service.notification.NotificationServiceImpl;
+import com.myicpc.service.notification.NotificationService;
 import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.cpr.BroadcasterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.inject.Inject;
 
 /**
  * @author Roman Smetana
@@ -56,7 +53,7 @@ public class PublishService {
             // ignore offensive notifications
             return;
         }
-        JsonObject notificationObject = NotificationServiceImpl.getNotificationInJson(notification);
+        JsonObject notificationObject = NotificationService.getNotificationInJson(notification);
 
         atmospherePublish(PREFIX + contest.getCode() + "/" + NOTIFICATION, notificationObject.toString());
     }

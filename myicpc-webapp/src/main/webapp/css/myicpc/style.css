@@ -113,6 +113,14 @@ a.block {
     margin: 7px 7px;
     border-radius: 5px; }
 
+.timeline-carousel .item div.content {
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: justify;
+  height: 150px;
+  overflow-y: auto;
+  margin-bottom: 5px; }
+
 #mainScoreboard.mobile {
   font-size: 0.9em; }
   #mainScoreboard.mobile .mobile-problem-cell {
