@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,6 +31,32 @@ public class ContestService {
             throw new ContestNotFoundException("Contest with code " + contestCode + " not found.");
         }
         return contest;
+    }
+
+    /**
+     * Get the current contest time in seconds
+     * <p/>
+     * The positive number means the contest already started and x seconds elapsed.
+     * If the returned number is negative, it means the contest has not yet started
+     * and x seconds left to the start of the contest.
+     *
+     * @param contest contest
+     * @return seconds from start of the contest
+     */
+    public long getCurrentContestTime(Contest contest) {
+        Date now = new Date();
+        Date contestStartDate = null;
+        if (contest != null) {
+            contestStartDate = contest.getStartTime();
+        }
+        long diff = now.getTime() - contestStartDate.getTime();
+        diff = diff / 1000;
+
+        if (contest != null && contest.getLength() > 0) {
+            diff = Math.min(diff, contest.getLength());
+        }
+
+        return diff;
     }
 
     public void saveContest(Contest contest) {

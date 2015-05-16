@@ -21,6 +21,7 @@ import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.util.TextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,6 @@ import java.security.cert.X509Certificate;
  */
 public class WebServiceUtils {
     private static final Logger logger = LoggerFactory.getLogger(WebServiceUtils.class);
-
 
     /**
      * Connect to CDS server
@@ -85,6 +85,18 @@ public class WebServiceUtils {
         }
         HttpEntity entity = response.getEntity();
         return entity.getContent();
+    }
+
+    public static String connectAndGetResponse(String url) {
+        try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
+            HttpGet request = new HttpGet(url);
+
+            HttpResponse response = client.execute(request);
+            HttpEntity entity = response.getEntity();
+            return IOUtils.toString(entity.getContent(), FormatUtils.DEFAULT_ENCODING);
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     public static void releaseConnection(HttpRequestBase httpRequest) {

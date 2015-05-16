@@ -7,13 +7,16 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 import com.myicpc.commons.adapters.JSONAdapter;
+import com.myicpc.commons.utils.WebServiceUtils;
 import com.myicpc.model.codeInsight.CodeInsightActivity;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Problem;
 import com.myicpc.repository.codeInsight.CodeInsightActivityRepository;
+import com.myicpc.repository.contest.ContestRepository;
 import com.myicpc.repository.eventFeed.LanguageRepository;
 import com.myicpc.repository.eventFeed.ProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
+import com.myicpc.service.contest.ContestService;
 import com.myicpc.service.scoreboard.dto.insight.CodeInsightProblem;
 import com.myicpc.service.scoreboard.dto.insight.CodeInsightSnapshot;
 import com.myicpc.service.scoreboard.dto.insight.CodeInsightTeam;
@@ -22,6 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import twitter4j.JSONArray;
@@ -48,8 +52,11 @@ public class CodeInsightService {
     private static final int INSIGHT_HISTORY_MINUTES = 5 * INSIGHT_INTERVAL;
 
     public enum InsideCodeMode {
-        DIFF, COUNT;
+        DIFF, COUNT
     }
+
+    @Autowired
+    private ContestService contestService;
 
     @Autowired
     private LanguageRepository languageRepository;
@@ -63,9 +70,22 @@ public class CodeInsightService {
     @Autowired
     private CodeInsightActivityRepository codeInsightActivityRepository;
 
+    // TODO remove not cloud friendly
+    @Autowired
+    private ContestRepository contestRepository;
+
+    @Scheduled(cron = "0 */1 * * * *")
+    public void everyMinuteTasks() throws Exception {
+        // TODO remove not cloud friendly
+        System.out.println("get code insight");
+        String url = "http://localhost:7080/simulator/LastEditActivity?min=5&teams=10&problems=3&skipChance=40";
+        for (Contest contest : contestRepository.findAll()) {
+            processCodeInsightResource(WebServiceUtils.connectAndGetResponse(url), contest);
+        }
+    }
 
     public void processCodeInsightResource(final String codeInsightResponse, final Contest contest) throws CodeInsightException {
-
+        System.out.println(codeInsightResponse);
         if (StringUtils.isEmpty(codeInsightResponse) || "[]".equals(codeInsightResponse)) {
             // skip if result is empty
             return;
@@ -105,7 +125,7 @@ public class CodeInsightService {
     }
 
     public JsonObject createCodeInsightReport(final Contest contest, final InsideCodeMode insideCodeMode) {
-        int contestTime = 20; // TODO get real value
+        int contestTime = (int) (contestService.getCurrentContestTime(contest) / 60);
         cachedSnapshots.clear(); // TODO remove for caching
         int historyTime = Math.max(contestTime - INSIGHT_HISTORY_MINUTES, 0);
 
