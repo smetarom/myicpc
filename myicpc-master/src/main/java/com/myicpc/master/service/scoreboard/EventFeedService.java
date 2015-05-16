@@ -95,10 +95,10 @@ public class EventFeedService {
 
     public void startEventFeed(final Contest contest) {
         Future<Void> running = runningFeedProcessors.get(contest.getId());
-        if (running != null && !running.isDone()) {
-            // TODO logging
-            return;
-        }
+//        if (running != null && !running.isDone()) {
+//            // TODO logging
+//            return;
+//        }
         Future<Void> newFeedProcessor = eventFeedProcessor.runEventFeed(contest);
         runningFeedProcessors.put(contest.getId(), newFeedProcessor);
     }
