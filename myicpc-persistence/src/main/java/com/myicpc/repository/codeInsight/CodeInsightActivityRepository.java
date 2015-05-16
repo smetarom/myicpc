@@ -7,8 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface CodeInsightActivityRepository extends CrudRepository<CodeInsightActivity, Long> {
     CodeInsightActivity findByExternalId(Long externalId);
+
+    List<CodeInsightActivity> findByModifyTimeBetween(int start, int end);
 
     @Transactional
     @Modifying

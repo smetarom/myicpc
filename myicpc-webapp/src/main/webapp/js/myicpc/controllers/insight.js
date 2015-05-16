@@ -333,9 +333,50 @@ insightApp.controller('languageDetailCtrl', function($scope, $http, $interval, $
   controller for a vie with code insight
  */
 
-insightApp.controller('codeInsightCtrl', function($scope, $http) {
-  $scope.data = null;
-  return $scope.init = function(contextPath, contestCode, title) {
-    return $("#insightHeadline").html("" + title);
+insightApp.controller('codeInsightCtrl', function($scope, $http, $interval, insightService) {
+  $scope.data = {};
+  $scope.problems = null;
+  $scope.mode = 'DIFF';
+
+  /*
+    loads data at the beginning and initiate insight data polling
+    @param contextPath app context path
+    @param contestCode contest code
+    @param title temporary title before the title is loaded
+    @see insightService#init
+   */
+  $scope.init = function(contextPath, contestCode, title) {
+    var url;
+    url = "" + contextPath + "/" + contestCode + "/insight/ajax/codeInsight";
+    return $scope._init(url, contextPath, contestCode, title);
+  };
+  $scope._init = function(url, contextPath, contestCode, title) {
+    var pollingFn, successFn;
+    successFn = function(data) {
+      $scope.data = data.data;
+      return $scope.problems = data.problems;
+    };
+    pollingFn = function(data) {
+      return $scope.data = data.data;
+    };
+    return insightService.init(url, title, successFn, pollingFn);
+  };
+
+  /*
+    get insight data for a given problem
+    @param problemCode code of the problem
+    @return problem insight data if exists
+   */
+  $scope.getChartData = function(problemCode) {
+    if (($scope.data[problemCode] != null)) {
+      return $scope.data[problemCode];
+    }
+  };
+  return $scope.toolTipContentFunction = function() {
+    return function(key, x, y, e, graph) {
+      var text;
+      text = $scope.mode === 'DIFF' ? 'Has changed ' : 'Has total ';
+      return '<p><strong>' + x + '</strong></p>' + "<p>" + text + Math.round(y) + ' lines in ' + key + ' min</p>';
+    };
   };
 });

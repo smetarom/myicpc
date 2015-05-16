@@ -284,10 +284,44 @@ insightApp.controller('languageDetailCtrl', ($scope, $http, $interval, $routePar
 ###
   controller for a vie with code insight
 ###
-insightApp.controller('codeInsightCtrl', ($scope, $http) ->
-  $scope.data = null
+insightApp.controller('codeInsightCtrl', ($scope, $http, $interval, insightService) ->
+  # insight data about all problems
+  $scope.data = {}
+  # all contest problems
+  $scope.problems = null
+  $scope.mode = 'DIFF'
 
+  ###
+    loads data at the beginning and initiate insight data polling
+    @param contextPath app context path
+    @param contestCode contest code
+    @param title temporary title before the title is loaded
+    @see insightService#init
+  ###
   $scope.init = (contextPath, contestCode, title) ->
-    $("#insightHeadline").html("#{title}")
+    url = "#{contextPath}/#{contestCode}/insight/ajax/codeInsight"
+    $scope._init(url, contextPath, contestCode, title)
 
+  $scope._init = (url, contextPath, contestCode, title) ->
+    successFn = (data) ->
+      $scope.data = data.data
+      $scope.problems = data.problems
+    pollingFn = (data) ->
+      $scope.data = data.data
+    insightService.init(url, title, successFn, pollingFn)
+
+  ###
+    get insight data for a given problem
+    @param problemCode code of the problem
+    @return problem insight data if exists
+  ###
+  $scope.getChartData = (problemCode) ->
+    if ($scope.data[problemCode]?)
+      return $scope.data[problemCode]
+
+  $scope.toolTipContentFunction = () ->
+    (key, x, y, e, graph) ->
+      text = if $scope.mode == 'DIFF' then 'Has changed ' else 'Has total '
+      return '<p><strong>' + x + '</strong></p>' +
+          "<p>" + text + Math.round(y) + ' lines in ' + key + ' min</p>'
 )

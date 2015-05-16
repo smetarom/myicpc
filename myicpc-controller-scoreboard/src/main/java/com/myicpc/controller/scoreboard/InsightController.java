@@ -12,6 +12,7 @@ import com.myicpc.repository.eventFeed.LanguageRepository;
 import com.myicpc.repository.eventFeed.ProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.service.scoreboard.ScoreboardService;
+import com.myicpc.service.scoreboard.insight.CodeInsightService;
 import com.myicpc.service.scoreboard.insight.LanguageInsightService;
 import com.myicpc.service.scoreboard.insight.ProblemInsightService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class InsightController extends GeneralController {
 
     @Autowired
     private ScoreboardService scoreboardService;
+
+    @Autowired
+    private CodeInsightService codeInsightService;
 
     @Autowired
     private ProblemInsightService problemInsightService;
@@ -162,6 +166,20 @@ public class InsightController extends GeneralController {
         return response.toString();
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/{contestCode}/insight/ajax/codeInsight", method = RequestMethod.GET)
+    public String insightCodeJSON(@PathVariable String contestCode) {
+        Contest contest = getContest(contestCode, null);
+
+        JsonObject insightReport = codeInsightService.createCodeInsightReport(contest, CodeInsightService.InsideCodeMode.DIFF);
+
+        JsonObject response = new JsonObject();
+        response.add("data", insightReport);
+        response.add("problems", scoreboardService.getProblemsJSON(contest));
+        response.addProperty("title", MessageUtils.getMessage("insight.problems"));
+
+        return response.toString();
+    }
 
     private void addJudgmentsToModel(final Model model, final Contest contest) {
         model.addAttribute("judgements", judgementRepository.findByContestOrderByNameAsc(contest));
