@@ -1,12 +1,15 @@
 package com.myicpc.controller;
 
 import com.myicpc.commons.utils.CookieUtils;
+import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.Notification;
+import com.myicpc.service.contest.ContestService;
 import com.myicpc.service.notification.NotificationService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.site.SitePreference;
 import org.springframework.mobile.device.site.SitePreferenceUtils;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -25,6 +28,18 @@ import java.util.List;
 public abstract class GeneralController extends GeneralAbstractController {
     @Autowired
     protected NotificationService notificationService;
+
+    @Autowired
+    protected ContestService contestService;
+
+    @Override
+    protected Contest getContest(String contestCode, Model model) {
+        Contest contest = super.getContest(contestCode, model);
+        if (model != null && contest != null) {
+            model.addAttribute("contestTime", contestService.getCurrentContestTime(contest));
+        }
+        return contest;
+    }
 
     /**
      * Populates model with site preference

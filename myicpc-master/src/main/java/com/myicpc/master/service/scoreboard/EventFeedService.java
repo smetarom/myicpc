@@ -115,7 +115,6 @@ public class EventFeedService {
     }
 
     public synchronized void processReceivedCommand(ObjectMessage rcvMessage, final EventFeedCommand command) {
-        System.out.println("Scoreboard bean " + scoreboardBean.getStarted());
         // if this bean is running
         if (scoreboardBean.getStarted().get()) {
             Contest contest = contestDao.getContestById(command.getContestId());

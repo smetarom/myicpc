@@ -100,7 +100,6 @@ public class QuestLeaderboardAdminController extends GeneralAdminController {
         if (result.hasErrors()) {
             return "private/quest/editLeaderboard";
         }
-        System.out.println(Arrays.toString(roles));
         leaderboard.setParsedRoles(roles);
 
         leaderboardRepository.save(leaderboard);

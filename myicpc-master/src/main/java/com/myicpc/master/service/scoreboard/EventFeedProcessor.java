@@ -104,7 +104,7 @@ public class EventFeedProcessor {
                 try {
                     while (true) {
                         if (sessionContext.wasCancelCalled()) {
-                            System.out.println("Feed finished 2");
+                            logger.info("Event feed was cancelled.");
                             return new AsyncResult<>(null);
                         }
                         try {
@@ -139,7 +139,6 @@ public class EventFeedProcessor {
         } else {
             logger.error("Event feed settings is not correct for contest " + contest.getName());
         }
-        System.out.println("Feed finished");
         return new AsyncResult<>(null);
     }
 

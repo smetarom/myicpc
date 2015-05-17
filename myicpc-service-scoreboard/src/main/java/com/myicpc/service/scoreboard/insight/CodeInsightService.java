@@ -85,7 +85,6 @@ public class CodeInsightService {
     }
 
     public void processCodeInsightResource(final String codeInsightResponse, final Contest contest) throws CodeInsightException {
-        System.out.println(codeInsightResponse);
         if (StringUtils.isEmpty(codeInsightResponse) || "[]".equals(codeInsightResponse)) {
             // skip if result is empty
             return;

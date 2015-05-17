@@ -28,9 +28,9 @@ public class TimelineService {
             .addScoreboardSuccess()
             .addTeamAnalystMessage()
             .addAnalystMessage()
-//            .addTwitter()
-//            .addInstagram()
-//            .addVine()
+            .addTwitter()
+            .addInstagram()
+            .addVine()
             .addPicasa();
 
     @Autowired
