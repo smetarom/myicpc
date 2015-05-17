@@ -51,8 +51,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Roman Smetana
@@ -205,6 +207,7 @@ public class TeamService {
 
             if (teamArray != null) {
                 List<Team> teamsToSync = teamRepository.findByContest(contest);
+                Set<TeamInfo> currentTeamInfos = new HashSet<>(teamInfoRepository.findByContest(contest));
                 Map<Long, Team> externalIdTeamMap = new HashMap<>();
                 for (Team team : teamsToSync) {
                     externalIdTeamMap.put(team.getExternalId(), team);
@@ -214,8 +217,7 @@ public class TeamService {
                 // Iterate through all JSON representations of teams
                 for (JsonElement teamJE : teamArray) {
                     // Tries to find a team by externalReservationId in the database
-                    // and
-                    // if the team is not found, it returns a new team
+                    // and if the team is not found, it returns a new team
                     JsonObject root = teamJE.getAsJsonObject();
                     JSONAdapter teamAdapter = new JSONAdapter(teamJE);
                     Long externalId = teamAdapter.getLong("externalReservationId");
@@ -239,6 +241,7 @@ public class TeamService {
                         team.setTeamInfo(teamInfo);
                         teamRepository.save(team);
                     }
+                    currentTeamInfos.remove(teamInfo);
 
                     // process team members and assign them to the team
                     parsePeople(teamInfo, teamAdapter);
@@ -251,6 +254,10 @@ public class TeamService {
 
                     logger.info("CM import: team " + teamInfo.getExternalId());
                 }
+
+                // in currentTeamInfos are teamInfos, which are in MyICPC but not in CM
+                // TODO test this
+                //teamInfoRepository.delete(currentTeamInfos);
             }
         } catch (JsonParseException | IllegalStateException ex) {
             logger.error(ex.getMessage(), ex);

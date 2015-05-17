@@ -29,7 +29,7 @@ public class TeamWSService extends AbstractWSService {
      * @throws IOException
      */
     public String getTeamsFromCM(final Contest contest) throws IOException {
-        return (String) connectCM("/ws/myicpc/contest/" + contest.getCode() + "/teams", contest);
+        return (String) connectCM("/ws/myicpc/contest/" + contest.getCode() + "/simpleteams", contest);
     }
 
     /**

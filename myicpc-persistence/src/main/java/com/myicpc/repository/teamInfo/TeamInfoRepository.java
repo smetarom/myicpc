@@ -13,6 +13,8 @@ public interface TeamInfoRepository extends JpaRepository<TeamInfo, Long> {
 
     TeamInfo findByExternalIdAndContest(Long externalId, Contest contest);
 
+    List<TeamInfo> findByContest(Contest contest);
+
     List<TeamInfo> findByContestOrderByNameAsc(Contest contest);
 
     List<TeamInfo> findByContestOrderByUniversityNameAsc(Contest contest);
@@ -21,8 +23,6 @@ public interface TeamInfoRepository extends JpaRepository<TeamInfo, Long> {
     TeamInfo findByExternalId(Long externalId);
 
     TeamInfo findByTeamContestId(Long teamContestId);
-
-    List<TeamInfo> findByContest(Contest contest);
 
     @Query("SELECT rr FROM RegionalResult rr WHERE rr.contestId = ?1 AND rr.teamInfo.externalId = ?2")
     RegionalResult findRegionalResultByContestIdAndTeamInfoExternalId(Long contestId, Long teamInfoExternalId);

@@ -17,7 +17,7 @@
     <td><t:topSubmenuLink labelCode="nav.insight" url="${contestURL}/insight" icon="glyphicon glyphicon-eye-open"/></td>
     <td>
         <c:if test="${util:codeInsightModuleEnabled(contest)}">
-            <t:topSubmenuLink labelCode="nav.insight.code" url="${contestURL}/code"
+            <t:topSubmenuLink labelCode="nav.insight.code" url="${contestURL}/insight#/code"
                               icon="fa fa-code"></t:topSubmenuLink>
         </c:if>
     </td>
