@@ -56,7 +56,9 @@
                     <t:glyphIcon icon="map-marker" /> <spring:message code="venue.detail"/>
                 </a>
             </c:if>
-			<iframe width="100%" height="350" src="${event.location.googleMapUrl}" class="google-map-frame"></iframe>
+			<c:if test="${not empty event.location.googleMapUrl}">
+				<iframe width="100%" height="350" src="${event.location.googleMapUrl}" class="google-map-frame"></iframe>
+			</c:if>
 		</c:if>
         <%--TODO--%>
 		<%--<jsp:include page="/WEB-INF/views/fragment/team/photos.jsp">--%>

@@ -32,7 +32,7 @@
             <jsp:include page="/WEB-INF/views/includes/header_mobile.jsp"/>
         </c:if>
         <c:if test="${not empty headline}">
-            <div class="page-header clearfix" style="margin-bottom: 10px;">
+            <div id="pageTitle" class="page-header clearfix" style="margin-bottom: 10px;">
                 <c:if test="${not empty headline}">
                     <div class="pull-right">
                         <jsp:invoke fragment="headlineRight" />

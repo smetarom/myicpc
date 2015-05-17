@@ -89,4 +89,17 @@ convertSecondsToHHMMSS = (seconds) ->
 
 isElementVisible = (elem, offset = 0) ->
   $e = $(elem);
-  $(window).scrollTop()+window.innerHeight + offset >$e.offset().top && $(window).scrollTop() + offset <$e.offset().top+$e.height();
+  win = $(window)
+  win.scrollTop()+window.innerHeight + offset >$e.offset().top && win.scrollTop() + offset <$e.offset().top+$e.height();
+
+
+setFixedSubmenuHeight = () ->
+  footerHeight = $("#footer").outerHeight(true)
+  viewportHeight = $(window).height()
+  pageTitle = $('#pageTitle')
+  pageTitleBottom = pageTitle.position().top + pageTitle.outerHeight() + pageTitle.offset().top
+
+  height = viewportHeight - pageTitleBottom - footerHeight
+  bodyHeight = $("#fixedContent").outerHeight()
+  fixedSidebar = $("#fixedSidebar");
+  fixedSidebar.height(Math.max(height, bodyHeight))

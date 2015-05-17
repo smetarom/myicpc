@@ -11,7 +11,6 @@
         <c:forEach var="event" items="${day.eventsChronologically}">
             <tr>
                 <td style="width: 115px">
-
                     <fmt:formatDate type="time" pattern="HH:mm" value="${event.localStartDate}" /> - <fmt:formatDate type="time" pattern="HH:mm" value="${event.localEndDate}" />
                 </td>
                 <td>
@@ -19,7 +18,7 @@
                         <a href="<spring:url value="${contestURL}/schedule/event/${event.code}" />">${event.name}</a>
                     </c:if>
                     <c:if test="${param.isMobile ne 'true'}">
-                        <a href="#${event.code}" onclick="loadEventContent(${event.id})">${event.name}</a>
+                        <a href="#${event.code}" onclick="loadEventContent(${event.id})" class="display-block">${event.name}</a>
                     </c:if>
                 </td>
             </tr>

@@ -18,6 +18,9 @@ hr.divider {
 .no-items-available {
   padding: 25px 0; }
 
+.display-block {
+  display: block; }
+
 .responsive {
   width: 100%;
   margin-bottom: 15px;
@@ -68,6 +71,9 @@ a.block {
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex; }
+
+#fixedSidebar {
+  overflow-y: auto; }
 
 #timeline-notification {
   display: block;

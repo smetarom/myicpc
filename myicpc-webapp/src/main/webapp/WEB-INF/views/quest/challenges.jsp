@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
 
-<t:template>
+<t:templateWithFixedSubmenu>
     <jsp:attribute name="headline">
         <spring:message code="nav.quest.challenges" />
     </jsp:attribute>
@@ -8,14 +8,17 @@
         <spring:message code="nav.quest.challenges" />
     </jsp:attribute>
 
-    <jsp:body>
+    <jsp:attribute name="topContent">
         <%@ include file="/WEB-INF/views/quest/fragment/questInfo.jsp" %>
+    </jsp:attribute>
 
+    <jsp:attribute name="submenu">
+        <%@ include file="/WEB-INF/views/quest/fragment/challengeSubmenu.jsp" %>
+    </jsp:attribute>
+
+    <jsp:body>
         <c:if test="${not empty challenges}">
-            <div class="col-sm-4 col-md-3">
-                <%@ include file="/WEB-INF/views/quest/fragment/challengeSubmenu.jsp" %>
-            </div>
-            <div class="col-sm-8 col-md-9" id="challengeContainer">
+            <div id="challengeContainer">
                 <div class="no-items-available">
                     <spring:message code="quest.challanges.noSelected" />
                 </div>
@@ -34,6 +37,7 @@
                 $.get( '<spring:url value="${contestURL}/quest/ajax/challenge/" />'+eventId, function( data ) {
                     $("#challengeContainer").html(data);
                 });
+                setFixedSubmenuHeight();
             };
 
             $(function() {
@@ -46,4 +50,4 @@
             });
         </script>
     </jsp:body>
-</t:template>
+</t:templateWithFixedSubmenu>
