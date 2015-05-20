@@ -53,8 +53,6 @@
             <c:forEach var="submission" items="${submissions.getContent()}" varStatus="status">
                 <div class="col-sm-4">
                     <div class="thumbnail">
-                        <%@ include file="/WEB-INF/views/private/quest/fragment/submissionTemplate.jsp"%>
-                        <br />
                         <t:plainForm action="/private${contestURL}/quest/submission/${submission.id}/accept" style="padding: 10px 10px; background-color: #dff0d8;">
                             <table style="width: 100%;">
                                 <tbody>
@@ -84,15 +82,16 @@
                                               <input type="text" size="3" class="form-control" id="reasonToReject" name="reasonToReject" value="${submission.reasonToReject}">
                                               <span class="input-group-btn">
                                                 <button type="submit" class="btn btn-danger">
-                                                            <i class="fa fa-ban"></i> <spring:message code="questAdmin.submissions.reject" />
-                                                        </button>
+                                                    <i class="fa fa-ban"></i> <spring:message code="questAdmin.submissions.reject" />
+                                                </button>
                                               </span>
                                             </div>
-                                            </td>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </t:plainForm>
+                        <%@ include file="/WEB-INF/views/private/quest/fragment/submissionTemplate.jsp"%>
                     </div>
                 </div>
                 <c:if test="${util:isNLine(status, 2, 3)}">
