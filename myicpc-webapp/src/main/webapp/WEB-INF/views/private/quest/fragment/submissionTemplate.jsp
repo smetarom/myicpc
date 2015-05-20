@@ -2,7 +2,7 @@
 <div class="text-center">
     <h4>${submission.submissionState}</h4>
     <strong>
-        <a href="<spring:url value="/quest/challenges#${submission.challenge.hashtag}" />">${submission.challenge.name}</a>
+        <a href="<spring:url value="${contestURL}/quest/challenges#${submission.challenge.hashtag}" />">${submission.challenge.name}</a>
         <br />
         ${submission.participant.contestParticipant.fullname}
     </strong>

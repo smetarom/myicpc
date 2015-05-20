@@ -43,9 +43,17 @@
 					<form:options items="${participants}" itemValue="id" itemLabel="contestParticipant.officialFullname" />
 		        </form:select>
 			  </div>
+			  <div class="form-group">
+			    <form:label path="sortOrder" class="control-label">
+					<spring:message code="questAdmin.submissions.filter.sort" />: </form:label>
+		        <form:select path="sortOrder" class="form-control">
+		        	<form:option value="ASC"><spring:message code="sort.asc" /></form:option>
+		        	<form:option value="DESC"><spring:message code="sort.desc" /></form:option>
+		        </form:select>
+			  </div>
 			  <button type="submit" class="btn btn-default">
 					<spring:message code="questAdmin.submissions.filter" />
-				</button>
+              </button>
 			</form:form>
 		</div>
 		

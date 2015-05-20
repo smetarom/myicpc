@@ -1,5 +1,6 @@
 package com.myicpc.service.quest.dto;
 
+import com.myicpc.enums.SortOrder;
 import com.myicpc.model.quest.QuestChallenge;
 import com.myicpc.model.quest.QuestParticipant;
 import com.myicpc.model.quest.QuestSubmission;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 public class QuestSubmissionFilter implements Serializable {
 	private static final long serialVersionUID = -4140466990864140810L;
 
+	private SortOrder sortOrder;
 	/**
 	 * Quest submission state
 	 */
@@ -26,6 +28,14 @@ public class QuestSubmissionFilter implements Serializable {
 	 * Quest participant
 	 */
 	private QuestParticipant participant;
+
+	public SortOrder getSortOrder() {
+		return sortOrder;
+	}
+
+	public void setSortOrder(SortOrder sortOrder) {
+		this.sortOrder = sortOrder;
+	}
 
 	public QuestSubmission.QuestSubmissionState getSubmissionState() {
 		return submissionState;

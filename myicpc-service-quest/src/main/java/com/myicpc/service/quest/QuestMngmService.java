@@ -2,6 +2,7 @@ package com.myicpc.service.quest;
 
 import com.myicpc.enums.ContestParticipantRole;
 import com.myicpc.enums.NotificationType;
+import com.myicpc.enums.SortOrder;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.quest.QuestChallenge;
 import com.myicpc.model.quest.QuestParticipant;
@@ -32,6 +33,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.Arrays;
@@ -179,7 +182,13 @@ public class QuestMngmService extends EntityManagerService {
             countPredicate = cb.and(countPredicate, cb.equal(countRoot.<QuestParticipant>get("participant"), submissionFilter.getParticipant()));
         }
 
-        q.select(c).where(predicate).orderBy(cb.asc(c.<Date>get("created")));
+        Path<Date> orderBy = c.get("created");
+        Order order = cb.asc(orderBy);
+        if (submissionFilter.getSortOrder() == SortOrder.DESC) {
+            order = cb.desc(orderBy);
+        }
+
+        q.select(c).where(predicate).orderBy(order);
         List<QuestSubmission> list = em.createQuery(q).setFirstResult(pageable.getOffset()).setMaxResults(pageable.getPageSize()).getResultList();
 
         countQ.select(cb.count(countRoot)).where(countPredicate);
