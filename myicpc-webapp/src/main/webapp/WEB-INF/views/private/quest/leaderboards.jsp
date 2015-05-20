@@ -10,6 +10,7 @@
 	</jsp:attribute>
 
 	<jsp:attribute name="breadcrumb">
+        <li><a href="<spring:url value="/private${contestURL}/quest/challenges" />"><spring:message code="nav.admin.quest" /></a></li>
 	    <li class="active"><spring:message code="nav.admin.quest.leaderboards" /></li>
 	</jsp:attribute>
 
