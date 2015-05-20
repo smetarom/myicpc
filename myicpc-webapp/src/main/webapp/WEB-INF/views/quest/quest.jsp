@@ -59,7 +59,7 @@
                                     <p>${challenge.description}</p>
                                     <div class="text-center">
                                         <button class="btn btn-primary" onclick="showParticipateChallenge('${challenge.hashtag}', '${challenge.name}')">
-                                            <spring:message code="quest.participateThisChallenge" />
+                                            <spring:message code="quest.participate.btn.withPoints" arguments="${challenge.defaultPoints}" />
                                         </button>
                                     </div>
                                 </div>

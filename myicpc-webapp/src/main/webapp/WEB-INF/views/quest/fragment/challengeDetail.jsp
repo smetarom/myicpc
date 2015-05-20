@@ -12,9 +12,16 @@
         <p>${challenge.description}</p>
     </div>
     <div class="text-center">
-        <t:button context="primary" modalOpenId="participateInChallenge" onclick="showParticipateChallenge('${challenge.hashtag}', '${challenge.name}')">
-            <spring:message code="quest.participateThisChallenge" />
-        </t:button>
+        <c:if test="${not challenge.closed}">
+            <t:button context="primary" modalOpenId="participateInChallenge" onclick="showParticipateChallenge('${challenge.hashtag}', '${challenge.name}')">
+                <spring:message code="quest.participate.btn.withPoints" arguments="${challenge.defaultPoints}" />
+            </t:button>
+        </c:if>
+        <c:if test="${challenge.closed}">
+            <span class="text-danger">
+                <spring:message code="quest.challenge.over" />
+            </span>
+        </c:if>
     </div>
 </div>
 <br class="clear"/>

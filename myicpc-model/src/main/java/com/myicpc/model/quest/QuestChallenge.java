@@ -132,6 +132,11 @@ public class QuestChallenge extends StartEndDateObject {
         return timediff > 0 ? timediff.longValue() : 0;
     }
 
+    @Transient
+    public boolean isClosed() {
+        return endDate == null ? false : endDate.before(new Date());
+    }
+
     /**
      * @return description, which will be showed in Quest notification
      */
