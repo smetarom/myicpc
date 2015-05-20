@@ -78,7 +78,7 @@ public class CodeInsightService {
     public void everyMinuteTasks() throws Exception {
         // TODO remove not cloud friendly
         System.out.println("get code insight");
-        String url = "http://localhost:7080/simulator/LastEditActivity?min=5&teams=10&problems=3&skipChance=40";
+        String url = "https://localhost:4445/icat/api/LastEditActivity.php?min=";
         for (Contest contest : contestRepository.findAll()) {
             processCodeInsightResource(WebServiceUtils.connectAndGetResponse(url), contest);
         }

@@ -110,6 +110,18 @@ public class JSPCustomFunctions {
         return WikiModel.toHtml(wikiText);
     }
 
+    public static boolean arrayContains(Object[] objects, Object object) {
+        if (objects == null || object == null) {
+            return false;
+        }
+        for (Object o : objects) {
+            if (object.equals(o)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Escapes JavaScript characters
      *

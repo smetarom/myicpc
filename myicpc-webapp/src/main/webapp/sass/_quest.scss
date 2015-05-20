@@ -98,3 +98,14 @@
     }
   }
 }
+
+#mainLeaderboard {
+  .vertical-text {
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+    writing-mode: lr-tb;
+    width: 16px;
+    margin: 0 auto;
+  }
+}

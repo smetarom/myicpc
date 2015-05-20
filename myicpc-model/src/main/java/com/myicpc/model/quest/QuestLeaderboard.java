@@ -24,6 +24,10 @@ public class QuestLeaderboard extends IdGeneratedContestObject {
      * Leaderboard name
      */
     private String name;
+    /**
+     * Code used in URL
+     */
+    private String urlCode;
 
     /**
      * Allowed participant roles
@@ -38,6 +42,14 @@ public class QuestLeaderboard extends IdGeneratedContestObject {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getUrlCode() {
+        return urlCode;
+    }
+
+    public void setUrlCode(String urlCode) {
+        this.urlCode = urlCode;
     }
 
     public boolean isPublished() {

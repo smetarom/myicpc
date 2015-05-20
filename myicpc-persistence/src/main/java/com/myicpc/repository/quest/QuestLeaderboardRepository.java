@@ -11,4 +11,6 @@ public interface QuestLeaderboardRepository extends JpaRepository<QuestLeaderboa
 
     List<QuestLeaderboard> findByContestAndPublishedOrderByNameAsc(Contest contest, boolean published);
 
+    QuestLeaderboard findByUrlCodeAndContestAndPublished(String urlCode, Contest contest, boolean published);
+
 }

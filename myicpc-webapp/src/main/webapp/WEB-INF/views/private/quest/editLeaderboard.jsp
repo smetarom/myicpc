@@ -23,6 +23,7 @@
             </jsp:attribute>
             <jsp:body>
                 <t:springInput labelCode="quest.leaderboard.name" path="name" required="true" />
+                <t:springInput labelCode="quest.leaderboard.urlCode" path="urlCode" required="true" />
                 <div class="form-group">
                     <label class="col-sm-3 control-label">
                         <spring:message code="quest.leaderboard.roles"/>:
@@ -31,7 +32,7 @@
                             <c:forEach var="role" items="${roles}">
                                 <div class="checkbox">
                                     <label>
-                                        <input type="checkbox" name="roles" value="${role}">
+                                        <input type="checkbox" name="roles" value="${role}" ${util:arrayContains(leaderboard.parsedRoles, role.toString()) ? 'checked="checked"' : ''}">
                                         <spring:message code="${role.code}" text="${role.label}" />
                                     </label>
                                 </div>

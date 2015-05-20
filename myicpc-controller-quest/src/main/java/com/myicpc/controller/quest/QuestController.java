@@ -4,17 +4,20 @@ import com.myicpc.controller.GeneralController;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.quest.QuestChallenge;
 import com.myicpc.model.quest.QuestLeaderboard;
+import com.myicpc.model.quest.QuestParticipant;
 import com.myicpc.model.quest.QuestSubmission;
 import com.myicpc.model.quest.QuestSubmission.QuestSubmissionState;
 import com.myicpc.model.social.Notification;
 import com.myicpc.repository.quest.QuestChallengeRepository;
 import com.myicpc.repository.quest.QuestLeaderboardRepository;
+import com.myicpc.repository.quest.QuestParticipantRepository;
 import com.myicpc.repository.quest.QuestSubmissionRepository;
 import com.myicpc.service.quest.QuestService;
 import com.myicpc.service.timeline.TimelineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.Device;
 import org.springframework.mobile.device.site.SitePreference;
+import org.springframework.mobile.device.site.SitePreferenceUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +44,9 @@ public class QuestController extends GeneralController {
 
     @Autowired
     private QuestChallengeRepository challengeRepository;
+
+    @Autowired
+    private QuestParticipantRepository questParticipantRepository;
 
     @Autowired
     private QuestLeaderboardRepository leaderboardRepository;
@@ -108,15 +115,51 @@ public class QuestController extends GeneralController {
     }
 
     @RequestMapping(value = "/{contestCode}/quest/leaderboard", method = RequestMethod.GET)
-    public String leaderboard(@PathVariable final String contestCode, Model model) {
+    public String leaderboard(@PathVariable final String contestCode, Model model, HttpServletRequest request) {
         Contest contest = getContest(contestCode, model);
 
         List<QuestLeaderboard> leaderboards = leaderboardRepository.findByContestAndPublishedOrderByNameAsc(contest, true);
 
         model.addAttribute("leaderboards", leaderboards);
+        if (!leaderboards.isEmpty()) {
+            QuestLeaderboard activeLeaderboard = leaderboards.get(0);
+            model.addAttribute("activeLeaderboard", activeLeaderboard);
+            initiateLeaderboard(activeLeaderboard, contest, model, request);
+        }
 
         return "quest/leaderboard";
     }
+
+    @RequestMapping(value = "/{contestCode}/quest/leaderboard/{urlCode}", method = RequestMethod.GET)
+    public String leaderboard(@PathVariable String urlCode, @PathVariable final String contestCode, Model model, HttpServletRequest request) {
+        Contest contest = getContest(contestCode, model);
+
+        List<QuestLeaderboard> leaderboards = leaderboardRepository.findByContestAndPublishedOrderByNameAsc(contest, true);
+        QuestLeaderboard activeLeaderboard = leaderboardRepository.findByUrlCodeAndContestAndPublished(urlCode, contest, true);
+
+        model.addAttribute("leaderboards", leaderboards);
+        model.addAttribute("activeLeaderboard", activeLeaderboard);
+        initiateLeaderboard(activeLeaderboard, contest, model, request);
+
+        return "quest/leaderboard";
+    }
+
+    private void initiateLeaderboard(QuestLeaderboard activeLeaderboard, Contest contest, Model model, HttpServletRequest request) {
+        SitePreference sitePreference = SitePreferenceUtils.getCurrentSitePreference(request);
+
+        List<QuestChallenge> challenges = challengeRepository.findOpenChallengesByContestOrderByHashtag(new Date(), contest);
+        List<QuestParticipant> participants = (List<QuestParticipant>) questParticipantRepository.findAll();// TODO fix me
+
+
+        if (!sitePreference.isMobile()) {
+            model.addAttribute("challengesJSON", questService.getJSONChallenges(challenges).toString());
+        }
+        model.addAttribute("participantsJSON", questService.getJSONParticipants(participants, !sitePreference.isMobile()).toString());
+        model.addAttribute("activeTab", activeLeaderboard.getUrlCode());
+
+
+    }
+
 
     private QuestChallenge initiateChallengeDetailModel(final String challengeId, final String contestCode, final Model model, Device device) {
         Contest contest = getContest(contestCode, model);

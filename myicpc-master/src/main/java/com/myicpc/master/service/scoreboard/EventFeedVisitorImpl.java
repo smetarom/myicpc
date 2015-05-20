@@ -82,7 +82,7 @@ public class EventFeedVisitorImpl implements EventFeedLocal {
         contest = eventFeedDao.findContestById(contest.getId());
         xmlContest.mergeTo(contest);
         // TODO remove timestamp, it is here for testing purposes
-        contest.setStartTime(new Date());
+//        contest.setStartTime(new Date());
         eventFeedDao.saveContestEntity(contest);
     }
 

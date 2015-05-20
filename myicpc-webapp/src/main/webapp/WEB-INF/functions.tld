@@ -65,6 +65,11 @@
         <function-signature>boolean isMapModuleEnabled(com.myicpc.model.contest.Contest)</function-signature>
     </function>
     <function>
+        <name>arrayContains</name>
+        <function-class>com.myicpc.controller.functions.JSPCustomFunctions</function-class>
+        <function-signature>boolean arrayContains(java.lang.Object[],java.lang.Object)</function-signature>
+    </function>
+    <function>
         <name>codeInsightModuleEnabled</name>
         <function-class>com.myicpc.controller.functions.JSPCustomFunctions</function-class>
         <function-signature>boolean isCodeInsightModuleEnabled(com.myicpc.model.contest.Contest)</function-signature>

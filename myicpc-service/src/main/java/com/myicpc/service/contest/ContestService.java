@@ -59,11 +59,13 @@ public class ContestService {
         return diff;
     }
 
-    public void saveContest(Contest contest) {
+    public void saveContest(final Contest contest) {
         contestRepository.save(contest);
     }
 
-    public void deleteContest(Contest contest) {
+    public void deleteContest(final Contest contest) {
+        // TODO remove all objects related to the contest
+
         contestRepository.delete(contest);
     }
 
