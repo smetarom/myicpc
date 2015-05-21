@@ -126,20 +126,21 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
             teamObject.addProperty("teamId", team.getExternalId());
             teamObject.addProperty("teamExternalId", team.getExternalId());
             teamObject.addProperty("teamRank", team.getRank());
-            if (teamInfo != null) {
-                teamObject.addProperty("teamName", team.getTeamInfo().getShortName());
-                Region teamRegion = team.getTeamInfo().getRegion();
-                if (teamRegion != null && contest.getContestSettings().isShowRegion()) {
-                    teamObject.addProperty("regionName", teamRegion.getShortName());
-                    teamObject.addProperty("regionId", teamRegion.getId());
-                }
-                University teamUniversity = teamInfo.getUniversity();
-                if (teamUniversity != null && contest.getContestSettings().isShowUniversity()) {
-                    teamObject.addProperty("universityName", teamUniversity.getName());
-                }
-            } else {
+            // TODO FIX ME
+//            if (teamInfo != null) {
+//                teamObject.addProperty("teamName", team.getTeamInfo().getShortName());
+//                Region teamRegion = team.getTeamInfo().getRegion();
+//                if (teamRegion != null && contest.getContestSettings().isShowRegion()) {
+//                    teamObject.addProperty("regionName", teamRegion.getShortName());
+//                    teamObject.addProperty("regionId", teamRegion.getId());
+//                }
+//                University teamUniversity = teamInfo.getUniversity();
+//                if (teamUniversity != null && contest.getContestSettings().isShowUniversity()) {
+//                    teamObject.addProperty("universityName", teamUniversity.getName());
+//                }
+//            } else {
                 teamObject.addProperty("teamName", team.getName());
-            }
+//            }
             if (contest.getContestSettings().isShowCountry()) {
                 teamObject.addProperty("nationality", team.getNationality());
             }

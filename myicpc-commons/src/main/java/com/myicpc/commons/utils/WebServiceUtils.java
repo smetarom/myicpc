@@ -16,6 +16,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.conn.ssl.AllowAllHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLContextBuilder;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.impl.client.BasicCredentialsProvider;
@@ -25,6 +26,7 @@ import org.apache.http.util.TextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
@@ -68,7 +70,7 @@ public class WebServiceUtils {
         SSLContextBuilder builder = new SSLContextBuilder();
         try {
             builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
-            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(builder.build());
+            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(builder.build(), SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
             clientBuilder.setSSLSocketFactory(sslsf);
         } catch (NoSuchAlgorithmException | KeyManagementException | KeyStoreException e) {
             logger.error("Error during disabling CDS SSL checks", e);
@@ -87,16 +89,14 @@ public class WebServiceUtils {
         return entity.getContent();
     }
 
-    public static String connectAndGetResponse(String url) {
-        try (CloseableHttpClient client = HttpClientBuilder.create().build()) {
-            HttpGet request = new HttpGet(url);
-
-            HttpResponse response = client.execute(request);
-            HttpEntity entity = response.getEntity();
-            return IOUtils.toString(entity.getContent(), FormatUtils.DEFAULT_ENCODING);
+    public static String connectAndGetResponse(String url, String username, String password) {
+        try {
+            InputStream inputStream = connectCDS(url, username, password);
+            return IOUtils.toString(inputStream, FormatUtils.DEFAULT_ENCODING);
         } catch (IOException e) {
-            return null;
+            e.printStackTrace();
         }
+        return null;
     }
 
     public static void releaseConnection(HttpRequestBase httpRequest) {

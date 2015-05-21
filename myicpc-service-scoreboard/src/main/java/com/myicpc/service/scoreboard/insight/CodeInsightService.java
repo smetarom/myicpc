@@ -80,11 +80,12 @@ public class CodeInsightService {
         System.out.println("get code insight");
         String url = "https://localhost:4445/icat/api/LastEditActivity.php?min=";
         for (Contest contest : contestRepository.findAll()) {
-            processCodeInsightResource(WebServiceUtils.connectAndGetResponse(url), contest);
+            processCodeInsightResource(WebServiceUtils.connectAndGetResponse(url, contest.getContestSettings().getEventFeedUsername(), contest.getContestSettings().getEventFeedPassword()), contest);
         }
     }
 
     public void processCodeInsightResource(final String codeInsightResponse, final Contest contest) throws CodeInsightException {
+        System.out.println(codeInsightResponse);
         if (StringUtils.isEmpty(codeInsightResponse) || "[]".equals(codeInsightResponse)) {
             // skip if result is empty
             return;
