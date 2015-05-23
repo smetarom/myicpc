@@ -34,16 +34,9 @@
                               <div class="carousel-caption">
                                   <h3 style="white-space:nowrap;">${contestParticipant.fullname}</h3>
                                   <p>
-                                      <c:choose>
-                                          <c:when test="${contestParticipant.teamAssociations.size() > 1}">
-                                              <spring:message code="role.coach"/>
-                                          </c:when>
-                                          <c:otherwise>
-                                              <c:forEach var="_association" items="${contestParticipant.teamAssociations}">
-                                                  <spring:message code="${_association.contestParticipantRole.code}" text="${_association.contestParticipantRole.label}"/>
-                                              </c:forEach>
-                                          </c:otherwise>
-                                      </c:choose>
+                                      <c:forEach var="_association" items="${contestParticipant.teamAssociations}">
+                                          <spring:message code="${_association.contestParticipantRole.code}" text="${_association.contestParticipantRole.label}"/><br/>
+                                      </c:forEach>
                                   </p>
                                   <p>
                                       <a href="<spring:url value="/person/${contestParticipant.id}" />"><spring:message code="person.viewProfile" /></a>

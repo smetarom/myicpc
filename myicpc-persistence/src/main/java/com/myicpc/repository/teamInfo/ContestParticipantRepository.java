@@ -18,16 +18,13 @@ public interface ContestParticipantRepository extends CrudRepository<ContestPart
 
     ContestParticipant findByInstagramUsernameIgnoreCase(String instagramUsername);
 
-    @Query(value = "SELECT DISTINCT tm FROM ContestParticipant tm ORDER BY tm.lastname, tm.firstname")
+    @Query(value = "SELECT DISTINCT tm FROM ContestParticipant tm LEFT JOIN FETCH tm.teamAssociations ta ORDER BY tm.lastname, tm.firstname")
     List<ContestParticipant> findAllOrderByName();
 
-    @Query(value = "SELECT DISTINCT tm FROM ContestParticipant tm LEFT JOIN tm.teamAssociations ta WHERE ta.teamInfo=?1 AND ta.contestParticipantRole = ?2")
+    @Query(value = "SELECT DISTINCT tm FROM ContestParticipant tm LEFT JOIN FETCH tm.teamAssociations ta WHERE ta.teamInfo=?1 AND ta.contestParticipantRole = ?2")
     List<ContestParticipant> findByTeamInfoAndContestParticipantRole(TeamInfo teamInfo, ContestParticipantRole role);
 
-    @Query(value = "SELECT DISTINCT tm FROM ContestParticipant tm LEFT JOIN tm.teamAssociations ta WHERE ta.contestParticipantRole = ?1")
-    List<ContestParticipant> findByContestParticipantRole(ContestParticipantRole role);
-
-    @Query(value = "SELECT DISTINCT tm FROM ContestParticipant tm LEFT JOIN tm.teamAssociations ta WHERE ta.contestParticipantRole = ?1 ORDER BY tm.lastname")
+    @Query(value = "SELECT DISTINCT tm FROM ContestParticipant tm LEFT JOIN FETCH tm.teamAssociations ta WHERE ta.contestParticipantRole = ?1 ORDER BY tm.lastname")
     List<ContestParticipant> findByContestParticipantRoleOrderByName(ContestParticipantRole role);
 
     @Query(value = "SELECT COUNT(tm) FROM ContestParticipant tm WHERE tm.linkedinOauthToken IS NOT NULL")

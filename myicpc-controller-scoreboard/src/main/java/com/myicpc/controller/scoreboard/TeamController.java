@@ -106,11 +106,11 @@ public class TeamController extends GeneralController {
 
     @RequestMapping(value = {"/{contestCode}/team/{teamId}/profile"}, method = RequestMethod.GET)
     public String teamProfile(@PathVariable String contestCode, @PathVariable Long teamId, Model model) {
-        TeamInfo teamInfo = teamInfoRepository.findByExternalId(teamId);
+        Contest contest = getContest(contestCode, model);
+        TeamInfo teamInfo = teamInfoRepository.findByExternalIdAndContestWithRegionalResult(teamId, contest);
         if (teamInfo == null) {
             // TODO team not found
         }
-        Contest contest = getContest(contestCode, model);
         Team team = teamRepository.findByExternalId(teamId);
         List<ContestParticipant> coaches = contestParticipantRepository.findByTeamInfoAndContestParticipantRole(teamInfo, ContestParticipantRole.COACH);
         List<ContestParticipant> contestants = contestParticipantRepository.findByTeamInfoAndContestParticipantRole(teamInfo, ContestParticipantRole.CONTESTANT);

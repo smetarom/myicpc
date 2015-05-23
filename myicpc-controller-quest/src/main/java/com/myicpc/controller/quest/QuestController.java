@@ -148,8 +148,8 @@ public class QuestController extends GeneralController {
         SitePreference sitePreference = SitePreferenceUtils.getCurrentSitePreference(request);
 
         List<QuestChallenge> challenges = challengeRepository.findOpenChallengesByContestOrderByHashtag(new Date(), contest);
-        List<QuestParticipant> participants = (List<QuestParticipant>) questParticipantRepository.findAll();// TODO fix me
 
+        List<QuestParticipant> participants = questParticipantRepository.findByRoles(activeLeaderboard.getContestParticipantRoles(), contest, null);
 
         if (!sitePreference.isMobile()) {
             model.addAttribute("challengesJSON", questService.getJSONChallenges(challenges).toString());

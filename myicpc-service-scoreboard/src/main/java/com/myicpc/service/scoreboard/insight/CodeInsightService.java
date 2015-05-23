@@ -70,20 +70,6 @@ public class CodeInsightService {
     @Autowired
     private CodeInsightActivityRepository codeInsightActivityRepository;
 
-    // TODO remove not cloud friendly
-    @Autowired
-    private ContestRepository contestRepository;
-
-    @Scheduled(cron = "0 */1 * * * *")
-    public void everyMinuteTasks() throws Exception {
-        // TODO remove not cloud friendly
-        System.out.println("get code insight");
-        String url = "https://localhost:4445/icat/api/LastEditActivity.php?min=";
-        for (Contest contest : contestRepository.findAll()) {
-            processCodeInsightResource(WebServiceUtils.connectAndGetResponse(url, contest.getContestSettings().getEventFeedUsername(), contest.getContestSettings().getEventFeedPassword()), contest);
-        }
-    }
-
     public void processCodeInsightResource(final String codeInsightResponse, final Contest contest) throws CodeInsightException {
         System.out.println(codeInsightResponse);
         if (StringUtils.isEmpty(codeInsightResponse) || "[]".equals(codeInsightResponse)) {

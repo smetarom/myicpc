@@ -11,4 +11,7 @@ public interface ContestRepository extends JpaRepository<Contest, Long> {
     Contest findByName(String name);
 
     Contest findByCode(String code);
+
+    @Query("FROM Contest c LEFT JOIN c.questConfiguration WHERE c.code = ?1")
+    Contest findFullByCode(String code);
 }

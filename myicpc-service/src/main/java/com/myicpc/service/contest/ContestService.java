@@ -26,7 +26,7 @@ public class ContestService {
     }
 
     public Contest getContest(String contestCode) throws ContestNotFoundException {
-        Contest contest = contestRepository.findByCode(contestCode);
+        Contest contest = contestRepository.findFullByCode(contestCode);
         if (contest == null) {
             throw new ContestNotFoundException("Contest with code " + contestCode + " not found.");
         }

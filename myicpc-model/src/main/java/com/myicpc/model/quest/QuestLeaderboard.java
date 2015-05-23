@@ -7,6 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 import javax.persistence.Entity;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Transient;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A leader board shows the score of the participants. Each leader board groups
@@ -69,15 +71,15 @@ public class QuestLeaderboard extends IdGeneratedContestObject {
     }
 
     @Transient
-    public ContestParticipantRole[] getContestParticipantRoles() {
+    public List<ContestParticipantRole> getContestParticipantRoles() {
         if (roles == null) {
             return null;
         }
         String[] names = roles.split(SEPARATOR);
-        ContestParticipantRole[] roles = new ContestParticipantRole[names.length];
-        for (int i = 0; i < roles.length; i++) {
+        List<ContestParticipantRole> roles = new ArrayList<>(names.length);
+        for (int i = 0; i < names.length; i++) {
             try {
-                roles[i] = ContestParticipantRole.valueOf(names[i]);
+                roles.add(ContestParticipantRole.valueOf(names[i]));
             } catch (IllegalArgumentException ex) {
                 // ignore
             }

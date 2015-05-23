@@ -21,24 +21,6 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
-    <!-- Spring implementation of open session in view (see https://community.jboss.org/wiki/OpenSessionInView) -->
-    <filter>
-        <filter-name>oemInViewFilter</filter-name>
-        <filter-class>
-            org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter
-        </filter-class>
-        <async-supported>true</async-supported>
-        <init-param>
-            <param-name>entityManagerFactoryBeanName</param-name>
-            <param-value>entityManagerFactory</param-value>
-        </init-param>
-    </filter>
-
-    <filter-mapping>
-        <filter-name>oemInViewFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
     <filter>
         <filter-name>MultipartFilter</filter-name>
         <filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
