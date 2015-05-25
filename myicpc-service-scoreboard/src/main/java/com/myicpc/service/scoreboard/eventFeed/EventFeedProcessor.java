@@ -1,5 +1,7 @@
 package com.myicpc.service.scoreboard.eventFeed;
 
+import com.myicpc.dto.eventFeed.convertor.ProblemConverter;
+import com.myicpc.dto.eventFeed.convertor.TeamConverter;
 import com.myicpc.dto.eventFeed.visitor.EventFeedVisitor;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.contest.ContestSettings;
@@ -102,12 +104,7 @@ public class EventFeedProcessor {
     }
 
     protected void parseXML(final Reader reader, final Contest contest, EventFeedControl eventFeedControl) throws IOException, ClassNotFoundException {
-        XStream xStream = new XStream();
-        xStream.ignoreUnknownElements();
-        xStream.processAnnotations(new Class[]{ContestXML.class, LanguageXML.class, RegionXML.class, JudgementXML.class, ProblemXML.class, TeamXML.class,
-                TeamProblemXML.class, TestcaseXML.class, FinalizedXML.class, ClarificationXML.class});
-//        xStream.registerLocalConverter(TeamProblemXML.class, "problem", new ProblemConverter(problemRepository, contest));
-//        xStream.registerLocalConverter(TeamProblemXML.class, "team", new TeamConverter(teamRepository, contest));
+        final XStream xStream = createEventFeedParser(contest);
         ObjectInputStream in = xStream.createObjectInputStream(reader);
         try {
             while (true) {
@@ -124,6 +121,26 @@ public class EventFeedProcessor {
         } catch (EOFException ex) {
             logger.info("Event feed parsing is done.");
         }
+    }
+
+    private XStream createEventFeedParser(final Contest contest) {
+        XStream xStream = new XStream();
+        xStream.ignoreUnknownElements();
+        xStream.processAnnotations(new Class[]{ContestXML.class, LanguageXML.class, RegionXML.class, JudgementXML.class, ProblemXML.class, TeamXML.class,
+                TeamProblemXML.class, TestcaseXML.class, FinalizedXML.class, ClarificationXML.class});
+        xStream.registerLocalConverter(TeamProblemXML.class, "problem", new ProblemConverter(contest) {
+            @Override
+            public Object fromString(String value) {
+                return problemRepository.findBySystemIdAndContest(Long.parseLong(value), contest);
+            }
+        });
+        xStream.registerLocalConverter(TeamProblemXML.class, "team", new TeamConverter(contest) {
+            @Override
+            public Object fromString(String value) {
+                return teamRepository.findBySystemIdAndContest(Long.parseLong(value), contest);
+            }
+        });
+        return xStream;
     }
 
     @Transactional

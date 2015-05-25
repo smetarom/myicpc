@@ -3,9 +3,12 @@ package com.myicpc.service.scoreboard.eventFeed;
 import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.LastTeamProblem;
+import com.myicpc.model.eventFeed.LastTeamSubmission;
+import com.myicpc.model.eventFeed.Problem;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
 import com.myicpc.repository.eventFeed.LastTeamProblemRepository;
+import com.myicpc.repository.eventFeed.LastTeamSubmissionRepository;
 import com.myicpc.repository.eventFeed.TeamProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRankHistoryRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
@@ -36,6 +39,9 @@ public abstract class FeedRunStrategy {
 
     @Autowired
     protected LastTeamProblemRepository lastTeamProblemRepository;
+
+    @Autowired
+    protected LastTeamSubmissionRepository lastTeamSubmissionRepository;
 
     @Autowired
     protected TeamRepository teamRepository;
@@ -114,6 +120,21 @@ public abstract class FeedRunStrategy {
         }
         lastTeamProblem.setTeamProblem(teamProblem);
         lastTeamProblemRepository.save(lastTeamProblem);
+
+        // new impl
+        Team team = teamProblem.getTeam();
+        Problem problem = teamProblem.getProblem();
+        LastTeamSubmission lastTeamSubmission = lastTeamSubmissionRepository.findByTeamIdAndProblemId(team.getId(), problem.getId());
+        if (lastTeamSubmission == null) {
+            lastTeamSubmission = new LastTeamSubmission(teamProblem);
+        }
+        // TODO fix
+//        if (lastTeamSubmission.isSolved() || lastTeamSubmission.getTime().compareTo(teamProblem.getTime()) == 1) {
+//            // the problem was already solved or we have already a newer submission
+//            return;
+//        }
+        lastTeamSubmission.update(teamProblem);
+        lastTeamSubmissionRepository.saveAndFlush(lastTeamSubmission);
     }
 
     /**

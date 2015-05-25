@@ -158,15 +158,12 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
         TeamProblem teamProblem = teamProblemRepository.findBySystemIdAndTeamContest(xmlTeamProblem.getSystemId(), contest);
 
         if (teamProblem != null) {
-            // skip 'fresh' submission if it is already persisted
-            if ("fresh".equalsIgnoreCase(teamProblem.getStatus())) {
-                logger.info("Skipping 'fresh' run {} in contest {}", xmlTeamProblem.getSystemId(), contest.getId());
+            if ("fresh".equalsIgnoreCase(xmlTeamProblem.getStatus())) {
+                logger.info("Skip 'fresh' submission {} from team {}", xmlTeamProblem.getSystemId(), xmlTeamProblem.getTeam().getId());
                 return;
             }
-
-            // skip 'done' submission, if there is already persisted
-            if ("done".equalsIgnoreCase(teamProblem.getStatus()) && Double.compare(teamProblem.getTime(), xmlTeamProblem.getTime()) == 0) {
-                logger.info("Skipping 'done' run {} in contest {}", xmlTeamProblem.getSystemId(), contest.getId());
+            if ("done".equalsIgnoreCase(xmlTeamProblem.getStatus()) && teamProblem.getJudged()) {
+                logger.info("Skip 'done' submission {} from team {}", xmlTeamProblem.getSystemId(), xmlTeamProblem.getTeam().getId());
                 return;
             }
         }

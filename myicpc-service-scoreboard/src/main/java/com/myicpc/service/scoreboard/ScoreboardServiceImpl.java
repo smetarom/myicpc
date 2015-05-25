@@ -1,9 +1,12 @@
 package com.myicpc.service.scoreboard;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.LastTeamProblem;
+import com.myicpc.model.eventFeed.LastTeamSubmission;
 import com.myicpc.model.eventFeed.Problem;
 import com.myicpc.model.eventFeed.Region;
 import com.myicpc.model.eventFeed.Team;
@@ -11,6 +14,7 @@ import com.myicpc.model.eventFeed.TeamProblem;
 import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.model.teamInfo.University;
 import com.myicpc.repository.eventFeed.LastTeamProblemRepository;
+import com.myicpc.repository.eventFeed.LastTeamSubmissionRepository;
 import com.myicpc.repository.eventFeed.ProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.repository.teamInfo.TeamInfoRepository;
@@ -42,6 +46,9 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
 
     @Autowired
     private LastTeamProblemRepository lastTeamProblemRepository;
+
+    @Autowired
+    private LastTeamSubmissionRepository lastTeamSubmissionRepository;
 
     @Autowired
     private ProblemRepository problemRepository;
@@ -89,9 +96,11 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
      */
     @Override
     public JsonArray getTeamsFullTemplate(final Contest contest) {
-        Iterable<Team> teams = teamRepository.findByContest(contest);
+        List<Team> teams = teamRepository.findByContest(contest);
+        List<LastTeamSubmission> submissions = lastTeamSubmissionRepository.findByContestId(contest.getId());
 
-        return getTeamsFullTemplate(teams);
+//        return getTeamsFullTemplate(teams);
+        return getTeamsFullTemplate2(teams, submissions);
     }
 
     /**
@@ -126,21 +135,7 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
             teamObject.addProperty("teamId", team.getExternalId());
             teamObject.addProperty("teamExternalId", team.getExternalId());
             teamObject.addProperty("teamRank", team.getRank());
-            // TODO FIX ME
-//            if (teamInfo != null) {
-//                teamObject.addProperty("teamName", team.getTeamInfo().getShortName());
-//                Region teamRegion = team.getTeamInfo().getRegion();
-//                if (teamRegion != null && contest.getContestSettings().isShowRegion()) {
-//                    teamObject.addProperty("regionName", teamRegion.getShortName());
-//                    teamObject.addProperty("regionId", teamRegion.getId());
-//                }
-//                University teamUniversity = teamInfo.getUniversity();
-//                if (teamUniversity != null && contest.getContestSettings().isShowUniversity()) {
-//                    teamObject.addProperty("universityName", teamUniversity.getName());
-//                }
-//            } else {
-                teamObject.addProperty("teamName", team.getName());
-//            }
+            teamObject.addProperty("teamName", team.getName());
             if (contest.getContestSettings().isShowCountry()) {
                 teamObject.addProperty("nationality", team.getNationality());
             }
@@ -161,6 +156,45 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
                 problemObject.addProperty("time", teamProblem.getTime());
                 problemObject.addProperty("first", teamProblem.isFirstSolved());
                 teamProblems.add(lastTeamProblem.getProblem().getId().toString(), problemObject);
+            }
+            teamObject.add("teamProblems", teamProblems);
+
+            root.add(teamObject);
+        }
+        return root;
+    }
+
+    public JsonArray getTeamsFullTemplate2(final List<Team> teams, final List<LastTeamSubmission> submissions) {
+        Multimap<Long, LastTeamSubmission> submissionMultimap = HashMultimap.create();
+        for (LastTeamSubmission submission : submissions) {
+            submissionMultimap.put(submission.getTeamId(), submission);
+        }
+
+        JsonArray root = new JsonArray();
+        for (Team team : teams) {
+            final Contest contest = team.getContest();
+            JsonObject teamObject = new JsonObject();
+            teamObject.addProperty("teamId", team.getExternalId());
+            teamObject.addProperty("teamExternalId", team.getExternalId());
+            teamObject.addProperty("teamRank", team.getRank());
+            teamObject.addProperty("teamName", team.getName());
+            if (contest.getContestSettings().isShowCountry()) {
+                teamObject.addProperty("nationality", team.getNationality());
+            }
+            teamObject.addProperty("nSolved", team.getProblemsSolved());
+            teamObject.addProperty("totalTime", team.getTotalTime());
+            teamObject.addProperty("followed", team.isFollowed());
+
+            JsonObject teamProblems = new JsonObject();
+            for (LastTeamSubmission submission : submissionMultimap.get(team.getId())) {
+                JsonObject problemObject = new JsonObject();
+                problemObject.addProperty("attempts", submission.getAttempts());
+                problemObject.addProperty("judged", submission.isJudged());
+                problemObject.addProperty("solved", submission.isSolved());
+                problemObject.addProperty("penalty", submission.isPenalty());
+                problemObject.addProperty("time", submission.getTime());
+                problemObject.addProperty("first", submission.isFirstSolved());
+                teamProblems.add(String.valueOf(submission.getProblemId()), problemObject);
             }
             teamObject.add("teamProblems", teamProblems);
 
