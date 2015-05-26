@@ -39,12 +39,12 @@ public abstract class StartEndDateObject extends IdGeneratedContestObject {
 
     @Transient
     public Date getLocalStartDate() {
-        return TimeUtils.convertUTCDateToLocal(getStartDate(), contest.getContestSettings().getTimeDifference());
+        return TimeUtils.convertUTCDateToLocal(getStartDate(), contest.getTimeDifference());
     }
 
     @Transient
     public void setLocalStartDate(final Date startDate) {
-        setStartDate(TimeUtils.convertLocalDateToUTC(startDate, contest.getContestSettings().getTimeDifference()));
+        setStartDate(TimeUtils.convertLocalDateToUTC(startDate, contest.getTimeDifference()));
     }
 
     public Date getEndDate() {
@@ -57,12 +57,12 @@ public abstract class StartEndDateObject extends IdGeneratedContestObject {
 
     @Transient
     public Date getLocalEndDate() {
-        return TimeUtils.convertUTCDateToLocal(getEndDate(), contest.getContestSettings().getTimeDifference());
+        return TimeUtils.convertUTCDateToLocal(getEndDate(), contest.getTimeDifference());
     }
 
     @Transient
     public void setLocalEndDate(final Date endDate) {
-        setEndDate(TimeUtils.convertLocalDateToUTC(endDate, contest.getContestSettings().getTimeDifference()));
+        setEndDate(TimeUtils.convertLocalDateToUTC(endDate, contest.getTimeDifference()));
     }
 
     public boolean isPublished() {

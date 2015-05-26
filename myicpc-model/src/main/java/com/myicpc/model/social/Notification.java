@@ -300,7 +300,7 @@ public class Notification extends IdGeneratedContestObject {
      */
     @Transient
     public Date getLocalTimestamp() {
-        return TimeUtils.convertUTCDateToLocal(getTimestamp(), contest.getContestSettings().getTimeDifference());
+        return TimeUtils.convertUTCDateToLocal(getTimestamp(), contest.getTimeDifference());
     }
 
     /**

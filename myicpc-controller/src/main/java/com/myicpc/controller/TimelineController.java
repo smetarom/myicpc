@@ -41,4 +41,11 @@ public class TimelineController extends GeneralController {
         model.addAttribute("openQuests", questNotifications);
         return "timeline/timeline";
     }
+
+    @RequestMapping(value = {"/{contestCode}/empty"}, method = RequestMethod.GET)
+    public String empty(Model model, @PathVariable String contestCode) {
+        Contest contest = getContest(contestCode, model);
+
+        return "empty";
+    }
 }

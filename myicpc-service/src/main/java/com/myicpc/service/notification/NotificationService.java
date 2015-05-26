@@ -107,7 +107,7 @@ public class NotificationService {
         notificationObject.addProperty("videoUrl", notification.getVideoUrl());
         notificationObject.addProperty("entityId", notification.getEntityId());
         notificationObject.addProperty("code", notification.getCode());
-        Date timestamp = TimeUtils.convertUTCDateToLocal(notification.getTimestamp(), notification.getContest().getContestSettings().getTimeDifference());
+        Date timestamp = TimeUtils.convertUTCDateToLocal(notification.getTimestamp(), notification.getContest().getTimeDifference());
         notificationObject.addProperty("timestamp", timestamp != null ? formatter.format(timestamp) : "");
         notificationObject.addProperty("profileUrl", notification.getProfilePictureUrl());
 

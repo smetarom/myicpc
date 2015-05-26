@@ -69,7 +69,7 @@ public class ScheduleDay extends IdGeneratedContestObject implements Comparable<
      */
     @Transient
     public Date getLocalDate() {
-        return TimeUtils.convertUTCDateToLocal(getDate(), contest.getContestSettings().getTimeDifference());
+        return TimeUtils.convertUTCDateToLocal(getDate(), contest.getTimeDifference());
     }
 
     /**
@@ -77,7 +77,7 @@ public class ScheduleDay extends IdGeneratedContestObject implements Comparable<
      */
     @Transient
     public void setLocalDate(final Date date) {
-        setDate(TimeUtils.convertLocalDateToUTC(date, contest.getContestSettings().getTimeDifference()));
+        setDate(TimeUtils.convertLocalDateToUTC(date, contest.getTimeDifference()));
     }
 
     public String getName() {

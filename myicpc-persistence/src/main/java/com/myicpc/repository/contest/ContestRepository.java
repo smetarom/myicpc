@@ -12,6 +12,12 @@ public interface ContestRepository extends JpaRepository<Contest, Long> {
 
     Contest findByCode(String code);
 
-    @Query("FROM Contest c JOIN FETCH c.questConfiguration JOIN FETCH c.moduleConfiguration JOIN FETCH c.mapConfiguration WHERE c.code = ?1")
+    @Query("FROM Contest c " +
+            "JOIN FETCH c.contestSettings " +
+            "JOIN FETCH c.webServiceSettings " +
+            "JOIN FETCH c.questConfiguration " +
+            "JOIN FETCH c.moduleConfiguration " +
+            "JOIN FETCH c.mapConfiguration " +
+            "WHERE c.code = ?1")
     Contest findFullByCode(String code);
 }

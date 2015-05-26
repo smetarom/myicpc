@@ -42,7 +42,6 @@ public class ContestSettings extends IdGeneratedObject {
     private String teamPicturesURL;
 
     private Integer year;
-    private Integer timeDifference = 0;
     private boolean showTeamNames;
     private boolean showRegion;
     private boolean showUniversity;
@@ -142,14 +141,6 @@ public class ContestSettings extends IdGeneratedObject {
 
     public void setYear(Integer year) {
         this.year = year;
-    }
-
-    public Integer getTimeDifference() {
-        return timeDifference;
-    }
-
-    public void setTimeDifference(Integer timeDifference) {
-        this.timeDifference = timeDifference;
     }
 
     public boolean isShowTeamNames() {

@@ -52,7 +52,7 @@ public class TechTrekSubmission extends IdGeneratedContestObject {
      */
     @Transient
     public Date getLocalModifiedWhen() {
-        return TimeUtils.convertUTCDateToLocal(getModifiedWhen(), contest.getContestSettings().getTimeDifference());
+        return TimeUtils.convertUTCDateToLocal(getModifiedWhen(), contest.getTimeDifference());
     }
 
     public void setModifiedWhen(Date modifiedWhen) {

@@ -11,7 +11,7 @@
 <t:springInput labelCode="contest.shortName" path="shortName" required="true"/>
 <t:springInput labelCode="contest.startTime" path="startTime" id="startTime" required="true"
                hintCode="contest.startTime.hint"/>
-<t:springInput type="number" labelCode="contest.timeDifference" path="contestSettings.timeDifference" id="startTime"
+<t:springInput type="number" labelCode="contest.timeDifference" path="timeDifference" id="startTime"
                required="true" hintCode="contest.timeDifference.hint"/>
 <div class="form-group">
     <label class="col-sm-3 control-label"><spring:message code="contest.showTeamNames"/>:* </label>

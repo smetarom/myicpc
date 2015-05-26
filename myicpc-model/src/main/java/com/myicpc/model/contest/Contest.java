@@ -36,6 +36,8 @@ public class Contest extends IdGeneratedObject {
 
     private String hashtag;
 
+    private Integer timeDifference = 0;
+
     /**
      * Start date time of the contest
      */
@@ -136,6 +138,14 @@ public class Contest extends IdGeneratedObject {
 
     public void setHashtag(String hashtag) {
         this.hashtag = hashtag;
+    }
+
+    public Integer getTimeDifference() {
+        return timeDifference;
+    }
+
+    public void setTimeDifference(Integer timeDifference) {
+        this.timeDifference = timeDifference;
     }
 
     public ContestSettings getContestSettings() {

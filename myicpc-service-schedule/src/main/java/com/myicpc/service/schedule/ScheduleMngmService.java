@@ -386,6 +386,6 @@ public class ScheduleMngmService {
      * @return date compatible with dates in database
      */
     private Date processImportedDate(final Date date, final Contest contest) {
-        return TimeUtils.convertLocalDateToUTC(date, contest.getContestSettings().getTimeDifference());
+        return TimeUtils.convertLocalDateToUTC(date, contest.getTimeDifference());
     }
 }
