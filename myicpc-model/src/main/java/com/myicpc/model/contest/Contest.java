@@ -64,11 +64,11 @@ public class Contest extends IdGeneratedObject {
     @JoinColumn(name = "mapConfigurationId")
     private MapConfiguration mapConfiguration = new MapConfiguration();
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "questConfigurationId")
     private QuestConfiguration questConfiguration = new QuestConfiguration();
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "moduleConfigurationId")
     private ModuleConfiguration moduleConfiguration = new ModuleConfiguration();
 

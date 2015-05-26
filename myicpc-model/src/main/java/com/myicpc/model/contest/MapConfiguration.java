@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "MapConfiguration_id_seq")
 public class MapConfiguration extends IdGeneratedObject {
-    private static final long serialVersionUID = 2888711611800779397L;
+    private static final long serialVersionUID = 2883711611800779397L;
 
     private boolean zoomableMap;
     @Lob

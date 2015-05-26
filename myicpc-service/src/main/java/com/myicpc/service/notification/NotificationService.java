@@ -71,17 +71,20 @@ public class NotificationService {
      * important on the top of the page
      *
      * @param ignoredFeatured ids of notifications ignored by user
+     * @param contest
      * @return list of featured notifications
      */
-    public List<Notification> getFeaturedNotifications(final List<Long> ignoredFeatured) {
-        List<Notification> notifications = new ArrayList<Notification>();
-        notifications.addAll(notificationRepository.findCurrentPollNotifications(new Date(), ignoredFeatured));
-        notifications.addAll(notificationRepository.findCurrentAdminNotifications(new Date(), ignoredFeatured));
-        notifications.addAll(notificationRepository.findCurrentQuestChallengeNotifications(new Date(), ignoredFeatured));
+    public List<Notification> getFeaturedNotifications(final List<Long> ignoredFeatured, final Contest contest) {
+        return notificationRepository.findFeaturedNotifications(new Date(), ignoredFeatured, contest);
 
-        Collections.sort(notifications, new FeaturedNotificationComparator());
-
-        return notifications;
+//        List<Notification> notifications = new ArrayList<Notification>();
+//        notifications.addAll(notificationRepository.findCurrentPollNotifications(new Date(), ignoredFeatured));
+//        notifications.addAll(notificationRepository.findCurrentAdminNotifications(new Date(), ignoredFeatured));
+//        notifications.addAll(notificationRepository.findCurrentQuestChallengeNotifications(new Date(), ignoredFeatured));
+//
+//        Collections.sort(notifications, new FeaturedNotificationComparator());
+//
+//        return notifications;
     }
 
     /**

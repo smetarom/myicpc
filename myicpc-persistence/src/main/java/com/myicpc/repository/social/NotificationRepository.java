@@ -132,6 +132,19 @@ public interface NotificationRepository extends PagingAndSortingRepository<Notif
     List<Notification> findByEntityIdAndNotificationTypeOrderByIdDesc(long entityId, NotificationType notificationType1,
                                                                       NotificationType notificationType2);
 
+    @Query("SELECT n " +
+            "FROM Notification n " +
+            "WHERE n.featuredEligible = true" +
+            "   AND n.contest = ?3" +
+            "   AND n.id NOT IN ?2" +
+            "   AND (" +
+            "           (n.entityId IN (SELECT p.id FROM Poll p WHERE ?1 BETWEEN p.startDate AND p.endDate) AND n.notificationType = 'POLL_OPEN') OR " +
+            "           (n.entityId IN (SELECT an.id FROM AdminNotification an WHERE ?1 BETWEEN an.startDate AND an.endDate) AND n.notificationType = 'ADMIN_NOTIFICATION') OR " +
+            "           (n.entityId IN (SELECT qc.id FROM QuestChallenge qc WHERE ?1 BETWEEN qc.startDate AND qc.endDate OR (qc.startDate < ?1 AND qc.endDate IS NULL)) AND n.notificationType = 'QUEST_CHALLENGE')" +
+            "       ) " +
+            "ORDER BY n.timestamp DESC")
+    List<Notification> findFeaturedNotifications(Date date, List<Long> ignoredFeatured, Contest contest);
+
     /**
      * @return notifications for polls, which are in progress and not ignored by
      * user

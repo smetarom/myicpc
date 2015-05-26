@@ -12,6 +12,8 @@ import org.springframework.mobile.device.site.SitePreferenceUtils;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,6 +39,7 @@ public abstract class GeneralController extends GeneralAbstractController {
         Contest contest = super.getContest(contestCode, model);
         if (model != null && contest != null) {
             model.addAttribute("contestTime", contestService.getCurrentContestTime(contest));
+            model.addAttribute("featuredNotifications", getFeaturedNotifications(contest));
         }
         return contest;
     }
@@ -54,15 +57,13 @@ public abstract class GeneralController extends GeneralAbstractController {
     /**
      * Populates model with featured notifications
      *
-     * @param request
-     * @param response
-     * @param ignoreFeaturedNotifications
      * @return list of featured notifications
+     * @param contest
      */
-    @ModelAttribute("featuredNotifications")
-    public List<Notification> getFeaturedNotifications(HttpServletRequest request, HttpServletResponse response,
-                                                       @CookieValue(value = "ignoreFeaturedNotifications", required = false) String ignoreFeaturedNotifications) {
-        List<Long> ignoredFeatured = new ArrayList<Long>();
+    public List<Notification> getFeaturedNotifications(final Contest contest) {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        String ignoreFeaturedNotifications = CookieUtils.getCookie(request, "ignoreFeaturedNotifications");
+        List<Long> ignoredFeatured = new ArrayList<>();
         ignoredFeatured.add(-1L);
         if (!StringUtils.isEmpty(ignoreFeaturedNotifications)) {
             try {
@@ -71,10 +72,9 @@ public abstract class GeneralController extends GeneralAbstractController {
                     ignoredFeatured.add(Long.parseLong(s));
                 }
             } catch (Throwable ex) {
-                CookieUtils.removeCookie(request, response, "ignoreFeaturedNotifications");
             }
         }
-        return notificationService.getFeaturedNotifications(ignoredFeatured);
+        return notificationService.getFeaturedNotifications(ignoredFeatured, contest);
     }
 
     protected String resolveView(@NotNull String desktopView, String mobileView, SitePreference sitePreference) {
