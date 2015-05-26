@@ -25,6 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +37,9 @@ import java.util.List;
 @Service("scoreboardService")
 @Transactional
 public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements ScoreboardService {
+
+    @PersistenceContext(name = "MyICPC")
+    protected EntityManager em;
 
     @Autowired
     private PublishService publishService;
@@ -97,10 +103,35 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
     @Override
     public JsonArray getTeamsFullTemplate(final Contest contest) {
         List<Team> teams = teamRepository.findByContest(contest);
-        List<LastTeamSubmission> submissions = lastTeamSubmissionRepository.findByContestId(contest.getId());
 
+        // solution 1
 //        return getTeamsFullTemplate(teams);
+
+        // solution 2
+//        List<LastTeamSubmission> submissions = lastTeamSubmissionRepository.findByContestId(contest.getId());
+//        return getTeamsFullTemplate2(teams, submissions);
+
+        // solution 3
+        Query nativeQuery = em.createNativeQuery("SELECT " +
+                "   ltp.id AS id, " +
+                "   ltp.version AS version, " +
+                "   ltp.teamId AS teamId, " +
+                "   ltp.problemId AS problemId, " +
+                "   ltp.contestId AS contestId, " +
+                "   tp.id AS submissionId, " +
+                "   tp.solved AS solved, " +
+                "   tp.penalty AS penalty, " +
+                "   tp.attempts AS attempts, " +
+                "   tp.time AS time, " +
+                "   tp.judged AS judged, " +
+                "   tp.firstSolved AS firstSolved " +
+                "FROM LastTeamProblem ltp " +
+                "JOIN TeamProblem tp ON tp.id = ltp.teamProblemId " +
+                "WHERE ltp.contestId = :contestId", LastTeamSubmission.class);
+        nativeQuery.setParameter("contestId", contest.getId());
+        List submissions = nativeQuery.getResultList();
         return getTeamsFullTemplate2(teams, submissions);
+
     }
 
     /**

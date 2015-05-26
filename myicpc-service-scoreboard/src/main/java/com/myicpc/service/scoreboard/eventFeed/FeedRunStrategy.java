@@ -112,6 +112,7 @@ public abstract class FeedRunStrategy {
             lastTeamProblem = new LastTeamProblem();
             lastTeamProblem.setTeam(teamProblem.getTeam());
             lastTeamProblem.setProblem(teamProblem.getProblem());
+            lastTeamProblem.setContest(teamProblem.getTeam().getContest());
         }
         // the problem was already solved or we have already a newer submission
         if (lastTeamProblem.getTeamProblem() != null
