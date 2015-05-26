@@ -28,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,24 +113,33 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
 //        return getTeamsFullTemplate2(teams, submissions);
 
         // solution 3
-        Query nativeQuery = em.createNativeQuery("SELECT " +
-                "   ltp.id AS id, " +
-                "   ltp.version AS version, " +
-                "   ltp.teamId AS teamId, " +
-                "   ltp.problemId AS problemId, " +
-                "   ltp.contestId AS contestId, " +
-                "   tp.id AS submissionId, " +
-                "   tp.solved AS solved, " +
-                "   tp.penalty AS penalty, " +
-                "   tp.attempts AS attempts, " +
-                "   tp.time AS time, " +
-                "   tp.judged AS judged, " +
-                "   tp.firstSolved AS firstSolved " +
-                "FROM LastTeamProblem ltp " +
-                "JOIN TeamProblem tp ON tp.id = ltp.teamProblemId " +
-                "WHERE ltp.contestId = :contestId", LastTeamSubmission.class);
-        nativeQuery.setParameter("contestId", contest.getId());
-        List submissions = nativeQuery.getResultList();
+//        Query nativeQuery = em.createNativeQuery("SELECT " +
+//                "   ltp.id AS id, " +
+//                "   ltp.version AS version, " +
+//                "   ltp.teamId AS teamId, " +
+//                "   ltp.problemId AS problemId, " +
+//                "   ltp.contestId AS contestId, " +
+//                "   tp.id AS submissionId, " +
+//                "   tp.solved AS solved, " +
+//                "   tp.penalty AS penalty, " +
+//                "   tp.attempts AS attempts, " +
+//                "   tp.time AS time, " +
+//                "   tp.judged AS judged, " +
+//                "   tp.firstSolved AS firstSolved " +
+//                "FROM LastTeamProblem ltp " +
+//                "JOIN TeamProblem tp ON tp.id = ltp.teamProblemId " +
+//                "WHERE ltp.contestId = :contestId", LastTeamSubmission.class);
+//        nativeQuery.setParameter("contestId", contest.getId());
+//        List submissions = nativeQuery.getResultList();
+//        return getTeamsFullTemplate2(teams, submissions);
+
+        // solution 4
+        TypedQuery<LastTeamSubmission> namedQuery = em.createQuery(
+                "SELECT new com.myicpc.model.eventFeed.LastTeamSubmission(ltp.teamProblem, ltp.contest.id, ltp.problem.id, ltp.team.id) " +
+                        "FROM LastTeamProblem ltp WHERE ltp.contest = :contest", LastTeamSubmission.class);
+        namedQuery.setParameter("contest", contest);
+
+        List<LastTeamSubmission> submissions = namedQuery.getResultList();
         return getTeamsFullTemplate2(teams, submissions);
 
     }

@@ -56,6 +56,19 @@ public class LastTeamSubmission extends IdGeneratedObject {
         update(submission);
     }
 
+    public LastTeamSubmission(final TeamProblem submission, long contestId, long problemId, long teamId) {
+        this.contestId = contestId;
+        this.problemId = problemId;
+        this.teamId = teamId;
+
+        this.attempts = submission.getAttempts();
+        this.judged = submission.getJudged();
+        this.solved = submission.getSolved();
+        this.penalty = submission.getPenalty();
+        this.time = submission.getTime();
+        this.firstSolved = submission.isFirstSolved();
+    }
+
     @Transient
     public void update(final TeamProblem submission) {
         this.submissionId = submission.getId();
