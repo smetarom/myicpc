@@ -1,16 +1,25 @@
 package com.myicpc.model.contest;
 
+import com.myicpc.model.IdGeneratedObject;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.io.Serializable;
 import java.util.Date;
 
-@Embeddable
-public class WebServiceSettings implements Serializable {
+@Entity
+@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "WebServiceSettings_id_seq")
+public class WebServiceSettings extends IdGeneratedObject {
     private static final long serialVersionUID = 8156742203651195626L;
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "mapConfiguration")
+    private Contest contest;
 
     //CM4
     private String wsCMToken;

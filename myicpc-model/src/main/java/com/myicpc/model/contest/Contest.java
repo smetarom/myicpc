@@ -54,10 +54,12 @@ public class Contest extends IdGeneratedObject {
     /**
      * Represents the settings for the contest
      */
-    @Embedded
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "contestSettingsId")
     private ContestSettings contestSettings = new ContestSettings();
 
-    @Embedded
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "webServiceSettingsId")
     private WebServiceSettings webServiceSettings = new WebServiceSettings();
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

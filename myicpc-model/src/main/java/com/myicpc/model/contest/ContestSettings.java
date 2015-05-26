@@ -1,11 +1,16 @@
 package com.myicpc.model.contest;
 
 import com.myicpc.enums.FeedRunStrategyType;
+import com.myicpc.model.IdGeneratedObject;
 import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.Embeddable;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 import java.io.Serializable;
 
 /**
@@ -13,9 +18,13 @@ import java.io.Serializable;
  *
  * @author Roman Smetana
  */
-@Embeddable
-public class ContestSettings implements Serializable {
+@Entity
+@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "ContestSettings_id_seq")
+public class ContestSettings extends IdGeneratedObject {
     private static final long serialVersionUID = -7122410076109471464L;
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "mapConfiguration")
+    private Contest contest;
 
     private String email;
 
