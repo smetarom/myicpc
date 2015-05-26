@@ -75,7 +75,9 @@ public class QuestController extends GeneralController {
     public String questChallenges(@PathVariable final String contestCode, Model model, SitePreference sitePreference) {
         Contest contest = getContest(contestCode, model);
 
-        model.addAttribute("challenges", challengeRepository.findOpenChallengesByContestOrderByName(new Date(), contest));
+        List<QuestChallenge> challenges = challengeRepository.findOpenChallengesByContestOrderByName(new Date(), contest);
+        QuestService.applyHashtagPrefix(contest.getQuestConfiguration().getHashtagPrefix(), challenges);
+        model.addAttribute("challenges", challenges);
 
         return resolveView("quest/challenges", "quest/challenges_mobile", sitePreference);
     }
@@ -175,6 +177,7 @@ public class QuestController extends GeneralController {
         if (challenge == null) {
             throw new EntityNotFoundException();
         }
+        challenge.setHashtagPrefix(contest.getQuestConfiguration().getHashtagPrefix());
         model.addAttribute("device", device);
         model.addAttribute("challenge", challenge);
         model.addAttribute("acceptedSubmissions", submissionRepository.findByChallengeAndSubmissionStateOrderByCreatedDesc(challenge, QuestSubmissionState.ACCEPTED));

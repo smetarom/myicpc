@@ -64,6 +64,9 @@ public class QuestChallenge extends StartEndDateObject {
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
     private List<QuestSubmission> submissions;
 
+    @Transient
+    private String hashtagPrefix;
+
     public String getName() {
         return name;
     }
@@ -109,7 +112,7 @@ public class QuestChallenge extends StartEndDateObject {
      */
     @Transient
     public String getHashtag() {
-        return contest.getQuestConfiguration().getHashtagPrefix() + hashtagSuffix;
+        return hashtagPrefix + hashtagSuffix;
     }
 
     public List<QuestSubmission> getSubmissions() {
@@ -118,6 +121,14 @@ public class QuestChallenge extends StartEndDateObject {
 
     public void setSubmissions(final List<QuestSubmission> submissions) {
         this.submissions = submissions;
+    }
+
+    public String getHashtagPrefix() {
+        return hashtagPrefix;
+    }
+
+    public void setHashtagPrefix(String hashtagPrefix) {
+        this.hashtagPrefix = hashtagPrefix;
     }
 
     /**

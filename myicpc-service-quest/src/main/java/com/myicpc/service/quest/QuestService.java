@@ -78,4 +78,12 @@ public class QuestService {
         return arr;
     }
 
+    public static void applyHashtagPrefix(String hashtagPrefix, final List<QuestChallenge> challenges) {
+        if (challenges != null) {
+            for (QuestChallenge challenge : challenges) {
+                challenge.setHashtagPrefix(hashtagPrefix);
+            }
+        }
+    }
+
 }

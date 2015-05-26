@@ -6,6 +6,7 @@ import com.myicpc.model.quest.QuestChallenge;
 import com.myicpc.repository.quest.QuestChallengeRepository;
 import com.myicpc.service.exception.BusinessValidationException;
 import com.myicpc.service.quest.QuestMngmService;
+import com.myicpc.service.quest.QuestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author Roman Smetana
@@ -39,7 +41,9 @@ public class QuestChallengeAdminController extends GeneralAdminController {
     public String challegeList(@PathVariable final String contestCode, Model model) {
         Contest contest = getContest(contestCode, model);
         Sort sort = new Sort(new Sort.Order(Sort.Direction.DESC, "startDate"), new Sort.Order("name"));
-        model.addAttribute("challenges", challengeRepository.findByContest(contest, sort));
+        List<QuestChallenge> challenges = challengeRepository.findByContest(contest, sort);
+        QuestService.applyHashtagPrefix(contest.getQuestConfiguration().getHashtagPrefix(), challenges);
+        model.addAttribute("challenges", challenges);
 
         return "private/quest/challenges";
     }
