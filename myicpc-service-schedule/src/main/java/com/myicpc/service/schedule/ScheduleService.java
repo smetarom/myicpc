@@ -39,6 +39,18 @@ public class ScheduleService extends EntityManagerService {
     @Autowired
     private EventRoleRepository eventRoleRepository;
 
+    public Event getEventByIdOrCode(String eventId) {
+        Event event;
+        try {
+            Long id = Long.parseLong(eventId);
+            event = eventRepository.findOne(id);
+        } catch (Exception ex) {
+            event = eventRepository.findByCode(eventId);
+        }
+        event.getRoles().size();
+        return event;
+    }
+
     /**
      * Returns all events which ends after the given date
      *
@@ -71,7 +83,7 @@ public class ScheduleService extends EntityManagerService {
      * @return complete schedule
      */
     public Iterable<ScheduleDay> getEntireContestSchedule(final Contest contest) {
-        Iterable<Event> events = eventRepository.findByContest(contest);
+        Iterable<Event> events = eventRepository.findByContestWithScheduleDayAndLocation(contest);
         return getEventsGroupedByScheduleDay(events);
     }
 
@@ -83,7 +95,7 @@ public class ScheduleService extends EntityManagerService {
      * @return events in the location
      */
     public Iterable<ScheduleDay> getScheduleEventsInLocation(final Location location) {
-        Iterable<Event> events = eventRepository.findByLocation(location);
+        Iterable<Event> events = eventRepository.findByLocationWithScheduleDayAndLocation(location);
         return getEventsGroupedByScheduleDay(events);
     }
 

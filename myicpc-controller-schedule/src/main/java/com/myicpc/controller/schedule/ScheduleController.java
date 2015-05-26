@@ -126,14 +126,7 @@ public class ScheduleController extends GeneralController {
 
     protected String _eventDetail(Contest contest, String view, String redirectView, String eventId, Model model,
                                   RedirectAttributes redirectAttributes) {
-        Event event;
-        try {
-            Long id = Long.parseLong(eventId);
-            event = eventRepository.findOne(id);
-        } catch (Exception ex) {
-            event = eventRepository.findByCode(eventId);
-        }
-
+        Event event = scheduleService.getEventByIdOrCode(eventId);
         if (event == null) {
             errorMessage(redirectAttributes, "scheduleAdmin.noResult");
             return redirectView;

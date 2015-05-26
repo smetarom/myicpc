@@ -70,7 +70,7 @@ public class Event extends StartEndDateObject {
     /**
      * List of roles, which are invited for the event
      */
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "EventRoleEventAssociation", joinColumns = @JoinColumn(name = "eventId", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "eventRoleId", referencedColumnName = "id"))
     private Set<EventRole> roles = new HashSet<EventRole>();
 
