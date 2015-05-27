@@ -1,36 +1,25 @@
-package com.myicpc.dto.eventFeed;
+package com.myicpc.dto.eventFeed.parser;
 
 import com.myicpc.dto.eventFeed.visitor.EventFeedVisitor;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.model.eventFeed.Judgement;
+import com.myicpc.model.eventFeed.Language;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
  * @author Roman Smetana
  */
-@XStreamAlias("judgement")
-public class JudgementXML extends XMLEntity<Judgement> {
-    private String acronym;
-
+@XStreamAlias("language")
+public class LanguageXML extends XMLEntity<Language> {
     private String name;
 
     @Override
-    public void mergeTo(Judgement judgement) {
-        judgement.setName(getName());
-        judgement.setCode(getAcronym());
+    public void mergeTo(final Language language) {
+        language.setName(getName());
     }
 
     @Override
     public void accept(EventFeedVisitor visitor, Contest contest) {
         visitor.visit(this, contest);
-    }
-
-    public String getAcronym() {
-        return acronym;
-    }
-
-    public void setAcronym(String acronym) {
-        this.acronym = acronym;
     }
 
     public String getName() {

@@ -3,7 +3,7 @@ package com.myicpc.service.scoreboard.eventFeed
 import com.myicpc.dto.eventFeed.visitor.EventFeedVisitor
 import com.myicpc.model.contest.Contest
 import com.myicpc.model.eventFeed.EventFeedControl
-import com.myicpc.dto.eventFeed.ContestXML
+import com.myicpc.dto.eventFeed.parser.ContestXML
 import org.mockito.InjectMocks
 import org.mockito.Matchers
 import org.mockito.Mock

@@ -1,5 +1,6 @@
 package com.myicpc.repository.eventFeed;
 
+import com.myicpc.dto.eventFeed.LastTeamSubmissionDTO;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.LastTeamProblem;
 import com.myicpc.model.eventFeed.Problem;
@@ -15,6 +16,21 @@ public interface LastTeamProblemRepository extends JpaRepository<LastTeamProblem
     LastTeamProblem findByTeamAndProblem(Team team, Problem problem);
 
     List<LastTeamProblem> findByTeam(Team team);
+
+    @Query("SELECT " +
+            "new com.myicpc.dto.eventFeed.LastTeamSubmissionDTO(" +
+            "   ltp.contest.id, " +
+            "   ltp.team.id, " +
+            "   ltp.problem.id," +
+            "   ltp.teamProblem.id, " +
+            "   ltp.teamProblem.solved, " +
+            "   ltp.teamProblem.penalty, " +
+            "   ltp.teamProblem.attempts, " +
+            "   ltp.teamProblem.time, " +
+            "   ltp.teamProblem.judged, " +
+            "   ltp.teamProblem.firstSolved) " +
+            "FROM LastTeamProblem ltp WHERE ltp.contest = ?1")
+    List<LastTeamSubmissionDTO> findLastTeamSubmissionDTOByContest(Contest contest);
 
     @Transactional
     @Modifying

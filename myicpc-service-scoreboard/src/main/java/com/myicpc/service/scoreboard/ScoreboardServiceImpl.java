@@ -6,15 +6,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.LastTeamProblem;
-import com.myicpc.model.eventFeed.LastTeamSubmission;
+import com.myicpc.dto.eventFeed.LastTeamSubmissionDTO;
 import com.myicpc.model.eventFeed.Problem;
-import com.myicpc.model.eventFeed.Region;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
 import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.model.teamInfo.University;
 import com.myicpc.repository.eventFeed.LastTeamProblemRepository;
-import com.myicpc.repository.eventFeed.LastTeamSubmissionRepository;
 import com.myicpc.repository.eventFeed.ProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.repository.teamInfo.TeamInfoRepository;
@@ -27,9 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,9 +48,6 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
 
     @Autowired
     private LastTeamProblemRepository lastTeamProblemRepository;
-
-    @Autowired
-    private LastTeamSubmissionRepository lastTeamSubmissionRepository;
 
     @Autowired
     private ProblemRepository problemRepository;
@@ -104,43 +96,10 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
     @Override
     public JsonArray getTeamsFullTemplate(final Contest contest) {
         List<Team> teams = teamRepository.findByContest(contest);
-
-        // solution 1
-//        return getTeamsFullTemplate(teams);
-
-        // solution 2
-//        List<LastTeamSubmission> submissions = lastTeamSubmissionRepository.findByContestId(contest.getId());
-//        return getTeamsFullTemplate2(teams, submissions);
-
-        // solution 3
-//        Query nativeQuery = em.createNativeQuery("SELECT " +
-//                "   ltp.id AS id, " +
-//                "   ltp.version AS version, " +
-//                "   ltp.teamId AS teamId, " +
-//                "   ltp.problemId AS problemId, " +
-//                "   ltp.contestId AS contestId, " +
-//                "   tp.id AS submissionId, " +
-//                "   tp.solved AS solved, " +
-//                "   tp.penalty AS penalty, " +
-//                "   tp.attempts AS attempts, " +
-//                "   tp.time AS time, " +
-//                "   tp.judged AS judged, " +
-//                "   tp.firstSolved AS firstSolved " +
-//                "FROM LastTeamProblem ltp " +
-//                "JOIN TeamProblem tp ON tp.id = ltp.teamProblemId " +
-//                "WHERE ltp.contestId = :contestId", LastTeamSubmission.class);
-//        nativeQuery.setParameter("contestId", contest.getId());
-//        List submissions = nativeQuery.getResultList();
-//        return getTeamsFullTemplate2(teams, submissions);
-
-        // solution 4
-        TypedQuery<LastTeamSubmission> namedQuery = em.createQuery(
-                "SELECT new com.myicpc.model.eventFeed.LastTeamSubmission(ltp.teamProblem, ltp.contest.id, ltp.problem.id, ltp.team.id) " +
-                        "FROM LastTeamProblem ltp WHERE ltp.contest = :contest", LastTeamSubmission.class);
-        namedQuery.setParameter("contest", contest);
-
-        List<LastTeamSubmission> submissions = namedQuery.getResultList();
-        return getTeamsFullTemplate2(teams, submissions);
+        System.out.println("before");
+        List<LastTeamSubmissionDTO> submissions = lastTeamProblemRepository.findLastTeamSubmissionDTOByContest(contest);
+        System.out.println("after");
+        return getTeamsFullTemplate(teams, submissions);
 
     }
 
@@ -154,9 +113,11 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
      */
     @Override
     public JsonArray getTeamsFullTemplate(final Contest contest, final List<Long> teamIds) {
-        Iterable<Team> teams = teamRepository.findByContestAndTeamIds(contest, teamIds);
-
-        return getTeamsFullTemplate(teams);
+        // TODO renew or remove
+//        Iterable<Team> teams = teamRepository.findByContestAndTeamIds(contest, teamIds);
+//
+//        return getTeamsFullTemplate(teams);
+        return null;
     }
 
     /**
@@ -167,47 +128,9 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
      * @return JSON representation of selected teams paired with last team
      * submissions
      */
-    public JsonArray getTeamsFullTemplate(final Iterable<Team> teams) {
-        JsonArray root = new JsonArray();
-        for (Team team : teams) {
-            final TeamInfo teamInfo = team.getTeamInfo();
-            final Contest contest = team.getContest();
-            JsonObject teamObject = new JsonObject();
-            teamObject.addProperty("teamId", team.getExternalId());
-            teamObject.addProperty("teamExternalId", team.getExternalId());
-            teamObject.addProperty("teamRank", team.getRank());
-            teamObject.addProperty("teamName", team.getName());
-            if (contest.getContestSettings().isShowCountry()) {
-                teamObject.addProperty("nationality", team.getNationality());
-            }
-            teamObject.addProperty("nSolved", team.getProblemsSolved());
-            teamObject.addProperty("totalTime", team.getTotalTime());
-            teamObject.addProperty("followed", team.isFollowed());
-
-            JsonObject teamProblems = new JsonObject();
-            List<LastTeamProblem> problems = team.getLastTeamProblems();
-
-            for (LastTeamProblem lastTeamProblem : problems) {
-                JsonObject problemObject = new JsonObject();
-                TeamProblem teamProblem = lastTeamProblem.getTeamProblem();
-                problemObject.addProperty("attempts", teamProblem.getAttempts());
-                problemObject.addProperty("judged", teamProblem.getJudged());
-                problemObject.addProperty("solved", teamProblem.getSolved());
-                problemObject.addProperty("penalty", teamProblem.getPenalty());
-                problemObject.addProperty("time", teamProblem.getTime());
-                problemObject.addProperty("first", teamProblem.isFirstSolved());
-                teamProblems.add(lastTeamProblem.getProblem().getId().toString(), problemObject);
-            }
-            teamObject.add("teamProblems", teamProblems);
-
-            root.add(teamObject);
-        }
-        return root;
-    }
-
-    public JsonArray getTeamsFullTemplate2(final List<Team> teams, final List<LastTeamSubmission> submissions) {
-        Multimap<Long, LastTeamSubmission> submissionMultimap = HashMultimap.create();
-        for (LastTeamSubmission submission : submissions) {
+    public JsonArray getTeamsFullTemplate(final List<Team> teams, final List<LastTeamSubmissionDTO> submissions) {
+        Multimap<Long, LastTeamSubmissionDTO> submissionMultimap = HashMultimap.create();
+        for (LastTeamSubmissionDTO submission : submissions) {
             submissionMultimap.put(submission.getTeamId(), submission);
         }
 
@@ -227,7 +150,7 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
             teamObject.addProperty("followed", team.isFollowed());
 
             JsonObject teamProblems = new JsonObject();
-            for (LastTeamSubmission submission : submissionMultimap.get(team.getId())) {
+            for (LastTeamSubmissionDTO submission : submissionMultimap.get(team.getId())) {
                 JsonObject problemObject = new JsonObject();
                 problemObject.addProperty("attempts", submission.getAttempts());
                 problemObject.addProperty("judged", submission.isJudged());

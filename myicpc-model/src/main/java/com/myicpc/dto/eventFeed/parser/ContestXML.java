@@ -1,4 +1,4 @@
-package com.myicpc.dto.eventFeed;
+package com.myicpc.dto.eventFeed.parser;
 
 import com.myicpc.dto.eventFeed.convertor.TimeConverter;
 import com.myicpc.dto.eventFeed.convertor.TimestampConverter;

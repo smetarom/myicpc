@@ -1,18 +1,18 @@
 package com.myicpc.master.service.scoreboard;
 
 import com.myicpc.commons.utils.FormatUtils;
-import com.myicpc.dto.eventFeed.AnalystMessageXML;
-import com.myicpc.dto.eventFeed.ContestXML;
+import com.myicpc.dto.eventFeed.parser.AnalystMessageXML;
+import com.myicpc.dto.eventFeed.parser.ContestXML;
 import com.myicpc.dto.eventFeed.EventFeedEvent;
 import com.myicpc.dto.eventFeed.EventFeedSubmission;
-import com.myicpc.dto.eventFeed.FinalizedXML;
-import com.myicpc.dto.eventFeed.JudgementXML;
-import com.myicpc.dto.eventFeed.LanguageXML;
-import com.myicpc.dto.eventFeed.ProblemXML;
-import com.myicpc.dto.eventFeed.RegionXML;
-import com.myicpc.dto.eventFeed.TeamProblemXML;
-import com.myicpc.dto.eventFeed.TeamXML;
-import com.myicpc.dto.eventFeed.TestcaseXML;
+import com.myicpc.dto.eventFeed.parser.FinalizedXML;
+import com.myicpc.dto.eventFeed.parser.JudgementXML;
+import com.myicpc.dto.eventFeed.parser.LanguageXML;
+import com.myicpc.dto.eventFeed.parser.ProblemXML;
+import com.myicpc.dto.eventFeed.parser.RegionXML;
+import com.myicpc.dto.eventFeed.parser.TeamProblemXML;
+import com.myicpc.dto.eventFeed.parser.TeamXML;
+import com.myicpc.dto.eventFeed.parser.TestcaseXML;
 import com.myicpc.dto.eventFeed.visitor.EventFeedMessage;
 import com.myicpc.master.dao.EventFeedDao;
 import com.myicpc.master.dao.NotificationDao;
@@ -45,7 +45,6 @@ import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.Session;
-import java.util.Date;
 
 /**
  * @author Roman Smetana

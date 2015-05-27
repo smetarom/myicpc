@@ -1,16 +1,16 @@
 package com.myicpc.service.scoreboard.eventFeed;
 
 import com.myicpc.commons.utils.FormatUtils;
-import com.myicpc.dto.eventFeed.AnalystMessageXML;
-import com.myicpc.dto.eventFeed.ContestXML;
-import com.myicpc.dto.eventFeed.FinalizedXML;
-import com.myicpc.dto.eventFeed.JudgementXML;
-import com.myicpc.dto.eventFeed.LanguageXML;
-import com.myicpc.dto.eventFeed.ProblemXML;
-import com.myicpc.dto.eventFeed.RegionXML;
-import com.myicpc.dto.eventFeed.TeamProblemXML;
-import com.myicpc.dto.eventFeed.TeamXML;
-import com.myicpc.dto.eventFeed.TestcaseXML;
+import com.myicpc.dto.eventFeed.parser.AnalystMessageXML;
+import com.myicpc.dto.eventFeed.parser.ContestXML;
+import com.myicpc.dto.eventFeed.parser.FinalizedXML;
+import com.myicpc.dto.eventFeed.parser.JudgementXML;
+import com.myicpc.dto.eventFeed.parser.LanguageXML;
+import com.myicpc.dto.eventFeed.parser.ProblemXML;
+import com.myicpc.dto.eventFeed.parser.RegionXML;
+import com.myicpc.dto.eventFeed.parser.TeamProblemXML;
+import com.myicpc.dto.eventFeed.parser.TeamXML;
+import com.myicpc.dto.eventFeed.parser.TestcaseXML;
 import com.myicpc.dto.eventFeed.visitor.EventFeedVisitor;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Judgement;

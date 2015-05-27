@@ -1,21 +1,11 @@
-package com.myicpc.model.eventFeed;
+package com.myicpc.dto.eventFeed;
 
-import com.myicpc.model.IdGeneratedObject;
-import com.myicpc.model.contest.Contest;
-
-import javax.persistence.Entity;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
+import java.io.Serializable;
 
 /**
  * @author Roman Smetana
  */
-@Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"teamId", "problemId"})})
-@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "LastTeamSubmission_id_seq")
-public class LastTeamSubmission extends IdGeneratedObject {
+public class LastTeamSubmissionDTO implements Serializable {
     /**
      * Is this submission, which solves the given problem
      */
@@ -46,39 +36,17 @@ public class LastTeamSubmission extends IdGeneratedObject {
     private long submissionId;
     private long contestId;
 
-    public LastTeamSubmission() {
-    }
-
-    public LastTeamSubmission(final TeamProblem submission) {
-        this.contestId = submission.getTeam().getContest().getId();
-        this.problemId = submission.getProblem().getId();
-        this.teamId = submission.getTeam().getId();
-        update(submission);
-    }
-
-    public LastTeamSubmission(final TeamProblem submission, long contestId, long problemId, long teamId) {
-        this.contestId = contestId;
-        this.problemId = problemId;
+    public LastTeamSubmissionDTO(long contestId, long teamId, long problemId, long submissionId, boolean solved, boolean penalty, Integer attempts, Double time, boolean judged, boolean firstSolved) {
+        this.solved = solved;
+        this.penalty = penalty;
+        this.attempts = attempts;
+        this.time = time;
+        this.judged = judged;
+        this.firstSolved = firstSolved;
         this.teamId = teamId;
-
-        this.attempts = submission.getAttempts();
-        this.judged = submission.getJudged();
-        this.solved = submission.getSolved();
-        this.penalty = submission.getPenalty();
-        this.time = submission.getTime();
-        this.firstSolved = submission.isFirstSolved();
-    }
-
-    @Transient
-    public void update(final TeamProblem submission) {
-        this.submissionId = submission.getId();
-
-        this.attempts = submission.getAttempts();
-        this.judged = submission.getJudged();
-        this.solved = submission.getSolved();
-        this.penalty = submission.getPenalty();
-        this.time = submission.getTime();
-        this.firstSolved = submission.isFirstSolved();
+        this.problemId = problemId;
+        this.submissionId = submissionId;
+        this.contestId = contestId;
     }
 
     public boolean isSolved() {
