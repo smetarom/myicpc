@@ -21,52 +21,85 @@
                 </c:forEach>
             </t:secondLevelSubmenu>
 
-            <div id="mainLeaderboard" class="table-responsive" ng-app="quest" ng-controller="leaderboardCtrl">
-                <table class="table striped-rows" ng-cloak>
-                    <thead>
-                        <tr>
-                            <th><spring:message code="quest.leaderboard.rank" /></th>
-                            <th style="min-width: 200px;"><spring:message code="quest.leaderboard.participant" /></th>
-                            <th class="text-center"><spring:message code="quest.leaderboard.points" /></th>
-                            <th class="text-center"><spring:message code="quest.leaderboard.numSolved" /></th>
-                            <th ng-repeat="challenge in challenges | orderBy:'name'">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th><spring:message code="quest.leaderboard.rank" /></th>
+                        <th style="min-width: 200px;"><spring:message code="quest.leaderboard.participant" /></th>
+                        <th class="text-center"><spring:message code="quest.leaderboard.points" /></th>
+                        <th class="text-center"><spring:message code="quest.leaderboard.numSolved" /></th>
+                        <c:forEach var="challenge" items="${challenges}">
+                            <th>
                                 <div class="vertical-text">
-                                    <a href="<spring:url value="${contestURL}/quest/challenges#" />{{challenge.id}}">{{challenge.name}}</a>
+                                    <a href="<spring:url value="${contestURL}/quest/challenges#" />${challenge.hashtag}">${challenge.hashtagSuffix}</a>
                                 </div>
                             </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="participant in participants | orderBy:[sortByPoints,'name']">
-                        <td>{{$index + 1}}</td>
-                        <td><a href="<spring:url value="/person/" />{{participant.id}}">{{participant.name}}</a></td>
-                        <td class="text-center">{{participant.points}}</td>
-                        <td class="text-center">{{participant.solved}}</td>
-                        <td class="text-center" ng-repeat="challenge in challenges | orderBy:'name'">
-                            <i ng-if="participant[challenge.id].state === 'ACCEPTED'" id="submission_{{participant.id}}_{{challenge.id}}" class="fa fa-check leaderboard-submission" style="color: green;" rel="tooltip"
-                               data-toggle="tooltip" title="<spring:message code="quest.leaderboard.accepted" />"
-                                    ></i>
-                            <i ng-if="participant[challenge.id].state === 'PENDING'" id="submission_{{participant.id}}_{{challenge.id}}" class="fa fa-clock-o leaderboard-submission" style="color: orange;" rel="tooltip"
-                               data-toggle="tooltip" title="<spring:message code="quest.leaderboard.pending" />"
-                                    ></i>
-                            <i ng-if="participant[challenge.id].state === 'REJECTED'" id="submission_{{participant.id}}_{{challenge.id}}" class="fa fa-ban leaderboard-submission" style="color: red;" rel="tooltip"
-                               data-toggle="tooltip" title="<spring:message code="questAdmin.submissions.reject.reason" />: {{participant[challenge.id].reason}}"
-                                    ></i>
-                        </td>
+                        </c:forEach>
                     </tr>
-                    </tbody>
-                </table>
-            </div>
+                </thead>
+                <tbody>
+                    <c:forEach var="questParticipant" items="${participants}" varStatus="status">
+                        <tr>
+                            <td>${status.index + 1}</td>
+                            <td>${questParticipant.contestParticipant.fullname}</td>
+                            <td>${questParticipant.totalPoints}</td>
+                            <td></td>
+                            <c:forEach var="challenge" items="${challenges}">
+                                <td>
+                                    <t:questTick state="${questParticipant.submissionMap[challenge.id].submissionState}" note="" />
+                                </td>
+                            </c:forEach>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
 
-            <script type="application/javascript">
-                $(function () {
-                    var ngController = angular.element($("#mainLeaderboard")).scope();
-                    var challengesJSON = ${empty challengesJSON ? '[]' : challengesJSON};
-                    var participantsJSON = ${empty participantsJSON ? '[]' : participantsJSON};
-                    ngController.init(challengesJSON, participantsJSON);
+            <%--<div id="mainLeaderboard" class="table-responsive" ng-app="quest" ng-controller="leaderboardCtrl">--%>
+                <%--<table class="table striped-rows" ng-cloak>--%>
+                    <%--<thead>--%>
+                        <%--<tr>--%>
+                            <%--<th><spring:message code="quest.leaderboard.rank" /></th>--%>
+                            <%--<th style="min-width: 200px;"><spring:message code="quest.leaderboard.participant" /></th>--%>
+                            <%--<th class="text-center"><spring:message code="quest.leaderboard.points" /></th>--%>
+                            <%--<th class="text-center"><spring:message code="quest.leaderboard.numSolved" /></th>--%>
+                            <%--<th ng-repeat="challenge in challenges | orderBy:'name'">--%>
+                                <%--<div class="vertical-text">--%>
+                                    <%--<a href="<spring:url value="${contestURL}/quest/challenges#" />{{challenge.id}}">{{challenge.name}}</a>--%>
+                                <%--</div>--%>
+                            <%--</th>--%>
+                        <%--</tr>--%>
+                    <%--</thead>--%>
+                    <%--<tbody>--%>
+                    <%--<tr ng-repeat="participant in participants | orderBy:[sortByPoints,'name']">--%>
+                        <%--<td>{{$index + 1}}</td>--%>
+                        <%--<td><a href="<spring:url value="/person/" />{{participant.id}}">{{participant.name}}</a></td>--%>
+                        <%--<td class="text-center">{{participant.points}}</td>--%>
+                        <%--<td class="text-center">{{participant.solved}}</td>--%>
+                        <%--<td class="text-center" ng-repeat="challenge in challenges | orderBy:'name'">--%>
+                            <%--<i ng-if="participant[challenge.id].state === 'ACCEPTED'" id="submission_{{participant.id}}_{{challenge.id}}" class="fa fa-check leaderboard-submission" style="color: green;" rel="tooltip"--%>
+                               <%--data-toggle="tooltip" title="<spring:message code="quest.leaderboard.accepted" />"--%>
+                                    <%--></i>--%>
+                            <%--<i ng-if="participant[challenge.id].state === 'PENDING'" id="submission_{{participant.id}}_{{challenge.id}}" class="fa fa-clock-o leaderboard-submission" style="color: orange;" rel="tooltip"--%>
+                               <%--data-toggle="tooltip" title="<spring:message code="quest.leaderboard.pending" />"--%>
+                                    <%--></i>--%>
+                            <%--<i ng-if="participant[challenge.id].state === 'REJECTED'" id="submission_{{participant.id}}_{{challenge.id}}" class="fa fa-ban leaderboard-submission" style="color: red;" rel="tooltip"--%>
+                               <%--data-toggle="tooltip" title="<spring:message code="questAdmin.submissions.reject.reason" />: {{participant[challenge.id].reason}}"--%>
+                                    <%--></i>--%>
+                        <%--</td>--%>
+                    <%--</tr>--%>
+                    <%--</tbody>--%>
+                <%--</table>--%>
+            <%--</div>--%>
 
-                });
-            </script>
+            <%--<script type="application/javascript">--%>
+                <%--$(function () {--%>
+                    <%--var ngController = angular.element($("#mainLeaderboard")).scope();--%>
+                    <%--var challengesJSON = ${empty challengesJSON ? '[]' : challengesJSON};--%>
+                    <%--var participantsJSON = ${empty participantsJSON ? '[]' : participantsJSON};--%>
+                    <%--ngController.init(challengesJSON, participantsJSON);--%>
+
+                <%--});--%>
+            <%--</script>--%>
 
 
         </c:if>

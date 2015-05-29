@@ -149,16 +149,20 @@ public class QuestController extends GeneralController {
     private void initiateLeaderboard(QuestLeaderboard activeLeaderboard, Contest contest, Model model, HttpServletRequest request) {
         SitePreference sitePreference = SitePreferenceUtils.getCurrentSitePreference(request);
 
-        List<QuestChallenge> challenges = challengeRepository.findOpenChallengesByContestOrderByHashtag(new Date(), contest);
 
-        List<QuestParticipant> participants = questParticipantRepository.findByRoles(activeLeaderboard.getContestParticipantRoles(), contest, null);
+        List<QuestParticipant> participants = questService.getParticipantsWithRoles(activeLeaderboard.getContestParticipantRoles(), contest, !sitePreference.isMobile());
+//        List<QuestParticipant> participants = (List<QuestParticipant>) questParticipantRepository.findAll();
+        List<QuestChallenge> challenges = challengeRepository.findOpenChallengesByContestOrderByHashtag(new Date(), contest);
+        QuestService.applyHashtagPrefix(contest.getQuestConfiguration().getHashtagPrefix(), challenges);
 
         if (!sitePreference.isMobile()) {
-            model.addAttribute("challengesJSON", questService.getJSONChallenges(challenges).toString());
+//            model.addAttribute("challengesJSON", questService.getJSONChallenges(challenges).toString());
         }
-        model.addAttribute("participantsJSON", questService.getJSONParticipants(participants, !sitePreference.isMobile()).toString());
+//        model.addAttribute("participantsJSON", questService.getJSONParticipants(activeLeaderboard.getContestParticipantRoles(), contest, !sitePreference.isMobile()).toString());
         model.addAttribute("activeTab", activeLeaderboard.getUrlCode());
 
+        model.addAttribute("participants", participants);
+        model.addAttribute("challenges", challenges);
 
     }
 

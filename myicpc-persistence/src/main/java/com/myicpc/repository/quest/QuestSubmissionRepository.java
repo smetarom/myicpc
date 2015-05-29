@@ -1,5 +1,6 @@
 package com.myicpc.repository.quest;
 
+import com.myicpc.dto.quest.QuestSubmissionDTO;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.quest.QuestChallenge;
 import com.myicpc.model.quest.QuestParticipant;
@@ -30,6 +31,18 @@ public interface QuestSubmissionRepository extends JpaRepository<QuestSubmission
 
     @Query("SELECT COUNT(qs) FROM QuestSubmission qs WHERE qs.voteSubmissionState = 'VOTE_WINNER' AND qs.challenge.contest = ?1")
     Long countWinningSubmissions(Contest contest);
+
+    @Query("SELECT new com.myicpc.dto.quest.QuestSubmissionDTO(" +
+            "   p.id," +
+            "   qs.challenge.id," +
+            "   qs.submissionState," +
+            "   qs.reasonToReject" +
+            ") " +
+            "FROM QuestSubmission qs " +
+            "   JOIN qs.participant p " +
+            "WHERE p.contest = ?2 " +
+            "   AND p.id IN ?1")
+    List<QuestSubmissionDTO> findQuestSubmissionDTOByQuestParticipantId(List<Long> participantIds, Contest contest);
 
     // -----
     @Query("SELECT qs FROM QuestSubmission qs ORDER BY qs.created DESC")

@@ -1,13 +1,20 @@
 package com.myicpc.service.quest;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.myicpc.dto.quest.QuestSubmissionDTO;
+import com.myicpc.enums.ContestParticipantRole;
 import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.quest.QuestChallenge;
 import com.myicpc.model.quest.QuestParticipant;
 import com.myicpc.model.quest.QuestSubmission;
 import com.myicpc.model.social.Notification;
+import com.myicpc.repository.quest.QuestParticipantRepository;
+import com.myicpc.repository.quest.QuestSubmissionRepository;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.service.utils.lists.NotificationList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,6 +32,12 @@ import java.util.List;
 @Service
 public class QuestService {
     public static final int POSTS_PER_PAGE = 30;
+
+    @Autowired
+    private QuestParticipantRepository questParticipantRepository;
+
+    @Autowired
+    private QuestSubmissionRepository questSubmissionRepository;
 
     /**
      * Notification types displayed on the quest timeline
@@ -57,20 +71,52 @@ public class QuestService {
         return arr;
     }
 
-    public JsonArray getJSONParticipants(final List<QuestParticipant> questParticipants, boolean extended) {
+    public List<QuestParticipant> getParticipantsWithRoles(final List<ContestParticipantRole> roles, final Contest contest, boolean extended) {
+        List<QuestParticipant> participants = questParticipantRepository.findByRoles(roles, contest, null);
+        List<Long> participantIds = new ArrayList<>(participants.size());
+        for (QuestParticipant participant : participants) {
+            participantIds.add(participant.getId());
+        }
+        List<QuestSubmissionDTO> submissions = questSubmissionRepository.findQuestSubmissionDTOByQuestParticipantId(participantIds, contest);
+        Multimap<Long, QuestSubmissionDTO> submissionMap = HashMultimap.create();
+        for (QuestSubmissionDTO submission : submissions) {
+            submissionMap.put(submission.getQuestParticipantId(), submission);
+        }
+
+        for (QuestParticipant participant : participants) {
+            for (QuestSubmissionDTO questSubmissionDTO : submissionMap.get(participant.getId())) {
+                participant.addSubmissionDTO(questSubmissionDTO);
+            }
+        }
+
+        return participants;
+    }
+
+    public JsonArray getJSONParticipants(final List<ContestParticipantRole> roles, final Contest contest, boolean extended) {
+        List<QuestParticipant> participants = questParticipantRepository.findByRoles(roles, contest, null);
+        List<Long> participantIds = new ArrayList<>(participants.size());
+        for (QuestParticipant participant : participants) {
+            participantIds.add(participant.getId());
+        }
+        List<QuestSubmissionDTO> submissions = questSubmissionRepository.findQuestSubmissionDTOByQuestParticipantId(participantIds, contest);
+        Multimap<Long, QuestSubmissionDTO> submissionMap = HashMultimap.create();
+        for (QuestSubmissionDTO submission : submissions) {
+            submissionMap.put(submission.getQuestParticipantId(), submission);
+        }
+
         JsonArray arr = new JsonArray();
-        for (QuestParticipant questParticipant : questParticipants) {
+        for (QuestParticipant questParticipant : participants) {
             JsonObject o = new JsonObject();
             o.addProperty("id", questParticipant.getId());
             o.addProperty("name", questParticipant.getContestParticipant().getFullname());
             o.addProperty("points", questParticipant.getPoints());
-            o.addProperty("solved", questParticipant.getNumSolvedSubmissions());
+//            o.addProperty("solved", questParticipant.getNumSolvedSubmissions());
             if (extended) {
-                for (QuestSubmission submission : questParticipant.getSubmissions()) {
+                for (QuestSubmissionDTO submission : submissionMap.get(questParticipant.getId())) {
                     JsonObject s = new JsonObject();
                     s.addProperty("state", submission.getSubmissionState().toString());
                     s.addProperty("reason", submission.getReasonToReject());
-                    o.add(submission.getChallenge().getId().toString(), s);
+                    o.add(String.valueOf(submission.getQuestChallengeId()), s);
                 }
             }
             arr.add(o);

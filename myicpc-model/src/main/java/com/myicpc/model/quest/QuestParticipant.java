@@ -1,5 +1,6 @@
 package com.myicpc.model.quest;
 
+import com.myicpc.dto.quest.QuestSubmissionDTO;
 import com.myicpc.model.IdGeneratedContestObject;
 import com.myicpc.model.teamInfo.ContestParticipant;
 import org.apache.commons.collections4.CollectionUtils;
@@ -8,7 +9,9 @@ import org.apache.commons.collections4.Predicate;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Participant in the quest
@@ -43,6 +46,9 @@ public class QuestParticipant extends IdGeneratedContestObject {
      */
     @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
     List<QuestSubmission> submissions = new ArrayList<QuestSubmission>();
+
+    @Transient
+    Map<Long, QuestSubmissionDTO> submissionMap = new HashMap<>();
 
     public int getPoints() {
         return points;
@@ -105,5 +111,19 @@ public class QuestParticipant extends IdGeneratedContestObject {
                 return submission.isAccepted();
             }
         });
+    }
+
+    @Transient
+    public int getTotalPoints() {
+        return points + pointsAdjustment;
+    }
+
+    @Transient
+    public void addSubmissionDTO(QuestSubmissionDTO submissionDTO) {
+        submissionMap.put(submissionDTO.getQuestChallengeId(), submissionDTO);
+    }
+
+    public Map<Long, QuestSubmissionDTO> getSubmissionMap() {
+        return submissionMap;
     }
 }

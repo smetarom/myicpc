@@ -96,9 +96,7 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
     @Override
     public JsonArray getTeamsFullTemplate(final Contest contest) {
         List<Team> teams = teamRepository.findByContest(contest);
-        System.out.println("before");
         List<LastTeamSubmissionDTO> submissions = lastTeamProblemRepository.findLastTeamSubmissionDTOByContest(contest);
-        System.out.println("after");
         return getTeamsFullTemplate(teams, submissions);
 
     }
