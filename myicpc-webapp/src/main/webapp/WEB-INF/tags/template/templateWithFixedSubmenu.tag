@@ -6,6 +6,7 @@
 
 <%@attribute name="title" fragment="true" %>
 <%@attribute name="head" fragment="true" %>
+<%@attribute name="javascript" fragment="true" %>
 <%@attribute name="headline" fragment="true" %>
 <%@attribute name="headlineRight" fragment="true" %>
 <%@attribute name="submenu" fragment="true" %>
@@ -14,16 +15,20 @@
 <t:template>
     <jsp:attribute name="head">
 		<jsp:invoke fragment="head"/>
-        
-        <script type="application/javascript">
-            $(window).scroll(setFixedSubmenuHeight);
-            $( window ).resize(setFixedSubmenuHeight);
-            $(setFixedSubmenuHeight);
-        </script>
 	</jsp:attribute>
 
     <jsp:attribute name="title">
 		<jsp:invoke fragment="title"/>
+	</jsp:attribute>
+
+    <jsp:attribute name="javascript">
+        <script type="application/javascript">
+            $(window).scroll(setFixedSubmenuHeight);
+            $(window).resize(setFixedSubmenuHeight);
+            $(setFixedSubmenuHeight);
+        </script>
+
+		<jsp:invoke fragment="javascript"/>
 	</jsp:attribute>
 
 	<jsp:attribute name="headline">

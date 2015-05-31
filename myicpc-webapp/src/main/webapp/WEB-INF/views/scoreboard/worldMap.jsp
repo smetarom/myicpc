@@ -1,9 +1,32 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
 
 <t:template>
-    <jsp:attribute name="head">
+    <jsp:attribute name="javascript">
         <%@ include file="/WEB-INF/views/includes/nvd3Dependencies.jsp" %>
         <script src="<c:url value='/js/myicpc/controllers/worldMap.js'/>"></script>
+        <script type="application/javascript">
+            $(function() {
+                var teamCoordinates = ${not empty teamCoordinates ? teamCoordinates : '{}'};
+                var teams = ${not empty teamJSON ? teamJSON : '[]'};
+                var problems = ${not empty problemJSON ? problemJSON : '[]'};
+                var mapConfigurations = ${not empty mapConfigurations ? mapConfigurations : '[]'};
+                var ngController = angular.element($("#worldMap")).scope();
+                var width = $("#mapContainer").width();
+                ngController.init(teams, problems);
+                var config = ngController.pickSuitableConfiguration(mapConfigurations, width);
+                ngController.renderMap('${r.contextPath}', config, teamCoordinates);
+
+                if (!$("body").hasClass("mobile")) {
+                    var height = $(window).height() - 55;
+                    if (height < 300) {
+                        height = $("#mapContainer").height();
+                    }
+                    $("#mapSubmenu").height(height);
+                }
+
+                startSubscribe('${r.contextPath}', '${contest.code}', 'scoreboard', updateWorldMap, ngController);
+            });
+        </script>
     </jsp:attribute>
     <jsp:attribute name="title">
         <spring:message code="nav.map"/>
@@ -55,30 +78,6 @@
                 </div>
             </div>
         </div>
-
-        <script type="application/javascript">
-            $(function() {
-                var teamCoordinates = ${not empty teamCoordinates ? teamCoordinates : '{}'};
-                var teams = ${not empty teamJSON ? teamJSON : '[]'};
-                var problems = ${not empty problemJSON ? problemJSON : '[]'};
-                var mapConfigurations = ${not empty mapConfigurations ? mapConfigurations : '[]'};
-                var ngController = angular.element($("#worldMap")).scope();
-                var width = $("#mapContainer").width();
-                ngController.init(teams, problems);
-                var config = ngController.pickSuitableConfiguration(mapConfigurations, width);
-                ngController.renderMap('${r.contextPath}', config, teamCoordinates);
-
-                if (!$("body").hasClass("mobile")) {
-                    var height = $(window).height() - 55;
-                    if (height < 300) {
-                        height = $("#mapContainer").height();
-                    }
-                    $("#mapSubmenu").height(height);
-                }
-
-                startSubscribe('${r.contextPath}', '${contest.code}', 'scoreboard', updateWorldMap, ngController);
-            });
-        </script>
     </jsp:body>
 
 </t:template>

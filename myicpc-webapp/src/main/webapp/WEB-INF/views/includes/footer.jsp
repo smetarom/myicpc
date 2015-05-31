@@ -81,10 +81,3 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    $(function () {
-        $("#thisPageOption").val(window.location.href);
-        $("#thisPageContainer").html(window.location.href);
-    });
-</script>

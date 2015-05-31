@@ -7,6 +7,33 @@
     <jsp:attribute name="title">
         <spring:message code="nav.scoreboard" />
     </jsp:attribute>
+    
+    <jsp:attribute name="javascript">
+        <script type="text/javascript">
+            $(function() {
+                <c:if test="${scoreboardAvailable}">
+                var ngController = angular.element($("#mainScoreboard")).scope();
+                var teams = ${not empty teamJSON ? teamJSON : '[]'};
+                ngController.init(teams);
+
+                startSubscribe('${r.contextPath}', '${contest.code}', 'scoreboard', updateScoreboard, ngController);
+
+                if (Modernizr.localstorage) {
+                    <%-- TODO --%>
+                    <%--localStorage.setItem("scoreboard", JSON.stringify(teams));--%>
+                    <%--localStorage.setItem("scoreboardProblems", JSON.stringify(${problemJSON}));--%>
+                }
+                </c:if>
+
+
+                <%--<%@ include file="/WEB-INF/views/scoreboard/fragment/atmosphereHandler.jsp"%>--%>
+
+                $("#mainScoreboard").click(function() {
+                    $("#scorebord-notification-bar").hide("slide", { direction: 'right'});
+                });
+            });
+        </script>
+    </jsp:attribute>
 
     <jsp:body>
         <t:downloadContestProblems />
@@ -50,33 +77,6 @@
             </div>
             </div>
         </c:if>
-
-        <script type="text/javascript">
-
-            $(function() {
-                <c:if test="${scoreboardAvailable}">
-                    var ngController = angular.element($("#mainScoreboard")).scope();
-                    var teams = ${not empty teamJSON ? teamJSON : '[]'};
-                    ngController.init(teams);
-
-                    startSubscribe('${r.contextPath}', '${contest.code}', 'scoreboard', updateScoreboard, ngController);
-
-                    if (Modernizr.localstorage) {
-                        <%-- TODO --%>
-                        <%--localStorage.setItem("scoreboard", JSON.stringify(teams));--%>
-                        <%--localStorage.setItem("scoreboardProblems", JSON.stringify(${problemJSON}));--%>
-                    }
-                </c:if>
-
-
-                <%--<%@ include file="/WEB-INF/views/scoreboard/fragment/atmosphereHandler.jsp"%>--%>
-
-                $("#mainScoreboard").click(function() {
-                    $("#scorebord-notification-bar").hide("slide", { direction: 'right'});
-                });
-            });
-
-        </script>
     </jsp:body>
 
 </t:template>

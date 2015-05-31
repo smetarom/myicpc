@@ -9,7 +9,7 @@
         ${pageHeadline}
     </jsp:attribute>
 
-    <jsp:attribute name="head">
+    <jsp:attribute name="javascript">
         <script type="text/javascript">
             function loadEventContent(eventId) {
                 $("#eventContainer").html('<div class="inline-spinner"></div>');
@@ -25,7 +25,9 @@
                     $("#eventContainer").html('<div class="inline-spinner"></div>');
                 }
             });
+
         </script>
+        <%@ include file="/WEB-INF/views/schedule/fragment/scheduleRolesDialog.jsp"%>
     </jsp:attribute>
 
     <jsp:attribute name="submenu">
@@ -40,8 +42,6 @@
                 <spring:message code="schedule.noSelected" />
             </div>
         </div>
-
-        <%@ include file="/WEB-INF/views/schedule/fragment/scheduleRolesDialog.jsp"%>
     </jsp:body>
 
 </t:templateWithFixedSubmenu>

@@ -1,8 +1,31 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
 
 <t:template>
-    <jsp:attribute name="head">
+    <jsp:attribute name="javascript">
         <script src="<c:url value='/js/myicpc/controllers/timeline.js'/>" defer></script>
+
+        <script type="application/javascript">
+            function timelineAcceptPost(post) {
+                var supportedNotificationTypes = ["submissionSuccess", "analystTeamMsg", "analystMsg", "twitter", "vine"];
+                return supportedNotificationTypes.indexOf(post.type) != -1;
+            }
+
+            $(function() {
+                Timeline.init();
+                Timeline.acceptFunction = timelineAcceptPost;
+                startSubscribe('${r.contextPath}', '${contest.code}', 'notification', updateTimeline, null);
+                videoAutoplayOnScroll();
+
+                $(window).scroll(function() {
+                    if($(window).scrollTop() === $(document).height() - $(window).height() && $('#timeline .timeline-loading').hasClass('hidden')) {
+
+                    } else if($(window).scrollTop() === 0) {
+                        Timeline.displayPendingNotification();
+                    }
+                });
+                $(window).scroll(videoAutoplayOnScroll);
+            });
+        </script>
     </jsp:attribute>
 
     <jsp:body>
@@ -52,29 +75,6 @@
                     <i class="fa fa-spinner fa-spin"></i> <spring:message code="loadingCtn" />
                 </div>
             </div>
-
-            <script type="application/javascript">
-                function timelineAcceptPost(post) {
-                    var supportedNotificationTypes = ["submissionSuccess", "analystTeamMsg", "analystMsg", "twitter", "vine"];
-                    return supportedNotificationTypes.indexOf(post.type) != -1;
-                }
-
-                $(function() {
-                    Timeline.init();
-                    Timeline.acceptFunction = timelineAcceptPost;
-                    startSubscribe('${r.contextPath}', '${contest.code}', 'notification', updateTimeline, null);
-                    videoAutoplayOnScroll();
-
-                    $(window).scroll(function() {
-                        if($(window).scrollTop() === $(document).height() - $(window).height() && $('#timeline .timeline-loading').hasClass('hidden')) {
-
-                        } else if($(window).scrollTop() === 0) {
-                            Timeline.displayPendingNotification();
-                        }
-                    });
-                    $(window).scroll(videoAutoplayOnScroll);
-                });
-            </script>
         </div>
     </jsp:body>
 

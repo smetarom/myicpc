@@ -15,22 +15,8 @@
     <jsp:attribute name="submenu">
         <%@ include file="/WEB-INF/views/quest/fragment/challengeSubmenu.jsp" %>
     </jsp:attribute>
-
-    <jsp:body>
-        <c:if test="${not empty challenges}">
-            <div id="challengeContainer">
-                <div class="no-items-available">
-                    <spring:message code="quest.challanges.noSelected" />
-                </div>
-            </div>
-
-        </c:if>
-        <c:if test="${empty challenges}">
-            <div class="no-items-available">
-                <spring:message code="quest.challenge.noResult" />
-            </div>
-        </c:if>
-
+    
+    <jsp:attribute name="javascript">
         <script type="text/javascript">
             function loadChallengeContent(eventId) {
                 $("#challengeContainer").html('<div class="inline-spinner"></div>');
@@ -49,5 +35,21 @@
                 }
             });
         </script>
+    </jsp:attribute>
+
+    <jsp:body>
+        <c:if test="${not empty challenges}">
+            <div id="challengeContainer">
+                <div class="no-items-available">
+                    <spring:message code="quest.challanges.noSelected" />
+                </div>
+            </div>
+
+        </c:if>
+        <c:if test="${empty challenges}">
+            <div class="no-items-available">
+                <spring:message code="quest.challenge.noResult" />
+            </div>
+        </c:if>
     </jsp:body>
 </t:templateWithFixedSubmenu>
