@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public interface TeamProblemRepository extends JpaRepository<TeamProblem, Long>, Serializable {
+    @Query("SELECT tp FROM TeamProblem tp JOIN FETCH tp.team JOIN FETCH tp.problem WHERE tp.systemId = ?1 AND tp.team.contest = ?2")
     TeamProblem findBySystemIdAndTeamContest(Long systemId, Contest contest);
 
     List<TeamProblem> findByTeam(Team team);

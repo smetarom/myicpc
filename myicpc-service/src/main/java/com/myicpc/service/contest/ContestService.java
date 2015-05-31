@@ -4,6 +4,7 @@ import com.myicpc.model.contest.Contest;
 import com.myicpc.repository.contest.ContestRepository;
 import com.myicpc.service.exception.ContestNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ public class ContestService {
         return contestRepository.findAll(sort);
     }
 
+    @Cacheable(value = "contestByCode")
     public Contest getContest(String contestCode) throws ContestNotFoundException {
         Contest contest = contestRepository.findFullByCode(contestCode);
         if (contest == null) {

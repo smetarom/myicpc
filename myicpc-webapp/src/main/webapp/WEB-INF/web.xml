@@ -14,7 +14,10 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            com.myicpc.config.AppConfig,com.myicpc.persistence.config.PersistenceAppConfig,com.myicpc.security.config.SecurityAppConfig
+            com.myicpc.config.AppConfig,
+            com.myicpc.persistence.config.PersistenceAppConfig,
+            com.myicpc.security.config.SecurityAppConfig,
+            com.myicpc.service.config.CacheConfig
         </param-value>
     </context-param>
     <listener>

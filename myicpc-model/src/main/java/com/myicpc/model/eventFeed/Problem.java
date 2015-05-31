@@ -10,6 +10,7 @@ import java.util.List;
  *
  * @author Roman Smetana
  */
+@Cacheable
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "Problem_id_seq")
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"code", "contestId"})})

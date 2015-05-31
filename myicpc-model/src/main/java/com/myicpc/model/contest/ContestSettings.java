@@ -4,6 +4,7 @@ import com.myicpc.enums.FeedRunStrategyType;
 import com.myicpc.model.IdGeneratedObject;
 import org.hibernate.validator.constraints.URL;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -18,6 +19,7 @@ import java.io.Serializable;
  *
  * @author Roman Smetana
  */
+@Cacheable
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "ContestSettings_id_seq")
 public class ContestSettings extends IdGeneratedObject {

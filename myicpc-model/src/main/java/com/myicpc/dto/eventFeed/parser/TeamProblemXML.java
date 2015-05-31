@@ -28,9 +28,10 @@ public class TeamProblemXML extends XMLEntity<TeamProblem> {
     private String language;
     private String result;
     private String status;
-
-    private Team team;
-    private Problem problem;
+    @XStreamAlias("team")
+    private Long teamId;
+    @XStreamAlias("problem")
+    private Long problemId;
 
     @Override
     public void mergeTo(final TeamProblem teamProblem) {
@@ -41,8 +42,6 @@ public class TeamProblemXML extends XMLEntity<TeamProblem> {
         teamProblem.setTime(getTime());
         teamProblem.setTimestamp(getTimestamp());
         teamProblem.setJudged(isJudged());
-        teamProblem.setTeam(getTeam());
-        teamProblem.setProblem(getProblem());
         teamProblem.setLanguage(getLanguage());
         teamProblem.setResultCode(getResult());
         teamProblem.setStatus(getStatus());
@@ -133,20 +132,19 @@ public class TeamProblemXML extends XMLEntity<TeamProblem> {
         this.status = status;
     }
 
-    public Team getTeam() {
-        return team;
+    public Long getTeamId() {
+        return teamId;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
+    public void setTeamId(Long teamId) {
+        this.teamId = teamId;
     }
 
-    public Problem getProblem() {
-        return problem;
+    public Long getProblemId() {
+        return problemId;
     }
 
-    public void setProblem(Problem problem) {
-        this.problem = problem;
+    public void setProblemId(Long problemId) {
+        this.problemId = problemId;
     }
-
 }

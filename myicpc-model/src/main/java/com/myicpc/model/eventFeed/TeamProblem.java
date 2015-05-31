@@ -95,6 +95,12 @@ public class TeamProblem extends IdGeneratedObject {
     @OneToOne(fetch=FetchType.LAZY, mappedBy="teamProblem", cascade = CascadeType.ALL, optional = true)
     private LastTeamProblem lastTeamProblem;
 
+    public TeamProblem() {}
+
+    public TeamProblem(TeamProblem teamProblem) {
+
+    }
+
     public Team getTeam() {
         return team;
     }

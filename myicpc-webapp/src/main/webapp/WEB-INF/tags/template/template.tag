@@ -9,7 +9,7 @@
 <%@attribute name="headline" fragment="true" %>
 <%@attribute name="headlineRight" fragment="true" %>
 
-<compress:html compressCss="true">
+<compress:html compressCss="true" compressJavaScript="true" jsCompressor="closure">
     <!DOCTYPE html>
     <html>
     <head>

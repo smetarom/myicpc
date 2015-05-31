@@ -159,11 +159,11 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
 
         if (teamProblem != null) {
             if ("fresh".equalsIgnoreCase(xmlTeamProblem.getStatus())) {
-                logger.info("Skip 'fresh' submission {} from team {}", xmlTeamProblem.getSystemId(), xmlTeamProblem.getTeam().getId());
+                logger.info("Skip 'fresh' submission {} from team {}", xmlTeamProblem.getSystemId(), xmlTeamProblem.getTeamId());
                 return;
             }
             if ("done".equalsIgnoreCase(xmlTeamProblem.getStatus()) && teamProblem.getJudged()) {
-                logger.info("Skip 'done' submission {} from team {}", xmlTeamProblem.getSystemId(), xmlTeamProblem.getTeam().getId());
+                logger.info("Skip 'done' submission {} from team {}", xmlTeamProblem.getSystemId(), xmlTeamProblem.getTeamId());
                 return;
             }
         }
@@ -174,6 +174,14 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
                 teamProblem = new TeamProblem();
             }
             xmlTeamProblem.mergeTo(teamProblem);
+            if (teamProblem.getTeam() == null) {
+                System.out.println("loading team");
+                teamProblem.setTeam(teamRepository.findBySystemIdAndContest(xmlTeamProblem.getTeamId(), contest));
+            }
+            if (teamProblem.getProblem() == null) {
+                System.out.println("loading problem");
+                teamProblem.setProblem(problemRepository.findBySystemIdAndContest(xmlTeamProblem.getProblemId(), contest));
+            }
             teamProblem = strategy.executeTeamProblem(teamProblem, contest);
 
             logger.info("Run " + teamProblem.getSystemId() + " processed for team " + teamProblem.getTeam().getSystemId());
@@ -205,10 +213,10 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
     @Override
     @Transactional
     public void visit(TestcaseXML xmlTestcase, Contest contest) {
-        TeamProblem teamProblem = teamProblemRepository.findBySystemIdAndTeamContest(xmlTestcase.getSystemId(), contest);
-        if (teamProblem != null) {
-            xmlTestcase.mergeTo(teamProblem);
-        }
+//        TeamProblem teamProblem = teamProblemRepository.findBySystemIdAndTeamContest(xmlTestcase.getSystemId(), contest);
+//        if (teamProblem != null) {
+//            xmlTestcase.mergeTo(teamProblem);
+//        }
     }
 
     @Override

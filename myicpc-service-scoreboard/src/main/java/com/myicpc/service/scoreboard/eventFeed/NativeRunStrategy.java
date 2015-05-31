@@ -4,7 +4,6 @@ import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.LastTeamProblem;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
-import com.myicpc.model.eventFeed.TeamRankHistory;
 import com.myicpc.repository.eventFeed.TeamProblemRepository;
 import org.springframework.stereotype.Component;
 
@@ -14,9 +13,9 @@ import java.util.*;
 @Component
 public class NativeRunStrategy extends FeedRunStrategy {
     @Override
-    protected List<Team> processScoreboardChanges(TeamProblem teamProblemFromDB, TeamProblem teamProblemFromFeed, Contest contest) {
+    protected List<Team> processScoreboardChanges(TeamProblem teamProblem, Contest contest) {
         // TODO Mark if the first solved problem
-        return computeNewRank(teamProblemFromDB.getTeam(), contest.getPenalty());
+        return computeNewRank(teamProblem.getTeam(), contest.getPenalty());
     }
 
     /**
@@ -51,18 +50,14 @@ public class NativeRunStrategy extends FeedRunStrategy {
         // sort teams
         Collections.sort(teams, new ScorebaordComparator(teamProblemRepository));
         int rank = 1;
-        int oldRank = 0;
-        List<Team> teamsToBroadcast = new ArrayList<Team>();
+        List<Team> teamsToBroadcast = new ArrayList<>();
         // reassign ranks based on sorted teams and mark team, where the rank
         // was changed
         for (Team t : teams) {
-            oldRank = t.getRank();
-            t.setRank(rank);
-            if (oldRank != rank) {
+            if (t.getRank() != rank) {
                 teamsToBroadcast.add(t);
-                TeamRankHistory history = new TeamRankHistory(t, rank, oldRank);
-                teamRankHistoryRepository.save(history);
             }
+            t.setRank(rank);
             rank++;
         }
         teamRepository.save(teams);

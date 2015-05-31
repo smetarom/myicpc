@@ -3,6 +3,7 @@ package com.myicpc.model.contest;
 import com.myicpc.model.IdGeneratedObject;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,6 +14,7 @@ import javax.persistence.TemporalType;
 import java.io.Serializable;
 import java.util.Date;
 
+@Cacheable
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "WebServiceSettings_id_seq")
 public class WebServiceSettings extends IdGeneratedObject {

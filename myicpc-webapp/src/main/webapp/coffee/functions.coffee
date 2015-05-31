@@ -2,7 +2,7 @@ class AtmosphereRequest
   constructor: (@url, @onMessage) ->
     @contentType = "application/json"
     @logLevel = 'debug'
-    @transport = 'websocket'
+    @transport = 'sse' #websocket or sse
     @trackMessageLength = true
     @reconnectInterval = 5000
     @fallbackTransport = 'long-polling'

@@ -5,6 +5,7 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
+@Cacheable
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "MapConfiguration_id_seq")
 public class MapConfiguration extends IdGeneratedObject {

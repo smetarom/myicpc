@@ -80,6 +80,7 @@ public class EventFeedProcessor {
             EventFeedControl eventFeedControl = getCurrentEventFeedControl(contest);
             Reader reader = null;
             InputStream in = null;
+            System.out.println("event feed start");
             try {
                 in = eventFeedWSService.connectCDS(contestSettings.getEventFeedURL(), contestSettings.getEventFeedUsername(),
                         contestSettings.getEventFeedPassword());
@@ -104,7 +105,7 @@ public class EventFeedProcessor {
     }
 
     protected void parseXML(final Reader reader, final Contest contest, EventFeedControl eventFeedControl) throws IOException, ClassNotFoundException {
-        final XStream xStream = createEventFeedParser(contest);
+        final XStream xStream = createEventFeedParser();
         ObjectInputStream in = xStream.createObjectInputStream(reader);
         try {
             while (true) {
@@ -117,29 +118,18 @@ public class EventFeedProcessor {
                 if (!(elem instanceof TestcaseXML)) {
                     elem.accept(eventFeedVisitor, contest);
                 }
+                System.out.println("entity finished" + elem);
             }
         } catch (EOFException ex) {
             logger.info("Event feed parsing is done.");
         }
     }
 
-    private XStream createEventFeedParser(final Contest contest) {
+    private XStream createEventFeedParser() {
         XStream xStream = new XStream();
         xStream.ignoreUnknownElements();
         xStream.processAnnotations(new Class[]{ContestXML.class, LanguageXML.class, RegionXML.class, JudgementXML.class, ProblemXML.class, TeamXML.class,
                 TeamProblemXML.class, TestcaseXML.class, FinalizedXML.class, ClarificationXML.class});
-        xStream.registerLocalConverter(TeamProblemXML.class, "problem", new ProblemConverter(contest) {
-            @Override
-            public Object fromString(String value) {
-                return problemRepository.findBySystemIdAndContest(Long.parseLong(value), contest);
-            }
-        });
-        xStream.registerLocalConverter(TeamProblemXML.class, "team", new TeamConverter(contest) {
-            @Override
-            public Object fromString(String value) {
-                return teamRepository.findBySystemIdAndContest(Long.parseLong(value), contest);
-            }
-        });
         return xStream;
     }
 

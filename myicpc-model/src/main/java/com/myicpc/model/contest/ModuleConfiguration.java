@@ -2,12 +2,14 @@ package com.myicpc.model.contest;
 
 import com.myicpc.model.IdGeneratedObject;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.SequenceGenerator;
 
 /**
  * @author Roman Smetana
  */
+@Cacheable
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "ModuleConfiguration_id_seq")
 public class ModuleConfiguration extends IdGeneratedObject {

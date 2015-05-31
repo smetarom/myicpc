@@ -159,18 +159,19 @@ public class EventFeedVisitorImpl implements EventFeedLocal {
 
     @Override
     public void visit(TeamProblemXML xmlTeamProblem, Contest contest) {
-        TeamProblem teamProblem = eventFeedDao.findTeamProblemBySystemIdAndTeamIdAndProblemId(
-                xmlTeamProblem.getSystemId(),
-                xmlTeamProblem.getTeam().getId(),
-                xmlTeamProblem.getProblem().getId());
+        TeamProblem teamProblem = null;
+//                eventFeedDao.findTeamProblemBySystemIdAndTeamIdAndProblemId(
+//                xmlTeamProblem.getSystemId(),
+//                xmlTeamProblem.getTeam().getId(),
+//                xmlTeamProblem.getProblem().getId());
         if (teamProblem != null) {
             if ("fresh".equalsIgnoreCase(xmlTeamProblem.getStatus())) {
-                logger.info("Skip 'fresh' submission {} from team {}", xmlTeamProblem.getSystemId(), xmlTeamProblem.getTeam().getId());
+                logger.info("Skip 'fresh' submission {} from team {}", xmlTeamProblem.getSystemId(), 1);
                 return;
             }
             if ("done".equalsIgnoreCase(xmlTeamProblem.getStatus()) &&
                     teamProblem.getJudged()) {
-                logger.info("Skip 'done' submission {} from team {}", xmlTeamProblem.getSystemId(), xmlTeamProblem.getTeam().getId());
+                logger.info("Skip 'done' submission {} from team {}", xmlTeamProblem.getSystemId(), 1);
                 return;
             }
         }
@@ -187,7 +188,7 @@ public class EventFeedVisitorImpl implements EventFeedLocal {
 
             logger.info("Run " + eventFeedSubmission.getTeamSubmission().getSystemId() + " processed for team " + eventFeedSubmission.getTeamSubmission().getTeam().getSystemId());
         } catch (EventFeedException ex) {
-            logger.error("Failed to process run " + xmlTeamProblem.getSystemId() + " for team " + xmlTeamProblem.getTeam().getSystemId(), ex);
+            logger.error("Failed to process run " + xmlTeamProblem.getSystemId() + " for team 1", ex);
         }
     }
 

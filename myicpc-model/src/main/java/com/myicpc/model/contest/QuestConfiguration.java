@@ -2,11 +2,13 @@ package com.myicpc.model.contest;
 
 import com.myicpc.model.IdGeneratedObject;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
+@Cacheable
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "QuestConfiguration_id_seq")
 public class QuestConfiguration extends IdGeneratedObject {
