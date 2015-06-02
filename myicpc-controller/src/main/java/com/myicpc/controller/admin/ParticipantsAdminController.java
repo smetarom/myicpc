@@ -61,7 +61,7 @@ public class ParticipantsAdminController extends GeneralAdminController {
         model.addAttribute("participantRoles", ContestParticipantRole.getAllTeamRoles());
         model.addAttribute("participantFilter", participantFilter);
         model.addAttribute("teamInfos", teamInfos);
-        if (contest.getContestSettings().isShowTeamNames()) {
+        if (contest.isShowTeamNames()) {
             model.addAttribute("teams", teamInfoRepository.findAllOrderByName());
         } else {
             model.addAttribute("teams", teamInfoRepository.findAllOrderByUniversityName());

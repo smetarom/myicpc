@@ -15,9 +15,11 @@ import com.myicpc.repository.eventFeed.TeamProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.repository.teamInfo.ContestParticipantRepository;
 import com.myicpc.repository.teamInfo.TeamInfoRepository;
+import com.myicpc.service.dto.GlobalSettings;
 import com.myicpc.service.scoreboard.dto.SubmissionDTO;
 import com.myicpc.service.scoreboard.insight.ProblemInsightService;
 import com.myicpc.service.scoreboard.team.TeamService;
+import com.myicpc.service.settings.GlobalSettingsService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.site.SitePreference;
@@ -62,6 +64,9 @@ public class TeamController extends GeneralController {
     @Autowired
     private ContestParticipantRepository contestParticipantRepository;
 
+    @Autowired
+    private GlobalSettingsService globalSettingsService;
+
     @RequestMapping(value = "/{contestCode}/teams", method = RequestMethod.GET)
     public String teams(@PathVariable String contestCode, @RequestParam(required = false, defaultValue = "grid") String view,
                         Model model, SitePreference sitePreference) {
@@ -75,7 +80,9 @@ public class TeamController extends GeneralController {
         if (sitePreference.isMobile()) {
             model.addAttribute("view", "list");
         } else {
+            GlobalSettings globalSettings = globalSettingsService.getGlobalSettings();
             model.addAttribute("showSwitch", true);
+            model.addAttribute("teamPictureURLPrefix", globalSettings.getTeamPicturesUrl());
             model.addAttribute("view", view);
         }
 

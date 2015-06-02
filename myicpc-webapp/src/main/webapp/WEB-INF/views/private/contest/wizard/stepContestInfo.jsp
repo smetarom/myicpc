@@ -18,12 +18,12 @@
 
     <div class="col-sm-9">
         <label for="showTeamNamesTrue" class="normal-label">
-            <form:radiobutton path="contestSettings.showTeamNames" id="showTeamNamesTrue" value="true"/>
+            <form:radiobutton path="showTeamNames" id="showTeamNamesTrue" value="true"/>
             &nbsp;<spring:message code="contest.showTeamNames.hint.1"/>
         </label>
         <br/>
         <label for="showTeamNamesFalse" class="normal-label">
-            <form:radiobutton path="contestSettings.showTeamNames" id="showTeamNamesFalse" value="false"/>
+            <form:radiobutton path="showTeamNames" id="showTeamNamesFalse" value="false"/>
             &nbsp;<spring:message code="contest.showTeamNames.hint.2"/>
         </label>
     </div>

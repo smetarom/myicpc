@@ -2,7 +2,7 @@
     <table class="table table-striped">
         <thead>
             <th><spring:message code="team.name" /></th>
-            <c:if test="${contest.contestSettings.showTeamNames}">
+            <c:if test="${contest.showTeamNames}">
                 <th class="hidden-xs"><spring:message code="university" /></th>
             </c:if>
             <c:if test="${contest.contestSettings.showRegion}">
@@ -20,7 +20,7 @@
                             <c:out value="${teamInfo.contestTeamName}" />
                         </a>
                     </td>
-                    <c:if test="${contest.contestSettings.showTeamNames}">
+                    <c:if test="${contest.showTeamNames}">
                         <td class="hidden-xs"><c:out value="${teamInfo.university.name}" /></td>
                     </c:if>
                     <c:if test="${contest.contestSettings.showCountry}">

@@ -44,7 +44,6 @@ public class ContestSettings extends IdGeneratedObject {
     private String teamPicturesURL;
 
     private Integer year;
-    private boolean showTeamNames;
     private boolean showRegion;
     private boolean showUniversity;
     private boolean showCountry;
@@ -143,14 +142,6 @@ public class ContestSettings extends IdGeneratedObject {
 
     public void setYear(Integer year) {
         this.year = year;
-    }
-
-    public boolean isShowTeamNames() {
-        return showTeamNames;
-    }
-
-    public void setShowTeamNames(boolean showTeamNames) {
-        this.showTeamNames = showTeamNames;
     }
 
     public String getLivestreamURL() {

@@ -54,6 +54,10 @@ public class Contest extends IdGeneratedObject {
      */
     private double penalty;
     /**
+     * Show team names or university names
+     */
+    private boolean showTeamNames;
+    /**
      * Represents the settings for the contest
      */
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -130,6 +134,14 @@ public class Contest extends IdGeneratedObject {
 
     public void setPenalty(final double penalty) {
         this.penalty = penalty;
+    }
+
+    public boolean isShowTeamNames() {
+        return showTeamNames;
+    }
+
+    public void setShowTeamNames(boolean showTeamNames) {
+        this.showTeamNames = showTeamNames;
     }
 
     public String getHashtag() {

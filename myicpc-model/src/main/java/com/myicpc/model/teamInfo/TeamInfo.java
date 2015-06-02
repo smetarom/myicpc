@@ -168,7 +168,7 @@ public class TeamInfo extends IdGeneratedContestObject {
     @Transient
     public String getContestTeamName() {
         if (contest != null && contest.getContestSettings() != null) {
-            if (contest.getContestSettings().isShowTeamNames()) {
+            if (contest.isShowTeamNames()) {
                 return name;
             } else {
                 return university.getName();

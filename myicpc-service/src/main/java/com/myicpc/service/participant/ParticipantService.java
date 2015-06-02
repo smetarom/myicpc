@@ -66,7 +66,7 @@ public class ParticipantService {
     }
 
     public List<TeamInfo> getTeamInfosSortedByName(Contest contest) {
-        if (contest.getContestSettings().isShowTeamNames()) {
+        if (contest.isShowTeamNames()) {
             return teamInfoRepository.findByContestOrderByNameAsc(contest);
         } else {
             return teamInfoRepository.findByContestOrderByUniversityNameAsc(contest);

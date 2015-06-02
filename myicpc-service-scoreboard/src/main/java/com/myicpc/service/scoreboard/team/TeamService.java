@@ -104,7 +104,7 @@ public class TeamService {
      * @return
      */
     public List<TeamInfo> getTeamInfosByContest(Contest contest) {
-        if (contest.getContestSettings().isShowTeamNames()) {
+        if (contest.isShowTeamNames()) {
             return teamInfoRepository.findByContestOrderByNameAsc(contest);
         } else {
             return teamInfoRepository.findByContestOrderByUniversityNameAsc(contest);
@@ -270,7 +270,7 @@ public class TeamService {
         List<TeamInfo> teamInfosWithoutHashtag = new ArrayList<>();
         int count = 1;
         for (TeamInfo teamInfo : teamInfos) {
-            if (contest.getContestSettings().isShowTeamNames()) {
+            if (contest.isShowTeamNames()) {
                 teamInfo.setShortName(FormatUtils.getTeamShortName(teamInfo.getName()));
                 teamInfo.setAbbreviation(teamInfo.getShortName());
                 if (StringUtils.isEmpty(teamInfo.getHashtag())) {

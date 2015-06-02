@@ -1,11 +1,8 @@
 package com.myicpc.service.dto;
 
-import com.google.common.base.Charsets;
 import com.myicpc.model.Globals;
-import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 

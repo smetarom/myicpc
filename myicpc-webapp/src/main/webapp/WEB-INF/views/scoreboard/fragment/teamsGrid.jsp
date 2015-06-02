@@ -4,13 +4,13 @@
             <jsp:attribute name="heading"><c:out value="${teamInfo.contestTeamName}" /></jsp:attribute>
             <jsp:attribute name="footer">
                 <div class="text-right">
-                    <a href="<spring:url value="/team/${teamInfo.externalId}/presentation" />" class="btn btn-primary"><spring:message code="team.viewProfile" /></a>
+                    <a href="<spring:url value="${contestURL}/team/${teamInfo.externalId}/profile" />" class="btn btn-primary"><spring:message code="team.viewProfile" /></a>
                 </div>
             </jsp:attribute>
             <jsp:attribute name="table">
                 <table class="table">
                     <tbody>
-                        <c:if test="${contest.contestSettings.showTeamNames}">
+                        <c:if test="${contest.showTeamNames}">
                             <tr>
                                 <th><spring:message code="university" />: </th>
                                 <td>${teamInfo.university.name}</td>
@@ -32,7 +32,9 @@
                 </table>
             </jsp:attribute>
             <jsp:body>
-                <img class="img-responsive" src="<spring:url value="/images/missing-image.jpg" />" alt="${teamInfo.contestTeamName}" />
+                <img class="img-responsive center-block" src="${teamPictureURLPrefix}${teamInfo.university.externalId}"
+                     style="height: 200px"
+                     alt="${teamInfo.contestTeamName}" onError="this.src='<spring:url value="/images/missing-image.jpg" />';" />
             </jsp:body>
         </t:panelWithHeading>
     </div>

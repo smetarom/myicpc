@@ -68,7 +68,7 @@ public class ContestAdminController extends GeneralAdminController {
     public String createContest(Model model) {
         Contest contest = new Contest();
         contest.getContestSettings().setYear(Calendar.getInstance().get(Calendar.YEAR));
-        contest.getContestSettings().setShowTeamNames(true);
+        contest.setShowTeamNames(true);
         contest.getQuestConfiguration().setHashtagPrefix(getMessage("quest.hashtag.default"));
 
         return createContest(1, contest, model);
