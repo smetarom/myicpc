@@ -53,10 +53,10 @@
 
 <%@ include file="/WEB-INF/views/includes/foot.jsp" %>
 <c:if test="${not sitePreference.mobile}">
-    <jsp:include page="/WEB-INF/views/includes/head_desktop.jsp"/>
+    <jsp:include page="/WEB-INF/views/includes/foot_desktop.jsp"/>
 </c:if>
 <c:if test="${sitePreference.mobile}">
-    <jsp:include page="/WEB-INF/views/includes/head_mobile.jsp"/>
+    <jsp:include page="/WEB-INF/views/includes/foot_mobile.jsp"/>
 </c:if>
 <jsp:invoke fragment="javascript" />
 </body>
