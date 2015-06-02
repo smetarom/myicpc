@@ -17,7 +17,7 @@
         <c:if test="${not empty leaderboards}">
             <t:secondLevelSubmenu isMobile="${sitePreference.mobile}">
                 <c:forEach var="leaderboard" items="${leaderboards}" varStatus="status">
-                    <t:menuItem activeItem="${leaderboard.urlCode}" active="${activeTab}" url="${contestURL}/team/${team.externalId}">${leaderboard.name}</t:menuItem>
+                    <t:menuItem activeItem="${leaderboard.urlCode}" active="${activeTab}" url="${contestURL}/quest/leaderboard/${leaderboard.urlCode}">${leaderboard.name}</t:menuItem>
                 </c:forEach>
             </t:secondLevelSubmenu>
 
@@ -43,7 +43,7 @@
                             <td>${status.index + 1}</td>
                             <td>${questParticipant.contestParticipant.fullname}</td>
                             <td>${questParticipant.totalPoints}</td>
-                            <td></td>
+                            <td>${questParticipant.acceptedSubmissions}</td>
                             <c:forEach var="challenge" items="${challenges}">
                                 <td>
                                     <t:questTick state="${questParticipant.submissionMap[challenge.id].submissionState}" note="" />

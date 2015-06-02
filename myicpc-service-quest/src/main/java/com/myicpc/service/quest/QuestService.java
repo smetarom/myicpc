@@ -3,7 +3,6 @@ package com.myicpc.service.quest;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.myicpc.dto.quest.QuestSubmissionDTO;
 import com.myicpc.enums.ContestParticipantRole;
@@ -84,9 +83,14 @@ public class QuestService {
         }
 
         for (QuestParticipant participant : participants) {
+            int acceptedSubmissions = 0;
             for (QuestSubmissionDTO questSubmissionDTO : submissionMap.get(participant.getId())) {
                 participant.addSubmissionDTO(questSubmissionDTO);
+                if (questSubmissionDTO.getSubmissionState() == QuestSubmission.QuestSubmissionState.ACCEPTED) {
+                    acceptedSubmissions++;
+                }
             }
+            participant.setAcceptedSubmissions(acceptedSubmissions);
         }
 
         return participants;

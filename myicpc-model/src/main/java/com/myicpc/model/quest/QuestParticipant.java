@@ -3,8 +3,6 @@ package com.myicpc.model.quest;
 import com.myicpc.dto.quest.QuestSubmissionDTO;
 import com.myicpc.model.IdGeneratedContestObject;
 import com.myicpc.model.teamInfo.ContestParticipant;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.Predicate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -45,10 +43,12 @@ public class QuestParticipant extends IdGeneratedContestObject {
      * All {@link QuestSubmission} submitted by participant
      */
     @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
-    List<QuestSubmission> submissions = new ArrayList<QuestSubmission>();
+    private List<QuestSubmission> submissions = new ArrayList<QuestSubmission>();
 
     @Transient
-    Map<Long, QuestSubmissionDTO> submissionMap = new HashMap<>();
+    private int acceptedSubmissions;
+    @Transient
+    private Map<Long, QuestSubmissionDTO> submissionMap = new HashMap<>();
 
     public int getPoints() {
         return points;
@@ -101,18 +101,6 @@ public class QuestParticipant extends IdGeneratedContestObject {
         this.points = points;
     }
 
-    /**
-     * @return number of accepted submissions for participant
-     */
-    public long getNumSolvedSubmissions() {
-        return CollectionUtils.countMatches(submissions, new Predicate<QuestSubmission>() {
-            @Override
-            public boolean evaluate(QuestSubmission submission) {
-                return submission.isAccepted();
-            }
-        });
-    }
-
     @Transient
     public int getTotalPoints() {
         return points + pointsAdjustment;
@@ -125,5 +113,13 @@ public class QuestParticipant extends IdGeneratedContestObject {
 
     public Map<Long, QuestSubmissionDTO> getSubmissionMap() {
         return submissionMap;
+    }
+
+    public int getAcceptedSubmissions() {
+        return acceptedSubmissions;
+    }
+
+    public void setAcceptedSubmissions(int acceptedSubmissions) {
+        this.acceptedSubmissions = acceptedSubmissions;
     }
 }

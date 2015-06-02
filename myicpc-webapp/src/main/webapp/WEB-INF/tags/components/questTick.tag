@@ -7,7 +7,7 @@
 
 <c:choose>
     <c:when test="${state eq 'ACCEPTED'}">
-        <span style="color: green"><t:faIcon icon="check"/></span>
+        <t:faIcon icon="check" style="color: green"/>
     </c:when>
     <c:when test="${state eq 'PENDING'}">
         <span style="color: orange"><t:faIcon icon="clock-o"/></span>

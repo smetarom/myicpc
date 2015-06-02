@@ -1,12 +1,27 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
 
 <t:template>
-    <jsp:attribute name="head">
-        <%@ include file="/WEB-INF/views/includes/nvd3Dependencies.jsp" %>
-        <script src="<c:url value='/js/myicpc/controllers/scorebar.js'/>" defer></script>
-    </jsp:attribute>
     <jsp:attribute name="title">
         <spring:message code="nav.scorebar"/>
+    </jsp:attribute>
+    <jsp:attribute name="javascript">
+        <%@ include file="/WEB-INF/views/includes/nvd3Dependencies.jsp" %>
+        <script src="<c:url value='/js/myicpc/controllers/scorebar.js'/>" defer></script>
+
+        <script type="text/javascript">
+            $(function() {
+                var ngController = angular.element($("#scorebar")).scope();
+                var teams = ${not empty teamJSON ? teamJSON : '[]'};
+                var problemCount = ${not empty problemCount ? problemCount : 0};
+                var teamCount = ${not empty teamCount ? teamCount : 0};
+                ngController.init(teams, teamCount, problemCount);
+
+                var width = $("#scorebar-container").width();
+                ngController.render(width);
+
+                startSubscribe('${r.contextPath}', '${contest.code}', 'scoreboard', updateScorebar, ngController);
+            });
+        </script>
     </jsp:attribute>
 
     <jsp:body>
@@ -33,21 +48,6 @@
 
             </div>
         </div>
-
-        <script type="text/javascript">
-            $(function() {
-                var ngController = angular.element($("#scorebar")).scope();
-                var teams = ${not empty teamJSON ? teamJSON : '[]'};
-                var problemCount = ${not empty problemCount ? problemCount : 0};
-                var teamCount = ${not empty teamCount ? teamCount : 0};
-                ngController.init(teams, teamCount, problemCount);
-
-                var width = $("#scorebar-container").width();
-                ngController.render(width);
-
-                startSubscribe('${r.contextPath}', '${contest.code}', 'scoreboard', updateScorebar, ngController);
-            });
-        </script>
 
     </jsp:body>
 
