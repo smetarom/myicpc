@@ -105,23 +105,6 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
      * Returns JSON representation of selected teams paired with last team
      * submissions
      *
-     * @param teamIds ids of selected teams
-     * @return JSON representation of selected teams paired with last team
-     * submissions
-     */
-    @Override
-    public JsonArray getTeamsFullTemplate(final Contest contest, final List<Long> teamIds) {
-        // TODO renew or remove
-//        Iterable<Team> teams = teamRepository.findByContestAndTeamIds(contest, teamIds);
-//
-//        return getTeamsFullTemplate(teams);
-        return null;
-    }
-
-    /**
-     * Returns JSON representation of selected teams paired with last team
-     * submissions
-     *
      * @param teams selected teams
      * @return JSON representation of selected teams paired with last team
      * submissions

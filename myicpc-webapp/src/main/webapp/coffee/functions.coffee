@@ -92,6 +92,8 @@ isElementVisible = (elem, offset = 0) ->
   win = $(window)
   win.scrollTop()+window.innerHeight + offset >$e.offset().top && win.scrollTop() + offset <$e.offset().top+$e.height();
 
+escapePlusSign = (string) ->
+  string.replace(new RegExp( "\\+", "g" ), "%2B")
 
 setFixedSubmenuHeight = () ->
   footerHeight = $("#footer").outerHeight(true)

@@ -252,7 +252,7 @@ insightApp.controller('languageDetailCtrl', ($scope, $http, $interval, $routePar
   ###
   $scope.init = (contextPath, contestCode, title) ->
     title = "#{title} #{$routeParams.languageName}"
-    url = "#{contextPath}/#{contestCode}/insight/ajax/language/#{$routeParams.languageName}"
+    url = "#{contextPath}/#{contestCode}/insight/ajax/language/#{escapePlusSign($routeParams.languageName)}"
     successFn = (data) ->
       $scope.data = data.data
       $("#insightHeadline").html(data.title)

@@ -296,7 +296,7 @@ insightApp.controller('languageDetailCtrl', function($scope, $http, $interval, $
   $scope.init = function(contextPath, contestCode, title) {
     var pollingFn, successFn, url;
     title = "" + title + " " + $routeParams.languageName;
-    url = "" + contextPath + "/" + contestCode + "/insight/ajax/language/" + $routeParams.languageName;
+    url = "" + contextPath + "/" + contestCode + "/insight/ajax/language/" + (escapePlusSign($routeParams.languageName));
     successFn = function(data) {
       $scope.data = data.data;
       return $("#insightHeadline").html(data.title);
