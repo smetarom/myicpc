@@ -13,20 +13,6 @@ import java.io.Serializable;
 public abstract class EntityObject implements Serializable {
     private static final long serialVersionUID = -7776179125313830253L;
 
-    /**
-     * Optimistic locking mechanism
-     */
-    @Version
-    protected Integer version;
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(final Integer version) {
-        this.version = version;
-    }
-
     public abstract Long getId();
 
     public abstract void setId(final Long id);

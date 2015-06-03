@@ -54,11 +54,11 @@ public class ScoreboardController extends GeneralController {
         Contest contest = getContest(contestCode, model);
 
         List<Problem> problems = problemService.findByContest(contest);
-
-        model.addAttribute("teamJSON", scoreboardService.getTeamsFullTemplate(contest).toString());
+        JsonArray teamsFullTemplate = scoreboardService.getTeamsFullTemplate(contest);
+        model.addAttribute("teamJSON", teamsFullTemplate.toString());
         model.addAttribute("problems", problems);
         model.addAttribute("numProblems", problems.size());
-        model.addAttribute("scoreboardAvailable", true);
+        model.addAttribute("scoreboardAvailable", teamsFullTemplate.size() > 0);
         model.addAttribute("sideMenuActive", "scoreboard");
         return resolveView("scoreboard/scoreboard", "scoreboard/scoreboard_mobile", sitePreference);
     }
@@ -66,10 +66,12 @@ public class ScoreboardController extends GeneralController {
     @RequestMapping(value = {"/{contestCode}/scorebar"}, method = RequestMethod.GET)
     public String scoreboard(@PathVariable String contestCode, Model model) {
         Contest contest = getContest(contestCode, model);
+        JsonArray teamsScorebarTemplate = scoreboardService.getTeamsScorebarTemplate(contest);
 
-        model.addAttribute("teamJSON", scoreboardService.getTeamsScorebarTemplate(contest).toString());
+        model.addAttribute("teamJSON", teamsScorebarTemplate.toString());
         model.addAttribute("problemCount", problemRepository.countByContest(contest));
         model.addAttribute("teamCount", teamRepository.countByContest(contest));
+        model.addAttribute("scorebarAvailable", teamsScorebarTemplate.size() > 0);
         return "scoreboard/scorebar";
     }
 

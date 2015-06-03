@@ -10,6 +10,7 @@ import com.myicpc.model.eventFeed.Team;
 import com.myicpc.repository.eventFeed.JudgementRepository;
 import com.myicpc.repository.eventFeed.LanguageRepository;
 import com.myicpc.repository.eventFeed.ProblemRepository;
+import com.myicpc.repository.eventFeed.TeamProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.service.scoreboard.ScoreboardService;
 import com.myicpc.service.scoreboard.insight.CodeInsightService;
@@ -53,12 +54,16 @@ public class InsightController extends GeneralController {
     @Autowired
     private JudgementRepository judgementRepository;
 
+    @Autowired
+    private TeamProblemRepository teamProblemRepository;
+
     @RequestMapping(value = "/{contestCode}/insight", method = RequestMethod.GET)
     public String insight(@PathVariable String contestCode, Model model) {
         Contest contest = getContest(contestCode, model);
 
         model.addAttribute("problems", problemRepository.findByContestOrderByCodeAsc(contest));
         model.addAttribute("languages", languageRepository.findAllOrderByName());
+        model.addAttribute("submissionCount", teamProblemRepository.countByTeamContest(contest));
         return "scoreboard/insight/insight";
     }
 

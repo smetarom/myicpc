@@ -26,28 +26,36 @@
 
     <jsp:body>
         <t:downloadContestProblems/>
-        <div ng-app="scorebar">
-            <div id="scorebar" ng-controller="scorebarCtrl">
-                <div class="col-sm-9" id="scorebar-container">
-                    <div id="scorebar-legend">
-                        <svg width="500" height="18">
-                            <g class="canvas" transform="translate(0,0)">
-                            </g>
-                        </svg>
-                    </div>
-
-                    <div id="scorebar-chart">
-                        <svg width="900" height="1000">
-                            <g class="axis-canvas" transform="translate(120,0)">
-                                <g class="canvas" transform="translate(0,20)">
+        <c:if test="${scorebarAvailable}">
+            <div ng-app="scorebar">
+                <div id="scorebar" ng-controller="scorebarCtrl">
+                    <div class="col-sm-9" id="scorebar-container">
+                        <div id="scorebar-legend">
+                            <svg width="500" height="18">
+                                <g class="canvas" transform="translate(0,0)">
                                 </g>
-                            </g>
-                        </svg>
+                            </svg>
+                        </div>
+
+                        <div id="scorebar-chart">
+                            <svg width="900" height="1000">
+                                <g class="axis-canvas" transform="translate(120,0)">
+                                    <g class="canvas" transform="translate(0,20)">
+                                    </g>
+                                </g>
+                            </svg>
+                        </div>
                     </div>
                 </div>
-
             </div>
-        </div>
+        </c:if>
+        <c:if test="${not scorebarAvailable}">
+            <div class="no-items-available">
+                <h2>
+                    <spring:message code="scorebar.notAvailable" />
+                </h2>
+            </div>
+        </c:if>
 
     </jsp:body>
 

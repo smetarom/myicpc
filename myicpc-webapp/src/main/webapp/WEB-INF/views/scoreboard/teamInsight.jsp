@@ -18,6 +18,8 @@
   </jsp:attribute>
 
     <jsp:body>
+        <c:set var="teamContestId" value="${team.externalId}" />
+        <c:set var="teamPresentationId" value="${teamInfo.externalId}" />
         <%@ include file="/WEB-INF/views/scoreboard/fragment/teamHomeMenu.jsp"%>
         <br class="clear"/>
         <br />

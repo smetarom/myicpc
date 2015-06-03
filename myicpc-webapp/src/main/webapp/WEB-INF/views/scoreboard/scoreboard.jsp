@@ -42,7 +42,7 @@
         <t:downloadContestProblems />
 
         <c:if test="${not scoreboardAvailable}">
-            <div class="centered-notification">
+            <div class="no-items-available">
                 <h2>
                     <spring:message code="scoreboard.notAvailable" />
                 </h2>

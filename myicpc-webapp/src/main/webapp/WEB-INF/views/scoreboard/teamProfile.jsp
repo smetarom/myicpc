@@ -11,6 +11,8 @@
   </jsp:attribute>
 
   <jsp:body>
+      <c:set var="teamContestId" value="${team.externalId}" />
+      <c:set var="teamPresentationId" value="${teamInfo.externalId}" />
       <%@ include file="/WEB-INF/views/scoreboard/fragment/teamHomeMenu.jsp"%>
 
       <div class="clearfix">
@@ -157,6 +159,11 @@
                       </div>
                   </div>
               </c:forEach>
+              <c:if test="${empty teamInfo.regionalResults}">
+                  <div class="no-items-available">
+                      <spring:message code="team.regionalResults.noResult" />
+                  </div>
+              </c:if>
           </div>
       </div>
 

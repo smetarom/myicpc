@@ -33,6 +33,8 @@ public interface TeamProblemRepository extends JpaRepository<TeamProblem, Long>,
 
     List<TeamProblem> findByTeamAndProblemOrderByTimeAsc(Team team, Problem problem);
 
+    Long countByTeamContest(Contest contest);
+
     @Query(value = "SELECT MIN(tp.time) FROM TeamProblem tp WHERE tp.team = ?1 AND tp.solved = true")
     Double getLastAcceptedTeamProblemTime(Team team);
 

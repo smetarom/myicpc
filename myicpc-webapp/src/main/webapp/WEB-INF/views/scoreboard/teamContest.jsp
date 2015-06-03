@@ -19,6 +19,8 @@
   </jsp:attribute>
 
   <jsp:body>
+      <c:set var="teamContestId" value="${team.externalId}" />
+      <c:set var="teamPresentationId" value="${teamInfo.externalId}" />
       <%@ include file="/WEB-INF/views/scoreboard/fragment/teamHomeMenu.jsp"%>
       <div id="teamDetail" ng-app="teamDetail" ng-controller="TeamDeatilCtrl">
           <div class="col-sm-6">
