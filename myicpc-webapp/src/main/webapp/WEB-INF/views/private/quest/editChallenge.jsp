@@ -42,6 +42,8 @@
                 <t:springInput labelCode="quest.challange.startDate" path="localStartDate" id="startDate" required="true" />
                 <t:springInput labelCode="quest.challange.endDate" path="localEndDate" id="endDate" required="true" />
                 <t:springTextarea labelCode="quest.challange.description" path="description" rows="3" />
+                <t:springCheckbox labelCode="quest.challange.requiresPhoto" path="requiresPhoto" />
+                <t:springCheckbox labelCode="quest.challange.requiresVideo" path="requiresVideo" />
             </jsp:body>
         </t:form>
 

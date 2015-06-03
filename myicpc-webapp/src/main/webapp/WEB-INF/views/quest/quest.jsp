@@ -30,6 +30,25 @@
                 videoAutoplayOnScroll();
 
                 $(window).scroll(videoAutoplayOnScroll);
+
+                <c:forEach var="challenge" items="${challenges}">
+                <c:if test="${not empty challenge.secondsToEndDate and challenge.secondsToEndDate gt 0}">
+                var timediff${challenge.id} = ${challenge.secondsToEndDate};
+                flashChallengeTime${challenge.id}();
+                var flashChallengeInterval${challenge.id} = setInterval(flashChallengeTime${challenge.id}, 1000);
+
+                function flashChallengeTime${challenge.id}() {
+                    if (timediff${challenge.id} >= 0) {
+                        $("#challenge-${challenge.id}-countdown").html(convertSecondsToHHMMSS(timediff${challenge.id}));
+                        timediff${challenge.id} -= 1;
+                    } else {
+                        $("#challenge-${challenge.id}-countdown").html('<spring:message code="quest.challenge.over" />');
+                        clearInterval(flashChallengeInterval${challenge.id});
+
+                    }
+                }
+                </c:if>
+                </c:forEach>
             });
         </script>
     </jsp:attribute>
@@ -68,16 +87,21 @@
                     <div class="carousel-inner">
                         <c:forEach var="challenge" items="${challenges}" varStatus="status">
                             <div class="item ${status.index == 0 ? 'active' : ''}">
-                                <c:if test="${not empty challenge.imageURL}">
-                                    <img src="${challenge.imageURL}" alt="${challenge.name}" class="center-block img-responsive" onerror='this.style.display = "none"'>
-                                </c:if>
-                                <div class="challenge-description">
+                                <div class="challenge-headline">
                                     <h4>
                                         <c:if test="${not empty challenge.secondsToEndDate and challenge.secondsToEndDate gt 0}">
                                             <span class="pull-right"><span id="challenge-${challenge.id}-countdown"></span> <spring:message code="quest.flashChallenge.left" /></span>
                                         </c:if>
                                             ${challenge.name}
                                     </h4>
+                                    <p>
+                                        <%@ include file="/WEB-INF/views/quest/fragment/challengeQuickInfo.jsp" %>
+                                    </p>
+                                </div>
+                                <c:if test="${not empty challenge.imageURL}">
+                                    <img src="${challenge.imageURL}" alt="${challenge.name}" class="center-block img-responsive" onerror='this.style.display = "none"'>
+                                </c:if>
+                                <div class="challenge-description">
                                     <p>${challenge.description}</p>
                                     <div class="text-center">
                                         <button class="btn btn-primary" onclick="showParticipateChallenge('${challenge.hashtag}', '${challenge.name}')">
@@ -98,28 +122,6 @@
                 </div>
 
                 <%--<%@ include file="/WEB-INF/views/fragment/quest/participateChallengeModal.jsp"%>--%>
-                <script type="text/javascript">
-                    $(function() {
-                        <c:forEach var="challenge" items="${challenges}">
-                            <c:if test="${not empty challenge.secondsToEndDate and challenge.secondsToEndDate gt 0}">
-                                var timediff${challenge.id} = ${challenge.secondsToEndDate};
-                                flashChallengeTime${challenge.id}();
-                                var flashChallengeInterval${challenge.id} = setInterval(flashChallengeTime${challenge.id}, 1000);
-
-                                function flashChallengeTime${challenge.id}() {
-                                    if (timediff${challenge.id} >= 0) {
-                                        $("#challenge-${challenge.id}-countdown").html(convertSecondsToHHMMSS(timediff${challenge.id}));
-                                        timediff${challenge.id} -= 1;
-                                    } else {
-                                        $("#challenge-${challenge.id}-countdown").html('<spring:message code="quest.challenge.over" />');
-                                        clearInterval(flashChallengeInterval${challenge.id});
-
-                                    }
-                                }
-                            </c:if>
-                        </c:forEach>
-                    });
-                </script>
             </c:if>
             <c:if test="${empty challenges}">
                 <div class="no-items-available">

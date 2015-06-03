@@ -35,6 +35,16 @@ public class QuestChallenge extends StartEndDateObject {
     private String description;
 
     /**
+     * If the successful submission must contain photo
+     */
+    private boolean requiresPhoto;
+
+    /**
+     * If the successful submission must contain video
+     */
+    private boolean requiresVideo;
+
+    /**
      * Default number of points for solution to this challenge
      * <p/>
      * Admin can change it, before he approves a {@link QuestSubmission}
@@ -81,6 +91,22 @@ public class QuestChallenge extends StartEndDateObject {
 
     public void setDescription(final String description) {
         this.description = description;
+    }
+
+    public boolean isRequiresPhoto() {
+        return requiresPhoto;
+    }
+
+    public void setRequiresPhoto(boolean requiresPhoto) {
+        this.requiresPhoto = requiresPhoto;
+    }
+
+    public boolean isRequiresVideo() {
+        return requiresVideo;
+    }
+
+    public void setRequiresVideo(boolean requiresVideo) {
+        this.requiresVideo = requiresVideo;
     }
 
     public int getDefaultPoints() {

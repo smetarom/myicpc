@@ -5,6 +5,7 @@
 </c:if>
 
 <div class="col-sm-12">
+    <p><%@ include file="/WEB-INF/views/quest/fragment/challengeQuickInfo.jsp" %></p>
     <div class="center-block" style="max-width: 500px">
         <c:if test="${not empty challenge.imageURL}">
             <img src="${challenge.imageURL}" alt="${challenge.name}" class="center-block img-responsive" onerror='this.style.display = "none"'>
