@@ -28,6 +28,19 @@ kioskApp.controller('kioskFeedCtrl', ($scope, $sce) ->
 
 )
 
+kioskApp.controller('kioskCalendarCtrl', ($scope) ->
+  $scope.days = []
+
+  $scope.init = (days) ->
+    $scope.$apply(() ->
+      $scope.days = days
+    )
+
+  $scope.refresh = () ->
+    $scope.$apply();
+
+)
+
 updateKioskFeed = (data, ngController = null) ->
   ngController.addTile(data)
 

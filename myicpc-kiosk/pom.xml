@@ -21,6 +21,12 @@
             <artifactId>myicpc-controller</artifactId>
             <version>${myicpc-controller.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.myicpc</groupId>
+            <artifactId>myicpc-service-schedule</artifactId>
+            <version>${myicpc-service-schedule.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

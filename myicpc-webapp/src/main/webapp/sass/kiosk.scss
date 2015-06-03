@@ -59,6 +59,9 @@ body {
       &.article {
         background-color: #6441a5;
       }
+      &.today {
+        background: #55ACEE;
+      }
     }
 
     .tile-detail {
@@ -69,6 +72,14 @@ body {
       width: 1.5%;
     }
 
+    .grid-sizer {
+      /*some sort of hack for today! width*/
+      height:0px;
+      float: left;
+      border: 1px solid transparent;
+      border-radius: 5px;
+    }
+
     .kiosk-tile {
       width: 32%;
       margin-bottom: 10px;
@@ -76,6 +87,11 @@ body {
       border: 1px solid;
       border-color: #e5e6e9 #dfe0e4 #d0d1d5;
       border-radius: 3px;
+      overflow: hidden;
+
+      &.today {
+        width: 64.30%;
+      }
     }
   }
 }

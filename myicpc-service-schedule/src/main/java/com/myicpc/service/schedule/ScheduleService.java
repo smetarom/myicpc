@@ -2,6 +2,8 @@ package com.myicpc.service.schedule;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.schedule.Event;
 import com.myicpc.model.schedule.EventRole;
@@ -11,6 +13,7 @@ import com.myicpc.repository.schedule.EventRepository;
 import com.myicpc.repository.schedule.EventRoleRepository;
 import com.myicpc.service.EntityManagerService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,9 +23,13 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -225,5 +232,55 @@ public class ScheduleService extends EntityManagerService {
         }
 
         return activeRoles;
+    }
+
+    public JsonArray getScheduleDaysJSON(Date now, Contest contest) {
+        Iterable<ScheduleDay> iterable = getCurrentContestSchedule(now, contest);
+        JsonArray arr = new JsonArray();
+        if (iterable != null) {
+            for (ScheduleDay day : iterable) {
+                arr.add(getDayInJson(day));
+            }
+        }
+        return arr;
+    }
+
+    private JsonObject getDayInJson(final ScheduleDay day) {
+        DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+        JsonObject notificationObject = new JsonObject();
+        notificationObject.addProperty("id", day.getId());
+        notificationObject.addProperty("localDate", formatter.format(day.getLocalDate()));
+        notificationObject.addProperty("name", day.getName());
+        notificationObject.add("events", getScheduleEventsJSON(day.getEventsChronologically()));
+        notificationObject.addProperty("isToday", DateUtils.isSameDay(day.getDate(), new Date()));
+
+        return notificationObject;
+    }
+
+    private JsonArray getScheduleEventsJSON(List<Event> iterable) {
+        JsonArray arr = new JsonArray();
+        if (iterable != null) {
+            for (Event event : iterable) {
+                arr.add(getEventInJson(event));
+            }
+        }
+        return arr;
+    }
+
+    private JsonObject getEventInJson(final Event event) {
+        DateFormat formatter = new SimpleDateFormat("HH:mm");
+
+        JsonObject notificationObject = new JsonObject();
+        notificationObject.addProperty("id", event.getId());
+        notificationObject.addProperty("localStartDate", formatter.format(event.getLocalStartDate()));
+        notificationObject.addProperty("localEndDate", formatter.format(event.getLocalEndDate()));
+        notificationObject.addProperty("name", event.getName());
+        if (event.getLocation() != null) {
+            notificationObject.addProperty("venue", event.getLocation().getName());
+        }
+        notificationObject.addProperty("roles", event.getRolesPrint());
+        notificationObject.addProperty("code", event.getCode());
+
+        return notificationObject;
     }
 }
