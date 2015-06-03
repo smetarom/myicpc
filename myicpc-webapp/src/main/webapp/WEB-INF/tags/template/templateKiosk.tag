@@ -2,24 +2,22 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="t" uri="http://myicpc.baylor.edu/tags" %>
-<%@ taglib uri="http://htmlcompressor.googlecode.com/taglib/compressor" prefix="compress" %>
-<compress:html compressCss="true" compressJavaScript="true" jsCompressor="closure" closureOptLevel="whitespace">
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title><c:if test="${not empty pageTitle}">
-            ${pageTitle} -
-        </c:if> MyICPC</title>
-        <script type="text/javascript">
-            websocketURL = '127.0.0.1';
-            if (websocketURL == '') {
-                websocketURL = window.location.host;
-            }
-        </script>
-        <jsp:include page="/WEB-INF/views/includes/head.jsp"/>
-    </head>
-    <body id="kiosk">
+
+<%@attribute name="javascript" fragment="true" %>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title><spring:message code="app.name" /> Kiosk</title>
+    <jsp:include page="/WEB-INF/views/includes/head.jsp"/>
+    <link rel="stylesheet" href="<c:url value='/css/myicpc/kiosk.css'/>" type="text/css">
+</head>
+<body id="kiosk">
+    <div class="page-header text-center">
+        <img src="http://myicpc.icpcnews.com/static/images/2015-Slide-Header2.png" style="padding: 5px 0;" />
+    </div>
     <jsp:doBody/>
-    </body>
-    </html>
-</compress:html>
+    <jsp:include page="/WEB-INF/views/includes/foot.jsp"/>
+    <jsp:invoke fragment="javascript" />
+</body>
+</html>

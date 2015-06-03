@@ -26,6 +26,18 @@
     </tag>
 
     <tag>
+        <name>kioskTile</name>
+        <tag-class>com.myicpc.tags.kiosk.KioskTag</tag-class>
+        <body-content>scriptless</body-content>
+        <attribute>
+            <name>notificationType</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.myicpc.enums.NotificationType</type>
+        </attribute>
+    </tag>
+
+    <tag>
         <name>questSubmission</name>
         <tag-class>com.myicpc.tags.quest.QuestSubmissionTag</tag-class>
         <body-content>scriptless</body-content>
@@ -93,10 +105,6 @@
     <tag-file>
         <name>helpIcon</name>
         <path>/WEB-INF/tags/components/helpIcon.tag</path>
-    </tag-file>
-    <tag-file>
-        <name>kioskTile</name>
-        <path>/WEB-INF/tags/components/kioskTile.tag</path>
     </tag-file>
     <tag-file>
         <name>labelTableRow</name>

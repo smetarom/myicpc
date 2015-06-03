@@ -1,0 +1,81 @@
+body {
+  padding-top: 0;
+}
+
+#kiosk {
+  background-color: #e9eaed;
+
+  .page-header {
+    background-color: #515F6E;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100px;
+    z-index: 2000;
+  }
+
+  #kiosk-content {
+    padding: 110px 0 20px 1.5%;
+
+    .tile-title {
+      padding: 10px;
+      font-size:1.3em;
+      border-top-left-radius: 3px;
+      border-top-right-radius: 3px;
+      color: #fff;
+
+      small {
+        color: #fff;
+      }
+
+      .tile-image-container {
+        height: 450px;
+        width: 450px;
+        margin: 0 auto;
+
+        img {
+          margin: 0 auto;
+        }
+      }
+
+      &.myicpc {
+        background-color: #2C3E50;
+      }
+      &.twitter {
+        background-color: #55ACEE;
+      }
+      &.vine {
+        background-color: #00bf8f;
+      }
+      &.instagram {
+        background-color: #c08d64;
+      }
+      &.youtube {
+        background-color: #e52d27;
+      }
+      &.scoreboard {
+        background-color: #d54e21;
+      }
+      &.article {
+        background-color: #6441a5;
+      }
+    }
+
+    .tile-detail {
+      padding: 15px;
+    }
+
+    .gutter-sizer {
+      width: 1.5%;
+    }
+
+    .kiosk-tile {
+      width: 32%;
+      margin-bottom: 10px;
+      background-color: #fff;
+      border: 1px solid;
+      border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+      border-radius: 3px;
+    }
+  }
+}

@@ -2,6 +2,7 @@ package com.myicpc.service.notification;
 
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.myicpc.commons.utils.CookieUtils;
 import com.myicpc.commons.utils.TimeUtils;
@@ -85,6 +86,14 @@ public class NotificationService {
 //        Collections.sort(notifications, new FeaturedNotificationComparator());
 //
 //        return notifications;
+    }
+
+    public static JsonArray getNotificationInJson(final List<Notification> notifications) {
+        JsonArray arr = new JsonArray();
+        for (Notification notification : notifications) {
+            arr.add(getNotificationInJson(notification));
+        }
+        return arr;
     }
 
     /**

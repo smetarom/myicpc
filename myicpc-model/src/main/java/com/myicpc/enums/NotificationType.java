@@ -14,7 +14,7 @@ public enum NotificationType {
     TWITTER("Tweet", "Twitter", "twitter"),
     ARTICLE("Article", "Article", "a"),
     ADMIN_NOTIFICATION("Admin notification", "Admin notification", "an"),
-    PICASA("Gallery", "Gallery", "ga"),
+    PICASA("Gallery", "Gallery", "picasa"),
     VINE("Vine", "Vine", "vine"),
     INSTAGRAM("Instagram", "Instagram photo", "instagram"),
     POLL_OPEN("Poll", "Poll open", "po"),
@@ -25,7 +25,7 @@ public enum NotificationType {
     QUEST_VOTE_WINNER_VINE("Quest vote winner", "Quest vote winner", "qvwv"),
     QUEST_VOTE_WINNER_INSTAGRAM_IMAGE("Quest vote winner", "Quest vote winner", "qvwim"),
     QUEST_VOTE_INSTAGRAM_VIDEO("Quest vote winner", "Quest vote winner", "qvwiv"),
-    QUEST_CHALLENGE("Quest challenge", "Quest challenge", "qch");
+    QUEST_CHALLENGE("Quest challenge", "Quest challenge", "questChalleng");
     /**
      * Human readable name of notification type
      */

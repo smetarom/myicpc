@@ -50,6 +50,12 @@
 
         <dependency>
             <groupId>com.myicpc</groupId>
+            <artifactId>myicpc-kiosk</artifactId>
+            <version>${myicpc-kiosk.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.myicpc</groupId>
             <artifactId>myicpc-pubsub</artifactId>
             <version>${myicpc-pubsub.version}</version>
         </dependency>
