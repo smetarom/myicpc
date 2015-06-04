@@ -5,6 +5,7 @@ import com.myicpc.model.quest.QuestChallenge;
 import com.myicpc.model.quest.QuestParticipant;
 import com.myicpc.model.quest.QuestSubmission;
 import com.myicpc.model.quest.QuestSubmission.QuestSubmissionState;
+import com.myicpc.model.quest.QuestSubmission.VoteSubmissionState;
 import com.myicpc.model.social.Notification;
 import com.myicpc.model.teamInfo.ContestParticipant;
 import com.myicpc.repository.quest.QuestChallengeRepository;
@@ -13,6 +14,8 @@ import com.myicpc.repository.quest.QuestSubmissionRepository;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.repository.teamInfo.ContestParticipantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +27,8 @@ import java.util.List;
 @Service
 @Transactional
 public class QuestSubmissionService {
+    public static final int VOTE_ROUND_SIZE = 4;
+    public static final int MIN_VOTES_REQUIRED = 5;
 
     @Autowired
     private QuestChallengeRepository challengeRepository;
@@ -179,5 +184,39 @@ public class QuestSubmissionService {
     protected Long getLastProcessedId(final Contest contest) {
         Long max = submissionRepository.getMaxNotificationId(contest);
         return max != null ? max : 0L;
+    }
+
+    public void moveVotingToNextRound(final Contest contest) {
+        // determite winner
+        QuestSubmission winningSubmission = null;
+        int maxVotes = -1;
+        List<QuestSubmission> inProgressSubmissions = submissionRepository.getVoteInProgressSubmissions(contest);
+        for (QuestSubmission submission : inProgressSubmissions) {
+            int votes = submission.getVotes();
+            if (votes >= MIN_VOTES_REQUIRED && votes > maxVotes) {
+                // add point only if it has at least 5 votes
+                maxVotes = votes;
+                winningSubmission = submission;
+            }
+            submission.setVotes(0);
+            submission.setVoteSubmissionState(null);
+        }
+        // process winner
+        if (winningSubmission != null && inProgressSubmissions.size() == VOTE_ROUND_SIZE) {
+            winningSubmission.setVoteSubmissionState(VoteSubmissionState.VOTE_WINNER);
+            winningSubmission.setQuestPoints(winningSubmission.getQuestPoints() + contest.getQuestConfiguration().getPointsForVote());
+            winningSubmission.setVotes(maxVotes);
+            winningSubmission.getParticipant().calcQuestPoints();
+            questParticipantRepository.save(winningSubmission.getParticipant());
+        }
+        submissionRepository.save(inProgressSubmissions);
+
+        // select new candidates
+        Pageable pageable = new PageRequest(0, 4);
+        List<QuestSubmission> newInProgressSubmissions = submissionRepository.getVoteEligableSubmissions(contest, pageable);
+        for (QuestSubmission submission : newInProgressSubmissions) {
+            submission.setVoteSubmissionState(VoteSubmissionState.IN_PROGRESS);
+        }
+        submissionRepository.save(newInProgressSubmissions);
     }
 }

@@ -32,6 +32,12 @@ public interface QuestSubmissionRepository extends JpaRepository<QuestSubmission
     @Query("SELECT COUNT(qs) FROM QuestSubmission qs WHERE qs.voteSubmissionState = 'VOTE_WINNER' AND qs.challenge.contest = ?1")
     Long countWinningSubmissions(Contest contest);
 
+    @Query("SELECT qs FROM QuestSubmission qs WHERE qs.submissionState = 'ACCEPTED' AND qs.voteSubmissionState = 'IN_PROGRESS' AND qs.challenge.contest = ?1")
+    List<QuestSubmission> getVoteInProgressSubmissions(Contest contest);
+
+    @Query("SELECT qs FROM QuestSubmission qs WHERE qs.submissionState = 'ACCEPTED' AND qs.voteSubmissionState IS NULL AND qs.challenge.contest = ?1 ORDER BY RANDOM()")
+    List<QuestSubmission> getVoteEligableSubmissions(Contest contest, Pageable pageable);
+
     @Query("SELECT new com.myicpc.dto.quest.QuestSubmissionDTO(" +
             "   p.id," +
             "   qs.challenge.id," +
@@ -60,12 +66,6 @@ public interface QuestSubmissionRepository extends JpaRepository<QuestSubmission
 
     @Query("SELECT qs FROM QuestSubmission qs WHERE qs.submissionState = 'ACCEPTED' AND qs.voteSubmissionState = 'VOTE_WINNER'")
     List<QuestSubmission> getVoteWinnersSubmissions();
-
-    @Query("SELECT qs FROM QuestSubmission qs WHERE qs.submissionState = 'ACCEPTED' AND qs.voteSubmissionState = 'IN_PROGRESS'")
-    List<QuestSubmission> getVoteInProgressSubmissions();
-
-    @Query("SELECT qs FROM QuestSubmission qs WHERE qs.submissionState = 'ACCEPTED' AND qs.voteSubmissionState IS NULL ORDER BY RANDOM()")
-    List<QuestSubmission> getVoteEligableSubmissions(Pageable pageable);
 
     @Query("SELECT COUNT(qs) FROM QuestSubmission qs WHERE qs.participant.id = ?1")
     Long countSubmissionByParticipant(Long questParticipantId);
