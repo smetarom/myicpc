@@ -205,9 +205,8 @@ public class QuestSubmissionService {
         // process winner
         if (winningSubmission != null && inProgressSubmissions.size() == VOTE_ROUND_SIZE) {
             winningSubmission.setVoteSubmissionState(VoteSubmissionState.VOTE_WINNER);
-            winningSubmission.setQuestPoints(winningSubmission.getQuestPoints() + contest.getQuestConfiguration().getPointsForVote());
+            winningSubmission.getParticipant().setPointsFromVoting(winningSubmission.getParticipant().getPointsFromVoting());
             winningSubmission.setVotes(maxVotes);
-            winningSubmission.getParticipant().calcQuestPoints();
             questParticipantRepository.save(winningSubmission.getParticipant());
         }
         submissionRepository.save(inProgressSubmissions);

@@ -26,6 +26,10 @@ public class QuestParticipant extends IdGeneratedContestObject {
      */
     private int points;
     /**
+     * Points gained in submission voting
+     */
+    private int pointsFromVoting;
+    /**
      * Administrator can add/remove points from {@link QuestParticipant}, this
      * changes participant score permanently
      */
@@ -56,6 +60,14 @@ public class QuestParticipant extends IdGeneratedContestObject {
 
     public void setPoints(final int points) {
         this.points = points;
+    }
+
+    public int getPointsFromVoting() {
+        return pointsFromVoting;
+    }
+
+    public void setPointsFromVoting(int pointsFromVoting) {
+        this.pointsFromVoting = pointsFromVoting;
     }
 
     public int getPointsAdjustment() {
@@ -97,13 +109,12 @@ public class QuestParticipant extends IdGeneratedContestObject {
                 }
             }
         }
-        points += pointsAdjustment;
         this.points = points;
     }
 
     @Transient
     public int getTotalPoints() {
-        return points + pointsAdjustment;
+        return points + pointsAdjustment + pointsFromVoting;
     }
 
     @Transient
