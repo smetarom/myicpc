@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -211,12 +212,15 @@ public class QuestSubmissionService {
         }
         submissionRepository.save(inProgressSubmissions);
 
-        // select new candidates
-        Pageable pageable = new PageRequest(0, 4);
-        List<QuestSubmission> newInProgressSubmissions = submissionRepository.getVoteEligableSubmissions(contest, pageable);
-        for (QuestSubmission submission : newInProgressSubmissions) {
-            submission.setVoteSubmissionState(VoteSubmissionState.IN_PROGRESS);
+        Date deadline = contest.getQuestConfiguration().getDeadline();
+        if (deadline == null || deadline.after(new Date())) {
+            // select new candidates
+            Pageable pageable = new PageRequest(0, 4);
+            List<QuestSubmission> newInProgressSubmissions = submissionRepository.getVoteEligableSubmissions(contest, pageable);
+            for (QuestSubmission submission : newInProgressSubmissions) {
+                submission.setVoteSubmissionState(VoteSubmissionState.IN_PROGRESS);
+            }
+            submissionRepository.save(newInProgressSubmissions);
         }
-        submissionRepository.save(newInProgressSubmissions);
     }
 }
