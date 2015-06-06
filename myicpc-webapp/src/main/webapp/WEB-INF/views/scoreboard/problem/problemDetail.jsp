@@ -15,6 +15,8 @@
         <script type="application/javascript">
             $(function() {
                 var ngController = angular.element($("#problemController")).scope();
+                var judgements = ${not empty judgementsJSON ? judgementsJSON : '{}'};
+                ngController.setJudgements(judgements);
 
                 startSubscribe('${r.contextPath}', '${contest.code}', 'problem/${problem.code}', updateProblemView, ngController);
             });

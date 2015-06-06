@@ -25,7 +25,7 @@ public interface TeamProblemRepository extends JpaRepository<TeamProblem, Long>,
 
     List<TeamProblem> findByProblem(Problem problem);
 
-    @Query("SELECT new com.myicpc.dto.eventFeed.TeamSubmissionDTO(ts.systemId, t.externalId, t.name, ts.solved, ts.penalty, ts.time, ts.judged, ts.numTestPassed, ts.totalNumTests) " +
+    @Query("SELECT new com.myicpc.dto.eventFeed.TeamSubmissionDTO(ts.systemId, t.externalId, t.name, ts.solved, ts.penalty, ts.time, ts.judged, ts.numTestPassed, ts.totalNumTests, ts.language, ts.resultCode) " +
             "FROM TeamProblem ts " +
             "JOIN ts.team t " +
             "WHERE ts.problem = ?1 " +

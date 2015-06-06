@@ -1,4 +1,4 @@
-.attempt-table {
+.problem-table {
   &>tbody>tr>td {
     border-top-width: 0;
 
@@ -7,6 +7,11 @@
     }
   }
   .progress {
+    margin-bottom: 0;
+  }
+  .inner-table {
+    background-color: transparent;
+    font-size: 0.9em;
     margin-bottom: 0;
   }
 }

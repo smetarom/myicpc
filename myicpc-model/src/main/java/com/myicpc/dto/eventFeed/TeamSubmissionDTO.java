@@ -15,8 +15,10 @@ public class TeamSubmissionDTO implements Serializable {
     private boolean judged;
     private int numTestPassed;
     private int totalNumTests;
+    private String language;
+    private String judgement;
 
-    public TeamSubmissionDTO(Long teamSubmissionId, Long teamId, String teamName, boolean solved, boolean penalty, Double time, boolean judged, int numTestPassed, int totalNumTests) {
+    public TeamSubmissionDTO(Long teamSubmissionId, Long teamId, String teamName, boolean solved, boolean penalty, Double time, boolean judged, int numTestPassed, int totalNumTests, String language, String judgement) {
         this.teamSubmissionId = teamSubmissionId;
         this.teamId = teamId;
         this.teamName = teamName;
@@ -26,6 +28,8 @@ public class TeamSubmissionDTO implements Serializable {
         this.judged = judged;
         this.numTestPassed = numTestPassed;
         this.totalNumTests = totalNumTests;
+        this.language = language;
+        this.judgement = judgement;
     }
 
     public Long getTeamSubmissionId() {
@@ -62,5 +66,13 @@ public class TeamSubmissionDTO implements Serializable {
 
     public int getTotalNumTests() {
         return totalNumTests;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public String getJudgement() {
+        return judgement;
     }
 }

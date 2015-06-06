@@ -3,6 +3,7 @@ package com.myicpc.controller.scoreboard;
 import com.myicpc.controller.GeneralController;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Problem;
+import com.myicpc.repository.eventFeed.JudgementRepository;
 import com.myicpc.repository.eventFeed.ProblemRepository;
 import com.myicpc.service.scoreboard.problem.ProblemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class ProblemController extends GeneralController {
         }
 
         model.addAttribute("problem", problem);
+        model.addAttribute("judgementsJSON", problemService.getAllJudgementsJSON(contest).toString());
 
         return "scoreboard/problem/problemDetail";
     }

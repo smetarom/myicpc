@@ -14,6 +14,17 @@ problemApp.config(['$routeProvider',
     });
 ]);
 
+problemApp.directive('doubleTick', () ->
+  {
+  restrict: 'E',
+  scope: {
+    condition: '=ngModel'
+  },
+  template: '<span class="glyphicon glyphicon-ok" ng-if="condition"></span>' +
+    '<span class="glyphicon glyphicon-remove" ng-if="!condition"></span>'
+  }
+)
+
 problemApp.directive('tripleTick', () ->
   {
     restrict: 'E',
@@ -54,11 +65,23 @@ problemApp.factory('problemService', ($rootScope) ->
   problemService.addTeamSubmission = (submission) ->
     $rootScope.$broadcast("addSubmission", submission);
 
+  problemService.getSubmissionIndex = (submissions, submission) ->
+    index = -1
+    if submissions? && submissions.length > 0
+      for i in [0..submissions.length-1]
+        if (submissions[i].id == submission.id)
+          index = i
+          break
+    return index
+
   return problemService
 )
 
-problemApp.controller('problemCtrl', ($scope, problemService) ->
+problemApp.controller('problemCtrl', ($scope, $rootScope, problemService) ->
   $scope.addTeamSubmission = problemService.addTeamSubmission
+
+  $scope.setJudgements = (judgements) ->
+    $rootScope.judgements = judgements
 )
 
 problemApp.controller('problemAttempsCtrl', ($scope, $rootScope, $http) ->
@@ -70,21 +93,16 @@ problemApp.controller('problemAttempsCtrl', ($scope, $rootScope, $http) ->
     url = "#{contextPath}/#{contestCode}/problem/#{problemCode}/attempts-data"
     $http.get(url).success((data) ->
       $scope.submissions = data
-      $scope.dataLoaded = true
     ).error(() ->
       # TODO
     ).finally(() ->
       $scope.dataLoaded = true
     )
-#    $scope.$apply()
 
   $scope.$on('addSubmission', (event, submission) ->
     $scope.$apply(() ->
       if submission.judged
-        index = -1
-        for i in [0..$scope.submissions.length-1]
-          if ($scope.submissions[i].id == submission.id)
-            index = i
+        index = problemService.getSubmissionIndex($scope.submissions, submission)
         if index == -1
           $scope.submissions.unshift(submission)
         else
@@ -94,8 +112,7 @@ problemApp.controller('problemAttempsCtrl', ($scope, $rootScope, $http) ->
     )
   )
   
-  $scope.formatTime = (time) ->
-    formatContestTime(time)
+  $scope.formatTime = formatContestTime
 
   $scope.calcProgressPercentage = (submission) ->
     if submission.testcases? && submission.testcases > 0
@@ -103,16 +120,74 @@ problemApp.controller('problemAttempsCtrl', ($scope, $rootScope, $http) ->
     return 0
 )
 
-problemApp.controller('problemTeamsCtrl', ($scope, $rootScope) ->
+problemApp.controller('problemTeamsCtrl', ($scope, $rootScope, $http, problemService) ->
+  $scope.dataLoaded = false
+  $scope.teams = []
 
   $scope.init = (contextPath, contestCode, problemCode) ->
     $rootScope.activeTab = 'teams'
+    url = "#{contextPath}/#{contestCode}/problem/#{problemCode}/attempts-data"
+    $http.get(url).success((submissions) ->
+      if submissions.length > 0
+        teamsObject = {}
+        for i in [0..submissions.length-1]
+          submission = submissions[i]
+
+          createJudgementDetail(submission)
+
+          if !teamsObject[submission.teamExternalId]?
+            teamsObject[submission.teamExternalId] = createTeamFromSubmission(submission)
+          if !teamsObject[submission.teamExternalId].solved
+            teamsObject[submission.teamExternalId].solved = submission.solved
+          teamsObject[submission.teamExternalId].submissions.push(submission)
+        $scope.teams = Object.keys(teamsObject).map((key) -> teamsObject[key])
+    ).error(() ->
+      # TODO
+    ).finally(() ->
+      $scope.dataLoaded = true
+    )
 
   $scope.$on('addSubmission', (event, submission) ->
     $scope.$apply(() ->
-      console.log('ahoj')
+      teamIndex = -1
+      if ($scope.teams.length > 0)
+        for i in [0..$scope.teams.length-1]
+          if $scope.teams[i].teamExternalId == submission.teamExternalId
+            teamIndex = i
+
+      if teamIndex == -1
+        team = createTeamFromSubmission(submission)
+        team.submissions.push(submission)
+        $scope.teams.push(team)
+      else
+        if !$scope.teams[teamIndex].solved
+          $scope.teams[teamIndex].solved = submission.solved
+
+        index = problemService.getSubmissionIndex($scope.teams[teamIndex].submissions, submission)
+        if index == -1
+          $scope.teams[teamIndex].submissions.unshift(submission)
+        else
+          $scope.teams[teamIndex].submissions[index] = submission
     )
   )
+
+  $scope.formatTime = formatContestTime
+
+  createJudgementDetail = (submission) ->
+    if submission?
+      judgement = $rootScope.judgements[submission.judgement]
+      if judgement?
+        submission.judgementName = judgement.name
+        submission.judgementColor = judgement.color
+
+  createTeamFromSubmission = (submission) ->
+    return {
+        teamExternalId: submission.teamExternalId
+        teamName: submission.teamName
+        submissions: []
+        solved: submission.solved
+      }
+
 )
 
 updateProblemView = (data, ngController) ->

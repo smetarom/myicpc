@@ -4,9 +4,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.myicpc.dto.eventFeed.TeamSubmissionDTO;
 import com.myicpc.model.contest.Contest;
+import com.myicpc.model.eventFeed.Judgement;
 import com.myicpc.model.eventFeed.Problem;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
+import com.myicpc.repository.eventFeed.JudgementRepository;
 import com.myicpc.repository.eventFeed.ProblemRepository;
 import com.myicpc.repository.eventFeed.TeamProblemRepository;
 import com.myicpc.service.listener.ScoreboardListenerAdapter;
@@ -33,6 +35,9 @@ public class ProblemServiceImpl extends ScoreboardListenerAdapter implements Pro
     @Autowired
     private TeamProblemRepository teamProblemRepository;
 
+    @Autowired
+    private JudgementRepository judgementRepository;
+
     @Override
     public void onSubmission(TeamProblem teamProblem, List<Team> effectedTeams) {
         TeamSubmissionDTO teamSubmissionDTO = new TeamSubmissionDTO(teamProblem.getSystemId(),
@@ -43,7 +48,9 @@ public class ProblemServiceImpl extends ScoreboardListenerAdapter implements Pro
                 teamProblem.getTime(),
                 teamProblem.getJudged(),
                 teamProblem.getNumTestPassed(),
-                teamProblem.getTotalNumTests());
+                teamProblem.getTotalNumTests(),
+                teamProblem.getLanguage(),
+                teamProblem.getResultCode());
         publishService.broadcastProblem(ProblemServiceImpl.getTeamSubmissionJSON(teamSubmissionDTO),
                 teamProblem.getProblem().getCode(),
                 teamProblem.getTeam().getContest().getCode());
@@ -66,6 +73,19 @@ public class ProblemServiceImpl extends ScoreboardListenerAdapter implements Pro
         return arr;
     }
 
+    public JsonObject getAllJudgementsJSON(Contest contest) {
+        List<Judgement> judgements = judgementRepository.findByContest(contest);
+        JsonObject object = new JsonObject();
+        for (Judgement judgement : judgements) {
+            JsonObject judgementObject = new JsonObject();
+            judgementObject.addProperty("code", judgement.getCode());
+            judgementObject.addProperty("name", judgement.getName());
+            judgementObject.addProperty("color", judgement.getColor());
+            object.add(judgement.getCode(), judgementObject);
+        }
+        return object;
+    }
+
     public static JsonObject getTeamSubmissionJSON(final TeamSubmissionDTO teamProblem) {
         // TODO remove
         Random random = new Random();
@@ -74,6 +94,8 @@ public class ProblemServiceImpl extends ScoreboardListenerAdapter implements Pro
         submissionJSON.addProperty("time", teamProblem.getTime());
         submissionJSON.addProperty("judged", teamProblem.isJudged());
         submissionJSON.addProperty("solved", teamProblem.isSolved());
+        submissionJSON.addProperty("language", teamProblem.getLanguage());
+        submissionJSON.addProperty("judgement", teamProblem.getJudgement());
         submissionJSON.addProperty("passed", teamProblem.getNumTestPassed());
         submissionJSON.addProperty("testcases", teamProblem.getTotalNumTests());
         submissionJSON.addProperty("passed", random.nextInt(20));

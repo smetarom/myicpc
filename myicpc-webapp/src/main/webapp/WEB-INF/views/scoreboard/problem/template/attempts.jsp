@@ -11,7 +11,14 @@
         No events
     </div>
 
-    <table class="table table-condensed attempt-table">
+    <table class="table table-condensed problem-table striped-body">
+        <thead>
+            <tr>
+                <th class="text-center"><spring:message code="problem.time" /></th>
+                <th><spring:message code="team" /></th>
+                <th class="text-center" colspan="2"><spring:message code="problem.solved" /></th>
+            </tr>
+        </thead>
         <tbody ng-repeat="submission in submissions">
             <tr>
                 <td>{{formatTime(submission.time)}}</td>
