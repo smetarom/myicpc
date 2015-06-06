@@ -13,9 +13,6 @@ import java.util.List;
  * @author Roman Smetana
  */
 public interface ScoreboardService extends ScoreboardListener {
-    @Override
-    void onSubmission(TeamProblem teamProblem, List<Team> effectedTeams);
-
     JsonArray getTeamsFullTemplate(Contest contest);
 
     JsonArray getTeamsScorebarTemplate(Contest contest);

@@ -75,7 +75,7 @@
                         <th class="text-center"><spring:message code="scoreboard.solved" /></th>
                         <th class="text-center"><spring:message code="scoreboard.totalTime" /></th>
                         <c:forEach var="problem" items="${problems}">
-                            <th style="min-width: 50px" class="text-center"><a href="<spring:url value="${contestURL}/problem/${problem.code}"/>">${problem.code}</a></th>
+                            <th style="min-width: 50px" class="text-center"><a href="<spring:url value="${contestURL}/problem/${problem.code}/detail"/>">${problem.code}</a></th>
                         </c:forEach>
                     </tr>
                     </thead>

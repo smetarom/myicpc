@@ -2,6 +2,7 @@ package com.myicpc.service.publish;
 
 import com.google.gson.JsonObject;
 import com.myicpc.model.contest.Contest;
+import com.myicpc.model.eventFeed.TeamProblem;
 import com.myicpc.model.social.Notification;
 import com.myicpc.service.notification.NotificationService;
 import org.atmosphere.cpr.Broadcaster;
@@ -22,6 +23,10 @@ public class PublishService {
      * Web socket channel for submissions and contest related messages
      */
     public static final String SCOREBOARD_CHANNEL = "scoreboard";
+    /**
+     * Web socket channel for submissions and contest related messages
+     */
+    public static final String PROBLEM_CHANNEL = "problem";
     /**
      * Web socket channel for poll related messages
      */
@@ -56,6 +61,17 @@ public class PublishService {
         JsonObject notificationObject = NotificationService.getNotificationInJson(notification);
 
         atmospherePublish(PREFIX + contest.getCode() + "/" + NOTIFICATION, notificationObject.toString());
+    }
+
+    /**
+     * Broadcast the contest submissions on a problem to the problem channel
+     *
+     * @param teamSubmission
+     *            submission, which triggered the event
+     */
+    public void broadcastProblem(JsonObject teamSubmission, String problemCode, String contestCode) {
+        atmospherePublish(PREFIX + contestCode + "/" + PROBLEM_CHANNEL + "/" + problemCode,
+                teamSubmission.toString());
     }
 
     /**

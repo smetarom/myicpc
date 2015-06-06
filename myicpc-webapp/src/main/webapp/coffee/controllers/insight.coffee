@@ -46,7 +46,6 @@ insightApp.factory('insightService', ($http, $interval) ->
   insightService.init = (url, title, successFn, pollingFn) ->
     if promise?
       $interval.cancel(promise)
-    console.log(promise);
     $("#insightHeadline").html("#{title}")
     $http.get(url).success(successFn)
     .error(() ->

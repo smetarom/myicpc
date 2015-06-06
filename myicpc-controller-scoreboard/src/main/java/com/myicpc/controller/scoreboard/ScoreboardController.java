@@ -1,10 +1,6 @@
 package com.myicpc.controller.scoreboard;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.myicpc.controller.GeneralAbstractController;
 import com.myicpc.controller.GeneralController;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Problem;
@@ -15,7 +11,6 @@ import com.myicpc.service.scoreboard.problem.ProblemService;
 import com.myicpc.service.scoreboard.team.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.site.SitePreference;
-import org.springframework.mobile.device.site.SitePreferenceUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;

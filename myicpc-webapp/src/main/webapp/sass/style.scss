@@ -1,6 +1,7 @@
 @import 'commons';
 @import 'timeline';
 @import 'scoreboard';
+@import 'problem';
 @import 'scorebar';
 @import 'worldMap';
 @import 'insight';
@@ -325,4 +326,10 @@ td.fit-content {
   width: 100%;
   overflow: visible;
   overflow-x: auto;
+}
+
+.inline-spinner {
+  width: 100%;
+  height: 200px;
+  background: url('../images/ajax-loader.gif') no-repeat center center;
 }

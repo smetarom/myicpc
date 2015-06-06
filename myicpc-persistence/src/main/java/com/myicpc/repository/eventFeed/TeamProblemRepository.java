@@ -1,5 +1,6 @@
 package com.myicpc.repository.eventFeed;
 
+import com.myicpc.dto.eventFeed.TeamSubmissionDTO;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Problem;
 import com.myicpc.model.eventFeed.Team;
@@ -23,6 +24,15 @@ public interface TeamProblemRepository extends JpaRepository<TeamProblem, Long>,
     List<TeamProblem> findByTeamOrderByTimeDesc(Team team);
 
     List<TeamProblem> findByProblem(Problem problem);
+
+    @Query("SELECT new com.myicpc.dto.eventFeed.TeamSubmissionDTO(ts.systemId, t.externalId, t.name, ts.solved, ts.penalty, ts.time, ts.judged, ts.numTestPassed, ts.totalNumTests) " +
+            "FROM TeamProblem ts " +
+            "JOIN ts.team t " +
+            "WHERE ts.problem = ?1 " +
+            "ORDER BY ts.systemId DESC")
+    List<TeamSubmissionDTO> findTeamSubmissionsByProblem(Problem problem);
+
+    List<TeamProblem> findByProblemOrderByTimeDesc(Problem problem);
 
     List<TeamProblem> findByProblemAndFirstSolved(Problem problem, boolean firstSolved);
 

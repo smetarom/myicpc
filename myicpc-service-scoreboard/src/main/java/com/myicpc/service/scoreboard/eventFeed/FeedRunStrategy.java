@@ -11,6 +11,8 @@ import com.myicpc.repository.eventFeed.TeamRankHistoryRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.service.listener.ScoreboardListener;
 import com.myicpc.service.publish.PublishService;
+import com.myicpc.service.scoreboard.ScoreboardService;
+import com.myicpc.service.scoreboard.problem.ProblemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,20 +43,26 @@ public abstract class FeedRunStrategy {
 
     @Autowired
     protected TeamRankHistoryRepository teamRankHistoryRepository;
+//
+//    @Autowired(required = false)
+//    protected ScoreboardListener notificationService;
 
     @Autowired(required = false)
-    protected ScoreboardListener notificationService;
+    protected ScoreboardService scoreboardService;
 
     @Autowired(required = false)
-    protected ScoreboardListener scoreboardService;
+    protected ProblemService problemService;
 
     @PostConstruct
     private void init() {
-        if (notificationService != null) {
-            scoreboardListeners.add(notificationService);
-        }
+//        if (notificationService != null) {
+//            scoreboardListeners.add(notificationService);
+//        }
         if (scoreboardService != null) {
             scoreboardListeners.add(scoreboardService);
+        }
+        if (problemService != null) {
+            scoreboardListeners.add(problemService);
         }
     }
 

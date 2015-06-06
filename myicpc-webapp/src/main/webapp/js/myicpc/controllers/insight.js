@@ -50,7 +50,6 @@ insightApp.factory('insightService', function($http, $interval) {
     if (promise != null) {
       $interval.cancel(promise);
     }
-    console.log(promise);
     $("#insightHeadline").html("" + title);
     $http.get(url).success(successFn).error(function() {});
     return promise = $interval(function() {

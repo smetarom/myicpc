@@ -1,0 +1,12 @@
+.attempt-table {
+  &>tbody>tr>td {
+    border-top-width: 0;
+
+    &.problem-bar {
+      padding-top: 0;
+    }
+  }
+  .progress {
+    margin-bottom: 0;
+  }
+}

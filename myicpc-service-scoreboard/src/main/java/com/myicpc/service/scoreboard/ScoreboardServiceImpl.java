@@ -18,6 +18,7 @@ import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.repository.teamInfo.TeamInfoRepository;
 import com.myicpc.service.listener.ScoreboardListenerAdapter;
 import com.myicpc.service.publish.PublishService;
+import com.myicpc.service.scoreboard.problem.ProblemService;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ import java.util.List;
 /**
  * @author Roman Smetana
  */
-@Service("scoreboardService")
+@Service
 @Transactional
 public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements ScoreboardService {
 
@@ -54,36 +55,8 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
 
     @Override
     public void onSubmission(TeamProblem teamProblem, List<Team> effectedTeams) {
-        JsonObject tpObject = new JsonObject();
-        tpObject.addProperty("type", "submission");
-        tpObject.addProperty("teamId", teamProblem.getTeam().getExternalId());
-        tpObject.addProperty("teamName", teamProblem.getTeam().getName());
-        tpObject.addProperty("problemId", teamProblem.getProblem().getId());
-        tpObject.addProperty("problemCode", teamProblem.getProblem().getCode());
-        tpObject.addProperty("problemName", teamProblem.getProblem().getName());
-        tpObject.addProperty("attempts", teamProblem.getAttempts());
-        tpObject.addProperty("judged", teamProblem.getJudged());
-        tpObject.addProperty("solved", teamProblem.getSolved());
-        tpObject.addProperty("passed", teamProblem.getNumTestPassed());
-        tpObject.addProperty("first", teamProblem.isFirstSolved());
-        tpObject.addProperty("testcases", teamProblem.getProblem().getTotalTestcases());
-        tpObject.addProperty("penalty", teamProblem.getPenalty());
-        tpObject.addProperty("time", teamProblem.getTime());
-        tpObject.addProperty("total", teamProblem.getTeam().getTotalTime());
-        tpObject.addProperty("numSolved", teamProblem.getTeam().getProblemsSolved());
-        tpObject.addProperty("oldRank", teamProblem.getOldRank());
-        tpObject.addProperty("teamRank", teamProblem.getTeam().getRank());
-
-        JsonObject teamsObject = new JsonObject();
-        for (Team team : effectedTeams) {
-            JsonObject teamObject = new JsonObject();
-            teamObject.addProperty("teamId", team.getExternalId());
-            teamObject.addProperty("teamRank", team.getRank());
-            teamsObject.add(team.getExternalId().toString(), teamObject);
-        }
-        tpObject.add("teams", teamsObject);
-
-        publishService.broadcastTeamProblem(tpObject, teamProblem.getTeam().getContest().getCode());
+        publishService.broadcastTeamProblem(ScoreboardServiceImpl.getTeamSubmissionJSON(teamProblem, effectedTeams),
+                teamProblem.getTeam().getContest().getCode());
     }
 
     /**
@@ -218,5 +191,37 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
             root.add(problemObject);
         }
         return root;
+    }
+
+    public static JsonObject getTeamSubmissionJSON(final TeamProblem teamProblem, Iterable<Team> effectedTeams) {
+        JsonObject tpObject = new JsonObject();
+        tpObject.addProperty("type", "submission");
+        tpObject.addProperty("teamId", teamProblem.getTeam().getExternalId());
+        tpObject.addProperty("teamName", teamProblem.getTeam().getName());
+        tpObject.addProperty("problemId", teamProblem.getProblem().getId());
+        tpObject.addProperty("problemCode", teamProblem.getProblem().getCode());
+        tpObject.addProperty("problemName", teamProblem.getProblem().getName());
+        tpObject.addProperty("attempts", teamProblem.getAttempts());
+        tpObject.addProperty("judged", teamProblem.getJudged());
+        tpObject.addProperty("solved", teamProblem.getSolved());
+        tpObject.addProperty("passed", teamProblem.getNumTestPassed());
+        tpObject.addProperty("first", teamProblem.isFirstSolved());
+        tpObject.addProperty("testcases", teamProblem.getProblem().getTotalTestcases());
+        tpObject.addProperty("penalty", teamProblem.getPenalty());
+        tpObject.addProperty("time", teamProblem.getTime());
+        tpObject.addProperty("total", teamProblem.getTeam().getTotalTime());
+        tpObject.addProperty("numSolved", teamProblem.getTeam().getProblemsSolved());
+        tpObject.addProperty("oldRank", teamProblem.getOldRank());
+        tpObject.addProperty("teamRank", teamProblem.getTeam().getRank());
+
+        JsonObject teamsObject = new JsonObject();
+        for (Team team : effectedTeams) {
+            JsonObject teamObject = new JsonObject();
+            teamObject.addProperty("teamId", team.getExternalId());
+            teamObject.addProperty("teamRank", team.getRank());
+            teamsObject.add(team.getExternalId().toString(), teamObject);
+        }
+        tpObject.add("teams", teamsObject);
+        return tpObject;
     }
 }

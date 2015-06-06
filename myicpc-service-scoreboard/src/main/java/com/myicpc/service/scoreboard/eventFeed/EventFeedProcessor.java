@@ -118,7 +118,6 @@ public class EventFeedProcessor {
                 if (!(elem instanceof TestcaseXML)) {
                     elem.accept(eventFeedVisitor, contest);
                 }
-                System.out.println("entity finished" + elem);
             }
         } catch (EOFException ex) {
             logger.info("Event feed parsing is done.");
