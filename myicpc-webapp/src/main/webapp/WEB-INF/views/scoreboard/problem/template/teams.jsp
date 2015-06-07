@@ -12,14 +12,14 @@
     </div>
 
     <table class="table problem-table striped-body">
-        <tbody ng-repeat="team in teams | orderBy : teamName">
+        <tbody ng-repeat="team in teams | orderBy : 'teamName'">
             <tr>
                 <td><a href="<spring:url value="${contestURL}/team/"/>{{team.teamExternalId}}">{{team.teamName}}</a></td>
                 <td><double-tick ng-model="team.solved" /></td>
             </tr>
             <tr>
                 <td colspan="2">
-                    <table class="table inner-table">
+                    <table class="table inner-table table-condensed">
                         <tr ng-repeat="submission in team.submissions">
                             <td style="width: 5%"><triple-tick ng-model="submission"/></td>
                             <td style="width: 10%">{{formatTime(submission.time)}}</td>

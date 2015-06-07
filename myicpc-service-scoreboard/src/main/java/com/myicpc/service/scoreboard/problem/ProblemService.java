@@ -17,4 +17,6 @@ public interface ProblemService extends ScoreboardListener {
     JsonArray getSubmissionAttemptsJSON(Problem problem);
 
     JsonObject getAllJudgementsJSON(Contest contest);
+
+    JsonArray getProblemOverviewJSON(Problem problem);
 }

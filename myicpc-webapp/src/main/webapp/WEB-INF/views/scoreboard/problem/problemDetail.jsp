@@ -29,6 +29,7 @@
                 <t:secondLevelSubmenu isMobile="${sitePreference.mobile}">
                     <li ng-class="{active: activeTab == 'attempts'}"><a href="#/attempts"><spring:message code="problem.tab.byAttempts"/></a></li>
                     <li ng-class="{active: activeTab == 'teams'}"><a href="#/teams"><spring:message code="problem.tab.byTeams"/></a></li>
+                    <li ng-class="{active: activeTab == 'overview'}"><a href="#/overview"><spring:message code="problem.tab.byTeams"/></a></li>
                 </t:secondLevelSubmenu>
             </div>
 

@@ -9,6 +9,9 @@ problemApp.config(['$routeProvider',
     }).when('/teams', {
       templateUrl: 'teams-template',
       controller: 'problemTeamsCtrl'
+    }).when('/overview', {
+      templateUrl: 'overview-template',
+      controller: 'problemOverviewCtrl'
     }).otherwise({
       redirectTo: '/attempts'
     });
@@ -149,6 +152,7 @@ problemApp.controller('problemTeamsCtrl', ($scope, $rootScope, $http, problemSer
 
   $scope.$on('addSubmission', (event, submission) ->
     $scope.$apply(() ->
+      createJudgementDetail(submission)
       teamIndex = -1
       if ($scope.teams.length > 0)
         for i in [0..$scope.teams.length-1]
@@ -187,6 +191,64 @@ problemApp.controller('problemTeamsCtrl', ($scope, $rootScope, $http, problemSer
         submissions: []
         solved: submission.solved
       }
+
+)
+
+problemApp.controller('problemOverviewCtrl', ($scope, $rootScope, $http, problemService) ->
+  $scope.dataLoaded = false
+  $scope.data = []
+
+  $scope.init = (contextPath, contestCode, problemCode) ->
+    $rootScope.activeTab = 'overview'
+    url = "#{contextPath}/#{contestCode}/problem/#{problemCode}/overview-data"
+    $http.get(url).success((data) ->
+      $scope.data = [{
+        "key": "Passed tests",
+        "color": '#5cb85c'
+        "values": data
+      }]
+    ).error(() ->
+      # TODO
+    ).finally(() ->
+      $scope.dataLoaded = true
+    )
+
+  $scope.$on('addSubmission', (event, submission) ->
+    $scope.$apply(() ->
+      if submission.judged
+        index = -1
+        console.log($scope.data[0])
+        if $scope.data[0].values.length > 0
+          for i in [0..$scope.data[0].values.length-1]
+            if $scope.data[0].values[i][0].teamExternalId == submission.teamExternalId
+              index = i
+              break
+
+        $scope.data[0].values[i][1] = submission
+    )
+  )
+
+  $scope.xFunction = ->
+    (d) ->
+      d[0].teamName
+
+  $scope.yFunction = ->
+    (d) ->
+      d[1].passed
+
+  format = d3.format(',.0f')
+  $scope.valueFormatFunction = ->
+    (d) ->
+      format d
+
+  $scope.toolTipContentFunction = ->
+    (key, x, y, e, graph) ->
+      d = e.point[1]
+      "<strong>#{x}</strong><br/>" +
+      "Time: #{formatContestTime(d.time)}<br/>" +
+      "Language:&nbsp;#{d.language}<br/>" +
+      "Judgement: #{d.judgement}"
+
 
 )
 

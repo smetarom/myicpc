@@ -59,13 +59,30 @@ public class ProblemController extends GeneralController {
         return problemService.getSubmissionAttemptsJSON(problem).toString();
     }
 
-
     @RequestMapping(value = "/{contestCode}/problem/{problemCode}/teams-template", method = RequestMethod.GET)
-    public String teamsTempate(@PathVariable String contestCode, @PathVariable String problemCode, Model model) {
+    public String teamsTemplate(@PathVariable String contestCode, @PathVariable String problemCode, Model model) {
         Contest contest = getContest(contestCode, model);
         Problem problem = problemRepository.findByCodeAndContest(problemCode, contest);
 
         model.addAttribute("problem", problem);
         return "scoreboard/problem/template/teams";
+    }
+
+    @RequestMapping(value = "/{contestCode}/problem/{problemCode}/overview-template", method = RequestMethod.GET)
+    public String chartTemplate(@PathVariable String contestCode, @PathVariable String problemCode, Model model) {
+        Contest contest = getContest(contestCode, model);
+        Problem problem = problemRepository.findByCodeAndContest(problemCode, contest);
+
+        model.addAttribute("problem", problem);
+        return "scoreboard/problem/template/overview";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/{contestCode}/problem/{problemCode}/overview-data", method = RequestMethod.GET)
+    public String problemOverviewJSON(@PathVariable String contestCode, @PathVariable String problemCode) {
+        Contest contest = getContest(contestCode, null);
+        Problem problem = problemRepository.findByCodeAndContest(problemCode, contest);
+
+        return problemService.getProblemOverviewJSON(problem).toString();
     }
 }

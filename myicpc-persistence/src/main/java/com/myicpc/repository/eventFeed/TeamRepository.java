@@ -13,6 +13,8 @@ import java.util.List;
 public interface TeamRepository extends JpaRepository<Team, Long> {
     List<Team> findByContest(Contest contest);
 
+    List<Team> findByContestOrderByNameAsc(Contest contest);
+
     @Query("SELECT t FROM Team t WHERE t.contest = ?1 AND t.id IN ?2")
     List<Team> findByContestAndTeamIds(Contest contest, List<Long> ids);
 

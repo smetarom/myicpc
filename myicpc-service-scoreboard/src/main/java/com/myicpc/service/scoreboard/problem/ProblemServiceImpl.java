@@ -1,7 +1,9 @@
 package com.myicpc.service.scoreboard.problem;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.myicpc.dto.eventFeed.TeamSubmissionDTO;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Judgement;
@@ -11,13 +13,21 @@ import com.myicpc.model.eventFeed.TeamProblem;
 import com.myicpc.repository.eventFeed.JudgementRepository;
 import com.myicpc.repository.eventFeed.ProblemRepository;
 import com.myicpc.repository.eventFeed.TeamProblemRepository;
+import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.service.listener.ScoreboardListenerAdapter;
 import com.myicpc.service.publish.PublishService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -31,6 +41,10 @@ public class ProblemServiceImpl extends ScoreboardListenerAdapter implements Pro
 
     @Autowired
     private ProblemRepository problemRepository;
+
+    @Autowired
+    private TeamRepository teamRepository;
+
 
     @Autowired
     private TeamProblemRepository teamProblemRepository;
@@ -73,6 +87,7 @@ public class ProblemServiceImpl extends ScoreboardListenerAdapter implements Pro
         return arr;
     }
 
+    @Override
     public JsonObject getAllJudgementsJSON(Contest contest) {
         List<Judgement> judgements = judgementRepository.findByContest(contest);
         JsonObject object = new JsonObject();
@@ -84,6 +99,39 @@ public class ProblemServiceImpl extends ScoreboardListenerAdapter implements Pro
             object.add(judgement.getCode(), judgementObject);
         }
         return object;
+    }
+
+    @Override
+    public JsonArray getProblemOverviewJSON(Problem problem) {
+        List<Team> teams = teamRepository.findByContestOrderByNameAsc(problem.getContest());
+        List<TeamSubmissionDTO> submissions = teamProblemRepository.findTeamSubmissionsByProblem(problem);
+        Map<Long, TeamSubmissionDTO> map = new HashMap<>(submissions.size());
+
+        for (TeamSubmissionDTO submission : submissions) {
+            if (submission.isJudged() && !map.containsKey(submission.getTeamId())) {
+                map.put(submission.getTeamId(), submission);
+            }
+        }
+
+        JsonArray arr = new JsonArray();
+        for (Team team : teams) {
+            JsonArray dataArr = new JsonArray();
+            JsonObject teamObject = new JsonObject();
+            teamObject.addProperty("teamExternalId", team.getExternalId());
+            teamObject.addProperty("teamName", team.getName());
+            dataArr.add(teamObject);
+            TeamSubmissionDTO submission = map.get(team.getExternalId());
+            if (submission != null) {
+                dataArr.add(getTeamSubmissionJSON(submission));
+            } else {
+                JsonObject zeroPassed = new JsonObject();
+                zeroPassed.addProperty("passed", 0);
+                dataArr.add(zeroPassed);
+            }
+            arr.add(dataArr);
+        }
+
+        return arr;
     }
 
     public static JsonObject getTeamSubmissionJSON(final TeamSubmissionDTO teamProblem) {
@@ -98,8 +146,8 @@ public class ProblemServiceImpl extends ScoreboardListenerAdapter implements Pro
         submissionJSON.addProperty("judgement", teamProblem.getJudgement());
         submissionJSON.addProperty("passed", teamProblem.getNumTestPassed());
         submissionJSON.addProperty("testcases", teamProblem.getTotalNumTests());
-        submissionJSON.addProperty("passed", random.nextInt(20));
-        submissionJSON.addProperty("testcases", random.nextInt(50));
+        submissionJSON.addProperty("passed", random.nextInt(50));
+        submissionJSON.addProperty("testcases", 50);
         submissionJSON.addProperty("teamExternalId", teamProblem.getTeamId());
         submissionJSON.addProperty("teamName", teamProblem.getTeamName());
         return submissionJSON;
