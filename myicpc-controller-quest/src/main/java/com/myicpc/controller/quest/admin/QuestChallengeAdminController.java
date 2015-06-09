@@ -3,10 +3,14 @@ package com.myicpc.controller.quest.admin;
 import com.myicpc.controller.GeneralAdminController;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.quest.QuestChallenge;
+import com.myicpc.model.security.SystemUser;
 import com.myicpc.repository.quest.QuestChallengeRepository;
 import com.myicpc.service.exception.BusinessValidationException;
+import com.myicpc.service.exception.ReportException;
 import com.myicpc.service.quest.QuestMngmService;
 import com.myicpc.service.quest.QuestService;
+import com.myicpc.service.quest.report.QuestReportService;
+import net.sf.dynamicreports.report.exception.DRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -21,7 +25,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -33,6 +39,9 @@ public class QuestChallengeAdminController extends GeneralAdminController {
 
     @Autowired
     private QuestMngmService questMngmService;
+
+    @Autowired
+    private QuestReportService questReportService;
 
     @Autowired
     private QuestChallengeRepository challengeRepository;
@@ -114,6 +123,21 @@ public class QuestChallengeAdminController extends GeneralAdminController {
             return "private/quest/editChallenge";
         }
         return "redirect:/private" + getContestURL(contestCode) + "/quest/challenges";
+    }
+
+    @RequestMapping(value = "/private/{contestCode}/quest/report/guide-full", method = RequestMethod.GET)
+    public void exportUsers(@PathVariable final String contestCode, HttpServletResponse response) {
+        Contest contest = getContest(contestCode, null);
+        try {
+            List<QuestChallenge> challenges = challengeRepository.findByContest(contest);
+            QuestService.applyHashtagPrefix(contest.getQuestConfiguration().getHashtagPrefix(), challenges);
+            questReportService.downloadQuestChallengesGuide(challenges, response.getOutputStream());
+            response.setContentType("application/pdf");
+            response.addHeader("Content-Disposition", "attachment; filename=\"document.pdf\"");
+            response.flushBuffer();
+        } catch (DRException | IOException ex) {
+            throw new ReportException(ex);
+        }
     }
 
     @InitBinder("challenge")

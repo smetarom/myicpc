@@ -7,7 +7,7 @@ import com.myicpc.model.security.SystemUserRole;
 import com.myicpc.repository.security.SystemUserRepository;
 import com.myicpc.enums.UserRoleEnum;
 import com.myicpc.service.exception.ReportException;
-import com.myicpc.service.report.SystemUserReport;
+import com.myicpc.service.report.SystemUserReportService;
 import com.myicpc.service.user.SystemUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ public class SystemUserAdminController extends GeneralAdminController {
 	private SystemUserService systemUserService;
 
 	@Autowired
-	private SystemUserReport systemUserReport;
+	private SystemUserReportService systemUserReport;
 
 	@Autowired
 	private SystemUserRepository systemUserRepository;
@@ -61,7 +61,7 @@ public class SystemUserAdminController extends GeneralAdminController {
 	@RequestMapping(value = "/private/users", method = RequestMethod.GET)
 	public String users(Model model) {
 
-		model.addAttribute("users", systemUserRepository.findAllOrderByLastname());
+		model.addAttribute("users", systemUserRepository.findAllWithRolesOrderByLastname());
 		return "private/users/userList";
 	}
 
@@ -355,9 +355,9 @@ public class SystemUserAdminController extends GeneralAdminController {
 	public void exportUsers(@PathVariable String format, HttpServletResponse response) {
 		try {
 			List<SystemUser> users = systemUserRepository.findAll();
-//			systemUserReport.generateUserReport(users, response.getOutputStream());
+			systemUserReport.generateUserReport(users, response.getOutputStream());
 			response.setContentType("application/pdf");
-			response.setHeader("Content-Disposition", "attachment; filename=user-report.pdf");
+			response.addHeader("Content-Disposition", "attachment; filename=\"document.pdf\"");
 			response.flushBuffer();
 		} catch (IOException ex) {
 			throw new ReportException(ex);
