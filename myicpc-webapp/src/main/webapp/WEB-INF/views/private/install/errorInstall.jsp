@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
 
-<t:templateEmpty>
+<t:templateAdminEmpty>
 
     <jsp:body>
         <div class="page-header">
@@ -15,4 +15,4 @@
 
     </jsp:body>
 
-</t:templateEmpty>
+</t:templateAdminEmpty>

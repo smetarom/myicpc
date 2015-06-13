@@ -39,9 +39,6 @@ public class ScheduleController extends GeneralController {
     private ScheduleService scheduleService;
 
     @Autowired
-    private EventRepository eventRepository;
-
-    @Autowired
     private LocationRepository locationRepository;
 
     @Autowired
@@ -87,7 +84,7 @@ public class ScheduleController extends GeneralController {
         Calendar calendar = new GregorianCalendar(2014, 1, 1);
 
         String[] roleIds = scheduleRoles.split(",");
-        model.addAttribute("schedule", scheduleService.getMyCurrentSchedule(roleIds, calendar.getTime()));
+        model.addAttribute("schedule", scheduleService.getMyCurrentSchedule(roleIds, calendar.getTime(), contest));
         model.addAttribute("pageHeadline", getMessage("myschedule.title"));
         model.addAttribute("pageTitle", getMessage("nav.myschedule"));
         model.addAttribute("sideMenuActive", "schedule");
@@ -141,6 +138,17 @@ public class ScheduleController extends GeneralController {
 //        model.addAttribute("picasaUsername", WebServiceUtils.getShowPhotosUsername());
         model.addAttribute("sideMenuActive", "schedule");
         return view;
+    }
+
+    @RequestMapping(value = "{contestCode}/schedule/ajax/upcoming-events", method = RequestMethod.GET)
+    public String upcomingEvents(@PathVariable String contestCode, Model model,
+                                 @CookieValue(value = "scheduleRoles", required = false) String scheduleRoles) {
+        Contest contest = getContest(contestCode, model);
+
+        List<Event> upcomingEvents = scheduleService.getUpcomingEventsForUser(scheduleRoles, 8, contest);
+
+        model.addAttribute("upcomingEvents", upcomingEvents);
+        return "timeline/fragment/timelineUpcomingEvents";
     }
 
     @RequestMapping(value = "/{contestCode}/venues", method = RequestMethod.GET)

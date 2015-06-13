@@ -77,10 +77,11 @@ public class ScheduleService extends EntityManagerService {
      *            ids of selected roles
      * @param today
      *            deadline date
+     * @param contest
      * @return events for given roles and which ends after the given date
      */
-    public Iterable<ScheduleDay> getMyCurrentSchedule(final String[] roleIds, final Date today) {
-        Iterable<Event> events = getEventsForRoles(roleIds, today);
+    public Iterable<ScheduleDay> getMyCurrentSchedule(final String[] roleIds, final Date today, Contest contest) {
+        Iterable<Event> events = getEventsForRoles(roleIds, today, contest);
         return getEventsGroupedByScheduleDay(events);
     }
 
@@ -113,8 +114,8 @@ public class ScheduleService extends EntityManagerService {
      *            selected roles
      * @return events for given roles
      */
-    public List<Event> getEventsForRoles(final String[] roleIds) {
-        return getEventsForRoles(roleIds, null);
+    public List<Event> getEventsForRoles(final String[] roleIds, Contest contest) {
+        return getEventsForRoles(roleIds, null, contest);
     }
 
     /**
@@ -124,10 +125,11 @@ public class ScheduleService extends EntityManagerService {
      *            ids of selected roles
      * @param now
      *            deadline date
+     * @param contest
      * @return events for given roles and which ends after the given date
      */
-    public List<Event> getEventsForRoles(final String[] roleIds, final Date now) {
-        return getEventsForRoles(roleIds, now, null, false);
+    public List<Event> getEventsForRoles(final String[] roleIds, final Date now, Contest contest) {
+        return getEventsForRoles(roleIds, now, null, contest, false);
     }
 
     /**
@@ -139,11 +141,11 @@ public class ScheduleService extends EntityManagerService {
      *            events must end after this date
      * @param limit
      *            events must start before this date
-     * @param sorted
-     *            if sorted by start date
-     * @return events for roles, in the given time range
+     * @param contest
+     *@param sorted
+     *            if sorted by start date  @return events for roles, in the given time range
      */
-    public List<Event> getEventsForRoles(final String[] roleIds, final Date now, final Date limit, final boolean sorted) {
+    public List<Event> getEventsForRoles(final String[] roleIds, final Date now, final Date limit, Contest contest, final boolean sorted) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Event> q = cb.createQuery(Event.class);
         Root<Event> c = q.from(Event.class);
@@ -162,7 +164,7 @@ public class ScheduleService extends EntityManagerService {
         if (limit != null) {
             datesPredicate = cb.and(datesPredicate, cb.lessThanOrEqualTo(c.<Date> get("startDate"), limit));
         }
-        q.where(cb.and(datesPredicate, rolesPredicate));
+        q.where(cb.and(datesPredicate, rolesPredicate, cb.equal(c.<Contest> get("contest"), contest)));
         if (sorted) {
             q.orderBy(cb.asc(c.<Date> get("startDate")));
         }
@@ -232,6 +234,32 @@ public class ScheduleService extends EntityManagerService {
         }
 
         return activeRoles;
+    }
+
+    /**
+     * Events which start after startDate and end before endDate
+     *
+     * @param startDate
+     *            start date of period
+     * @param endDate
+     *            end date of period
+     * @return events in the period
+     */
+    public List<Event> getEventsInPeriod(final Date startDate, final Date endDate, final Contest contest) {
+        return eventRepository.findAllBetweenDates(startDate, endDate, contest);
+    }
+
+    public List<Event> getUpcomingEventsForUser(String scheduleRoles, int hours, final Contest contest) {
+        Date now = new GregorianCalendar(2014, 5, 22, 12, 0, 0).getTime();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(now);
+        cal.add(Calendar.HOUR_OF_DAY, hours);
+        if (!StringUtils.isEmpty(scheduleRoles)) {
+            String[] splitRoles = scheduleRoles.split(",");
+            return getEventsForRoles(splitRoles, now, cal.getTime(), contest, true);
+        } else {
+            return getEventsInPeriod(now, cal.getTime(), contest);
+        }
     }
 
     public JsonArray getScheduleDaysJSON(Date now, Contest contest) {

@@ -1,18 +1,21 @@
 package com.myicpc.controller;
 
 import com.myicpc.model.contest.Contest;
+import com.myicpc.model.schedule.Event;
 import com.myicpc.model.social.Notification;
 import com.myicpc.service.notification.NotificationService;
 import com.myicpc.service.timeline.TimelineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -29,7 +32,8 @@ public class TimelineController extends GeneralController {
     private NotificationService notificationService;
 
     @RequestMapping(value = {"/{contestCode}", "/{contestCode}/timeline"}, method = RequestMethod.GET)
-    public String timeline(Model model, @PathVariable String contestCode, HttpServletRequest request, HttpServletResponse response) {
+    public String timeline(Model model, @PathVariable String contestCode, HttpServletRequest request,
+                           HttpServletResponse response) {
         Contest contest = getContest(contestCode, model);
 
         List<Notification> timelineNotifications = timelineService.getTimelineNotifications(contest);

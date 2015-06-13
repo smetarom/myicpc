@@ -231,12 +231,16 @@
         <path>/WEB-INF/tags/template/template.tag</path>
     </tag-file>
     <tag-file>
+        <name>templateEmpty</name>
+        <path>/WEB-INF/tags/template/templateEmpty.tag</path>
+    </tag-file>
+    <tag-file>
         <name>templateWithFixedSubmenu</name>
         <path>/WEB-INF/tags/template/templateWithFixedSubmenu.tag</path>
     </tag-file>
     <tag-file>
-        <name>templateEmpty</name>
-        <path>/WEB-INF/tags/template/templateEmpty.tag</path>
+        <name>templateAdminEmpty</name>
+        <path>/WEB-INF/tags/template/templateAdminEmpty.tag</path>
     </tag-file>
     <tag-file>
         <name>templateAdmin</name>

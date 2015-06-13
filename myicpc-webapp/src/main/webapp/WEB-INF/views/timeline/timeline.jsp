@@ -24,6 +24,13 @@
                     }
                 });
                 $(window).scroll(videoAutoplayOnScroll);
+
+                // get upcoming events
+                <c:if test="${util:scheduleModuleEnabled(contest)}">
+                $.get("<spring:url value="${contestURL}/schedule/ajax/upcoming-events" />", function(data) {
+                    $("#upcomingEventsContainer").html(data);
+                });
+                </c:if>
             });
         </script>
     </jsp:attribute>
@@ -43,26 +50,11 @@
             </div>
             <div class="col-sm-4 col-md-4 col-lg-3">
                 <br/>
-                <ul class="nav nav-pills nav-stacked">
-                    <li>
-                        <a data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                            <t:glyphIcon icon="screenshot" /> 3 new Quest challenges
-                        </a>
-
-                        <div class="collapse" id="collapseExample">
-                            <h4>15 Year Coach</h4>
-                            <p>20 Points. Photo and Answer: Someone who was recognized as bringing teams to the World Finals at least 15 times. Also include as text the person's full name.</p>
-                            <h4>ACM President</h4>
-                            <p>20 Points. Autograph of the ACM President. Tweet why he is famous.</p>
-                        </div>
-                    </li>
-                    <li><a href="#"><t:glyphIcon icon="bullhorn" /> 2 unanswered polls</a></li>
-                </ul>
-                <hr />
-                <%@ include file="/WEB-INF/views/timeline/timelineQuest.jsp"%>
-                <hr />
-                <%@ include file="/WEB-INF/views/timeline/timelineUpcomingEvents.jsp"%>
-                <hr />
+                <c:if test="${not empty questNotifications}">
+                    <%@ include file="/WEB-INF/views/timeline/timelineQuest.jsp"%>
+                    <hr />
+                </c:if>
+                <div id="upcomingEventsContainer"></div>
                 <%@ include file="/WEB-INF/views/timeline/timelineFollowedTeams.jsp"%>
             </div>
             <br class="clear" />

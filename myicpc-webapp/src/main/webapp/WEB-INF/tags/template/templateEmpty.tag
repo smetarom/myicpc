@@ -2,22 +2,23 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="t" uri="http://myicpc.baylor.edu/tags" %>
-<%@ taglib uri="http://htmlcompressor.googlecode.com/taglib/compressor" prefix="compress" %>
-<compress:html compressCss="true">
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title><c:if test="${not empty pageTitle}">${pageTitle} - </c:if> MyICPC
-        </title>
-        <jsp:include page="/WEB-INF/views/includes/headAdmin.jsp"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    </head>
-    <body>
-    <div id="bodyContainer">
-        <div id="body">
-            <jsp:doBody/>
-        </div>
+
+<%@attribute name="head" fragment="true" %>
+<%@attribute name="javascript" fragment="true" %>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title><spring:message code="app.name" /> Kiosk</title>
+    <jsp:include page="/WEB-INF/views/includes/head.jsp"/>
+    <jsp:invoke fragment="head" />
+</head>
+<body>
+    <div class="page-header text-center">
+        <img src="http://myicpc.icpcnews.com/static/images/2015-Slide-Header2.png" style="padding: 5px 0;" />
     </div>
-    </body>
-    </html>
-</compress:html>
+    <jsp:doBody/>
+    <jsp:include page="/WEB-INF/views/includes/foot.jsp"/>
+    <jsp:invoke fragment="javascript" />
+</body>
+</html>

@@ -26,6 +26,13 @@ public interface EventRepository extends CrudRepository<Event, Long> {
     @Query("SELECT e FROM Event e WHERE e.endDate > ?1 AND e.contest = ?2")
     List<Event> findAllFutureEvents(Date now, Contest contest);
 
+
+    /**
+     * @return Events starting between these two dates
+     */
+    @Query("SELECT e FROM Event e WHERE e.contest = ?3 AND e.startDate BETWEEN ?1 AND ?2 ORDER BY e.startDate")
+    List<Event> findAllBetweenDates(Date startDate, Date endDate, Contest contest);
+
     // ---
 
     List<Event> findByLocation(Location location);
@@ -36,12 +43,6 @@ public interface EventRepository extends CrudRepository<Event, Long> {
 
     @Query("SELECT COUNT(e) FROM Event e JOIN e.roles er WHERE er = ?1")
     Long countByEventRole(EventRole eventRole);
-
-    /**
-     * @return Events starting between these two dates
-     */
-    @Query("SELECT e FROM Event e WHERE e.startDate BETWEEN ?1 AND ?2 ORDER BY e.startDate")
-    List<Event> findAllBetweenDates(Date startDate, Date endDate);
 
     @Query("SELECT e FROM Event e ORDER BY e.startDate")
     List<Event> findAllOrderByStartDateAsc();
