@@ -15,7 +15,7 @@
                 </td>
                 <td>
                     <c:if test="${param.isMobile eq 'true'}">
-                        <a href="<spring:url value="${contestURL}/schedule/event/${event.code}" />">${event.name}</a>
+                        <a href="<spring:url value="${contestURL}/schedule/event/${event.code}" />" class="display-block">${event.name}</a>
                     </c:if>
                     <c:if test="${param.isMobile ne 'true'}">
                         <a href="#${event.code}" onclick="loadEventContent(${event.id})" class="display-block">${event.name}</a>

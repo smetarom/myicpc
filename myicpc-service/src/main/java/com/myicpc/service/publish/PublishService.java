@@ -3,6 +3,8 @@ package com.myicpc.service.publish;
 import com.google.gson.JsonObject;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.TeamProblem;
+import com.myicpc.model.poll.Poll;
+import com.myicpc.model.poll.PollOption;
 import com.myicpc.model.social.Notification;
 import com.myicpc.service.notification.NotificationService;
 import org.atmosphere.cpr.Broadcaster;
@@ -72,6 +74,21 @@ public class PublishService {
     public void broadcastProblem(JsonObject teamSubmission, String problemCode, String contestCode) {
         atmospherePublish(PREFIX + contestCode + "/" + PROBLEM_CHANNEL + "/" + problemCode,
                 teamSubmission.toString());
+    }
+
+    /**
+     * Broadcast the poll updates
+     *
+     * @param poll
+     * @param option
+     */
+    public void broadcastPollAnswer(final Poll poll, final PollOption option) {
+        JsonObject pollUpdate = new JsonObject();
+        pollUpdate.addProperty("pollId", poll.getId());
+        pollUpdate.addProperty("optionId", option.getId());
+        pollUpdate.addProperty("optionName", option.getName());
+        pollUpdate.addProperty("votes", option.getVotes());
+        atmospherePublish(PREFIX + poll.getContest().getCode() + "/" + POLL, pollUpdate.toString());
     }
 
     /**

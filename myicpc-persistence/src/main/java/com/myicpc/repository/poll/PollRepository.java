@@ -11,7 +11,8 @@ import java.util.List;
 public interface PollRepository extends JpaRepository<Poll, Long> {
     List<Poll> findByContestOrderByStartDateDesc(Contest contest);
 
-    List<Poll> findByContestAndStartDateLessThanOrderByStartDateDesc(Contest contest, Date date);
+    @Query(value = "SELECT p FROM Poll p WHERE p.contest = ?1 AND p.startDate < ?2 ORDER BY p.startDate DESC")
+    List<Poll> findOpenPolls(Contest contest, Date date);
 
     // ----
 

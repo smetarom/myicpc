@@ -23,32 +23,42 @@ public class Poll extends StartEndDateObject {
     private static final Logger logger = LoggerFactory.getLogger(Poll.class);
     private static final long serialVersionUID = 385801354549528941L;
 
-    public enum PollType {
+    public enum PollRepresentationType {
         /**
-         * Select
+         * Horizontal bar chart
          */
-        SELECT("Selection"),
+        BAR_CHART("Bar chart", "poll.representation.barChart"),
         /**
-         * Radio selection
+         * Pie chart
          */
-        CHOICE("Choice");
+        PIE_CHART("Pie chart", "poll.representation.pieChart");
 
         private String label;
+        private String code;
 
-        private PollType(String label) {
+        PollRepresentationType(String label, String code) {
             this.label = label;
+            this.code = code;
         }
 
         public String getLabel() {
             return label;
         }
 
-        public boolean isChoiceType() {
-            return this == CHOICE;
+        public String getCode() {
+            return code;
         }
 
-        public boolean isSelectType() {
-            return this == SELECT;
+        public String getEnumType() {
+            return this.toString();
+        }
+
+        public boolean isBarChart() {
+            return this == BAR_CHART;
+        }
+
+        public boolean isPieChart() {
+            return this == PIE_CHART;
         }
     }
 
@@ -69,7 +79,7 @@ public class Poll extends StartEndDateObject {
      */
     @NotNull
     @Enumerated(EnumType.STRING)
-    private PollType pollType;
+    private PollRepresentationType pollRepresentationType;
 
     @Lob
     @Type(type = "org.hibernate.type.StringClobType")
@@ -103,12 +113,12 @@ public class Poll extends StartEndDateObject {
         this.question = question;
     }
 
-    public PollType getPollType() {
-        return pollType;
+    public PollRepresentationType getPollRepresentationType() {
+        return pollRepresentationType;
     }
 
-    public void setPollType(final PollType pollType) {
-        this.pollType = pollType;
+    public void setPollRepresentationType(final PollRepresentationType pollRepresentationType) {
+        this.pollRepresentationType = pollRepresentationType;
     }
 
     public String getConclusionMessage() {

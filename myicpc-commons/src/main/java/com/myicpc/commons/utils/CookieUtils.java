@@ -5,6 +5,10 @@ import org.apache.commons.lang3.StringUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Roman Smetana
@@ -69,7 +73,7 @@ public class CookieUtils {
      */
     public static void appendIdToCookie(final String cookieValue, final String cookieName, final String addedId, final HttpServletRequest request,
                                         final HttpServletResponse response) {
-        String cookie = "";
+        String cookie;
         if (StringUtils.isEmpty(cookieValue)) {
             cookie = addedId;
         } else {
@@ -86,6 +90,22 @@ public class CookieUtils {
             }
         }
         CookieUtils.setCookie(request, response, cookieName, cookie);
+    }
+
+    public static Set<Long> getCookieAsLongs(final String cookieValue) {
+        Set<Long> list = new HashSet<>();
+        if (StringUtils.isEmpty(cookieValue)) {
+            return list;
+        }
+        String[] ss = cookieValue.split(",");
+        for (String s : ss) {
+            try {
+                list.add(Long.parseLong(s));
+            } catch (NumberFormatException ex) {
+                // ignore non-number expression
+            }
+        }
+        return list;
     }
 
     /**

@@ -12,10 +12,11 @@ public class PollOption extends IdGeneratedObject {
     private static final long serialVersionUID = 3527757661176320411L;
 
     private String name;
-    @Lob
-    @Type(type = "org.hibernate.type.StringClobType")
-    private String resultMessage;
     private Integer votes = 0;
+
+    @ManyToOne
+    @JoinColumn(name = "pollId")
+    private Poll poll;
 
     public PollOption() {
         super();
@@ -27,9 +28,6 @@ public class PollOption extends IdGeneratedObject {
         this.poll = poll;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "pollId")
-    private Poll poll;
 
     public String getName() {
         return name;
@@ -37,14 +35,6 @@ public class PollOption extends IdGeneratedObject {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getResultMessage() {
-        return resultMessage;
-    }
-
-    public void setResultMessage(String resultMessage) {
-        this.resultMessage = resultMessage;
     }
 
     public Integer getVotes() {

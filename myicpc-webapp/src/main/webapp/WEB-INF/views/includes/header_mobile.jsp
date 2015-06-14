@@ -74,12 +74,12 @@
         <tr>
             <td>
                 <c:if test="${util:pollModuleEnabled(contest)}">
-                    <t:topSubmenuLink labelCode="nav.polls" url="/polls" icon="glyphicon glyphicon-bullhorn"/>
+                    <t:topSubmenuLink labelCode="nav.polls" url="${contestURL}/polls" icon="glyphicon glyphicon-bullhorn"/>
                 </c:if>
             </td>
             <td>
                 <c:if test="${util:rssModuleEnabled(contest)}">
-                    <t:topSubmenuLink labelCode="nav.rss" url="/rss" icon="fa fa-rss"></t:topSubmenuLink>
+                    <t:topSubmenuLink labelCode="nav.rss" url="${contestURL}/rss" icon="fa fa-rss"></t:topSubmenuLink>
                 </c:if>
             </td>
         </tr>
