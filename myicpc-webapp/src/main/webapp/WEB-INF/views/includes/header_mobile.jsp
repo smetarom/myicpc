@@ -83,12 +83,5 @@
                 </c:if>
             </td>
         </tr>
-        <tr>
-            <td><t:topSubmenuLink labelCode="nav.settings" url="/settings" icon="glyphicon glyphicon-cog"/></td>
-            <td class="mobile-submenu">
-                <t:emptyLink onclick="$('#main-misc-submenu').hide();" modalId="feedbackModal"><span
-                        class="fa fa-pencil-square-o"></span><br/><spring:message code="feedback"/></t:emptyLink>
-            </td>
-        </tr>
     </table>
 </div>

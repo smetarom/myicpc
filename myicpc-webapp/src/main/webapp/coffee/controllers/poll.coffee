@@ -34,6 +34,13 @@ pollApp.factory('pollService', ($http) ->
   pollService.isBarChart = (poll) ->
     poll.type == barChartType
 
+  pollService.sortChartOptions = (poll) ->
+    if pollService.isPieChart(poll)
+      poll.chart = _.sortBy(poll.chart, (obj) -> obj.value * -1)
+    else if pollService.isBarChart(poll)
+      poll.chart[0].values = _.sortBy(poll.chart[0].values, (obj) -> obj.value * -1)
+    return poll.chart
+
   pollService.xFunction = ->
     (d) ->
       d.name
@@ -152,6 +159,7 @@ initCommonFunctions = ($scope, pollService) ->
   $scope.toolTipContentFunction = pollService.toolTipContentFunction
   $scope.toolTipContentFunctionMobile = pollService.toolTipContentFunctionMobile
   $scope.countPollAnsweredOptions = pollService.countPollAnsweredOptions
+  $scope.sortChartOptions = pollService.sortChartOptions
   $scope.isPieChart = pollService.isPieChart
   $scope.isBarChart = pollService.isBarChart
 

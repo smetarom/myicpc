@@ -59,15 +59,11 @@ public class PollController extends GeneralController {
 
     @RequestMapping(value = "/{contestCode}/poll/overview-template", method = RequestMethod.GET)
     public String overviewTemplate(@PathVariable String contestCode, Model model) {
-        Contest contest = getContest(contestCode, model);
-
         return "poll/template/overview";
     }
 
     @RequestMapping(value = "/{contestCode}/poll/detail-template", method = RequestMethod.GET)
     public String detailTemplate(@PathVariable String contestCode, Model model) {
-        Contest contest = getContest(contestCode, model);
-
         return "poll/template/detail";
     }
 }
