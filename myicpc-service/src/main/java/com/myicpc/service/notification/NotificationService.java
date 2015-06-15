@@ -1,38 +1,16 @@
 package com.myicpc.service.notification;
 
-import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.myicpc.commons.utils.CookieUtils;
 import com.myicpc.commons.utils.TimeUtils;
-import com.myicpc.commons.utils.WikiUtils;
-import com.myicpc.enums.GalleryMediaType;
 import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.model.eventFeed.Team;
-import com.myicpc.model.eventFeed.TeamProblem;
-import com.myicpc.model.poll.Poll;
-import com.myicpc.model.quest.QuestChallenge;
-import com.myicpc.model.quest.QuestSubmission;
-import com.myicpc.model.rss.RSSMessage;
-import com.myicpc.model.schedule.Event;
-import com.myicpc.model.social.AdminNotification;
-import com.myicpc.model.social.GalleryMedia;
 import com.myicpc.model.social.Notification;
-import com.myicpc.model.social.TwitterMessage;
-import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.repository.social.NotificationRepository;
-import com.myicpc.service.analyst.MessageAnalystService;
-import com.myicpc.service.dto.AnalystMessageDTO;
-import com.myicpc.service.publish.PublishService;
 import com.myicpc.service.utils.lists.NotificationList;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +32,10 @@ import java.util.Locale;
 @Service("notificationService")
 @Transactional
 public class NotificationService {
+    public static final List<NotificationType> FEATURED_NOTIFICATION_TYPES = NotificationList.newList()
+            .addAdminNotification()
+            .addQuestChallenge()
+            .addPollOpen();
 
     @Autowired
     private NotificationRepository notificationRepository;
@@ -75,8 +57,8 @@ public class NotificationService {
      * @param contest
      * @return list of featured notifications
      */
-    public List<Notification> getFeaturedNotifications(final List<Long> ignoredFeatured, final Contest contest) {
-        return notificationRepository.findFeaturedNotifications(new Date(), ignoredFeatured, contest);
+    public Long countFeaturedNotifications(final List<Long> ignoredFeatured, final Contest contest) {
+        return notificationRepository.countFeaturedNotifications(new Date(), ignoredFeatured, contest);
 
 //        List<Notification> notifications = new ArrayList<Notification>();
 //        notifications.addAll(notificationRepository.findCurrentPollNotifications(new Date(), ignoredFeatured));

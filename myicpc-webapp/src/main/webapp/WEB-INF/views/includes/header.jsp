@@ -64,14 +64,10 @@
             </c:if>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-                <t:emptyLink isDropdown="true" styleClass="dropdown-toggle">
-                    <span class="glyphicon glyphicon-share-alt"></span> <span class="hidden-xs hidden-sm"><spring:message
-                        code="share"/></span>
-                </t:emptyLink>
-                <ul class="dropdown-menu">
-                    <%@ include file="/WEB-INF/views/includes/header_share.jsp" %>
-                </ul>
+            <li>
+                <a href="javascript:void(0)">
+                    <span class="label ${featuredNotificationsCount == 0 ? 'label-default' : 'label-danger'} notification-counter">${featuredNotificationsCount}</span>
+                </a>
             </li>
         </ul>
         <p class="navbar-text navbar-right contest-time hidden-xs" title="<spring:message code="contest.time.hint" />">
@@ -86,3 +82,7 @@
         </ul>
     </div>
 </nav>
+
+<div id="featured-notification-container">
+    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+</div>

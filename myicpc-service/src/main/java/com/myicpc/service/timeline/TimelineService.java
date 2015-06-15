@@ -31,7 +31,9 @@ public class TimelineService {
             .addTwitter()
             .addInstagram()
             .addVine()
-            .addPicasa();
+            .addPicasa()
+            .addQuestChallenge()
+            .addAdminNotification();
 
     @Autowired
     private NotificationRepository notificationRepository;

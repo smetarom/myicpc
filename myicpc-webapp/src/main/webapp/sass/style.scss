@@ -334,3 +334,26 @@ td.fit-content {
   height: 200px;
   background: url('../images/ajax-loader.gif') no-repeat center center;
 }
+
+.notification-counter {
+  font-size: 1.2em;
+  padding: 0.3em 0.6em;
+}
+
+#featured-notification-container {
+  display: none;
+
+  .featured-list {
+    font-size: 0.9em;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    .alert {
+      border-radius: 0;
+      margin-bottom: 0;
+      padding-bottom: 8px;
+      padding-top: 8px;
+    }
+  }
+}

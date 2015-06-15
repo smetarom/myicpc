@@ -4,7 +4,8 @@
 <nav id="mobile-top-menu" class="navbar navbar-inverse navbar-fixed-top mobile" style="z-index: 1200">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-            <span class="glyphicon glyphicon-share-alt"> <spring:message code="share"/></span>
+            <%--<span class="glyphicon glyphicon-share-alt"> <spring:message code="share"/></span>--%>
+            <span class="label label-danger">${featuredNotificationsCount}</span>
         </button>
         <a class="navbar-brand" href='<spring:url value="${contestURL}/" />'><span class="fa fa-home"></span> <spring:message
                 code="app.name"/></a>

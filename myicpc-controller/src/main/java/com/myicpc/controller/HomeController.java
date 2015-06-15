@@ -3,6 +3,7 @@ package com.myicpc.controller;
 import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.Notification;
+import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.service.contest.ContestService;
 import com.myicpc.service.email.EmailService;
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -23,6 +25,7 @@ import java.util.Date;
 public class HomeController extends GeneralController {
     @Autowired
     private ContestService contestService;
+
     @Autowired
     private EmailService emailService;
 

@@ -1,6 +1,7 @@
 package com.myicpc.tags.notification;
 
 import com.myicpc.model.social.Notification;
+import com.myicpc.tags.utils.HandlebarsUtils;
 import com.myicpc.tags.utils.JSPUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -10,6 +11,9 @@ import javax.servlet.jsp.PageContext;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Locale;
+
+import static com.myicpc.tags.utils.TagConstants.IMAGE_FORMAT;
+import static com.myicpc.tags.utils.TagConstants.VIDEO_FORMAT;
 
 /**
  * @author Roman Smetana
@@ -99,5 +103,18 @@ public abstract class NotificationTile {
 
     protected String resolveUrl(String url) throws JspException {
         return JSPUtils.resolveUrl(url, pageContext);
+    }
+
+    protected void renderMedia(JspWriter out) throws IOException, JspException {
+        if (isTemplate) {
+            out.print(HandlebarsUtils.displayIfNotEmtpy("imageUrl", String.format(IMAGE_FORMAT, "{{imageUrl}}")));
+            out.print(HandlebarsUtils.displayIfNotEmtpy("videoUrl", String.format(VIDEO_FORMAT, "{{videoUrl}}")));
+        } else {
+            if (!StringUtils.isEmpty(notification.getVideoUrl())) {
+                out.print(String.format(VIDEO_FORMAT, notification.getVideoUrl()));
+            } else if (!StringUtils.isEmpty(notification.getImageUrl())) {
+                out.print(String.format(IMAGE_FORMAT, notification.getImageUrl()));
+            }
+        }
     }
 }

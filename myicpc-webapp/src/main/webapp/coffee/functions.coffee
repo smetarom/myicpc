@@ -105,3 +105,57 @@ setFixedSubmenuHeight = () ->
   bodyHeight = $("#fixedContent").outerHeight()
   fixedSidebar = $("#fixedSidebar");
   fixedSidebar.height(Math.max(height, bodyHeight))
+
+###
+# Set cookies
+# @param c_name cookie name
+# @param value cookie value
+# @param exdays expiration date
+# @param path cookie path
+###
+setCookie = (c_name, value, exdays, path) ->
+  exdate = new Date
+  c_value = undefined
+  exdate.setDate exdate.getDate() + exdays
+  if path == undefined or path == ''
+    path = '/'
+  c_value = escape(value) + ';path=' + path + (if exdays == null then '' else '; expires=' + exdate.toUTCString())
+  document.cookie = c_name + '=' + c_value
+  return
+
+###
+# Get cookie value
+# @param c_name cookie name
+# @returns cookie value
+###
+getCookie = (c_name) ->
+  c_value = document.cookie
+  c_start = c_value.indexOf(' ' + c_name + '=')
+  c_end = undefined
+  if c_start == -1
+    c_start = c_value.indexOf(c_name + '=')
+  if c_start == -1
+    c_value = null
+  else
+    c_start = c_value.indexOf('=', c_start) + 1
+    c_end = c_value.indexOf(';', c_start)
+    if c_end == -1
+      c_end = c_value.length
+    c_value = unescape(c_value.substring(c_start, c_end))
+  if c_value != null
+    c_value = c_value.replace(/"/g, '')
+  c_value
+
+###
+# Append a value to the cookie
+# @param c_name cookie path
+# @param id appended value
+# @param path cookie path
+###
+appendIdToCookieArray = (c_name, id, path) ->
+  value = getCookie(c_name)
+  if typeof value != 'undefined' and value != null
+    value += ',' + id
+  else
+    value = id
+  setCookie(c_name, value, 7, path)

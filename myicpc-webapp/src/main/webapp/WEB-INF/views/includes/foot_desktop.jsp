@@ -1,3 +1,4 @@
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <script type="text/javascript">
   $(function () {
     $(".dropdown").hover(
@@ -22,5 +23,17 @@
     if (timediff < 18000) {
       setInterval(contestTime, 60 * 1000);
     }
+
+    $(".notification-counter").click(function() {
+        $featuredNotificationContainer = $("#featured-notification-container");
+        if (!$featuredNotificationContainer.is(":visible")) {
+            $.get("<spring:url value="${contestURL}/notification/featured-panel" />", function(data) {
+                $featuredNotificationContainer.html(data);
+                $featuredNotificationContainer.slideDown();
+            });
+        } else {
+            $featuredNotificationContainer.slideUp();
+        }
+    });
   });
 </script>

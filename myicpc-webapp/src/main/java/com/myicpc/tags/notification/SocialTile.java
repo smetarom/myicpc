@@ -45,19 +45,6 @@ public abstract class SocialTile extends NotificationTile {
         renderMedia(out);
     }
 
-    protected void renderMedia(JspWriter out) throws IOException, JspException {
-        if (isTemplate) {
-            out.print(HandlebarsUtils.displayIfNotEmtpy("imageUrl", String.format(IMAGE_FORMAT, "{{imageUrl}}")));
-            out.print(HandlebarsUtils.displayIfNotEmtpy("videoUrl", String.format(VIDEO_FORMAT, "{{videoUrl}}")));
-        } else {
-            if (!StringUtils.isEmpty(notification.getVideoUrl())) {
-                out.print(String.format(VIDEO_FORMAT, notification.getVideoUrl()));
-            } else if (!StringUtils.isEmpty(notification.getImageUrl())) {
-                out.print(String.format(IMAGE_FORMAT, notification.getImageUrl()));
-            }
-        }
-    }
-
     @Override
     protected void renderAvatar(JspWriter out) throws IOException, JspException {
         if (isTemplate) {
