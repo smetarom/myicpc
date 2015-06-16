@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -112,11 +113,12 @@ public class TeamController extends GeneralController {
     }
 
     @RequestMapping(value = {"/{contestCode}/team/{teamId}/profile"}, method = RequestMethod.GET)
-    public String teamProfile(@PathVariable String contestCode, @PathVariable Long teamId, Model model) {
+    public String teamProfile(@PathVariable String contestCode, @PathVariable Long teamId, Model model, RedirectAttributes redirectAttributes) {
         Contest contest = getContest(contestCode, model);
         TeamInfo teamInfo = teamInfoRepository.findByExternalIdAndContestWithRegionalResult(teamId, contest);
         if (teamInfo == null) {
-            // TODO team not found
+            errorMessage(redirectAttributes, "team.notFound");
+            return "redirect:" + getContestURL(contestCode) + "/teams";
         }
         Team team = teamRepository.findByExternalId(teamId);
         List<ContestParticipant> coaches = contestParticipantRepository.findByTeamInfoAndContestParticipantRole(teamInfo, ContestParticipantRole.COACH);
@@ -165,10 +167,11 @@ public class TeamController extends GeneralController {
     }
 
     @RequestMapping(value = {"/{contestCode}/team/{teamId}/social"}, method = RequestMethod.GET)
-    public String teamSocial(@PathVariable String contestCode, @PathVariable Long teamId, Model model) {
+    public String teamSocial(@PathVariable String contestCode, @PathVariable Long teamId, Model model, RedirectAttributes redirectAttributes) {
         TeamInfo teamInfo = teamInfoRepository.findByExternalId(teamId);
         if (teamInfo == null) {
-            // TODO team not found
+            errorMessage(redirectAttributes, "team.notFound");
+            return "redirect:" + getContestURL(contestCode) + "/teams";
         }
         Contest contest = getContest(contestCode, model);
         Team team = teamRepository.findByExternalId(teamId);

@@ -111,19 +111,4 @@ public class TeamAdminController extends GeneralAdminController {
 
         return "redirect:/private/" + contestCode + "/teams/synchronize";
     }
-
-    @RequestMapping(value = "/private/{contestCode}/teams/contestteamidmapping", method = RequestMethod.POST)
-    public String processTeamContestIdsMapping(@PathVariable String contestCode, @RequestParam("teamContestJSON") MultipartFile teamContestJSON,
-                                               RedirectAttributes redirectAttributes) {
-        Contest contest = getContest(contestCode, null);
-        try {
-            //TODO
-//          teamService.uploadTeamContestIdsMappingFile(teamContestJSON, contest);
-            successMessage(redirectAttributes, "teamAdmin.teamContestIds.success");
-        } catch (ValidationException ex) {
-            errorMessage(redirectAttributes, ex);
-        }
-
-        return "redirect:/private/" + contestCode + "/teams/synchronize";
-    }
 }
