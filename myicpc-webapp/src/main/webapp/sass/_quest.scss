@@ -114,5 +114,59 @@
     writing-mode: lr-tb;
     width: 16px;
     margin: 0 auto;
+    white-space: nowrap;
+  }
+
+  #leaderboard-not-fixed table {
+
+    table-layout: fixed;
+  }
+
+  .fixed-offset {
+    margin-left: 265px;
+  }
+
+  .col-rank {
+    width: 35px;
+    min-width: 35px;
+    max-width: 35px;
+  }
+  .col-participant-name {
+    width: 230px;
+    min-width: 230px;
+    max-width: 230px;
+  }
+  .col-role {
+    width: 85px;
+    min-width: 85px;
+    max-width: 85px;
+  }
+  .col-points {
+    width: 75px;
+    min-width: 75px;
+    max-width: 75px;
+  }
+  .col-quest-label {
+    width: 35px;
+    min-width: 35px;
+    max-width: 35px;
+  }
+
+  .table {
+    margin-bottom: 0;
+  }
+
+  .leaderboard-header-row {
+    height: 100px;
+    th {
+      vertical-align: bottom;
+    }
+  }
+
+  .fixed-columns {
+    position: absolute;
+    background-color: white;
+    z-index: 500;
   }
 }
+

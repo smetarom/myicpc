@@ -72,6 +72,9 @@ public class QuestService {
 
     public List<QuestParticipant> getParticipantsWithRoles(final List<ContestParticipantRole> roles, final Contest contest, boolean extended) {
         List<QuestParticipant> participants = questParticipantRepository.findByRoles(roles, contest, null);
+        if (participants.isEmpty()) {
+            return participants;
+        }
         List<Long> participantIds = new ArrayList<>(participants.size());
         for (QuestParticipant participant : participants) {
             participantIds.add(participant.getId());
