@@ -208,8 +208,7 @@ public class VineService extends ASocialService {
                     JSONAdapter tagAdapter = new JSONAdapter(elem);
                     tags[i++] = tagAdapter.getString("tag");
                 }
-                // TODO complete quest hashtag
-                builder.setHashtag(createHashtags(tags, contest.getHashtag(), null));
+                builder.setHashtag(createHashtags(tags, contest.getHashtag(), contest.getQuestConfiguration().getHashtagPrefix()));
 
                 list.add(builder.build());
             }

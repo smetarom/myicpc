@@ -171,8 +171,6 @@ public class TwitterService extends ASocialService {
 
         @Override
         public void onDeletionNotice(final StatusDeletionNotice statusDeletionNotice) {
-            // TODO it is never called
-//            webService.deleteTweetByTweetId(statusDeletionNotice.getStatusId());
         }
 
         @Override

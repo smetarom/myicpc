@@ -156,10 +156,7 @@ public class InstagramService extends ASocialService {
                 builder.setThumbnailUrl(mediaAdapter.getStringFromObject("images", "low_resolution", "url"));
 
                 String[] tags = mediaAdapter.getJsonArrayValues("tags");
-                // TODO complete quest hashtag
-                builder.setHashtags(createHashtags(tags, contest.getHashtag(), null));
-                // TODO
-//                instagramMedia.setUserId(userAdapter.getString("id"));
+                builder.setHashtags(createHashtags(tags, contest.getHashtag(), contest.getQuestConfiguration().getHashtagPrefix()));
 
                 list.add(builder.build());
             }

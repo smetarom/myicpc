@@ -148,14 +148,13 @@ public class ProblemInsightService extends AbstractInsightService<Problem> {
 
             if (teamProblem.getSolved()) {
                 if (solvedLanguageMap.containsKey(teamProblem.getLanguage())) {
-                    solvedLanguageMap.put(teamProblem.getLanguage(), Integer.valueOf(solvedLanguageMap.get(teamProblem.getLanguage()) + 1));
+                    solvedLanguageMap.put(teamProblem.getLanguage(), solvedLanguageMap.get(teamProblem.getLanguage()) + 1);
                 } else {
                     solvedLanguageMap.put(teamProblem.getLanguage(), 1);
                 }
             }
-            // TODO can I do better insert to map using some library?
             if (languageMap.containsKey(teamProblem.getLanguage())) {
-                languageMap.put(teamProblem.getLanguage(), Integer.valueOf(languageMap.get(teamProblem.getLanguage()) + 1));
+                languageMap.put(teamProblem.getLanguage(), languageMap.get(teamProblem.getLanguage()) + 1);
             } else {
                 languageMap.put(teamProblem.getLanguage(), 1);
             }

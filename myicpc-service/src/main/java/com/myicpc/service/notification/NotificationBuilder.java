@@ -117,7 +117,6 @@ public class NotificationBuilder {
     }
 
     public void setOffensive() {
-        // TODO refactor
-//		notification.setOffensive(BadWordsFilter.isNotificationOffensive(notification));
+		notification.setOffensive(BadWordsFilter.isNotificationOffensive(notification));
     }
 }

@@ -319,35 +319,6 @@ public class Notification extends IdGeneratedContestObject {
         return parsedCode;
     }
 
-    /**
-     * Returns list of poll options in the map where the key is "id", which is
-     * internal, and value "choice", which represents the human readable label
-     * of the option
-     *
-     * @return get poll choices, if the notification was created from poll
-     */
-    //TODO refactor
-    @Transient
-    public List<Entry<Integer, String>> getPollChoices() {
-        String choices = getParsedCode().get("choices");
-        if (StringUtils.isEmpty(choices)) {
-            return null;
-        }
-        List<Entry<Integer, String>> list = new ArrayList<Map.Entry<Integer, String>>();
-        JsonArray arr = new JsonParser().parse(choices).getAsJsonArray();
-        for (JsonElement e : arr) {
-            JsonObject o = e.getAsJsonObject();
-            if (o.has("id") && o.has("choice")) {
-                try {
-                    list.add(new AbstractMap.SimpleEntry<Integer, String>(o.get("id").getAsInt(), o.get("choice").getAsString()));
-                } catch (ClassCastException ex) {
-                    logger.warn("Invalid option: " + o.toString(), ex);
-                }
-            }
-        }
-        return list;
-    }
-
     public String getHighlightedBody() {
         return highlightedBody;
     }

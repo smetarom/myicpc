@@ -112,7 +112,6 @@ public class CodeInsightService {
 
     public JsonObject createCodeInsightReport(final Contest contest, final InsideCodeMode insideCodeMode) {
         int contestTime = (int) (contestService.getCurrentContestTime(contest) / 60);
-        cachedSnapshots.clear(); // TODO remove for caching
         int historyTime = Math.max(contestTime - INSIGHT_HISTORY_MINUTES, 0);
 
         List<Problem> problems = problemRepository.findByContestOrderByCodeAsc(contest);
