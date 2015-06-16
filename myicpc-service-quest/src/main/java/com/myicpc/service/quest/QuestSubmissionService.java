@@ -167,7 +167,7 @@ public class QuestSubmissionService {
             // skip this submission, if it was posted after deadline
             return true;
         }
-        if (submission.getRetweetedId() != null) {
+        if (submission.getParentId() != null) {
             // skip retweeted submission
             return true;
         }

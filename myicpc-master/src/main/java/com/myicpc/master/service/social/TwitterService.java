@@ -76,7 +76,7 @@ public class TwitterService extends GeneralSocialService {
             notification.setNotificationType(NotificationType.TWITTER);
             notification.setExternalId(String.valueOf(status.getId()));
             if (status.getRetweetedStatus() != null) {
-                notification.setRetweetedId(status.getRetweetedStatus().getId());
+                notification.setParentId(status.getRetweetedStatus().getId());
             }
             notification.setAuthorName(status.getUser().getName());
             notification.setProfilePictureUrl(status.getUser().getProfileImageURL());

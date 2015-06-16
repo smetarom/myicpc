@@ -26,13 +26,13 @@
             </li>
             <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="nav.admin.notifications" /> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                    <li><a href='<spring:url value="/private/timeline" />'><spring:message code="nav.admin.timeline" /></a></li>
-                    <li><a href='<spring:url value="/private/notifications" />'><spring:message code="nav.admin.notifications.all" /></a></li>
-                    <li><a href='<spring:url value="/private/notifications/featured" />'><spring:message code="nav.admin.notifications.featured" /></a></li>
-                    <li><a href='<spring:url value="/private/blacklist" />'><spring:message code="nav.admin.blacklist" /></a></li>
-                    <li><a href='<spring:url value="/private/notifications/suspicious" />'><spring:message code="nav.admin.notifications.suspicious" /></a></li>
+                    <li><a href='<spring:url value="/private${contestURL}/timeline" />'><spring:message code="nav.admin.timeline" /></a></li>
+                    <li><a href='<spring:url value="/private${contestURL}/notifications" />'><spring:message code="nav.admin.notifications.all" /></a></li>
+                    <li><a href='<spring:url value="/private${contestURL}/notifications/featured" />'><spring:message code="nav.admin.notifications.featured" /></a></li>
+                    <li><a href='<spring:url value="/private${contestURL}/blacklist" />'><spring:message code="nav.admin.blacklist" /></a></li>
+                    <li><a href='<spring:url value="/private${contestURL}/notifications/suspicious" />'><spring:message code="nav.admin.notifications.suspicious" /></a></li>
                     <li class="divider"></li>
-                    <li><a href='<spring:url value="/private/notifications/admin" />'><spring:message code="nav.admin.notifications.icpc" /></a></li>
+                    <li><a href='<spring:url value="/private${contestURL}/notifications/icpc" />'><spring:message code="nav.admin.notifications.icpc" /></a></li>
                 </ul>
             </li>
             <c:if test="${util:scheduleModuleEnabled(contest)}">

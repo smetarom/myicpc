@@ -1,5 +1,6 @@
 package com.myicpc.repository.social;
 
+import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.AdminNotification;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -8,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface AdminNotificationRepository extends CrudRepository<AdminNotification, Long> {
+    List<AdminNotification> findByContestOrderByEndDateDesc(Contest contest);
 
     @Query("SELECT an FROM AdminNotification an ORDER BY an.endDate ASC")
     List<AdminNotification> findAllOrderByEndDate();

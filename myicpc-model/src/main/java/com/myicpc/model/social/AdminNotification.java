@@ -27,6 +27,14 @@ public class AdminNotification extends StartEndDateObject {
     @Lob
     @Type(type = "org.hibernate.type.StringClobType")
     private String body;
+    /**
+     * Source URL of the image
+     */
+    private String imageUrl;
+    /**
+     * Source URL of the video
+     */
+    private String videoUrl;
 
     public String getTitle() {
         return title;
@@ -42,5 +50,21 @@ public class AdminNotification extends StartEndDateObject {
 
     public void setBody(final String body) {
         this.body = body;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
     }
 }

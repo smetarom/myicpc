@@ -159,3 +159,15 @@ appendIdToCookieArray = (c_name, id, path) ->
   else
     value = id
   setCookie(c_name, value, 7, path)
+
+###*
+# Use service to transtate plain text to wiki text
+# @param url service URL
+# @param source plain text source
+# @param target target, where result is inserted
+###
+previewWikiSyntax = (url, source, target) ->
+  value = source.val()
+  $.post(url, { 'text': value }, (data) ->
+    $(target).html(data)
+  )

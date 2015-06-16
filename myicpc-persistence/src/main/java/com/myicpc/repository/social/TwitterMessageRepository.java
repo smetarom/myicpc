@@ -15,11 +15,6 @@ public interface TwitterMessageRepository extends PagingAndSortingRepository<Twi
 
     List<TwitterMessage> findByUsername(String username);
 
-    List<TwitterMessage> findByRetweetedId(Long retweetedId);
-
-    @Query("SELECT tm FROM TwitterMessage tm WHERE tm.retweetedId IN ?1")
-    List<TwitterMessage> findByRetweetedIds(List<Long> retweetedIds);
-
     @Query(value = "SELECT tm FROM TwitterMessage tm WHERE UPPER(tm.hashtags) LIKE UPPER(?1) ORDER BY tm.tweetId DESC")
     List<TwitterMessage> findByHashTag(String hashtag1);
 

@@ -103,7 +103,7 @@ public class TwitterService extends ASocialService {
         builder.setNotificationType(NotificationType.TWITTER);
         builder.setExternalId(String.valueOf(twitterStatus.getId()));
         if (twitterStatus.getRetweetedStatus() != null) {
-            builder.setRetweetedId(twitterStatus.getRetweetedStatus().getId());
+            builder.setParentId(twitterStatus.getRetweetedStatus().getId());
         }
         builder.setAuthorName(twitterStatus.getUser().getName());
         builder.setProfilePictureUrl(twitterStatus.getUser().getProfileImageURL());

@@ -1,5 +1,6 @@
 package com.myicpc.repository.social;
 
+import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.BlacklistedUser;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -7,8 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface BlacklistedUserRepository extends CrudRepository<BlacklistedUser, Long> {
-    @Query("SELECT bu FROM BlacklistedUser bu ORDER BY bu.username, bu.blacklistedUserType")
-    List<BlacklistedUser> findAllOrderByUsername();
+    List<BlacklistedUser> findByContestOrderByUsernameAscBlacklistedUserTypeAsc(Contest contest);
 
     List<BlacklistedUser> findByBlacklistedUserType(BlacklistedUser.BlacklistedUserType blacklistType);
 

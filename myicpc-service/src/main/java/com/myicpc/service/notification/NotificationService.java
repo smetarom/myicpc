@@ -6,9 +6,12 @@ import com.myicpc.commons.utils.CookieUtils;
 import com.myicpc.commons.utils.TimeUtils;
 import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
+import com.myicpc.model.social.AdminNotification;
 import com.myicpc.model.social.Notification;
+import com.myicpc.repository.social.AdminNotificationRepository;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.service.utils.lists.NotificationList;
+import info.bliki.wiki.model.WikiModel;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +43,42 @@ public class NotificationService {
     @Autowired
     private NotificationRepository notificationRepository;
 
+    @Autowired
+    private AdminNotificationRepository adminNotificationRepository;
+
+    public void markDeleted(Notification notification) {
+        notification.setDeleted(true);
+        notificationRepository.save(notification);
+    }
+
+    public void markDeleted(List<Notification> notifications) {
+        for (Notification notification : notifications) {
+            notification.setDeleted(true);
+        }
+        notificationRepository.save(notifications);
+    }
+
+    public void updateAdminNotification(final AdminNotification adminNotification) {
+        adminNotificationRepository.save(adminNotification);
+        // TODO
+//        List<Notification> notifications = notificationRepository.findByEntityIdAndNotificationType(adminNotification.getId(), NotificationType.ADMIN_NOTIFICATION);
+//        for (Notification notification : notifications) {
+//            notification.setTitle(WikiModel.toHtml(adminNotification.getTitle()));
+//            notification.setBody(WikiModel.toHtml(adminNotification.getBody()));
+//        }
+//        notificationRepository.save(notifications);
+//        if (adminNotification.isPublished()) {
+//            PublishService.broadcastNotification(notificationForAdminNotification(adminNotification));
+//        }
+    }
+
+    public void deleteAdminNotification(final AdminNotification adminNotification) {
+        adminNotificationRepository.delete(adminNotification);
+
+        // TODO
+//        deleteNoficicationsForEntity(adminNotification.getId(), NotificationType.ADMIN_NOTIFICATION);
+    }
+
     public List<Notification> getFeaturedQuestNotifications(final List<Long> ignoredFeatured) {
         List<Notification> notifications = new ArrayList<Notification>();
         notifications.addAll(notificationRepository.findCurrentQuestChallengeNotifications(new Date(), ignoredFeatured));
@@ -57,17 +96,12 @@ public class NotificationService {
      * @param contest
      * @return list of featured notifications
      */
+    public List<Notification> getFeaturedNotifications(final List<Long> ignoredFeatured, final Contest contest) {
+        return notificationRepository.findFeaturedNotifications(new Date(), ignoredFeatured, contest);
+    }
+
     public Long countFeaturedNotifications(final List<Long> ignoredFeatured, final Contest contest) {
         return notificationRepository.countFeaturedNotifications(new Date(), ignoredFeatured, contest);
-
-//        List<Notification> notifications = new ArrayList<Notification>();
-//        notifications.addAll(notificationRepository.findCurrentPollNotifications(new Date(), ignoredFeatured));
-//        notifications.addAll(notificationRepository.findCurrentAdminNotifications(new Date(), ignoredFeatured));
-//        notifications.addAll(notificationRepository.findCurrentQuestChallengeNotifications(new Date(), ignoredFeatured));
-//
-//        Collections.sort(notifications, new FeaturedNotificationComparator());
-//
-//        return notifications;
     }
 
     public static JsonArray getNotificationInJson(final List<Notification> notifications) {

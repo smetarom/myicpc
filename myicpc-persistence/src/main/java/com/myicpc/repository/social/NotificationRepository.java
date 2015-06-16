@@ -58,8 +58,7 @@ public interface NotificationRepository extends PagingAndSortingRepository<Notif
     @Query("SELECT n FROM Notification n WHERE n.notificationType IN ?2 AND n.contest = ?3 AND n.id < ?1 AND n.videoUrl IS NOT NULL AND n.deleted = false ORDER BY n.id DESC")
     Page<Notification> findByVideosNotificationTypesFromNotificationIdOrderByIdDesc(Long lastNotificationId, List<NotificationType> notificationTypes, Contest contest, Pageable pageable);
 
-    @Query("SELECT n FROM Notification n WHERE n.body LIKE ?1 AND n.body LIKE ?2 AND n.contest = ?3")
-    Page<Notification> findNotificationsByContainingTextAndContest(String text1, String text2, Contest contest, Pageable pageable);
+    List<Notification> findByOffensiveAndContestAndDeletedOrderByIdDesc(boolean offensive, Contest contest, boolean deleted);
 
     /**
      * Finds notifications, which contain {@code hashtag} and are in the @{code contest}
@@ -86,6 +85,48 @@ public interface NotificationRepository extends PagingAndSortingRepository<Notif
     @Query(value = "FROM Notification n WHERE UPPER(n.hashtags) LIKE UPPER(?1) AND UPPER(n.hashtags) LIKE UPPER(?2) AND n.id > ?3 ORDER BY n.id DESC")
     List<Notification> findByHashTagsSinceId(String hashtag1, String hashtag2, long sinceId);
 
+    List<Notification> findByParentIdAndNotificationTypeAndContest(Long parentId, NotificationType notificationType, Contest contest);
+
+    List<Notification> findByAuthorUsernameAndNotificationTypeAndContest(String username, NotificationType notificationType, Contest contest);
+
+    List<Notification> findByIdIn(List<Long> notificationIds);
+
+    @Query("SELECT n " +
+            "FROM Notification n " +
+            "WHERE n.featuredEligible = true" +
+            "   AND n.deleted = false" +
+            "   AND n.contest = ?3" +
+            "   AND n.id NOT IN ?2" +
+            "   AND (" +
+            "           (n.entityId IN (SELECT qc.id FROM QuestChallenge qc WHERE ?1 BETWEEN qc.startDate AND qc.endDate OR (qc.startDate < ?1 AND qc.endDate IS NULL)) AND n.notificationType = 'QUEST_CHALLENGE') OR" +
+            "           (n.entityId IN (SELECT p.id FROM Poll p WHERE ?1 BETWEEN p.startDate AND p.endDate) AND n.notificationType = 'POLL_OPEN') OR " +
+            "           (n.entityId IN (SELECT an.id FROM AdminNotification an WHERE ?1 BETWEEN an.startDate AND an.endDate) AND n.notificationType = 'ADMIN_NOTIFICATION')" +
+            "       ) " +
+            "ORDER BY n.timestamp DESC")
+    List<Notification> findFeaturedNotifications(Date date, List<Long> ignoredFeatured, Contest contest);
+
+    @Query("SELECT COUNT(n) " +
+            "FROM Notification n " +
+            "WHERE n.featuredEligible = true" +
+            "   AND n.deleted = false" +
+            "   AND n.contest = ?3" +
+            "   AND n.id NOT IN ?2" +
+            "   AND (" +
+            "           (n.entityId IN (SELECT qc.id FROM QuestChallenge qc WHERE ?1 BETWEEN qc.startDate AND qc.endDate OR (qc.startDate < ?1 AND qc.endDate IS NULL)) AND n.notificationType = 'QUEST_CHALLENGE') OR " +
+            "           (n.entityId IN (SELECT p.id FROM Poll p WHERE ?1 BETWEEN p.startDate AND p.endDate) AND n.notificationType = 'POLL_OPEN') OR " +
+            "           (n.entityId IN (SELECT an.id FROM AdminNotification an WHERE ?1 BETWEEN an.startDate AND an.endDate) AND n.notificationType = 'ADMIN_NOTIFICATION')" +
+            "       ) ")
+    Long countFeaturedNotifications(Date date, List<Long> ignoredFeatured, Contest contest);
+
+    @Query("SELECT n " +
+            "FROM Notification n " +
+            "WHERE n.notificationType IN ?1 " +
+            "   AND n.contest = ?4 " +
+            "   AND n.deleted = false " +
+            "   AND UPPER(n.title) LIKE UPPER(?2) " +
+            "   AND UPPER(n.body) LIKE UPPER(?3)")
+    Page<Notification> findFilteredNotifications(List<NotificationType> notificationTypes, String title, String body, Contest contest, Pageable pageable);
+
     // ---
 
     List<Notification> findByNotificationType(NotificationType notificationType);
@@ -97,8 +138,7 @@ public interface NotificationRepository extends PagingAndSortingRepository<Notif
     @Query("SELECT n FROM Notification n WHERE n.body LIKE ?1 AND n.body LIKE ?2")
     Page<Notification> findNotificationsByContainingText(String text1, String text2, Pageable pageable);
 
-    @Query("SELECT n FROM Notification n WHERE n.notificationType IN ?1 AND n.title LIKE ?2 AND n.body LIKE ?3")
-    Page<Notification> findFilteredNotifications(List<NotificationType> notificationTypes, String title, String body, Pageable pageable);
+
 
     @Query("SELECT n FROM Notification n ORDER BY n.id DESC")
     Page<Notification> findAllOrderByIdDesc(Pageable pageable);
@@ -131,18 +171,6 @@ public interface NotificationRepository extends PagingAndSortingRepository<Notif
     @Query("SELECT n FROM Notification n WHERE n.entityId = ?1 AND (n.notificationType = ?2 OR n.notificationType = ?3) ORDER BY n.id DESC")
     List<Notification> findByEntityIdAndNotificationTypeOrderByIdDesc(long entityId, NotificationType notificationType1,
                                                                       NotificationType notificationType2);
-
-    @Query("SELECT COUNT(n) " +
-            "FROM Notification n " +
-            "WHERE n.featuredEligible = true" +
-            "   AND n.contest = ?3" +
-            "   AND n.id NOT IN ?2" +
-            "   AND (" +
-            "           (n.entityId IN (SELECT p.id FROM Poll p WHERE ?1 BETWEEN p.startDate AND p.endDate) AND n.notificationType = 'POLL_OPEN') OR " +
-            "           (n.entityId IN (SELECT an.id FROM AdminNotification an WHERE ?1 BETWEEN an.startDate AND an.endDate) AND n.notificationType = 'ADMIN_NOTIFICATION') OR " +
-            "           (n.entityId IN (SELECT qc.id FROM QuestChallenge qc WHERE ?1 BETWEEN qc.startDate AND qc.endDate OR (qc.startDate < ?1 AND qc.endDate IS NULL)) AND n.notificationType = 'QUEST_CHALLENGE')" +
-            "       ) ")
-    Long countFeaturedNotifications(Date date, List<Long> ignoredFeatured, Contest contest);
 
     /**
      * @return notifications for polls, which are in progress and not ignored by

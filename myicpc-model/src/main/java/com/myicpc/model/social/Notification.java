@@ -89,7 +89,7 @@ public class Notification extends IdGeneratedContestObject {
     /**
      * Id of the original tweet,from which this tweet was retweeted
      */
-    private Long retweetedId;
+    private Long parentId;
     /**
      * ID related to the event, which created this notification
      */
@@ -271,12 +271,12 @@ public class Notification extends IdGeneratedContestObject {
         this.externalId = externalId;
     }
 
-    public Long getRetweetedId() {
-        return retweetedId;
+    public Long getParentId() {
+        return parentId;
     }
 
-    public void setRetweetedId(Long retweetedId) {
-        this.retweetedId = retweetedId;
+    public void setParentId(Long retweetedId) {
+        this.parentId = retweetedId;
     }
 
     public boolean isDeleted() {

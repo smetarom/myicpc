@@ -112,8 +112,8 @@ public class NotificationBuilder {
         notification.setExternalId(externalId);
     }
 
-    public void setRetweetedId(Long retweetedId) {
-        notification.setRetweetedId(retweetedId);
+    public void setParentId(Long parentId) {
+        notification.setParentId(parentId);
     }
 
     public void setOffensive() {

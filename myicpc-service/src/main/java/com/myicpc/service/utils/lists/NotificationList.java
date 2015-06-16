@@ -81,16 +81,6 @@ public class NotificationList extends ArrayList<NotificationType> {
         return this;
     }
 
-    public NotificationList addQuestWinnerTwitter() {
-        this.add(NotificationType.QUEST_VOTE_WINNER_TWITTER);
-        return this;
-    }
-
-    public NotificationList addQuestWinnerVine() {
-        this.add(NotificationType.QUEST_VOTE_WINNER_VINE);
-        return this;
-    }
-
     public NotificationList addQuestChallenge() {
         this.add(NotificationType.QUEST_CHALLENGE);
         return this;

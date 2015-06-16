@@ -1,5 +1,6 @@
 package com.myicpc.model.social;
 
+import com.myicpc.model.IdGeneratedContestObject;
 import com.myicpc.model.IdGeneratedObject;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "SocialMediaUser_id_seq")
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"username", "blacklistedUserType"})})
-public class BlacklistedUser extends IdGeneratedObject {
+public class BlacklistedUser extends IdGeneratedContestObject {
     private static final long serialVersionUID = 6111410017922277873L;
 
     public enum BlacklistedUserType {

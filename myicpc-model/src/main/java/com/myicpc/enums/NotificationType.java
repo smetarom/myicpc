@@ -21,10 +21,6 @@ public enum NotificationType {
     POLL_CLOSE("Poll", "Poll close", "pc"),
     YOUTUBE_VIDEO("YouTube", "YouTube", "yt"),
     SCHEDULE_EVENT_OPEN("Schedule", "Schedule event open", "seo"),
-    QUEST_VOTE_WINNER_TWITTER("Quest vote winner", "Quest vote winner", "qvwt"),
-    QUEST_VOTE_WINNER_VINE("Quest vote winner", "Quest vote winner", "qvwv"),
-    QUEST_VOTE_WINNER_INSTAGRAM_IMAGE("Quest vote winner", "Quest vote winner", "qvwim"),
-    QUEST_VOTE_INSTAGRAM_VIDEO("Quest vote winner", "Quest vote winner", "qvwiv"),
     QUEST_CHALLENGE("Quest challenge", "Quest challenge", "questChalleng");
     /**
      * Human readable name of notification type
