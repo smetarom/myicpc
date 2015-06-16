@@ -1,10 +1,14 @@
 package com.myicpc.controller;
 
 import com.myicpc.commons.utils.TimeUtils;
+import com.myicpc.model.contest.Contest;
+import com.myicpc.service.settings.GlobalSettingsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.orm.jpa.JpaOptimisticLockingFailureException;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -24,16 +28,17 @@ import java.util.Date;
 public class GeneralAdminController extends GeneralAbstractController {
     private static final Logger logger = LoggerFactory.getLogger(GeneralAdminController.class);
 
-    /**
-     * Populates model with current local time
-     *
-     * @return current date
-     */
-    @ModelAttribute("currentDate")
-    public Date getCurrentDate() {
-        // TODO convert to contest timezone
-        //return TimeUtils.convertUTCDateToLocal(new Date());
-        return new Date();
+    @Autowired
+    private GlobalSettingsService globalSettingsService;
+
+    @Override
+    protected Contest getContest(String contestCode, Model model) {
+        Contest contest = super.getContest(contestCode, model);
+        if (contest != null) {
+            model.addAttribute("currentDate", TimeUtils.convertUTCDateToLocal(new Date(), contest.getTimeDifference()));
+            model.addAttribute("adminContact", globalSettingsService.getGlobalSettings().getAdminEmail());
+        }
+        return contest;
     }
 
     /**

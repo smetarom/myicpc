@@ -127,7 +127,6 @@ public class GalleryController extends GeneralController {
 
         try {
             picasaService.uploadPrivatePicasaEntry(caption, file, contest);
-            // TODO add a new email notification on a new photo
             successMessage(redirectAttributes, "crowdGallery.successMessage");
         } catch (WebServiceException | IOException e) {
             logger.error("User photo upload to Picasa failed.", e);

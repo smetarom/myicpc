@@ -56,7 +56,9 @@
             <span class="glyphicon glyphicon-time"></span>
             <spring:message code="admin.systemTime"/>
             <fmt:formatDate value="${currentDate}" type="both" dateStyle="medium" timeStyle="medium"/> |
-            <spring:message code="admin.contact"/>: smetarom@gmail.com
+        </c:if>
+        <c:if test="${not empty adminContact}">
+            <spring:message code="admin.contact"/>: ${adminContact}
         </c:if>
     </footer>
     <script type="application/javascript">
