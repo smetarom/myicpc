@@ -3,6 +3,7 @@ package com.myicpc.service.scoreboard.dto.insight;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.myicpc.commons.utils.FormatUtils;
+import com.myicpc.dto.insight.InsightSubmissionDTO;
 import com.myicpc.model.eventFeed.Problem;
 import com.myicpc.model.eventFeed.TeamProblem;
 
@@ -28,11 +29,11 @@ public class ReportByProblem extends InsightReport {
 	/**
 	 * First submission, which tried to solve a problem
 	 */
-	private TeamProblem firstSubmission;
+	private InsightSubmissionDTO firstSubmission;
 	/**
 	 * First submission, which solved a problem
 	 */
-	private TeamProblem firstSolution;
+	private InsightSubmissionDTO firstSolution;
 	/**
 	 * Average solution time
 	 */
@@ -70,19 +71,11 @@ public class ReportByProblem extends InsightReport {
 		results.add(result);
 	}
 
-	public TeamProblem getFirstSubmission() {
-		return firstSubmission;
-	}
-
-	public void setFirstSubmission(final TeamProblem firstSubmission) {
+	public void setFirstSubmission(final InsightSubmissionDTO firstSubmission) {
 		this.firstSubmission = firstSubmission;
 	}
 
-	public TeamProblem getFirstSolution() {
-		return firstSolution;
-	}
-
-	public void setFirstSolution(final TeamProblem firstSolution) {
+	public void setFirstSolution(final InsightSubmissionDTO firstSolution) {
 		this.firstSolution = firstSolution;
 	}
 

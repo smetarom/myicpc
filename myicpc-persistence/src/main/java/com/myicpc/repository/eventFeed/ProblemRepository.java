@@ -26,10 +26,16 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
      * load all judgments and number of submissions for judgment if there is at
      * least one submission per judgment
      */
-    @Query(value = "SELECT NEW org.apache.commons.lang3.tuple.ImmutablePair(tp.resultCode, COUNT(tp)) FROM TeamProblem tp WHERE tp.problem = ?1 AND tp.judged = true GROUP BY tp.resultCode HAVING COUNT(tp) > 0")
+    @Query(value = "SELECT NEW org.apache.commons.lang3.tuple.ImmutablePair(tp.resultCode, COUNT(tp)) " +
+            "FROM TeamProblem tp " +
+            "WHERE tp.problem = ?1 AND tp.judged = true " +
+            "GROUP BY tp.resultCode HAVING COUNT(tp) > 0")
     List<ImmutablePair<String, Long>> getProblemReport(Problem problem);
 
-    @Query(value = "SELECT NEW org.apache.commons.lang3.tuple.ImmutablePair(tp.resultCode, COUNT(tp)) FROM TeamProblem tp WHERE tp.problem = ?1 AND tp.team = ?2 AND tp.judged = true GROUP BY tp.resultCode HAVING COUNT(tp) > 0")
+    @Query(value = "SELECT NEW org.apache.commons.lang3.tuple.ImmutablePair(tp.resultCode, COUNT(tp)) " +
+            "FROM TeamProblem tp " +
+            "WHERE tp.problem = ?1 AND tp.team = ?2 AND tp.judged = true " +
+            "GROUP BY tp.resultCode HAVING COUNT(tp) > 0")
     List<ImmutablePair<String, Long>> getProblemReportByTeam(Problem problem, Team team);
 
     @Transactional

@@ -92,9 +92,6 @@ public class TeamProblem extends IdGeneratedObject {
     @JoinColumn(name = "problemId")
     private Problem problem;
 
-    @OneToOne(fetch=FetchType.LAZY, mappedBy="teamProblem", cascade = CascadeType.ALL, optional = true)
-    private LastTeamProblem lastTeamProblem;
-
     public TeamProblem() {}
 
     public TeamProblem(TeamProblem teamProblem) {
@@ -115,14 +112,6 @@ public class TeamProblem extends IdGeneratedObject {
 
     public void setProblem(final Problem problem) {
         this.problem = problem;
-    }
-
-    public LastTeamProblem getLastTeamProblem() {
-        return lastTeamProblem;
-    }
-
-    public void setLastTeamProblem(LastTeamProblem lastTeamProblem) {
-        this.lastTeamProblem = lastTeamProblem;
     }
 
     public Long getSystemId() {

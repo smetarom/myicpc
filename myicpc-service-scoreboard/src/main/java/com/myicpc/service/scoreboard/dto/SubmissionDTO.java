@@ -8,6 +8,7 @@ import java.io.Serializable;
 /**
  * @author Roman Smetana
  */
+//TODO rename
 public class SubmissionDTO implements Serializable {
     private TeamProblem teamProblem;
     private Notification notification;

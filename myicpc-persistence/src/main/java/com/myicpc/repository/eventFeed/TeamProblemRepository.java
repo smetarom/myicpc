@@ -1,6 +1,7 @@
 package com.myicpc.repository.eventFeed;
 
 import com.myicpc.dto.eventFeed.TeamSubmissionDTO;
+import com.myicpc.dto.insight.InsightSubmissionDTO;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Problem;
 import com.myicpc.model.eventFeed.Team;
@@ -36,7 +37,18 @@ public interface TeamProblemRepository extends JpaRepository<TeamProblem, Long>,
 
     List<TeamProblem> findByProblemAndFirstSolved(Problem problem, boolean firstSolved);
 
-    List<TeamProblem> findByLanguageAndTeamContest(String language, Contest contest);
+    @Query(value = "SELECT new com.myicpc.dto.insight.InsightSubmissionDTO(t.externalId, t.name, ts.time, ts.solved, ts.firstSolved, ts.language) " +
+            "FROM TeamProblem ts " +
+            "JOIN ts.team t " +
+            "WHERE ts.problem = ?1")
+    List<InsightSubmissionDTO> findByProblemInsight(Problem problem);
+
+    @Query(value = "SELECT new com.myicpc.dto.insight.InsightSubmissionDTO(t.externalId, t.name, ts.time, ts.solved, ts.firstSolved, ts.language) " +
+                    "FROM TeamProblem ts " +
+                    "JOIN ts.team t " +
+                    "WHERE ts.language = ?1 " +
+                    "   AND t.contest = ?2")
+    List<InsightSubmissionDTO> findByLanguageAndContest(String language, Contest contest);
 
     @Query(value = "SELECT COUNT(tp) FROM TeamProblem tp WHERE tp.team = ?1 and tp.problem = ?2")
     Long countTeamProblemsByTeamAndProblem(Team team, Problem problem);
@@ -52,4 +64,6 @@ public interface TeamProblemRepository extends JpaRepository<TeamProblem, Long>,
     @Modifying
     @Query("DELETE FROM TeamProblem tp WHERE tp.team IN (SELECT t FROM Team t WHERE t.contest = ?1)")
     void deleteByContest(Contest contest);
+
+    List<TeamProblem> findByLanguage(String language);
 }

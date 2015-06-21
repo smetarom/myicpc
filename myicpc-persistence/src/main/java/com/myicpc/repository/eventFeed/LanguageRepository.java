@@ -20,6 +20,9 @@ public interface LanguageRepository extends JpaRepository<Language, Long> {
      * load all judgments and number of submissions for judgment if there is at
      * least one submission per judgment
      */
-    @Query("SELECT NEW org.apache.commons.lang3.tuple.ImmutablePair(tp.resultCode, COUNT(tp)) FROM TeamProblem tp WHERE tp.language = ?1 AND tp.judged = true GROUP BY tp.resultCode HAVING COUNT(tp) > 0")
+    @Query("SELECT NEW org.apache.commons.lang3.tuple.ImmutablePair(tp.resultCode, COUNT(tp)) " +
+            "FROM TeamProblem tp " +
+            "WHERE tp.language = ?1 AND tp.judged = true " +
+            "GROUP BY tp.resultCode HAVING COUNT(tp) > 0")
     List<ImmutablePair<String, Long>> getLanguageReport(String language);
 }

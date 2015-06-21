@@ -1,6 +1,8 @@
 package com.myicpc.service.scoreboard.dto.insight;
 
 import com.google.gson.JsonObject;
+import com.myicpc.commons.utils.FormatUtils;
+import com.myicpc.dto.insight.InsightSubmissionDTO;
 import com.myicpc.model.eventFeed.TeamProblem;
 
 import java.util.HashMap;
@@ -40,15 +42,15 @@ public abstract class InsightReport {
 	/**
 	 * Returns JSON representation of {@link TeamProblem} for Insight report
 	 * 
-	 * @param teamProblem
+	 * @param insightSubmissionDTO
 	 *            team submission
 	 * @return JSON representation
 	 */
-	protected JsonObject getJSONTeamProblem(final TeamProblem teamProblem) {
+	protected JsonObject getJSONTeamProblem(final InsightSubmissionDTO insightSubmissionDTO) {
 		JsonObject teamProblemJSON = new JsonObject();
-		teamProblemJSON.addProperty("teamId", teamProblem.getTeam().getExternalId());
-		teamProblemJSON.addProperty("teamName", teamProblem.getTeam().getName());
-		teamProblemJSON.addProperty("time", teamProblem.getFormattedTime());
+		teamProblemJSON.addProperty("teamId", insightSubmissionDTO.getTeamId());
+		teamProblemJSON.addProperty("teamName", insightSubmissionDTO.getTeamName());
+		teamProblemJSON.addProperty("time", FormatUtils.formatTimeToHoursMinutes(insightSubmissionDTO.getTime()));
 		return teamProblemJSON;
 	}
 }

@@ -2,12 +2,11 @@ package com.myicpc.service.scoreboard.insight;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.myicpc.dto.insight.InsightSubmissionDTO;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Problem;
 import com.myicpc.model.eventFeed.Team;
-import com.myicpc.model.eventFeed.TeamProblem;
 import com.myicpc.repository.eventFeed.ProblemRepository;
-import com.myicpc.repository.eventFeed.TeamProblemRepository;
 import com.myicpc.service.scoreboard.dto.insight.JudgmentDTO;
 import com.myicpc.service.scoreboard.dto.insight.ReportByProblem;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -128,54 +127,54 @@ public class ProblemInsightService extends AbstractInsightService<Problem> {
 
         double averageSolutionTime = 0;
         double numSolvedCounter = 0;
-        TeamProblem firstSubmission = null;
-        TeamProblem firstSolution = null;
-        Map<Team, Boolean> teamMap = new HashMap<>();
+        InsightSubmissionDTO firstSubmission = null;
+        InsightSubmissionDTO firstSolution = null;
+        Map<Long, Boolean> teamMap = new HashMap<>();
         Map<String, Integer> solvedLanguageMap = new HashMap<>();
         Map<String, Integer> languageMap = new HashMap<>();
 
-        List<TeamProblem> teamProblems = teamProblemRepository.findByProblem(problem);
+        List<InsightSubmissionDTO> teamSubmissions = teamProblemRepository.findByProblemInsight(problem);
         // for each submission, it modifies statistics we have so far to get
         // final report
-        for (TeamProblem teamProblem : teamProblems) {
-            if (teamMap.containsKey(teamProblem.getTeam())) {
-                if (teamProblem.getSolved()) {
-                    teamMap.put(teamProblem.getTeam(), teamProblem.getSolved());
+        for (InsightSubmissionDTO teamSubmission : teamSubmissions) {
+            if (teamMap.containsKey(teamSubmission.getTeamId())) {
+                if (teamSubmission.isSolved()) {
+                    teamMap.put(teamSubmission.getTeamId(), teamSubmission.isSolved());
                 }
             } else {
-                teamMap.put(teamProblem.getTeam(), teamProblem.getSolved());
+                teamMap.put(teamSubmission.getTeamId(), teamSubmission.isSolved());
             }
 
-            if (teamProblem.getSolved()) {
-                if (solvedLanguageMap.containsKey(teamProblem.getLanguage())) {
-                    solvedLanguageMap.put(teamProblem.getLanguage(), solvedLanguageMap.get(teamProblem.getLanguage()) + 1);
+            if (teamSubmission.isSolved()) {
+                if (solvedLanguageMap.containsKey(teamSubmission.getLanguage())) {
+                    solvedLanguageMap.put(teamSubmission.getLanguage(), solvedLanguageMap.get(teamSubmission.getLanguage()) + 1);
                 } else {
-                    solvedLanguageMap.put(teamProblem.getLanguage(), 1);
+                    solvedLanguageMap.put(teamSubmission.getLanguage(), 1);
                 }
             }
-            if (languageMap.containsKey(teamProblem.getLanguage())) {
-                languageMap.put(teamProblem.getLanguage(), languageMap.get(teamProblem.getLanguage()) + 1);
+            if (languageMap.containsKey(teamSubmission.getLanguage())) {
+                languageMap.put(teamSubmission.getLanguage(), languageMap.get(teamSubmission.getLanguage()) + 1);
             } else {
-                languageMap.put(teamProblem.getLanguage(), 1);
+                languageMap.put(teamSubmission.getLanguage(), 1);
             }
 
-            if (teamProblem.getSolved()) {
-                averageSolutionTime += teamProblem.getTime();
+            if (teamSubmission.isSolved()) {
+                averageSolutionTime += teamSubmission.getTime();
                 numSolvedCounter++;
             }
 
             if (firstSubmission == null) {
-                firstSubmission = teamProblem;
+                firstSubmission = teamSubmission;
             }
-            if (firstSolution == null && teamProblem.isFirstSolved()) {
-                firstSolution = teamProblem;
+            if (firstSolution == null && teamSubmission.isFirstSolved()) {
+                firstSolution = teamSubmission;
             }
         }
 
         int numSolvedTeams = 0;
         int numSubmittedTeams = 0;
-        for (Map.Entry<Team, Boolean> entry : teamMap.entrySet()) {
-            if (entry.getValue()) {
+        for (Boolean solved : teamMap.values()) {
+            if (solved) {
                 numSolvedTeams++;
             } else {
                 numSubmittedTeams++;
@@ -188,7 +187,7 @@ public class ProblemInsightService extends AbstractInsightService<Problem> {
         report.setSolvedLanguageMap(solvedLanguageMap);
         report.setNumSolvedTeams(numSolvedTeams);
         report.setNumSubmittedTeams(numSubmittedTeams);
-        report.setTotalSubmissions(teamProblems.size());
+        report.setTotalSubmissions(teamSubmissions.size());
         report.setAverageSolutionTime(averageSolutionTime / numSolvedCounter);
 
         return report.getFullReport();

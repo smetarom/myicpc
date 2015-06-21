@@ -34,7 +34,7 @@ insightApp.factory('insightService', ($http, $interval) ->
   ###
     refresh rate for polling new insight data
   ###
-  insightService.refreshRate = 15000
+  insightService.refreshRate = 1500000
 
   ###
     loads data at the beginning and initiate insight data polling

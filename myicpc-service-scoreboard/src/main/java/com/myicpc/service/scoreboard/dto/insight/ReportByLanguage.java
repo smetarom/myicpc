@@ -2,6 +2,7 @@ package com.myicpc.service.scoreboard.dto.insight;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.myicpc.dto.insight.InsightSubmissionDTO;
 import com.myicpc.model.eventFeed.TeamProblem;
 
 import java.util.ArrayList;
@@ -46,11 +47,11 @@ public class ReportByLanguage extends InsightReport {
 	/**
 	 * First submission with this language, which solved a problem
 	 */
-	private TeamProblem firstSolution;
+	private InsightSubmissionDTO firstSolution;
 	/**
 	 * First submission with this language, which tried to solve a problem
 	 */
-	private TeamProblem firstSubmission;
+	private InsightSubmissionDTO firstSubmission;
 
 	public ReportByLanguage(final String language) {
 		this.language = language;
@@ -82,11 +83,11 @@ public class ReportByLanguage extends InsightReport {
 		this.usagePercentage = usagePercentage;
 	}
 
-	public void setFirstSolution(final TeamProblem firstSolution) {
+	public void setFirstSolution(final InsightSubmissionDTO firstSolution) {
 		this.firstSolution = firstSolution;
 	}
 
-	public void setFirstSubmission(final TeamProblem firstSubmission) {
+	public void setFirstSubmission(final InsightSubmissionDTO firstSubmission) {
 		this.firstSubmission = firstSubmission;
 	}
 
