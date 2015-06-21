@@ -48,7 +48,7 @@ public class NativeRunStrategy extends FeedRunStrategy {
         List<Team> teams = (List<Team>) teamRepository.findAll();
 
         // sort teams
-        Collections.sort(teams, new ScorebaordComparator(teamProblemRepository));
+        Collections.sort(teams, new ScoreboardComparator(teamProblemRepository));
         int rank = 1;
         List<Team> teamsToBroadcast = new ArrayList<>();
         // reassign ranks based on sorted teams and mark team, where the rank
@@ -71,12 +71,12 @@ public class NativeRunStrategy extends FeedRunStrategy {
      * @see <a
      * href="http://icpc.baylor.edu/worldfinals/rules#HScoringoftheFinals">http://icpc.baylor.edu/worldfinals/rules#HScoringoftheFinals</a>
      */
-    public static class ScorebaordComparator implements Comparator<Team>, Serializable {
+    public static class ScoreboardComparator implements Comparator<Team>, Serializable {
         private static final long serialVersionUID = -3436155626630004031L;
-        private Map<Long, Double> lastAcceptedCache = new HashMap<Long, Double>();
-        private TeamProblemRepository teamProblemRepository;
+        private final Map<Long, Double> lastAcceptedCache = new HashMap<Long, Double>();
+        private final TeamProblemRepository teamProblemRepository;
 
-        public ScorebaordComparator(final TeamProblemRepository teamProblemRepository) {
+        public ScoreboardComparator(final TeamProblemRepository teamProblemRepository) {
             this.teamProblemRepository = teamProblemRepository;
         }
 

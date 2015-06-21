@@ -1,7 +1,6 @@
 package com.myicpc.model.poll;
 
 import com.myicpc.model.IdGeneratedObject;
-import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 

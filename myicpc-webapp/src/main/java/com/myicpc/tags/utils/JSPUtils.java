@@ -10,9 +10,7 @@ import javax.servlet.jsp.PageContext;
 public class JSPUtils {
     public static final String VALID_SCHEME_CHARS =	"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+.-";
 
-    public static String resolveUrl(
-            String url, PageContext pageContext)
-            throws JspException {
+    public static String resolveUrl(String url, PageContext pageContext) {
         if (url == null) {
             return null;
         }

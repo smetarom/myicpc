@@ -11,7 +11,6 @@ import com.myicpc.model.social.Notification;
 import com.myicpc.repository.social.AdminNotificationRepository;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.service.utils.lists.NotificationList;
-import info.bliki.wiki.model.WikiModel;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,7 +79,7 @@ public class NotificationService {
     }
 
     public List<Notification> getFeaturedQuestNotifications(final List<Long> ignoredFeatured) {
-        List<Notification> notifications = new ArrayList<Notification>();
+        List<Notification> notifications = new ArrayList<>();
         notifications.addAll(notificationRepository.findCurrentQuestChallengeNotifications(new Date(), ignoredFeatured));
 
         Collections.sort(notifications, new FeaturedNotificationComparator());

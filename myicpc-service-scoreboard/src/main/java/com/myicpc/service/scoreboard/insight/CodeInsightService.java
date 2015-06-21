@@ -159,12 +159,12 @@ public class CodeInsightService {
         return root;
     }
 
-    protected CodeInsightProblem getProblemFromSnapshot(int time, Problem problem, final List<Problem> problems) {
+    private CodeInsightProblem getProblemFromSnapshot(int time, Problem problem, final List<Problem> problems) {
         CodeInsightSnapshot snapshot = getSnapshot(time, problems);
         return snapshot.getProblemById(problem.getId());
     }
 
-    protected CodeInsightSnapshot getSnapshot(int time, final List<Problem> problems) {
+    private CodeInsightSnapshot getSnapshot(int time, final List<Problem> problems) {
         CodeInsightSnapshot codeInsightSnapshot = cachedSnapshots.get(time);
         if (codeInsightSnapshot == null) {
             codeInsightSnapshot = createSnapshotAt(time, problems);
@@ -173,19 +173,19 @@ public class CodeInsightService {
         return codeInsightSnapshot;
     }
 
-    protected CodeInsightSnapshot createSnapshotAt(int time, final List<Problem> problems) {
+    private CodeInsightSnapshot createSnapshotAt(int time, final List<Problem> problems) {
         List<CodeInsightActivity> activities = codeInsightActivityRepository.findByModifyTimeBetween(time - INSIGHT_INTERVAL, time);
 
         Map<Long, CodeInsightProblem> problemMap = new HashMap<>();
         for (Problem problem : problems) {
-            CodeInsightProblem insightProblem = new CodeInsightProblem(problem);
+            CodeInsightProblem insightProblem = new CodeInsightProblem();
             problemMap.put(problem.getId(), insightProblem);
         }
 
         for (CodeInsightActivity activity : activities) {
             CodeInsightProblem insightProblem = problemMap.get(activity.getProblem().getId());
             if (insightProblem == null) {
-                insightProblem = new CodeInsightProblem(activity.getProblem());
+                insightProblem = new CodeInsightProblem();
                 problemMap.put(activity.getProblem().getId(), insightProblem);
             }
             insightProblem.addTeamActivity(activity);

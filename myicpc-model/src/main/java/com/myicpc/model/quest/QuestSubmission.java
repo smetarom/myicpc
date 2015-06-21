@@ -1,6 +1,5 @@
 package com.myicpc.model.quest;
 
-import com.myicpc.enums.NotificationType;
 import com.myicpc.model.IdGeneratedObject;
 import org.hibernate.annotations.Type;
 
@@ -40,9 +39,9 @@ public class QuestSubmission extends IdGeneratedObject {
     public enum QuestSubmissionState {
         ACCEPTED("Accepted"), PENDING("Pending"), REJECTED("Rejected");
 
-        private String label;
+        private final String label;
 
-        private QuestSubmissionState(final String label) {
+        QuestSubmissionState(final String label) {
             this.label = label;
         }
 
@@ -59,9 +58,9 @@ public class QuestSubmission extends IdGeneratedObject {
     public enum VoteSubmissionState {
         IN_PROGRESS("In progress"), VOTE_WINNER("Vote winner");
 
-        private String label;
+        private final String label;
 
-        private VoteSubmissionState(final String label) {
+        VoteSubmissionState(final String label) {
             this.label = label;
         }
 
@@ -255,7 +254,7 @@ public class QuestSubmission extends IdGeneratedObject {
      */
     @Transient
     public String getEscapedText() {
-        return text.replaceAll("\\<.*?>", "");
+        return text.replaceAll("<.*?>", "");
     }
 
     @Transient

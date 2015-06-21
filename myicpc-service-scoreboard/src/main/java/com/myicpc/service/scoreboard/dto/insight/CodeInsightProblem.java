@@ -16,12 +16,7 @@ import java.util.Map;
  * @author Roman Smetana
  */
 public class CodeInsightProblem implements Serializable {
-    private Map<Long, CodeInsightTeam> teamMap = new HashMap<>();
-    private Problem problem;
-
-    public CodeInsightProblem(Problem problem) {
-        this.problem = problem;
-    }
+    private final Map<Long, CodeInsightTeam> teamMap = new HashMap<>();
 
     public void addTeamActivity(CodeInsightActivity activity) {
         CodeInsightTeam team = teamMap.get(activity.getTeam().getId());
@@ -47,13 +42,13 @@ public class CodeInsightProblem implements Serializable {
         return null;
     }
 
-    protected List<CodeInsightTeam> getTeamsSortedByDiffLines() {
+    private List<CodeInsightTeam> getTeamsSortedByDiffLines() {
         List<CodeInsightTeam> teams = new ArrayList<>(teamMap.values());
         Collections.sort(teams, new CodeInsightTeam.DiffLineCountComparator());
         return teams;
     }
 
-    protected List<CodeInsightTeam> getTeamsSortedByCountLines() {
+    private List<CodeInsightTeam> getTeamsSortedByCountLines() {
         List<CodeInsightTeam> teams = new ArrayList<>(teamMap.values());
         Collections.sort(teams, new CodeInsightTeam.LineCountComparator());
         return teams;

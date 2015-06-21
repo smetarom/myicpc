@@ -1,7 +1,5 @@
 package com.myicpc.tags.kiosk;
 
-import com.myicpc.commons.utils.MessageUtils;
-
 import javax.servlet.jsp.PageContext;
 import java.util.Locale;
 

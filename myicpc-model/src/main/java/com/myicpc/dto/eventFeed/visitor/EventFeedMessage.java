@@ -7,7 +7,7 @@ import com.myicpc.model.social.Notification;
  * @author Roman Smetana
  */
 public class EventFeedMessage implements EventFeedEvent {
-    private Notification notification;
+    private final Notification notification;
 
     public EventFeedMessage(Notification notification) {
         this.notification = notification;

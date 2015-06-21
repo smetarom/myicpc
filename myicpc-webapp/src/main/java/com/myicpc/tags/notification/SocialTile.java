@@ -1,17 +1,12 @@
 package com.myicpc.tags.notification;
 
 import com.myicpc.model.social.Notification;
-import com.myicpc.tags.utils.HandlebarsUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import java.io.IOException;
 import java.util.Locale;
-
-import static com.myicpc.tags.utils.TagConstants.IMAGE_FORMAT;
-import static com.myicpc.tags.utils.TagConstants.VIDEO_FORMAT;
 
 /**
  * @author Roman Smetana

@@ -1,7 +1,6 @@
 package com.myicpc.model;
 
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
 import java.io.Serializable;
 
 /**

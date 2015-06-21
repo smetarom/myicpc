@@ -20,11 +20,11 @@ public class ReportByJudgement extends InsightReport {
 	/**
 	 * Judgment
 	 */
-	private Judgement judgement;
+	private final Judgement judgement;
 	/**
 	 * List of languages with this run judgment
 	 */
-	private List<LanguageDTO> languages = new ArrayList<LanguageDTO>();;
+	private final List<LanguageDTO> languages = new ArrayList<LanguageDTO>();;
 
 	public ReportByJudgement(final Judgement judgement) {
 		this.judgement = judgement;

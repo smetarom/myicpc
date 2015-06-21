@@ -60,11 +60,11 @@ public class JSONRunStrategy extends FeedRunStrategy {
             JsonObject root = new JsonParser().parse(getJSONContent(contest)).getAsJsonObject();
 
             JsonArray arr = root.getAsJsonArray("scoreboard");
-            List<Team> teamsToBroadcast = new ArrayList<Team>();
+            List<Team> teamsToBroadcast = new ArrayList<>();
 
             Iterator<JsonElement> jsonIterator = arr.iterator();
             // Mapping between team and its ID, for faster lookup
-            Map<Long, Team> teamMap = new HashMap<Long, Team>();
+            Map<Long, Team> teamMap = new HashMap<>();
             for (Team team : teams) {
                 teamMap.put(team.getSystemId(), team);
             }

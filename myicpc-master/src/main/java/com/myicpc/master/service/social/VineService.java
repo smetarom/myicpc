@@ -51,7 +51,7 @@ public class VineService extends GeneralSocialService {
     private static final String VINE_TAG_URL = "https://api.vineapp.com/timelines/tags/%s";
 
     private String lastSeenId;
-    private ConcurrentMap<Long, String> authenticationKeys = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Long, String> authenticationKeys = new ConcurrentHashMap<>();
 
     private String authenticate(final HttpClient httpClient,final Contest contest) throws IOException, AuthenticationException {
         logger.info("Vine logging...");

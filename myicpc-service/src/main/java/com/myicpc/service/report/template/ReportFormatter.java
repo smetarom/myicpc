@@ -19,7 +19,7 @@ public class ReportFormatter {
     public static final DateTimeFormatter dateTimeFormatter = new DateTimeFormatter();
 
     public static class DateFormatter extends AbstractValueFormatter<String, Date> {
-        DateFormat dateFormatter = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.US);
+        final DateFormat dateFormatter = DateFormat.getDateInstance(DateFormat.DEFAULT, Locale.US);
 
         @Override
         public String format(Date value, ReportParameters reportParameters) {
@@ -28,7 +28,7 @@ public class ReportFormatter {
     }
 
     public static class DateTimeFormatter extends AbstractValueFormatter<String, Date> {
-        DateFormat dateFormatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.US);
+        final DateFormat dateFormatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.US);
 
         @Override
         public String format(Date value, ReportParameters reportParameters) {

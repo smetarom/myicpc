@@ -25,7 +25,7 @@ public class TwitterTile extends SocialTile {
     }
 
     @Override
-    protected void renderFooterAppendix(JspWriter out) throws IOException, JspException {
+    protected void renderFooterAppendix(JspWriter out) throws IOException {
         Object[] params = new Object[2];
         if (isTemplate) {
             params[0] = "{{externalId}}";

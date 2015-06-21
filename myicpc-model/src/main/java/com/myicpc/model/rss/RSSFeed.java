@@ -4,7 +4,6 @@ import com.myicpc.model.IdGeneratedContestObject;
 import com.myicpc.model.contest.Contest;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 

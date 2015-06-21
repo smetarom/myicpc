@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
 @Service
 @Transactional
 public class BlacklistService {
-    public static final HashBiMap<NotificationType, BlacklistedUserType> fromNotificationToBlacklist;
+    private static final HashBiMap<NotificationType, BlacklistedUserType> fromNotificationToBlacklist;
 
     @Autowired
     private BlacklistedUserRepository blacklistedUserRepository;
@@ -127,7 +127,7 @@ public class BlacklistService {
      * @param type
      *            social media type
      */
-    protected void markDeletedRecordsByUsername(final String username, final BlacklistedUserType type, final Contest contest) {
+    private void markDeletedRecordsByUsername(final String username, final BlacklistedUserType type, final Contest contest) {
         if (type == null || StringUtils.isEmpty(username)) {
             return;
         }

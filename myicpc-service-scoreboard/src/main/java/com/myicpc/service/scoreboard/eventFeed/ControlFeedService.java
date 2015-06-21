@@ -37,7 +37,7 @@ import java.util.concurrent.Future;
 public class ControlFeedService {
     private static final Logger logger = LoggerFactory.getLogger(ControlFeedService.class);
 
-    private Map<String, Future<Void>> runningFeedProcessors = Maps.newConcurrentMap();
+    private final Map<String, Future<Void>> runningFeedProcessors = Maps.newConcurrentMap();
 
     @Autowired
     private EventFeedProcessor eventFeedProcessor;

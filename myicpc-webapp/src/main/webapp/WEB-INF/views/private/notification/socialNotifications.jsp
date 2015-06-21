@@ -94,7 +94,7 @@
 					return true;
 				}
 				return false;
-			};
+			}
 			function deleteNotification(elem, notificationId) {
 				if (confirm('<spring:message code="adminNotification.suspicious.delete.confirm" />')) {
 					$.get('<spring:url value="/private${contestURL}/notifications/" />' + notificationId + '/delete', function (data) {
@@ -103,11 +103,12 @@
 					return true;
 				}
 				return false;
-			};
+			}
 			function showNotificatioPreview(notificationId) {
-				$("#previewNotificationModal .modal-body").empty();
+				var $previewNotification = $("#previewNotificationModal .modal-body");
+				$previewNotification.empty();
 				$.get('<spring:url value="/private${contestURL}/notifications/" />' + notificationId + '/preview', function(data) {
-					$("#previewNotificationModal .modal-body").html(data);
+					$previewNotification.html(data);
 					$("#previewNotificationModal").modal('show');
 				});
 			}

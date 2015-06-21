@@ -10,7 +10,7 @@ import java.util.Map;
  * @author Roman Smetana
  */
 public class GlobalSettings implements Serializable {
-    private Map<Globals.GlobalsColumn, String> settingsMap = new HashMap<>();
+    private final Map<Globals.GlobalsColumn, String> settingsMap = new HashMap<>();
 
     public GlobalSettings() {
     }

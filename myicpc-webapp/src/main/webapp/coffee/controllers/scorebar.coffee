@@ -154,11 +154,13 @@ scorebar.controller('scorebarCtrl', ($scope) ->
     return $scope.config.zeroBar + (team.solvedNum + team.failedNum) * $scope.config.problemBarSize + $scope.config.teamNameOffset + $scope.config.infoBoxOffset;
 
   $scope.updateTeamInfo = (team) ->
-      if ($("#info-" + team.teamId).length)
-        $("#info-" + team.teamId).css({top : $scope._getTeamY(team) + "px", left : $scope._getTeamX(team) + "px"})
+      $infoteam = $("#info-" + team.teamId)
+      if ($infoteam.length)
+        $infoteam.css({top : $scope._getTeamY(team) + "px", left : $scope._getTeamX(team) + "px"})
 
-      if ($("#info-" + team.teamId + "-rank").length)
-        $("#info-" + team.teamId + "-rank").html(team.rank)
+      $infoteamrank = $("#info-" + team.teamId + "-rank")
+      if ($infoteamrank.length)
+        $infoteamrank.html(team.rank)
 
       formatProblemArray = (letters) ->
         str = letters.join(", ")
@@ -166,11 +168,13 @@ scorebar.controller('scorebarCtrl', ($scope) ->
           str = "(#{str})"
         return str
 
-      if ($("#info-" + team.teamId + "-solved").length)
-        $("#info-" + team.teamId + "-solved").html(team.solvedNum + " " + formatProblemArray(team.solved));
+      $infoteamsolved = $("#info-" + team.teamId + "-solved")
+      if ($infoteamsolved.length)
+        $infoteamsolved.html(team.solvedNum + " " + formatProblemArray(team.solved));
 
-      if ($("#info-" + team.teamId + "-failed").length)
-        $("#info-" + team.teamId + "-failed").html(team.failedNum + " " + formatProblemArray(team.failed));
+      $infoteamfailed = $("#info-" + team.teamId + "-failed")
+      if ($infoteamfailed.length)
+        $infoteamfailed.html(team.failedNum + " " + formatProblemArray(team.failed));
 
   $scope.drawTeamBar = (team) ->
     chart = d3.select("#scorebar-chart g.canvas")

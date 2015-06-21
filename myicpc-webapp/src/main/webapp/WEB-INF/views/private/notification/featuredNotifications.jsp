@@ -44,7 +44,7 @@
 					return true;
 				}
 				return false;
-			};
+			}
 		</script>
     </jsp:body>
 </t:templateAdmin>

@@ -184,9 +184,8 @@ public class ScheduleMngmService {
      *            event role file
      * @param contest
      * @throws IOException
-     * @throws ParseException
      */
-    public void parseScheduleRoleImportFile(final MultipartFile rolesFile, final Contest contest) throws IOException, ParseException {
+    public void parseScheduleRoleImportFile(final MultipartFile rolesFile, final Contest contest) throws IOException {
         String[] line;
         try (InputStream in = rolesFile.getInputStream();
              CSVReader rolesReader = new CSVReader(new InputStreamReader(in, FormatUtils.DEFAULT_ENCODING))) {
@@ -213,9 +212,8 @@ public class ScheduleMngmService {
      *            schedule days file
      * @param contest
      * @throws IOException
-     * @throws ParseException
      */
-    public void parseScheduleDayImportFile(final MultipartFile daysFile, final Contest contest) throws IOException, ParseException {
+    public void parseScheduleDayImportFile(final MultipartFile daysFile, final Contest contest) throws IOException {
         SimpleDateFormat date = MyICPCConstants.EXCEL_DATE_FORMAT;
         date.setLenient(true);
         String[] line;
@@ -259,9 +257,8 @@ public class ScheduleMngmService {
      *            location file
      * @param contest
      * @throws IOException
-     * @throws ParseException
      */
-    public void parseLocationImportFile(final MultipartFile locationsFile, final Contest contest) throws IOException, ParseException {
+    public void parseLocationImportFile(final MultipartFile locationsFile, final Contest contest) throws IOException {
         try (InputStream in = locationsFile.getInputStream();
              CSVReader locationsReader = new CSVReader(new InputStreamReader(in, FormatUtils.DEFAULT_ENCODING))) {
             String[] line;
@@ -293,9 +290,8 @@ public class ScheduleMngmService {
      * @param eventFile
      *            event file
      * @throws IOException
-     * @throws ParseException
      */
-    public void parseEventImportFile(final MultipartFile eventFile, final Contest contest) throws IOException, ParseException {
+    public void parseEventImportFile(final MultipartFile eventFile, final Contest contest) throws IOException {
         try (InputStream in = eventFile.getInputStream();
              CSVReader eventReader = new CSVReader(new InputStreamReader(in, FormatUtils.DEFAULT_ENCODING))) {
             SimpleDateFormat time = MyICPCConstants.EXCEL_DATE_TIME_FORMAT;

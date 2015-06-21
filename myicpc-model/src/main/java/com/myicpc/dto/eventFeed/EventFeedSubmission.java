@@ -9,8 +9,8 @@ import java.util.List;
  * @author Roman Smetana
  */
 public class EventFeedSubmission implements EventFeedEvent {
-    private TeamProblem teamSubmission;
-    private List<Team> changedTeams;
+    private final TeamProblem teamSubmission;
+    private final List<Team> changedTeams;
 
     public EventFeedSubmission(TeamProblem teamSubmission, List<Team> changedTeams) {
         this.teamSubmission = teamSubmission;

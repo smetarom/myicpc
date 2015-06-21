@@ -13,7 +13,7 @@ import java.util.Date;
 public class ReportExpressions {
 
     public static class SimpleValueExpression<T> extends AbstractSimpleExpression<T> {
-        private T value;
+        private final T value;
 
         public SimpleValueExpression(T value) {
             this.value = value;
@@ -26,8 +26,8 @@ public class ReportExpressions {
     }
 
     public static class LabelExpression<T> extends AbstractSimpleExpression<String> {
-        private MessageExpression label;
-        private AbstractSimpleExpression<T> expression;
+        private final MessageExpression label;
+        private final AbstractSimpleExpression<T> expression;
         private AbstractValueFormatter<?, T> formatter;
 
         public LabelExpression(MessageExpression label, T value) {
@@ -59,7 +59,7 @@ public class ReportExpressions {
     }
 
     public static class DateExpression extends AbstractSimpleExpression<String> {
-        private Date date;
+        private final Date date;
 
         public DateExpression(Date date) {
             this.date = date;

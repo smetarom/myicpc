@@ -13,7 +13,7 @@ import com.google.gson.JsonObject;
  * 
  */
 public class JSONAdapter {
-	private JsonObject jsonObject;
+	private final JsonObject jsonObject;
 
 	public JSONAdapter(JsonElement element) {
 		this.jsonObject = element.getAsJsonObject();

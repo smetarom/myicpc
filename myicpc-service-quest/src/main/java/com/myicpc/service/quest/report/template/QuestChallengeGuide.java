@@ -47,7 +47,7 @@ public class QuestChallengeGuide {
     }
 
     private class SubreportExpression extends AbstractSimpleExpression<JasperReportBuilder> {
-        private List<QuestChallenge> challenges;
+        private final List<QuestChallenge> challenges;
 
         public SubreportExpression(List<QuestChallenge> challenges) {
             this.challenges = challenges;
@@ -96,9 +96,9 @@ public class QuestChallengeGuide {
     }
 
     private static class PointsExpression extends AbstractSimpleExpression<String> {
-        private int points;
-        private boolean attachPhoto;
-        private boolean attachVideo;
+        private final int points;
+        private final boolean attachPhoto;
+        private final boolean attachVideo;
 
         public PointsExpression(int points, boolean attachPhoto, boolean attachVideo) {
             this.points = points;

@@ -2,7 +2,6 @@ package com.myicpc.dto.eventFeed.parser;
 
 import com.myicpc.dto.eventFeed.visitor.EventFeedVisitor;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.model.eventFeed.EventFeedControl;
 
 import java.io.Serializable;
 

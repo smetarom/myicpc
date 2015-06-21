@@ -1,7 +1,6 @@
 package com.myicpc.model.social;
 
 import com.myicpc.model.IdGeneratedContestObject;
-import com.myicpc.model.IdGeneratedObject;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -22,9 +21,9 @@ public class BlacklistedUser extends IdGeneratedContestObject {
          * Tweets and other twitter activity
          */
         TWITTER("Twitter"), YOUTUBE("Youtube"), VINE("Vine"), INSTAGRAM("Instagram"), QUEST("Quest");
-        private String label;
+        private final String label;
 
-        private BlacklistedUserType(final String label) {
+        BlacklistedUserType(final String label) {
             this.label = label;
         }
 

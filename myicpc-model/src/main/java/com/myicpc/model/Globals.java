@@ -7,7 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.SequenceGenerator;
-import javax.validation.constraints.NotNull;
 
 /**
  * Application variables stored in database

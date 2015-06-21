@@ -16,6 +16,7 @@ import java.util.Map;
  *
  * @author Roman Smetana
  */
+@SuppressWarnings("ALL")
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "QuestParticipant_id_seq")
 public class QuestParticipant extends IdGeneratedContestObject {
@@ -47,12 +48,12 @@ public class QuestParticipant extends IdGeneratedContestObject {
      * All {@link QuestSubmission} submitted by participant
      */
     @OneToMany(mappedBy = "participant", cascade = CascadeType.ALL)
-    private List<QuestSubmission> submissions = new ArrayList<QuestSubmission>();
+    private List<QuestSubmission> submissions = new ArrayList<>();
 
     @Transient
     private int acceptedSubmissions;
     @Transient
-    private Map<Long, QuestSubmissionDTO> submissionMap = new HashMap<>();
+    private final Map<Long, QuestSubmissionDTO> submissionMap = new HashMap<>();
 
     public int getPoints() {
         return points;

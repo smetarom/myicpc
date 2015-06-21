@@ -15,16 +15,17 @@ var POLL = {
     },
     addPredefinedOptions: function (url) {
         $.getJSON(url, function (data) {
-            $("#choices").empty();
+            var $choices = $("#choices")
+            $choices.empty();
             for (var i = 0; i < data.length; i++) {
-                POLL.addChoice($("#choices"), data[i]);
+                POLL.addChoice($choices, data[i]);
             }
         });
         return false;
     },
     /**
      * remove last option
-     * @param container
+     * @param parent
      */
     removeLastChoice: function (parent) {
         $(parent).parent().parent().parent().remove();

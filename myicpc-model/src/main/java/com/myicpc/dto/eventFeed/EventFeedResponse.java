@@ -6,7 +6,7 @@ import java.io.Serializable;
  * @author Roman Smetana
  */
 public class EventFeedResponse implements Serializable {
-    private int code;
+    private final int code;
 
     public EventFeedResponse(int code) {
         this.code = code;

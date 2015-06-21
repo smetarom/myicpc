@@ -10,6 +10,7 @@ import java.util.TreeMap;
 /**
  * @author Roman Smetana
  */
+@SuppressWarnings("ALL")
 public enum ContestParticipantRole implements GeneralEnum {
     /**
      * An <em>attendee</em>, or a person who attends a competition with the
@@ -42,13 +43,13 @@ public enum ContestParticipantRole implements GeneralEnum {
     /**
      * Language constant
      */
-    private String code;
-    private String label;
+    private final String code;
+    private final String label;
 
     /**
      * Mapping between role name and {@link ContestParticipantRole}
      */
-    private static Map<String, ContestParticipantRole> mapping;
+    private static final Map<String, ContestParticipantRole> mapping;
 
     static {
         mapping = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
@@ -84,4 +85,4 @@ public enum ContestParticipantRole implements GeneralEnum {
     public static List<ContestParticipantRole> getAllTeamRoles() {
         return Arrays.asList(ContestParticipantRole.values());
     }
-};
+}

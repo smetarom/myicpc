@@ -40,7 +40,7 @@ public class EventFeedNotificationReceiver {
         }
     }
 
-    public void onSubmission(final EventFeedSubmission eventFeedSubmission) {
+    private void onSubmission(final EventFeedSubmission eventFeedSubmission) {
         TeamProblem teamSubmission = eventFeedSubmission.getTeamSubmission();
         List<Team> effectedTeams = eventFeedSubmission.getChangedTeams();
         JsonObject tpObject = new JsonObject();
@@ -75,7 +75,7 @@ public class EventFeedNotificationReceiver {
         publishService.broadcastTeamProblem(tpObject, teamSubmission.getTeam().getContest().getCode());
     }
 
-    public void onNotification(Notification notification) {
+    private void onNotification(Notification notification) {
         if (notification == null) {
             return;
         }

@@ -25,7 +25,7 @@ public class ReportByProblem extends InsightReport {
 	/**
 	 * List of judgments with this problem
 	 */
-	private List<JudgmentDTO> results = new ArrayList<>();
+	private final List<JudgmentDTO> results = new ArrayList<>();
 	/**
 	 * First submission, which tried to solve a problem
 	 */

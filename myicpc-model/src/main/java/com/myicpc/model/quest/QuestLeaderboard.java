@@ -77,9 +77,9 @@ public class QuestLeaderboard extends IdGeneratedContestObject {
         }
         String[] names = roles.split(SEPARATOR);
         List<ContestParticipantRole> roles = new ArrayList<>(names.length);
-        for (int i = 0; i < names.length; i++) {
+        for (String name : names) {
             try {
-                roles.add(ContestParticipantRole.valueOf(names[i]));
+                roles.add(ContestParticipantRole.valueOf(name));
             } catch (IllegalArgumentException ex) {
                 // ignore
             }

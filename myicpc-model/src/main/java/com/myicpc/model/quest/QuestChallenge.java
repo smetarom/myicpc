@@ -171,7 +171,7 @@ public class QuestChallenge extends StartEndDateObject {
 
     @Transient
     public boolean isClosed() {
-        return endDate == null ? false : endDate.before(new Date());
+        return endDate != null && endDate.before(new Date());
     }
 
     /**

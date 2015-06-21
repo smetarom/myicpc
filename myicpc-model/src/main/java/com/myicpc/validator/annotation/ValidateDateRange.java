@@ -1,7 +1,6 @@
 package com.myicpc.validator.annotation;
 
 import com.myicpc.validator.DateRangeValidator;
-import com.myicpc.validator.SystemUserValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

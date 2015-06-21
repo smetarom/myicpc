@@ -10,8 +10,8 @@ public enum FeedRunStrategyType implements GeneralEnum {
     NATIVE("feed.strategy.type.native", "Computed by MyICPC"),
     JSON("feed.strategy.type.json", "JSON scoreboard"),;
 
-    private String label;
-    private String code;
+    private final String label;
+    private final String code;
 
     FeedRunStrategyType(String code, String label) {
         this.label = label;

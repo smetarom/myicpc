@@ -14,7 +14,7 @@ import java.util.Map;
  * @author Roman Smetana
  */
 public abstract class InsightReport {
-	private Map<String, String> colorMap;
+	private final Map<String, String> colorMap;
 
 	public InsightReport() {
 		colorMap = new HashMap<>();

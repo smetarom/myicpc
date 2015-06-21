@@ -19,10 +19,10 @@ import static com.myicpc.tags.utils.TagConstants.VIDEO_FORMAT;
  * @author Roman Smetana
  */
 public abstract class NotificationTile {
-    protected Notification notification;
-    protected boolean isTemplate;
-    protected Locale locale;
-    protected PageContext pageContext;
+    protected final Notification notification;
+    protected final boolean isTemplate;
+    protected final Locale locale;
+    protected final PageContext pageContext;
 
     public NotificationTile(Notification notification, boolean isTemplate, Locale locale, PageContext pageContext) {
         this.notification = notification;
@@ -70,7 +70,7 @@ public abstract class NotificationTile {
         out.print(" <span class=\"hidden-xs\"> &middot; " + getTimestamp() + "</span> ");
     }
 
-    protected void renderFooterAppendix(JspWriter out) throws IOException, JspException {
+    protected void renderFooterAppendix(JspWriter out) throws IOException {
         // do nothing by default
     }
 
@@ -78,7 +78,7 @@ public abstract class NotificationTile {
         out.print(String.format("<img class=\"pull-left media-object\" src=\"%s\" alt=\"%s\" width=\"%d\" height=\"%d\">", resolveUrl(src), title, 50, 50));
     }
 
-    protected void renderAvatarIcon(JspWriter out, String iconClass) throws IOException, JspException {
+    protected void renderAvatarIcon(JspWriter out, String iconClass) throws IOException {
         out.print(String.format("<span class=\"pull-left media-object %s\" style=\"font-size: 2.5em; width: 50px;\"></span>", iconClass));
     }
 
@@ -105,7 +105,7 @@ public abstract class NotificationTile {
         return JSPUtils.resolveUrl(url, pageContext);
     }
 
-    protected void renderMedia(JspWriter out) throws IOException, JspException {
+    protected void renderMedia(JspWriter out) throws IOException {
         if (isTemplate) {
             out.print(HandlebarsUtils.displayIfNotEmtpy("imageUrl", String.format(IMAGE_FORMAT, "{{imageUrl}}")));
             out.print(HandlebarsUtils.displayIfNotEmtpy("videoUrl", String.format(VIDEO_FORMAT, "{{videoUrl}}")));

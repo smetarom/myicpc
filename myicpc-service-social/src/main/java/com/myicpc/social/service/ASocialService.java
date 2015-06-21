@@ -42,7 +42,7 @@ public abstract class ASocialService {
      * @param blacklist
      *            list of blacklisted usernames
      */
-    protected void  saveSearchList(List<Notification> notifications, BlacklistedUser.BlacklistedUserType blacklistedUserType, Contest contest) {
+    protected void saveSearchList(List<Notification> notifications, BlacklistedUser.BlacklistedUserType blacklistedUserType, Contest contest) {
         Set<String> blacklist = new HashSet<>(blacklistedUserRepository.getUsernameByBlacklistedUserType(blacklistedUserType));
 
         for (int i = notifications.size() - 1; i >= 0; i--) {

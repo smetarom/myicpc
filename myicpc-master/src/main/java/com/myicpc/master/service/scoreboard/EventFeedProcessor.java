@@ -128,18 +128,18 @@ public class EventFeedProcessor {
         xStream.ignoreUnknownElements();
         xStream.processAnnotations(new Class[]{ContestXML.class, LanguageXML.class, RegionXML.class, JudgementXML.class, ProblemXML.class, TeamXML.class,
                 TeamProblemXML.class, TestcaseXML.class, FinalizedXML.class, AnalystMessageXML.class, ClarificationXML.class});
-        xStream.registerLocalConverter(TeamProblemXML.class, "problem", new ProblemConverter(contest) {
-            @Override
-            public Object fromString(String value) {
-                return eventFeedDao.getProblemBySystemId(value, contest.getId());
-            }
-        });
-        xStream.registerLocalConverter(TeamProblemXML.class, "team", new TeamConverter(contest) {
-            @Override
-            public Object fromString(String value) {
-                return eventFeedDao.getTeamBySystemId(value, contest.getId());
-            }
-        });
+//        xStream.registerLocalConverter(TeamProblemXML.class, "problem", new ProblemConverter(contest) {
+//            @Override
+//            public Object fromString(String value) {
+//                return eventFeedDao.getProblemBySystemId(value, contest.getId());
+//            }
+//        });
+//        xStream.registerLocalConverter(TeamProblemXML.class, "team", new TeamConverter(contest) {
+//            @Override
+//            public Object fromString(String value) {
+//                return eventFeedDao.getTeamBySystemId(value, contest.getId());
+//            }
+//        });
         return xStream;
     }
 

@@ -15,7 +15,7 @@ public class CodeInsightTeam implements Serializable {
     /**
      * Team
      */
-    private Team team;
+    private final Team team;
     /**
      * Total number of lines
      */

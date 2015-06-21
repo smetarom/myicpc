@@ -88,7 +88,6 @@
 
     <script type="application/javascript">
       $(function() {
-        console.log($("#participantFilter select"))
         $("#participantFilter select").chosen();
       });
     </script>

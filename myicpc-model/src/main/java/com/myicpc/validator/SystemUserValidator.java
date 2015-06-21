@@ -2,9 +2,6 @@ package com.myicpc.validator;
 
 import com.myicpc.model.security.SystemUser;
 import com.myicpc.validator.annotation.ValidateSystemUser;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
-import org.springframework.validation.Validator;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

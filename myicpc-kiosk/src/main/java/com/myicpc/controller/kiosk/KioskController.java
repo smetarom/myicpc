@@ -2,7 +2,6 @@ package com.myicpc.controller.kiosk;
 
 import com.myicpc.controller.GeneralController;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.model.schedule.ScheduleDay;
 import com.myicpc.service.kiosk.KioskService;
 import com.myicpc.service.schedule.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * @author Roman Smetana

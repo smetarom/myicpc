@@ -27,7 +27,7 @@ import java.util.Set;
 public abstract class FeedRunStrategy {
     private static final Logger logger = LoggerFactory.getLogger(FeedRunStrategy.class);
 
-    private Set<ScoreboardListener> scoreboardListeners = Collections.synchronizedSet(new HashSet<ScoreboardListener>());
+    private final Set<ScoreboardListener> scoreboardListeners = Collections.synchronizedSet(new HashSet<ScoreboardListener>());
 
     @Autowired
     private PublishService publishService;

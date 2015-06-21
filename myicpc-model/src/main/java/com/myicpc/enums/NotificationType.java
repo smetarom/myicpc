@@ -25,17 +25,17 @@ public enum NotificationType {
     /**
      * Human readable name of notification type
      */
-    private String label;
+    private final String label;
     /**
      * Full description of notification type
      */
-    private String description;
+    private final String description;
     /**
      * Short name for internal representation
      */
-    private String code;
+    private final String code;
 
-    private NotificationType(final String label, final String description, final String code) {
+    NotificationType(final String label, final String description, final String code) {
         this.label = label;
         this.description = description;
         this.code = code;

@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 @Singleton
 public class TwitterService extends GeneralSocialService {
     private static final Logger logger = LoggerFactory.getLogger(TwitterService.class);
-    private static ConcurrentMap<Long, TwitterStream> streamMapping = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<Long, TwitterStream> streamMapping = new ConcurrentHashMap<>();
 
     public void startTwitterStreaming(Contest contest) {
         ConfigurationBuilder cb = new ConfigurationBuilder();

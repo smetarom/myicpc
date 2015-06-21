@@ -52,7 +52,7 @@
                 $.get('<spring:url value="/private${contestURL}/notifications/suspicious/" />' + notificationId + '/ignore', function( data ) {
                     $(elem).parent().parent().hide();
                 });
-            };
+            }
             function banNotification(elem, notificationId) {
                 if (confirm('<spring:message code="adminNotification.suspicious.ban.confirm" />')) {
                     $.get('<spring:url value="/private${contestURL}/notifications/" />' + notificationId + '/ban', function (data) {
@@ -61,7 +61,7 @@
                     return true;
                 }
                 return false;
-            };
+            }
             function deleteNotification(elem, notificationId) {
                 if (confirm('<spring:message code="adminNotification.suspicious.delete.confirm" />')) {
                     $.get('<spring:url value="/private${contestURL}/notifications/" />' + notificationId + '/delete', function (data) {
@@ -70,7 +70,7 @@
                     return true;
                 }
                 return false;
-            };
+            }
         </script>
 
     </jsp:body>

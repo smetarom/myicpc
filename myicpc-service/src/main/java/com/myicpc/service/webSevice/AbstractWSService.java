@@ -37,7 +37,7 @@ public abstract class AbstractWSService {
      * @return received data from WS
      * @throws IOException
      */
-    public Object connectCM(String url, final Contest contest) throws IOException {
+    protected Object connectCM(String url, final Contest contest) throws IOException {
         return connectCM(globalSettingsService.getGlobalSettings().getContestManagementSystemUrl(), url, contest);
     }
 
@@ -51,7 +51,7 @@ public abstract class AbstractWSService {
      * @return received data from WS
      * @throws IOException
      */
-    public String connectCM(final String server, final String url, final Contest contest) throws IOException {
+    private String connectCM(final String server, final String url, final Contest contest) throws IOException {
         HttpGet httpGet = null;
         try {
             SSLContext sslcontext = SSLContexts.custom().build();
@@ -80,7 +80,7 @@ public abstract class AbstractWSService {
      * Release HTTP connection
      * @param httpGet
      */
-    public static void releaseConnection(HttpGet httpGet) {
+    private static void releaseConnection(HttpGet httpGet) {
         if (httpGet != null) {
             httpGet.releaseConnection();
         }

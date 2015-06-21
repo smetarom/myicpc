@@ -21,11 +21,11 @@ public class FormatUtils {
     /**
      * Mapping between word and abbreviation for team names
      */
-    private static Map<String, String> teamMapping;
+    private static final Map<String, String> teamMapping;
     /**
      * Mapping between word and abbreviation for region names
      */
-    private static Map<String, String> regionMapping;
+    private static final Map<String, String> regionMapping;
 
     /**
      * Common patterns

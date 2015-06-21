@@ -114,9 +114,8 @@ public class TeamService {
     /**
      * Synchronize team and university info via web services
      *
-     * @throws WebServiceException communication with WS failed
      */
-    public void synchronizeTeamsWithCM(Contest contest) throws WebServiceException, ValidationException {
+    public void synchronizeTeamsWithCM(Contest contest) throws ValidationException {
         try {
             synchronizeUniversities(teamWSService.getUniversitiesFromCM(contest));
             synchronizeTeams(teamWSService.getTeamsFromCM(contest), contest);
@@ -393,10 +392,8 @@ public class TeamService {
 
     /**
      * Synchronize staff info via web services
-     *
-     * @throws WebServiceException communication with WS failed
      */
-    public void synchronizeStaffMembersWithCM(Contest contest) throws WebServiceException {
+    public void synchronizeStaffMembersWithCM(Contest contest) {
         try {
             String json = teamWSService.getStaffMembersFromCM(contest);
             JsonObject root = new JsonParser().parse(json).getAsJsonObject();

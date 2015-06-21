@@ -4,14 +4,12 @@ import com.myicpc.model.IdGeneratedObject;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Cacheable;
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import java.io.Serializable;
 import java.util.Date;
 
 @Cacheable

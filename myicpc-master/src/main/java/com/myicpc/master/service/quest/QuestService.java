@@ -2,7 +2,6 @@ package com.myicpc.master.service.quest;
 
 import com.myicpc.enums.NotificationType;
 import com.myicpc.master.dao.QuestDao;
-import com.myicpc.master.service.social.GeneralSocialService;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.quest.QuestChallenge;
 import com.myicpc.model.social.Notification;

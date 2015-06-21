@@ -206,7 +206,7 @@ public class ContestParticipant extends IdGeneratedObject {
         return false;
     }
 
-    private static interface ContestParticipantRoleCommand {
+    private interface ContestParticipantRoleCommand {
         boolean hasContestParticipantRole(ContestParticipantAssociation association);
     }
 }

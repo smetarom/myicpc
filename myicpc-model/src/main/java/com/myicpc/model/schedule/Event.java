@@ -3,7 +3,6 @@ package com.myicpc.model.schedule;
 import com.myicpc.model.StartEndDateObject;
 import com.myicpc.validator.annotation.ValidateDateRange;
 import org.hibernate.annotations.Type;
-import org.hibernate.validator.constraints.ScriptAssert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -72,7 +71,7 @@ public class Event extends StartEndDateObject {
      */
     @ManyToMany
     @JoinTable(name = "EventRoleEventAssociation", joinColumns = @JoinColumn(name = "eventId", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "eventRoleId", referencedColumnName = "id"))
-    private Set<EventRole> roles = new HashSet<EventRole>();
+    private Set<EventRole> roles = new HashSet<>();
 
     public String getName() {
         return name;

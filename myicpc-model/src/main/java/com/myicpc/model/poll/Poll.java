@@ -33,8 +33,8 @@ public class Poll extends StartEndDateObject {
          */
         PIE_CHART("Pie chart", "poll.representation.pieChart");
 
-        private String label;
-        private String code;
+        private final String label;
+        private final String code;
 
         PollRepresentationType(String label, String code) {
             this.label = label;

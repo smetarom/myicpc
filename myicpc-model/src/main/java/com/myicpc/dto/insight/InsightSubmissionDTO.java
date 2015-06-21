@@ -6,12 +6,12 @@ import java.io.Serializable;
  * @author Roman Smetana
  */
 public class InsightSubmissionDTO implements Serializable {
-    private Long teamId;
-    private String teamName;
-    private Double time;
-    private boolean solved;
-    private boolean firstSolved;
-    private String language;
+    private final Long teamId;
+    private final String teamName;
+    private final Double time;
+    private final boolean solved;
+    private final boolean firstSolved;
+    private final String language;
 
     public InsightSubmissionDTO(Long teamId, String teamName, Double time, boolean solved, boolean firstSolved, String language) {
         this.teamId = teamId;

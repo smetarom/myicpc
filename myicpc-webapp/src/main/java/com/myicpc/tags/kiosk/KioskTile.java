@@ -20,7 +20,7 @@ public abstract class KioskTile {
         this.pageContext = pageContext;
     }
 
-    public void render(JspWriter out) throws IOException, JspException {
+    public void render(JspWriter out) throws IOException {
         out.print(String.format("<div class=\"tile-title %s\">", getTitleClass()));
         if (StringUtils.isNotEmpty(getTitleIcon())) {
             out.print(String.format("<div class=\"pull-right %s\"></div>", getTitleIcon()));

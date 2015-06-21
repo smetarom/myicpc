@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 @Component
 public class BadWordsFilter {
 	private static final Logger logger = LoggerFactory.getLogger(BadWordsFilter.class);
-	private static Set<String> swearWords;
+	private static final Set<String> swearWords;
 
 	/**
 	 * Preload swear words and checked notification types into memory

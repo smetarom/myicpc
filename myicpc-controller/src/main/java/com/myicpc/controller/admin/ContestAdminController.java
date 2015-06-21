@@ -196,7 +196,7 @@ public class ContestAdminController extends GeneralAdminController {
         return "redirect:/private/home";
     }
 
-    protected void populateCreateContestModel(Model model, Contest contest, int currentStep) {
+    private void populateCreateContestModel(Model model, Contest contest, int currentStep) {
         List<ImmutablePair<String, String>> steps = getWizardMenuItems(false);
         model.addAttribute("headline", getMessage("contestAdmin.create.title"));
         model.addAttribute("formAction", currentStep == steps.size() ? "/private/contest/create" : "/private/contest/nextStep");
@@ -205,7 +205,7 @@ public class ContestAdminController extends GeneralAdminController {
         populateContestModel(model, contest, false, currentStep);
     }
 
-    protected void populateEditContestModel(Model model, Contest contest, int currentStep) {
+    private void populateEditContestModel(Model model, Contest contest, int currentStep) {
         model.addAttribute("headline", getMessage("contestAdmin.edit.title", contest.getName()));
         model.addAttribute("formAction", "/private/contest/edit");
         model.addAttribute("cancelAction", "/private"+getContestURL(contest.getCode()));
@@ -213,7 +213,7 @@ public class ContestAdminController extends GeneralAdminController {
         populateContestModel(model, contest, true, currentStep);
     }
 
-    protected void populateContestModel(Model model, Contest contest, boolean editMode, int currentStep) {
+    private void populateContestModel(Model model, Contest contest, boolean editMode, int currentStep) {
         List<ImmutablePair<String, String>> steps = getWizardMenuItems(editMode);
         model.addAttribute("contest", contest);
         model.addAttribute("steps", steps);
@@ -223,7 +223,7 @@ public class ContestAdminController extends GeneralAdminController {
         model.addAttribute("defaultMapConfig", globalSettingsService.getGlobalSettings().getDefaultMapConfig());
     }
 
-    protected List<ImmutablePair<String, String>> getWizardMenuItems(boolean editMode) {
+    private List<ImmutablePair<String, String>> getWizardMenuItems(boolean editMode) {
         List<ImmutablePair<String, String>> items = Lists.newArrayList();
         items.add(new ImmutablePair<>("Initialize", getMessage("contestAdmin.wizard.stepInit")));
         items.add(new ImmutablePair<>("ContestInfo", getMessage("contestAdmin.wizard.stepContestInfo")));

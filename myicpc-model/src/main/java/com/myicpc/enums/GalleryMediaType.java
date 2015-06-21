@@ -4,8 +4,6 @@ package com.myicpc.enums;
  * @author Roman Smetana
  */
 
-import com.myicpc.model.social.Notification;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,17 +12,18 @@ import java.util.Map;
  *
  * @author Roman Smetana
  */
+@SuppressWarnings("CanBeFinal")
 public enum GalleryMediaType {
     VINE("vi"), INSTAGRAM_IMAGE("im"), INSTAGRAM_VIDEO("iv"), GALLERY("ga"), YOUTUBE_VIDEO("yt");
 
     /**
      * Code of the source
      */
-    private String code;
+    private final String code;
     /**
      * mapping between type and code
      */
-    private static final Map<String, GalleryMediaType> CODEMAP = new HashMap<String, GalleryMediaType>();
+    private static final Map<String, GalleryMediaType> CODEMAP = new HashMap<>();
 
     static {
         for (GalleryMediaType service : GalleryMediaType.values()) {
@@ -32,7 +31,7 @@ public enum GalleryMediaType {
         }
     }
 
-    private GalleryMediaType(String code) {
+    GalleryMediaType(String code) {
         this.code = code;
     }
 

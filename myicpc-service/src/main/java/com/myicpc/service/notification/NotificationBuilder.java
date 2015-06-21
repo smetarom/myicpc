@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 public class NotificationBuilder {
-    private Notification notification;
+    private final Notification notification;
 
     public NotificationBuilder() {
         notification = new Notification();

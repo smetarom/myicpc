@@ -1,7 +1,6 @@
 package com.myicpc.tags.kiosk;
 
 import com.myicpc.enums.NotificationType;
-import com.myicpc.tags.notification.NotificationTile;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;

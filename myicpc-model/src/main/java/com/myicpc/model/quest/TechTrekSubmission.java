@@ -41,7 +41,7 @@ public class TechTrekSubmission extends IdGeneratedContestObject {
      * List of answers
      */
     @OneToMany(mappedBy = "techTrekSubmission", cascade = CascadeType.ALL)
-    private List<TechTrekWriteup> writeups = new ArrayList<TechTrekWriteup>();
+    private List<TechTrekWriteup> writeups = new ArrayList<>();
 
     public Date getModifiedWhen() {
         return modifiedWhen;

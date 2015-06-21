@@ -3,7 +3,6 @@ package com.myicpc.controller.quest.admin;
 import com.myicpc.controller.GeneralAdminController;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.quest.QuestChallenge;
-import com.myicpc.model.security.SystemUser;
 import com.myicpc.repository.quest.QuestChallengeRepository;
 import com.myicpc.service.exception.BusinessValidationException;
 import com.myicpc.service.exception.ReportException;

@@ -1,7 +1,5 @@
 package com.myicpc.model.security;
 
-import com.myicpc.commons.enums.GeneralEnum;
-import com.myicpc.commons.utils.MessageUtils;
 import com.myicpc.enums.UserRoleEnum;
 import com.myicpc.model.IdGeneratedObject;
 
@@ -49,9 +47,7 @@ public class SystemUserRole extends IdGeneratedObject {
     @Transient
     public UserRoleEnum getUserRoleLabel() {
         try {
-            UserRoleEnum userRoleEnum = UserRoleEnum.valueOf(authority);
-            return userRoleEnum;
-//            return MessageUtils.translateEnum(userRoleEnum);
+            return UserRoleEnum.valueOf(authority);
         } catch (IllegalArgumentException ex) {
             return null;
         }

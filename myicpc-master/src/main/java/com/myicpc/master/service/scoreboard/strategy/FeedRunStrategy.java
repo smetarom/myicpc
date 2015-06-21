@@ -23,7 +23,7 @@ public abstract class FeedRunStrategy {
     protected EventFeedDao eventFeedDao;
 
     public EventFeedSubmission executeTeamProblem(TeamProblem teamProblem, Contest contest) throws EventFeedException {
-        List<Team> teamsToBroadcast = new ArrayList<Team>();
+        List<Team> teamsToBroadcast = new ArrayList<>();
         // fresh = submitted run, done = judged run
         if ("fresh".equalsIgnoreCase(teamProblem.getStatus())) {
             teamProblem = eventFeedDao.saveContestEntity(teamProblem);

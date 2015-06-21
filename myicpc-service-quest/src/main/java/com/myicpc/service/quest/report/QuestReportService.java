@@ -20,7 +20,7 @@ public class QuestReportService extends AbstractReportService {
         exportToPDF(reportQuestChallengesGuide(questChallenges), outputStream);
     }
 
-    public JasperReportBuilder reportQuestChallengesGuide(List<QuestChallenge> questChallenges) throws DRException {
+    public JasperReportBuilder reportQuestChallengesGuide(List<QuestChallenge> questChallenges) {
         QuestChallengeGuide questChallengeGuide = new QuestChallengeGuide();
         return questChallengeGuide.build(questChallenges);
 

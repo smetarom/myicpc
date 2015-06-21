@@ -60,7 +60,7 @@ public class NativeRunStrategy extends FeedRunStrategy {
         Collections.sort(teams, new ScorebaordComparator(eventFeedDao));
         int rank = 1;
         int oldRank = 0;
-        List<Team> teamsToBroadcast = new ArrayList<Team>();
+        List<Team> teamsToBroadcast = new ArrayList<>();
         // reassign ranks based on sorted teams and mark team, where the rank
         // was changed
         for (Team t : teams) {
@@ -91,7 +91,7 @@ public class NativeRunStrategy extends FeedRunStrategy {
      */
     public static class ScorebaordComparator implements Comparator<Team>, Serializable {
         private static final long serialVersionUID = -3436155626630004031L;
-        private Map<Long, Double> lastAcceptedCache = new HashMap<Long, Double>();
+        private Map<Long, Double> lastAcceptedCache = new HashMap<>();
         private EventFeedDao eventFeedDao;
 
         public ScorebaordComparator(final EventFeedDao eventFeedDao) {

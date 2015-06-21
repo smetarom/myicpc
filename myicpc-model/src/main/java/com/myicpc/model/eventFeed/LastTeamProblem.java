@@ -1,7 +1,6 @@
 package com.myicpc.model.eventFeed;
 
 import com.myicpc.model.IdGeneratedContestObject;
-import com.myicpc.model.IdGeneratedObject;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

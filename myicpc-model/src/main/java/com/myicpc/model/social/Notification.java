@@ -1,13 +1,11 @@
 package com.myicpc.model.social;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.myicpc.commons.utils.TimeUtils;
 import com.myicpc.enums.NotificationType;
 import com.myicpc.model.IdGeneratedContestObject;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -310,7 +308,7 @@ public class Notification extends IdGeneratedContestObject {
      */
     public Map<String, String> getParsedCode() {
         if (parsedCode == null && code != null) {
-            parsedCode = new HashMap<String, String>();
+            parsedCode = new HashMap<>();
             JsonObject obj = new JsonParser().parse(code).getAsJsonObject();
             for (Entry<String, JsonElement> entry : obj.entrySet()) {
                 parsedCode.put(entry.getKey(), entry.getValue().getAsString());

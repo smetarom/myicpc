@@ -17,12 +17,12 @@ public class ReportByLanguage extends InsightReport {
 	/**
 	 * Language
 	 */
-	private String language;
+	private final String language;
 
 	/**
 	 * List of judgments with this language
 	 */
-	private List<JudgmentDTO> results = new ArrayList<JudgmentDTO>();
+	private final List<JudgmentDTO> results = new ArrayList<JudgmentDTO>();
 
 	/**
 	 * Number of successful teams

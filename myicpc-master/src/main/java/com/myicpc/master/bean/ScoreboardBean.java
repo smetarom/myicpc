@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.Local;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 

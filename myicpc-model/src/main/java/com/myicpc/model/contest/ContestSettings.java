@@ -5,14 +5,12 @@ import com.myicpc.model.IdGeneratedObject;
 import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.Cacheable;
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
-import java.io.Serializable;
 
 /**
  * Represents the settings for the contest

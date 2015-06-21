@@ -1,7 +1,6 @@
 package com.myicpc.master.service.quest;
 
 import com.myicpc.model.social.Notification;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,8 +12,6 @@ import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.Session;
-import java.util.List;
-import java.util.ListIterator;
 
 /**
  * @author Roman Smetana

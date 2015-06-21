@@ -6,8 +6,8 @@ import javax.validation.ValidationException;
  * @author Roman Smetana
  */
 public class BusinessValidationException extends Exception {
-    private String messageCode;
-    private Object[] params;
+    private final String messageCode;
+    private final Object[] params;
 
     public BusinessValidationException(String messageCode, Object... params) {
         this.messageCode = messageCode;

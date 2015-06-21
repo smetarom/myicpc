@@ -1,7 +1,6 @@
 package com.myicpc.master.service.scoreboard;
 
 import com.myicpc.dto.eventFeed.EventFeedCommand;
-import com.myicpc.master.bean.IMasterBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

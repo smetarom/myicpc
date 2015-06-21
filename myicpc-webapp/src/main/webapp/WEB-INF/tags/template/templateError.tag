@@ -11,7 +11,7 @@
 
         <style type="text/css">
             body {
-                padding-top: 0px;
+                padding-top: 0;
             }
 
             p {

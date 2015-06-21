@@ -2,7 +2,6 @@ package com.myicpc.model.eventFeed;
 
 import com.myicpc.model.IdGeneratedContestObject;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
