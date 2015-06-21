@@ -12,6 +12,7 @@ import java.util.Date;
  *
  * @author Roman Smetana
  */
+@Cacheable
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "Contest_id_seq")
 public class Contest extends IdGeneratedObject {

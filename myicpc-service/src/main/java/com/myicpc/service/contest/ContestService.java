@@ -16,7 +16,6 @@ import java.util.List;
  * @author Roman Smetana
  */
 @Service
-@Transactional
 public class ContestService {
     @Autowired
     private ContestRepository contestRepository;
@@ -61,10 +60,12 @@ public class ContestService {
         return diff;
     }
 
+    @Transactional
     public void saveContest(final Contest contest) {
         contestRepository.save(contest);
     }
 
+    @Transactional
     public void deleteContest(final Contest contest) {
         // TODO remove all objects related to the contest
 

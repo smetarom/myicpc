@@ -32,7 +32,6 @@ import java.util.List;
  * @author Roman Smetana
  */
 @Service
-@Transactional
 public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements ScoreboardService {
 
     @PersistenceContext(name = "MyICPC")
@@ -70,7 +69,7 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
     public JsonArray getTeamsFullTemplate(final Contest contest) {
         List<Team> teams = teamRepository.findByContest(contest);
         List<LastTeamSubmissionDTO> submissions = lastTeamProblemRepository.findLastTeamSubmissionDTOByContest(contest);
-        return getTeamsFullTemplate(teams, submissions);
+        return getTeamsFullTemplate(teams, submissions, contest);
 
     }
 
@@ -82,7 +81,7 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
      * @return JSON representation of selected teams paired with last team
      * submissions
      */
-    public JsonArray getTeamsFullTemplate(final List<Team> teams, final List<LastTeamSubmissionDTO> submissions) {
+    private JsonArray getTeamsFullTemplate(final List<Team> teams, final List<LastTeamSubmissionDTO> submissions, final Contest contest) {
         Multimap<Long, LastTeamSubmissionDTO> submissionMultimap = HashMultimap.create();
         for (LastTeamSubmissionDTO submission : submissions) {
             submissionMultimap.put(submission.getTeamId(), submission);
@@ -90,7 +89,6 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
 
         JsonArray root = new JsonArray();
         for (Team team : teams) {
-            final Contest contest = team.getContest();
             JsonObject teamObject = new JsonObject();
             teamObject.addProperty("teamId", team.getExternalId());
             teamObject.addProperty("teamExternalId", team.getExternalId());

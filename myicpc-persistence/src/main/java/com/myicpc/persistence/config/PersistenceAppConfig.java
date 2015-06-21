@@ -62,6 +62,7 @@ public class PersistenceAppConfig {
         prop.setProperty("hibernate.connection.useUnicode", "true");
 
 //        prop.setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.infinispan.JndiInfinispanRegionFactory");
+//        prop.setProperty("hibernate.cache.infinispan.cachemanager", "java:jboss/infinispan/container/hibernate");
 //        prop.setProperty("hibernate.cache.use_second_level_cache", "true");
 //        prop.setProperty("hibernate.cache.use_query_cache", "true");
         return prop;
