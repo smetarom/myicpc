@@ -107,6 +107,11 @@
 }
 
 #mainLeaderboard {
+  min-width: 100%;
+  width: 100%;
+  height: 350px;
+  overflow: hidden;
+
   .vertical-text {
     -webkit-transform: rotate(270deg);
     -moz-transform: rotate(270deg);
@@ -115,6 +120,38 @@
     width: 16px;
     margin: 0 auto;
     white-space: nowrap;
+  }
+
+  .table-container {
+    position: relative;
+    overflow: hidden;
+    border-width: 0px;
+    width: 100%;
+    height: 100%;
+
+    .fixed-header {
+      position: absolute;
+      z-index: 505;
+      background-color: white;
+      width: auto;
+      max-width: none;
+    }
+
+    .fixed-rows, .non-fixed-header {
+      overflow: hidden;
+      position: absolute;
+      z-index: 501;
+      background-color: white;
+
+      table {
+        position: relative;
+      }
+    }
+
+    .scroller {
+      overflow: auto;
+      height: 100%;
+    }
   }
 
   #leaderboard-not-fixed table {
@@ -161,12 +198,6 @@
     th {
       vertical-align: bottom;
     }
-  }
-
-  .fixed-columns {
-    position: absolute;
-    background-color: white;
-    z-index: 500;
   }
 }
 
