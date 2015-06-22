@@ -87,7 +87,7 @@ problemApp.controller('problemCtrl', function($scope, $rootScope, problemService
   };
 });
 
-problemApp.controller('problemAttempsCtrl', function($scope, $rootScope, $http) {
+problemApp.controller('problemAttempsCtrl', function($scope, $rootScope, $http, problemService) {
   $scope.dataLoaded = false;
   $scope.submissions = [];
   $scope.init = function(contextPath, contestCode, problemCode) {

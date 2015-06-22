@@ -145,7 +145,7 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
             String shortName = team.getTeamInfo() != null ? team.getTeamInfo().getShortName() : team.getName();
             String abbreviation = team.getTeamInfo() != null ? team.getTeamInfo().getAbbreviation() : team.getName();
 
-            teamObject.addProperty("rank", team.getRank());
+            teamObject.addProperty("teamRank", team.getRank());
             teamObject.addProperty("teamId", team.getExternalId());
             teamObject.addProperty("teamShortName", StringEscapeUtils.escapeEcmaScript(shortName));
             teamObject.addProperty("teamAbbreviation", StringEscapeUtils.escapeEcmaScript(abbreviation));

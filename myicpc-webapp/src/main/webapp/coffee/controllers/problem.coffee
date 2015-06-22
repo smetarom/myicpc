@@ -87,7 +87,7 @@ problemApp.controller('problemCtrl', ($scope, $rootScope, problemService) ->
     $rootScope.judgements = judgements
 )
 
-problemApp.controller('problemAttempsCtrl', ($scope, $rootScope, $http) ->
+problemApp.controller('problemAttempsCtrl', ($scope, $rootScope, $http, problemService) ->
   $scope.dataLoaded = false
   $scope.submissions = []
 

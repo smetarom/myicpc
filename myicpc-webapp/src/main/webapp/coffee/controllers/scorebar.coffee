@@ -270,7 +270,6 @@ scorebar.controller('scorebarCtrl', ($scope) ->
       return "failed-bar" + d["teamId"]
     ).attr("class", "failed")
     .on("mouseover", (team) ->
-      alert(team["teamId"])
       #chart.selectAll("#bar-Ntitle" + team["teamId"]).attr("class", "bar-title-Visible")
     )
     .attr("onmouseout", "scorebarHideText(this);")
@@ -309,6 +308,15 @@ scorebar.controller('scorebarCtrl', ($scope) ->
     _.find($scope.teams, (obj) ->
       obj.teamId == teamId
     )
+
+  $scope.sortTeams = (sortFunc, team) ->
+    console.log($scope.teams)
+    arr = $scope.teams.slice(team.teamRank - 1, team.rank + 1)
+    arr = sortFunc(arr, team['teamRank'] - 1)
+    console.log(team)
+    console.log(arr)
+    console.log($scope.teams)
+    arr
 )
 
 scorebarDisplayText = (element) ->
@@ -335,6 +343,19 @@ scorebarHideText = (element) ->
   d3.select("#bar-Ntitle" + s).style("fill", "black")
   d3.select(".teamInfoVisible").attr("class", "teamInfoHidden")
 
+sortTeamRanks = (teams, offset = 0) ->
+  if teams.length == 0 then return teams
+  teams.sort((t1, t2) ->
+    return if t1.teamRank == t2.teamRank then t1.teamShortName.localeCompare(t2.teamShortName) else t1.teamRank - t2.teamRank
+  )
+#  effectedTeams = []
+  for i in [0..teams.length-1] by 1
+#    if !(teams[i].rank?) || teams[i].rank != i + 1
+#      effectedTeams.push(teams[i])
+    teams[i].rank = i + 1 + offset
+#  return effectedTeams
+  return teams
+
 updateScorebar = (data, ngController = null) ->
   if data.type == 'submission'
     if ngController != null
@@ -355,9 +376,14 @@ updateScorebar = (data, ngController = null) ->
         for key of data.teams
           teamId = parseInt(key)
           effectedTeam = ngController.findById(teamId)
-          effectedTeam.rank = data.teams[key].teamRank
-          ngController.drawTeamBar(effectedTeam)
-          ngController.updateTeamInfo(effectedTeam)
+          effectedTeam.teamRank = data.teams[key].teamRank
+
+        effectedTeams = ngController.sortTeams(sortTeamRanks, team)
+        console.log(effectedTeams.length)
+        for i in [0..effectedTeams.length-1] by 1
+          ngController.drawTeamBar(effectedTeams[i])
+          ngController.updateTeamInfo(effectedTeams[i])
+
 
       ngController.drawTeamBar(team)
       ngController.updateTeamInfo(team)

@@ -134,6 +134,7 @@ public class ProblemServiceImpl extends ScoreboardListenerAdapter implements Pro
         return arr;
     }
 
+    static Random random = new Random(System.currentTimeMillis());
     public static JsonObject getTeamSubmissionJSON(final TeamSubmissionDTO teamProblem) {
         JsonObject submissionJSON = new JsonObject();
         submissionJSON.addProperty("id", teamProblem.getTeamSubmissionId());
@@ -144,6 +145,8 @@ public class ProblemServiceImpl extends ScoreboardListenerAdapter implements Pro
         submissionJSON.addProperty("judgement", teamProblem.getJudgement());
         submissionJSON.addProperty("passed", teamProblem.getNumTestPassed());
         submissionJSON.addProperty("testcases", teamProblem.getTotalNumTests());
+        submissionJSON.addProperty("passed", random.nextInt(50));
+        submissionJSON.addProperty("testcases", 50);
         submissionJSON.addProperty("teamExternalId", teamProblem.getTeamId());
         submissionJSON.addProperty("teamName", teamProblem.getTeamName());
         return submissionJSON;

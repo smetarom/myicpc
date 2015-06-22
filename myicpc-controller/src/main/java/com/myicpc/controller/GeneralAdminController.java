@@ -34,7 +34,7 @@ public class GeneralAdminController extends GeneralAbstractController {
     @Override
     protected Contest getContest(String contestCode, Model model) {
         Contest contest = super.getContest(contestCode, model);
-        if (contest != null) {
+        if (model != null && contest != null) {
             model.addAttribute("currentDate", TimeUtils.convertUTCDateToLocal(new Date(), contest.getTimeDifference()));
             model.addAttribute("adminContact", globalSettingsService.getGlobalSettings().getAdminEmail());
         }

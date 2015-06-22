@@ -14,6 +14,7 @@
                 var teams = ${not empty teamJSON ? teamJSON : '[]'};
                 var problemCount = ${not empty problemCount ? problemCount : 0};
                 var teamCount = ${not empty teamCount ? teamCount : 0};
+                teams = sortTeamRanks(teams)
                 ngController.init(teams, teamCount, problemCount);
 
                 var width = $("#scorebar-container").width();

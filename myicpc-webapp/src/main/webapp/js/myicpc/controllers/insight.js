@@ -88,7 +88,7 @@ insightApp.factory('insightService', function($http, $interval) {
     construct a label for a pie chart
    */
   insightService.toolTipContentFunction = function() {
-    return function(key, x) {
+    return function(key, x, y, e, graph) {
       return '<p><strong>' + key + '</strong>' + ' - ' + Math.round(x) + ' submissions</p>';
     };
   };
@@ -372,7 +372,7 @@ insightApp.controller('codeInsightCtrl', function($scope, $http, $interval, insi
     }
   };
   return $scope.toolTipContentFunction = function() {
-    return function(key, x, y) {
+    return function(key, x, y, e, graph) {
       var text;
       text = $scope.mode === 'DIFF' ? 'Has changed ' : 'Has total ';
       return '<p><strong>' + x + '</strong></p>' + "<p>" + text + Math.round(y) + ' lines in ' + key + ' min</p>';
