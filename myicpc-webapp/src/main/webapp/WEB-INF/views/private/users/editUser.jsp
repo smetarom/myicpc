@@ -20,8 +20,8 @@
 			<form:form class="form-horizontal" role="form" action="${formAction}" commandName="systemUser">
 			  <c:if test="${showCredentials}">
 					<t:springInput labelCode="user.username" path="username" required="true" />
-					<t:springInput labelCode="user.password" path="password" type="password" required="true"></t:springInput>
-					<t:springInput labelCode="user.passwordCheck" path="passwordCheck" type="password" required="true"></t:springInput>
+					<t:springPassword labelCode="user.password" path="password" required="true"></t:springPassword>
+					<t:springPassword labelCode="user.passwordCheck" path="passwordCheck" required="true"></t:springPassword>
 			  </c:if>
 				<t:springCheckbox labelCode="user.enabled" path="enabled" />
 				<t:springInput labelCode="user.firstname" path="firstname" />

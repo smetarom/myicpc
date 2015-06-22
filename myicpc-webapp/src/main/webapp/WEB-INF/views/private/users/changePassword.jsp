@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp"%>
 
-<t:templateAdminEdit>
+<t:templateGeneralAdmin>
 	<jsp:attribute name="title">
 		<spring:message code="userAdmin.changePassword" />
 	</jsp:attribute>
@@ -18,10 +18,10 @@
 		<spring:url var="formAction" value="${formURL}" />
 		<form:form class="form-horizontal" role="form" action="${formAction}" commandName="systemUser">
 		  <c:if test="${requireOldPassword}">
-			  	<t:springInput labelCode="userAdmin.profile.oldPassword" path="oldPlainPassword" type="password" required="true" />
+			  	<t:springPassword labelCode="userAdmin.profile.oldPassword" path="oldPlainPassword" required="true" />
 		  </c:if>
-		  <t:springInput labelCode="user.password" path="password" type="password" required="true" />
-		  <t:springInput labelCode="user.passwordCheck" path="passwordCheck" type="password" required="true" />
+		  <t:springPassword labelCode="user.password" path="password" required="true" />
+		  <t:springPassword labelCode="user.passwordCheck" path="passwordCheck" required="true" />
 		  
 		  <hr />
 		  <div class="form-group text-right">
@@ -33,4 +33,4 @@
 		  </div>
 		</form:form>
     </jsp:body>
-</t:templateAdminEdit>
+</t:templateGeneralAdmin>

@@ -97,7 +97,7 @@ public class SystemUserAdminController extends GeneralAdminController {
 	@RequestMapping(value = "/private/users/{userId}/edit", method = RequestMethod.GET)
 	@Transactional
 	public String editUser(@PathVariable Long userId, Model model, RedirectAttributes redirectAttributes) {
-		SystemUser user = systemUserRepository.findOne(userId);
+		SystemUser user = systemUserRepository.findById(userId);
 		if (user == null) {
 			errorMessage(redirectAttributes, "userAdmin.noResult");
 			return "redirect:/private/users";

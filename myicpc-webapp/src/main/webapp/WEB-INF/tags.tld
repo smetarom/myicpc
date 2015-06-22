@@ -183,6 +183,10 @@
         <path>/WEB-INF/tags/form/springMultiSelect.tag</path>
     </tag-file>
     <tag-file>
+        <name>springPassword</name>
+        <path>/WEB-INF/tags/form/springPassword.tag</path>
+    </tag-file>
+    <tag-file>
         <name>springSelect</name>
         <path>/WEB-INF/tags/form/springSelect.tag</path>
     </tag-file>
