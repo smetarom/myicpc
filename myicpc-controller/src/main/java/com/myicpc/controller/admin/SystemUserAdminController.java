@@ -82,6 +82,8 @@ public class SystemUserAdminController extends GeneralAdminController {
 		model.addAttribute("headlineTitle", getMessage("userAdmin.create"));
 		model.addAttribute("formURL", "/private/users/create");
 		model.addAttribute("showCredentials", true);
+		model.addAttribute("showEnabled", true);
+		model.addAttribute("showRoles", true);
 		return "private/users/editUser";
 	}
 
@@ -114,6 +116,8 @@ public class SystemUserAdminController extends GeneralAdminController {
 		model.addAttribute("mode", "edit");
 		model.addAttribute("headlineTitle", getMessage("userAdmin.edit"));
 		model.addAttribute("formURL", "/private/users/updateUser");
+		model.addAttribute("showEnabled", true);
+		model.addAttribute("showRoles", true);
 		return "private/users/editUser";
 	}
 
@@ -227,7 +231,7 @@ public class SystemUserAdminController extends GeneralAdminController {
 
 	/**
 	 * Processes a user update
-	 * 
+	 *
 	 * @param user
 	 *            system user
 	 * @param result
@@ -298,6 +302,54 @@ public class SystemUserAdminController extends GeneralAdminController {
 		return "private/users/changePassword";
 	}
 
+	@RequestMapping(value = "/private/profile/edit", method = RequestMethod.GET)
+	@Transactional
+	public String editUserProfile(Model model, RedirectAttributes redirectAttributes) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		SystemUser user = systemUserRepository.findByUsername(auth.getName());
+
+		if (user == null) {
+			errorMessage(redirectAttributes, "userAdmin.noResult");
+			return "redirect:/private/profile";
+		}
+
+		List<String> stringRoles = new ArrayList<>();
+		for (SystemUserRole role : user.getRoles()) {
+			stringRoles.add(role.getAuthority());
+		}
+		user.setStringRoles(stringRoles);
+
+		model.addAttribute("systemUser", user);
+		model.addAttribute("mode", "edit");
+		model.addAttribute("headlineTitle", getMessage("userAdmin.editProfile"));
+		model.addAttribute("formURL", "/private/users/updateProfile");
+		return "private/users/editUser";
+	}
+
+    /**
+     * Processes a user update
+     *
+     * @param user
+     *            system user
+     * @param result
+     * @param model
+     * @return view
+     */
+    @RequestMapping(value = "/private/users/updateProfile", method = RequestMethod.POST)
+    @Transactional
+    public String updateProfile(@Valid @ModelAttribute("systemUser") SystemUser user, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
+        model.addAttribute("headlineTitle", getMessage("userAdmin.edit"));
+        model.addAttribute("formURL", "/private/users/updateUser");
+        if (result.hasErrors()) {
+            return "private/users/editUser";
+        }
+
+        systemUserService.mergeUser(user);
+        successMessage(redirectAttributes, "userAdmin.edit.success", user.getUsername());
+
+        return "redirect:/private/profile";
+    }
+
 	/**
 	 * Processes a change password by user
 	 * 
@@ -332,14 +384,13 @@ public class SystemUserAdminController extends GeneralAdminController {
 	 * 
 	 * @param usersCSV
 	 *            users file
-	 * @param model
 	 * @param redirectAttributes
 	 * @return view
 	 * @throws java.io.IOException
 	 * @throws java.text.ParseException
 	 */
 	@RequestMapping(value = "/private/users/import", method = RequestMethod.POST)
-	public String importUsers(@RequestParam MultipartFile usersCSV, Model model, RedirectAttributes redirectAttributes) throws IOException,
+	public String importUsers(@RequestParam MultipartFile usersCSV, RedirectAttributes redirectAttributes) throws IOException,
 			ParseException {
 
 		try {
@@ -351,10 +402,10 @@ public class SystemUserAdminController extends GeneralAdminController {
 		return "redirect:/private/users";
 	}
 
-	@RequestMapping(value = "/private/users/report/{format}", method = RequestMethod.GET)
-	public void exportUsers(@PathVariable String format, HttpServletResponse response) {
+	@RequestMapping(value = "/private/users/report/systemUserReport.pdf", method = RequestMethod.GET)
+	public void exportUsers(HttpServletResponse response) {
 		try {
-			List<SystemUser> users = systemUserRepository.findAll();
+			List<SystemUser> users = systemUserRepository.findAllWithRolesOrderByUsername();
 			systemUserReport.generateUserReport(users, response.getOutputStream());
 			response.setContentType("application/pdf");
 			response.addHeader("Content-Disposition", "attachment; filename=\"document.pdf\"");

@@ -17,7 +17,9 @@ public interface SystemUserRepository extends JpaRepository<SystemUser, Long> {
     @Query("SELECT u FROM SystemUser u ORDER BY u.lastname")
     List<SystemUser> findAllOrderByLastname();
 
-    @Query("SELECT u FROM SystemUser u LEFT JOIN FETCH u.roles ORDER BY u.lastname")
+    @Query("SELECT DISTINCT u FROM SystemUser u LEFT JOIN FETCH u.roles ORDER BY u.lastname")
     List<SystemUser> findAllWithRolesOrderByLastname();
 
+    @Query("SELECT DISTINCT u FROM SystemUser u LEFT JOIN FETCH u.roles ORDER BY u.username")
+    List<SystemUser> findAllWithRolesOrderByUsername();
 }

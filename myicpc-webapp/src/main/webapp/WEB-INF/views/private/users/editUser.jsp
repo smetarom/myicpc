@@ -23,16 +23,20 @@
 					<t:springPassword labelCode="user.password" path="password" required="true"></t:springPassword>
 					<t:springPassword labelCode="user.passwordCheck" path="passwordCheck" required="true"></t:springPassword>
 			  </c:if>
-				<t:springCheckbox labelCode="user.enabled" path="enabled" />
-				<t:springInput labelCode="user.firstname" path="firstname" />
-				<t:springInput labelCode="user.lastname" path="lastname" />
-			  <div class="form-group">
-				<form:label path="stringRoles" class="col-sm-3 control-label">
-					<spring:message code="user.roles" />: </form:label>
-				<div class="col-sm-9 form-element">
-					<form:select path="stringRoles" class="form-control" multiple="true" items="${roles}" id="systemUserRoles"></form:select>
-				</div>
-			  </div>
+			  <c:if test="${showEnabled}">
+			    <t:springCheckbox labelCode="user.enabled" path="enabled" />
+			  </c:if>
+			  <t:springInput labelCode="user.firstname" path="firstname" />
+			  <t:springInput labelCode="user.lastname" path="lastname" />
+			  <c:if test="${showRoles}">
+                  <div class="form-group">
+                    <form:label path="stringRoles" class="col-sm-3 control-label">
+                        <spring:message code="user.roles" />: </form:label>
+                    <div class="col-sm-9 form-element">
+                        <form:select path="stringRoles" class="form-control" multiple="true" items="${roles}" id="systemUserRoles"></form:select>
+                    </div>
+                  </div>
+			  </c:if>
 
 			  <hr />
 			  <div class="form-group text-right">

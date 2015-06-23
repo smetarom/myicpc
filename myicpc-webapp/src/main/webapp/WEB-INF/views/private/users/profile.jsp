@@ -14,6 +14,7 @@
 	</jsp:attribute>
 
 	<jsp:attribute name="controls">
+		<t:button href="/private/profile/edit" styleClass="btn-hover"><t:glyphIcon icon="pencil"/> <spring:message code="userAdmin.editProfile" /></t:button>
 		<t:button href="/private/profile/changePassword" styleClass="btn-hover"><t:glyphIcon icon="lock"/> <spring:message code="userAdmin.changePassword" /></t:button>
 	</jsp:attribute>
 

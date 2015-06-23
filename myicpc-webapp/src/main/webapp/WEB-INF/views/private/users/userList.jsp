@@ -16,7 +16,7 @@
 	<jsp:attribute name="controls">
 		<t:button href="/private/users/create" styleClass="btn-hover"><t:glyphIcon icon="plus"/> <spring:message code="userAdmin.createBtn" /></t:button>
 		<button data-toggle="modal" data-target="#importUsersModal" class="btn btn-hover btn-default"><t:glyphIcon icon="import"/> <spring:message code="userAdmin.import.title" /></button>
-		<t:button href="/private/users/report/pdf" styleClass="btn-hover"><t:faIcon icon="file-pdf-o"/> <spring:message code="export.pdf" /></t:button>
+		<t:button href="/private/users/report/systemUserReport.pdf" styleClass="btn-hover"><t:faIcon icon="file-pdf-o"/> <spring:message code="export.pdf" /></t:button>
 
 		<t:modalWindow id="importUsersModal">
 			<jsp:attribute name="title"><spring:message code="userAdmin.import.title" /></jsp:attribute>
@@ -29,6 +29,7 @@
 						<spring:message code="import" />
 					</button>
 				</form>
+				<p><spring:message code="userAdmin.import.hint" /></p>
 			</jsp:body>
 		</t:modalWindow>
 	</jsp:attribute>
