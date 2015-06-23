@@ -3,8 +3,14 @@
 <%@ taglib prefix="t" uri="http://myicpc.baylor.edu/tags" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<%@ attribute name="state" required="true" %>
-<%@ attribute name="note" required="true" %>
+<%@ attribute name="submission" type="com.myicpc.dto.quest.QuestSubmissionDTO" %>
+<%@ attribute name="state" %>
+<%@ attribute name="note" %>
+
+<c:if test="${not empty submission}">
+    <c:set var="state" value="${submission.submissionState}" />
+    <c:set var="note" value="${submission.reasonToReject}" />
+</c:if>
 
 <c:choose>
     <c:when test="${state eq 'ACCEPTED'}">

@@ -58,6 +58,7 @@
                             <tr class="leaderboard-header-row">
                                 <th class="col-rank"><spring:message code="quest.leaderboard.rank" /></th>
                                 <th class="col-participant-name"><spring:message code="quest.leaderboard.participant" /></th>
+                                <th class="col-role"><spring:message code="quest.leaderboard.role" /></th>
                             </tr>
                         </thead>
                     </table>
@@ -71,6 +72,11 @@
                                 <tr style="position: relative">
                                     <td class="col-rank">${status.index + 1}</td>
                                     <td class="col-participant-name"><a href="<spring:url value="${contestURL}/person/${questParticipant.contestParticipant.id}" />">${questParticipant.contestParticipant.fullname}</a></td>
+                                    <td class="col-role">
+                                        <c:forEach var="role" items="${questParticipant.contestParticipantRoles}">
+                                            <spring:message code="${role.code}" text="${role.label}" /><br/>
+                                        </c:forEach>
+                                    </td>
                                 </tr>
                             </c:forEach>
                             </tbody>
@@ -102,12 +108,16 @@
                             <tbody>
                             <c:forEach var="questParticipant" items="${participants}" varStatus="status">
                                 <tr style="position: relative">
-                                    <td class="col-role">as</td>
+                                    <td class="col-role">
+                                        <c:forEach var="role" items="${questParticipant.contestParticipantRoles}">
+                                            <spring:message code="${role.code}" text="${role.label}" /><br/>
+                                        </c:forEach>
+                                    </td>
                                     <td class="col-points">${questParticipant.totalPoints}</td>
                                     <td class="col-points">${questParticipant.acceptedSubmissions}</td>
                                     <c:forEach var="challenge" items="${challenges}">
                                         <td class="col-quest-label text-center">
-                                            <t:questTick state="${questParticipant.submissionMap[challenge.id].submissionState}" note="${questParticipant.submissionMap[challenge.id].reasonToReject}" />
+                                            <t:questTick submission="${questParticipant.submissionMap[challenge.id]}" />
                                         </td>
                                     </c:forEach>
                                 </tr>

@@ -151,7 +151,6 @@ public class QuestController extends GeneralController {
 
 
         List<QuestParticipant> participants = questService.getParticipantsWithRoles(activeLeaderboard.getContestParticipantRoles(), contest, !sitePreference.isMobile());
-//        List<QuestParticipant> participants = (List<QuestParticipant>) questParticipantRepository.findAll();
         List<QuestChallenge> challenges = challengeRepository.findOpenChallengesByContestOrderByHashtag(new Date(), contest);
         QuestService.applyHashtagPrefix(contest.getQuestConfiguration().getHashtagPrefix(), challenges);
 

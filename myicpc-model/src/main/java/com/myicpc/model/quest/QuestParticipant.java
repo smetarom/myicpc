@@ -1,8 +1,10 @@
 package com.myicpc.model.quest;
 
 import com.myicpc.dto.quest.QuestSubmissionDTO;
+import com.myicpc.enums.ContestParticipantRole;
 import com.myicpc.model.IdGeneratedContestObject;
 import com.myicpc.model.teamInfo.ContestParticipant;
+import com.myicpc.model.teamInfo.ContestParticipantAssociation;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -52,6 +54,8 @@ public class QuestParticipant extends IdGeneratedContestObject {
 
     @Transient
     private int acceptedSubmissions;
+    @Transient
+    private List<ContestParticipantRole> contestParticipantRoles = new ArrayList<>();
     @Transient
     private final Map<Long, QuestSubmissionDTO> submissionMap = new HashMap<>();
 
@@ -125,6 +129,14 @@ public class QuestParticipant extends IdGeneratedContestObject {
 
     public Map<Long, QuestSubmissionDTO> getSubmissionMap() {
         return submissionMap;
+    }
+
+    public void addContestParticipantRole(ContestParticipantRole contestParticipantRole) {
+        contestParticipantRoles.add(contestParticipantRole);
+    }
+
+    public List<ContestParticipantRole> getContestParticipantRoles() {
+        return contestParticipantRoles;
     }
 
     public int getAcceptedSubmissions() {

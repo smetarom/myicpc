@@ -12,18 +12,24 @@ import com.myicpc.model.quest.QuestChallenge;
 import com.myicpc.model.quest.QuestParticipant;
 import com.myicpc.model.quest.QuestSubmission;
 import com.myicpc.model.social.Notification;
+import com.myicpc.model.teamInfo.ContestParticipant;
+import com.myicpc.model.teamInfo.ContestParticipantAssociation;
 import com.myicpc.repository.quest.QuestParticipantRepository;
 import com.myicpc.repository.quest.QuestSubmissionRepository;
 import com.myicpc.repository.social.NotificationRepository;
+import com.myicpc.repository.teamInfo.ContestParticipantAssociationRepository;
 import com.myicpc.service.utils.lists.NotificationList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Roman Smetana
@@ -37,6 +43,9 @@ public class QuestService {
 
     @Autowired
     private QuestSubmissionRepository questSubmissionRepository;
+
+    @Autowired
+    private ContestParticipantAssociationRepository contestParticipantAssociationRepository;
 
     /**
      * Notification types displayed on the quest timeline
@@ -70,14 +79,23 @@ public class QuestService {
         return arr;
     }
 
+    @Transactional(readOnly = true)
     public List<QuestParticipant> getParticipantsWithRoles(final List<ContestParticipantRole> roles, final Contest contest, boolean extended) {
         List<QuestParticipant> participants = questParticipantRepository.findByRoles(roles, contest, null);
         if (participants.isEmpty()) {
             return participants;
         }
+        List<ContestParticipant> contestParticipants = new ArrayList<>();
+        Map<Long, QuestParticipant> participantsMap = new HashMap<>();
         List<Long> participantIds = new ArrayList<>(participants.size());
         for (QuestParticipant participant : participants) {
+            contestParticipants.add(participant.getContestParticipant());
+            participantsMap.put(participant.getContestParticipant().getId(), participant);
             participantIds.add(participant.getId());
+        }
+        List<ContestParticipantAssociation> associations = contestParticipantAssociationRepository.findByContestParticipantIn(contestParticipants);
+        for (ContestParticipantAssociation association : associations) {
+            participantsMap.get(association.getContestParticipant().getId()).addContestParticipantRole(association.getContestParticipantRole());
         }
         List<QuestSubmissionDTO> submissions = questSubmissionRepository.findQuestSubmissionDTOByQuestParticipantId(participantIds, contest);
         Multimap<Long, QuestSubmissionDTO> submissionMap = HashMultimap.create();
