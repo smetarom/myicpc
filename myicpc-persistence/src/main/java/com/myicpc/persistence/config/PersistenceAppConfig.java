@@ -10,6 +10,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.jta.JtaTransactionManager;
 
 import javax.persistence.SharedCacheMode;
 import javax.sql.DataSource;
@@ -56,7 +57,7 @@ public class PersistenceAppConfig {
     private Properties additionalProperties() {
         Properties prop = new Properties();
         prop.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL9Dialect");
-        prop.setProperty("hibernate.show_sql", "true");
+        prop.setProperty("hibernate.show_sql", "false");
         prop.setProperty("hibernate.hbm2ddl.auto", "update");
         prop.setProperty("hibernate.connection.characterEncoding", "UTF-8");
         prop.setProperty("hibernate.connection.useUnicode", "true");

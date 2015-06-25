@@ -10,14 +10,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import twitter4j.FilterQuery;
-import twitter4j.StallWarning;
 import twitter4j.Status;
-import twitter4j.StatusDeletionNotice;
-import twitter4j.StatusListener;
+import twitter4j.StatusAdapter;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 import twitter4j.conf.ConfigurationBuilder;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,35 +30,10 @@ import java.util.regex.Pattern;
 public class TwitterService extends ASocialService {
     private static final Logger logger = LoggerFactory.getLogger(TwitterService.class);
 
-    public void processReceivedNotification(final Notification receivedNotification) {
-        Contest contest = contestRepository.getOne(receivedNotification.getContest().getId());
-        Notification existingTweets = notificationRepository.findByContestAndExternalIdAndNotificationType(contest, String.valueOf(receivedNotification.getExternalId()), NotificationType.TWITTER);
-
-        if (existingTweets != null) {
-            logger.info("Skip tweet " + receivedNotification.getExternalId() + " because of duplication.");
-            return;
-        }
-
-        BlacklistedUser blacklistedUser = blacklistedUserRepository.findByUsernameAndBlacklistedUserType(receivedNotification.getAuthorUsername(), BlacklistedUser.BlacklistedUserType.TWITTER);
-        // skip, if user is in the blacklist
-        if (blacklistedUser != null) {
-            return;
-        }
-        // TODO resolve what to do with retweets
-//        if (receivedNotification.getRetweetedId() != null) {
-//            // skip, if author of retweeted tweet is in the blacklist
-//            blacklistedUser = blacklistedUserRepository.findByUsernameAndBlacklistedUserType(status.getRetweetedStatus().getUser().getScreenName(), BlacklistedUser.BlacklistedUserType.TWITTER);
-//            if (blacklistedUser != null) {
-//                return;
-//            }
-//        }
-
-        receivedNotification.setContest(contest);
-        notificationRepository.save(receivedNotification);
-        publishService.broadcastNotification(receivedNotification, contest);
-    }
+    private static final ConcurrentMap<Long, TwitterStream> streamMapping = new ConcurrentHashMap<>();
 
     public void startTwitterStreaming(Contest contest) {
+        System.err.println("START TWITTER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setOAuthConsumerKey(contest.getWebServiceSettings().getTwitterConsumerKey())
                 .setOAuthConsumerSecret(contest.getWebServiceSettings().getTwitterConsumerSecret())
@@ -66,98 +42,50 @@ public class TwitterService extends ASocialService {
         TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
         twitterStream.addListener(new TwitterStatusListener(contest));
         twitterStream.filter(new FilterQuery(0, null, new String[]{"#" + contest.getHashtag()}));
+
+        streamMapping.put(contest.getId(), twitterStream);
+    }
+
+    public void stopTwitterStreaming(Contest contest) {
+        TwitterStream twitterStream = streamMapping.get(contest.getId());
+        if (twitterStream != null) {
+            twitterStream.shutdown();
+            streamMapping.remove(contest.getId());
+        }
+    }
+
+    public void stopAllTwitterStreams() {
+        for (Map.Entry<Long, TwitterStream> entry : streamMapping.entrySet()) {
+            entry.getValue().shutdown();
+            streamMapping.remove(entry.getKey());
+        }
     }
 
     @Transactional
-    public void createTwitterNotificationFromStatus(final Status status, final Contest contest) {
-        Notification existingTweets = notificationRepository.findByContestAndExternalIdAndNotificationType(contest, String.valueOf(status.getId()), NotificationType.TWITTER);
-
-        if (existingTweets != null) {
-            logger.info("Skip tweet " + status.getId() + " because of duplication.");
+    private void saveTwitterNotification(Notification notification, Status twitterStatus) {
+        if (notificationRepository.countByContestAndExternalIdAndNotificationType(notification.getContest(), notification.getExternalId(), NotificationType.TWITTER) > 0) {
+            logger.info("Skip tweet " + notification.getExternalId() + " because of duplication.");
             return;
         }
 
-        BlacklistedUser blacklistedUser = blacklistedUserRepository.findByUsernameAndBlacklistedUserType(status.getUser().getScreenName(), BlacklistedUser.BlacklistedUserType.TWITTER);
+        BlacklistedUser blacklistedUser = blacklistedUserRepository.findByUsernameAndBlacklistedUserType(twitterStatus.getUser().getScreenName(), BlacklistedUser.BlacklistedUserType.TWITTER);
         // skip, if user is in the blacklist
         if (blacklistedUser != null) {
             return;
         }
-        if (status.getRetweetedStatus() != null) {
+        if (twitterStatus.getRetweetedStatus() != null) {
             // skip, if author of retweeted tweet is in the blacklist
-            blacklistedUser = blacklistedUserRepository.findByUsernameAndBlacklistedUserType(status.getRetweetedStatus().getUser().getScreenName(), BlacklistedUser.BlacklistedUserType.TWITTER);
+            blacklistedUser = blacklistedUserRepository.findByUsernameAndBlacklistedUserType(twitterStatus.getRetweetedStatus().getUser().getScreenName(), BlacklistedUser.BlacklistedUserType.TWITTER);
             if (blacklistedUser != null) {
                 return;
             }
         }
-
-        Notification notification = createNotification(status, contest);
-        publishService.broadcastNotification(notification, contest);
+        notificationRepository.save(notification);
+        publishService.broadcastNotification(notification, notification.getContest());
     }
 
-    @Transactional
-    public Notification createNotification(final Status twitterStatus, final Contest contest) {
-        NotificationBuilder builder = new NotificationBuilder();
-        builder.setTitle(twitterStatus.getUser().getScreenName());
-        builder.setBody(parseTweetText(twitterStatus));
-        builder.setHashtag(getHashtagsFromTweet(twitterStatus.getText()));
-        builder.setNotificationType(NotificationType.TWITTER);
-        builder.setExternalId(String.valueOf(twitterStatus.getId()));
-        if (twitterStatus.getRetweetedStatus() != null) {
-            builder.setParentId(twitterStatus.getRetweetedStatus().getId());
-        }
-        builder.setAuthorName(twitterStatus.getUser().getName());
-        builder.setProfilePictureUrl(twitterStatus.getUser().getProfileImageURL());
-        builder.setTimestamp(twitterStatus.getCreatedAt());
-        builder.setContest(contest);
 
-        if (!twitterStatus.isRetweet()) {
-            if (twitterStatus.getMediaEntities() != null && twitterStatus.getMediaEntities().length > 0) {
-                String imageUrl = twitterStatus.getMediaEntities()[0].getMediaURL();
-                builder.setThumbnailUrl(imageUrl + ":small");
-                builder.setImageUrl(imageUrl);
-            }
-        }
-
-        return notificationRepository.save(builder.build());
-    }
-
-    /**
-     * Finds Twitter hashtags, usernames, and URLs in the tweet
-     *
-     * @param status Twitter tweet
-     * @return tweet message enhanced by HTML tags
-     */
-    protected static String parseTweetText(final Status status) {
-        String text = null;
-        if (status.isRetweet() && status.getRetweetedStatus() != null) {
-            text = "RT @" + status.getRetweetedStatus().getUser().getScreenName() + ": " + status.getRetweetedStatus().getText();
-        } else {
-            text = status.getText();
-        }
-        text = text.replaceAll("((https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|])", "<a href='$1'>$1</a>");
-        text = text.replaceAll("@([\\p{L}+0-9-_]+)", "<a href='http://twitter.com/$1'>@$1</a>");
-        text = text.replaceAll("#([\\p{L}+0-9-_]+)", "<a href='https://twitter.com/search/?src=hash&amp;q=%23$1'>#$1</a>");
-        text = text.replaceAll("([\\ud800-\\udbff\\udc00-\\udfff])", "");
-        return text;
-    }
-
-    /**
-     * Gets all hashtags from the tweet body separated by |
-     *
-     * @param tweet tweet body
-     * @return hashtags separated by |
-     */
-    protected static String getHashtagsFromTweet(final String tweet) {
-        Pattern pattern = Pattern.compile("(#[\\p{L}+0-9-_]+)");
-        Matcher matcher = pattern.matcher(tweet);
-        StringBuilder hashtags = new StringBuilder("|");
-        while (matcher.find()) {
-            hashtags.append(matcher.group().substring(1)).append("|");
-        }
-        return hashtags.toString();
-    }
-
-    class TwitterStatusListener implements StatusListener {
+    class TwitterStatusListener extends StatusAdapter {
         private Contest contest;
 
         public TwitterStatusListener(Contest contest) {
@@ -170,24 +98,69 @@ public class TwitterService extends ASocialService {
         }
 
         @Override
-        public void onDeletionNotice(final StatusDeletionNotice statusDeletionNotice) {
+        public void onStatus(Status twitterStatus) {
+            NotificationBuilder builder = new NotificationBuilder();
+            builder.setTitle(twitterStatus.getUser().getScreenName());
+            builder.setBody(parseTweetText(twitterStatus));
+            builder.setHashtag(getHashtagsFromTweet(twitterStatus.getText()));
+            builder.setNotificationType(NotificationType.TWITTER);
+            builder.setExternalId(String.valueOf(twitterStatus.getId()));
+            if (twitterStatus.getRetweetedStatus() != null) {
+                builder.setParentId(twitterStatus.getRetweetedStatus().getId());
+            }
+            builder.setAuthorName(twitterStatus.getUser().getName());
+            builder.setProfilePictureUrl(twitterStatus.getUser().getProfileImageURL());
+            builder.setTimestamp(twitterStatus.getCreatedAt());
+            builder.setContest(contest);
+
+            if (!twitterStatus.isRetweet()) {
+                if (twitterStatus.getMediaEntities() != null && twitterStatus.getMediaEntities().length > 0) {
+                    String imageUrl = twitterStatus.getMediaEntities()[0].getMediaURL();
+                    builder.setThumbnailUrl(imageUrl + ":small");
+                    builder.setImageUrl(imageUrl);
+                }
+            }
+
+            // send the received notification
+            TwitterService.this.saveTwitterNotification(builder.build(), twitterStatus);
         }
 
-        @Override
-        public void onScrubGeo(final long userId, final long upToStatusId) {
+        /**
+         * Finds Twitter hashtags, usernames, and URLs in the tweet
+         *
+         * @param status
+         *            Twitter tweet
+         * @return tweet message enhanced by HTML tags
+         */
+        protected String parseTweetText(final Status status) {
+            String text = null;
+            if (status.isRetweet() && status.getRetweetedStatus() != null) {
+                text = "RT @" + status.getRetweetedStatus().getUser().getScreenName() + ": " + status.getRetweetedStatus().getText();
+            } else {
+                text = status.getText();
+            }
+            text = text.replaceAll("((https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|])", "<a href='$1'>$1</a>");
+            text = text.replaceAll("@([\\p{L}+0-9-_]+)", "<a href='http://twitter.com/$1'>@$1</a>");
+            text = text.replaceAll("#([\\p{L}+0-9-_]+)", "<a href='https://twitter.com/search/?src=hash&amp;q=%23$1'>#$1</a>");
+            text = text.replaceAll("([\\ud800-\\udbff\\udc00-\\udfff])", "");
+            return text;
         }
 
-        @Override
-        public void onStallWarning(StallWarning stallWarning) {
-        }
-
-        @Override
-        public void onStatus(Status status) {
-            TwitterService.this.createTwitterNotificationFromStatus(status, contest);
-        }
-
-        @Override
-        public void onTrackLimitationNotice(int code) {
+        /**
+         * Gets all hashtags from the tweet body separated by |
+         *
+         * @param tweet
+         *            tweet body
+         * @return hashtags separated by |
+         */
+        protected String getHashtagsFromTweet(final String tweet) {
+            Pattern pattern = Pattern.compile("(#[\\p{L}+0-9-_]+)");
+            Matcher matcher = pattern.matcher(tweet);
+            StringBuilder hashtags = new StringBuilder("|");
+            while (matcher.find()) {
+                hashtags.append(matcher.group().substring(1)).append("|");
+            }
+            return hashtags.toString();
         }
     }
 }

@@ -4,6 +4,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.myicpc.commons.utils.TimeUtils;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.schedule.Event;
 import com.myicpc.model.schedule.EventRole;
@@ -151,8 +152,7 @@ public class ScheduleService extends EntityManagerService {
         Root<Event> c = q.from(Event.class);
         Join<Event, EventRole> eventRole = c.join("roles");
         q.select(c).distinct(true);
-        Predicate rolesPredicate = cb.disjunction(); // cb.isNull(c.<String>
-        // get("roles"));
+        Predicate rolesPredicate = cb.disjunction();
         for (String roleId : roleIds) {
             rolesPredicate = cb.or(rolesPredicate, cb.equal(eventRole.<Long> get("id"), roleId));
         }
@@ -249,17 +249,12 @@ public class ScheduleService extends EntityManagerService {
         return eventRepository.findAllBetweenDates(startDate, endDate, contest);
     }
 
-    public List<Event> getUpcomingEventsForUser(String scheduleRoles, int hours, final Contest contest) {
+    public List<Event> getUpcomingEventsForUser(int hours, final Contest contest) {
         Date now = new GregorianCalendar(2014, 5, 22, 12, 0, 0).getTime();
         Calendar cal = Calendar.getInstance();
         cal.setTime(now);
         cal.add(Calendar.HOUR_OF_DAY, hours);
-        if (!StringUtils.isEmpty(scheduleRoles)) {
-            String[] splitRoles = scheduleRoles.split(",");
-            return getEventsForRoles(splitRoles, now, cal.getTime(), contest, true);
-        } else {
-            return getEventsInPeriod(now, cal.getTime(), contest);
-        }
+        return eventRepository.findTimelineUpcomingEvents(now, cal.getTime(), contest);
     }
 
     public JsonArray getScheduleDaysJSON(Date now, Contest contest) {

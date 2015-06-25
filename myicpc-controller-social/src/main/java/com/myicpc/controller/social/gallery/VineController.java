@@ -33,7 +33,7 @@ public class VineController extends GeneralController {
 
         try {
             vineService.getNewPosts(contest);
-        } catch (WebServiceException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

@@ -12,8 +12,8 @@ import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.BlacklistedUser;
 import com.myicpc.model.social.Notification;
+import com.myicpc.service.exception.AuthenticationException;
 import com.myicpc.service.exception.WebServiceException;
-import com.myicpc.service.notification.NotificationBuilder;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
@@ -38,6 +38,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * @author Roman Smetana
@@ -47,35 +49,16 @@ import java.util.List;
 public class VineService extends ASocialService {
     private static final Logger logger = LoggerFactory.getLogger(VineService.class);
     private static final int VINE_MAX_PAGES = 1;
+    private static final String VINE_AUTHENTICATION_URL = "https://api.vineapp.com/users/authenticate";
     private static final String VINE_TAG_URL = "https://api.vineapp.com/timelines/tags/%s";
 
-    public void processReceivedNotification(Notification receivedNotification) {
-        Contest contest = contestRepository.getOne(receivedNotification.getContest().getId());
-        Notification existingVine = notificationRepository.findByContestAndExternalIdAndNotificationType(contest, receivedNotification.getExternalId(), NotificationType.VINE);
+    private final ConcurrentMap<Long, String> authenticationKeys = new ConcurrentHashMap<>();
 
-        if (existingVine != null) {
-            logger.info("Skip vine " + receivedNotification.getExternalId() + " because of duplication.");
-            return;
-        }
-
-        receivedNotification.setContest(contest);
-        notificationRepository.save(receivedNotification);
-        publishService.broadcastNotification(receivedNotification, contest);
-    }
-
-    /**
-     * Login a user into Vine
-     *
-     * @param httpClient
-     *            http client
-     * @return get login session key
-     * @throws WebServiceException
-     *             web communication with Vine failed
-     */
-    protected String login(final HttpClient httpClient, final Contest contest) throws WebServiceException {
+    private String authenticate(final HttpClient httpClient,final Contest contest) throws IOException, AuthenticationException {
+        logger.info("Vine logging...");
         HttpPost httpPost = null;
         try {
-            httpPost = new HttpPost("https://api.vineapp.com/users/authenticate");
+            httpPost = new HttpPost(VINE_AUTHENTICATION_URL);
             List<NameValuePair> params = new ArrayList<>(2);
             params.add(new BasicNameValuePair("username", contest.getWebServiceSettings().getVineEmail()));
             params.add(new BasicNameValuePair("password", contest.getWebServiceSettings().getVinePassword()));
@@ -87,53 +70,38 @@ public class VineService extends ASocialService {
             JsonObject root = new JsonParser().parse(IOUtils.toString(entity.getContent(), FormatUtils.DEFAULT_ENCODING)).getAsJsonObject();
             JSONAdapter rootAdapter = new JSONAdapter(root);
             if (!rootAdapter.getBoolean("success") || !rootAdapter.has("data")) {
-                throw new WebServiceException("Unsuccessful Vine login.");
+                throw new AuthenticationException("Unsuccessful Vine login.");
             }
             return rootAdapter.getStringFromObject("data", "key");
-        } catch (Throwable ex) {
-            throw new WebServiceException(ex);
         } finally {
             WebServiceUtils.releaseConnection(httpPost);
         }
     }
 
-    /**
-     * Receive new Vine posts for given hashtag
-     *
-     * @param hashTag
-     *            hashtag to be searched
-     * @throws WebServiceException
-     *             communication with Vine failed
-     */
-    public void getNewPosts(final Contest contest) throws WebServiceException {
+    public void getNewPosts(final Contest contest) throws WebServiceException, AuthenticationException {
         if (StringUtils.isEmpty(contest.getWebServiceSettings().getVineEmail()) || StringUtils.isEmpty(contest.getWebServiceSettings().getVinePassword())) {
             return;
         }
 
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-            String vineApiKey = login(httpclient, contest);
-            if (vineApiKey == null) {
-                throw new WebServiceException("Unsuccessful Vine login.");
+            String authenticationKey = authenticationKeys.get(contest.getId());
+            if (StringUtils.isEmpty(authenticationKey)) {
+                authenticationKey = authenticate(httpclient, contest);
+                authenticationKeys.put(contest.getId(), authenticationKey);
             }
-            List<Notification> notifications = getByHashTag(httpclient, contest, vineApiKey, 1);
+            if (authenticationKey == null) {
+                throw new AuthenticationException("Unsuccessful Vine login.");
+            }
+            List<Notification> notifications = getByHashTag(httpclient, contest, authenticationKey, 1);
             saveSearchList(notifications, BlacklistedUser.BlacklistedUserType.VINE, contest);
         } catch (IOException ex) {
             throw new WebServiceException(ex);
+        } catch (AuthenticationException ex) {
+            authenticationKeys.remove(contest.getId());
+            throw ex;
         }
     }
 
-    /**
-     * Gets all Vine posts till the post last seen or the search limit is
-     * reached
-     *
-     * @param hashTag
-     *            hashtag to be searched
-     * @param vineApiKey
-     *@param page
-     *            number of search page  @return Vine posts for hashtag
-     * @throws WebServiceException
-     *             communication with Vine failed
-     */
     protected List<Notification> getByHashTag(final HttpClient httpClient, final Contest contest, String vineApiKey, int page) throws WebServiceException {
         if (page > VINE_MAX_PAGES) {
             return new ArrayList<>();
@@ -159,17 +127,6 @@ public class VineService extends ASocialService {
         }
     }
 
-    /**
-     * Parses returned JSON and creates {@link com.myicpc.model.social.Notification} entries
-     *
-     * @param json
-     *            recieved JSON from Vine web service
-     * @param hashTag
-     *            hashtag to be searched
-     * @return Vine posts for hashtag
-     * @throws WebServiceException
-     *             communication with Vine failed
-     */
     protected List<Notification> parseNewVineVideos(final HttpClient httpClient, final Contest contest, String vineApiKey, String json) throws WebServiceException {
         List<Notification> list = new ArrayList<>();
 
@@ -183,23 +140,25 @@ public class VineService extends ASocialService {
             for (JsonElement je : records) {
                 JSONAdapter mediaAdapter = new JSONAdapter(je);
                 String mediaId = mediaAdapter.getString("postId");
-                Notification notification = notificationRepository.findByContestAndExternalIdAndNotificationType(contest, mediaId, NotificationType.VINE);
-                if (notification != null) {
-                    return list; // Already parsed before
+
+                // this post and every following post were already processed
+                if (notificationRepository.countByContestAndExternalIdAndNotificationType(contest, mediaId, NotificationType.VINE) > 0) {
+                    return list;
                 }
-                NotificationBuilder builder = new NotificationBuilder();
-                builder.setExternalId(mediaId);
-                builder.setNotificationType(NotificationType.VINE);
-                builder.setTitle(mediaAdapter.getString("userId"));
-                builder.setBody(mediaAdapter.getString("description"));
-                builder.setAuthorName(mediaAdapter.getString("username"));
-                builder.setProfilePictureUrl(mediaAdapter.getString("avatarUrl"));
-                builder.setUrl(mediaAdapter.getString("permalinkUrl"));
-                builder.setVideoUrl(mediaAdapter.getString("videoUrl"));
-                builder.setThumbnailUrl(mediaAdapter.getString("thumbnailUrl"));
+
+                Notification notification = new Notification();
+                notification.setExternalId(mediaId);
+                notification.setNotificationType(NotificationType.VINE);
+                notification.setTitle(mediaAdapter.getString("userId"));
+                notification.setBody(mediaAdapter.getString("description"));
+                notification.setAuthorName(mediaAdapter.getString("username"));
+                notification.setProfilePictureUrl(mediaAdapter.getString("avatarUrl"));
+                notification.setUrl(mediaAdapter.getString("permalinkUrl"));
+                notification.setVideoUrl(mediaAdapter.getString("videoUrl"));
+                notification.setThumbnailUrl(mediaAdapter.getString("thumbnailUrl"));
                 DateTimeFormatter fmt = ISODateTimeFormat.dateTimeParser();
-                builder.setTimestamp(new Date(fmt.parseMillis(mediaAdapter.getString("created"))));
-                builder.setContest(contest);
+                notification.setTimestamp(new Date(fmt.parseMillis(mediaAdapter.getString("created"))));
+                notification.setContest(contest);
 
                 JsonArray tagArray = mediaAdapter.getJsonArray("tags");
                 String[] tags = new String[tagArray.size()];
@@ -208,9 +167,9 @@ public class VineService extends ASocialService {
                     JSONAdapter tagAdapter = new JSONAdapter(elem);
                     tags[i++] = tagAdapter.getString("tag");
                 }
-                builder.setHashtag(createHashtags(tags, contest.getHashtag(), contest.getQuestConfiguration().getHashtagPrefix()));
+                notification.setHashtags(createHashtags(tags, contest.getHashtag(), null));
 
-                list.add(builder.build());
+                list.add(notification);
             }
 
             // if the result has next page
@@ -227,6 +186,4 @@ public class VineService extends ASocialService {
 
         return list;
     }
-
-
 }

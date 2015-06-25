@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CookieValue;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -107,6 +108,23 @@ public class NotificationService {
         JsonArray arr = new JsonArray();
         for (Notification notification : notifications) {
             arr.add(getNotificationInJson(notification));
+        }
+        return arr;
+    }
+
+    /**
+     * Returns JSON representation of list of notifications
+     *
+     * @param notifications
+     *            list of notifications
+     * @return JSON representation of list of notifications
+     */
+    public static JsonArray getNotificationsInJson(final List<Notification> notifications) {
+        JsonArray arr = new JsonArray();
+        if (notifications != null) {
+            for (Notification notification : notifications) {
+                arr.add(getNotificationInJson(notification));
+            }
         }
         return arr;
     }

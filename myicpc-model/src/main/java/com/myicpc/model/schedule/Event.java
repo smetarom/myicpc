@@ -1,11 +1,13 @@
 package com.myicpc.model.schedule;
 
 import com.myicpc.model.StartEndDateObject;
+import com.myicpc.model.contest.Contest;
 import com.myicpc.validator.annotation.ValidateDateRange;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,6 +21,17 @@ import java.util.Set;
 @ValidateDateRange
 public class Event extends StartEndDateObject {
     private static final long serialVersionUID = -4924079934694291712L;
+
+    public Event() {
+    }
+
+    public Event(Long id, String name, Date startDate, Date endDate, Contest contest) {
+        this.id = id;
+        this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.contest = contest;
+    }
 
     /**
      * Name of the event

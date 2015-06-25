@@ -8,6 +8,7 @@ import com.myicpc.repository.social.BlacklistedUserRepository;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.service.notification.NotificationService;
 import com.myicpc.service.publish.PublishService;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -43,11 +44,14 @@ public abstract class ASocialService {
      *            list of blacklisted usernames
      */
     protected void saveSearchList(List<Notification> notifications, BlacklistedUser.BlacklistedUserType blacklistedUserType, Contest contest) {
+        if (CollectionUtils.isEmpty(notifications)) {
+            return;
+        }
         Set<String> blacklist = new HashSet<>(blacklistedUserRepository.getUsernameByBlacklistedUserType(blacklistedUserType));
 
         for (int i = notifications.size() - 1; i >= 0; i--) {
             Notification notification = notifications.get(i);
-            if (!blacklist.contains(notification.getTitle())) {
+            if (!blacklist.contains(notification.getAuthorUsername())) {
                 notification.setContest(contest);
                 notificationRepository.save(notification);
                 publishService.broadcastNotification(notification, contest);

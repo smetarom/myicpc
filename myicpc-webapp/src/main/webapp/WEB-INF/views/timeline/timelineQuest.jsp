@@ -6,7 +6,6 @@
             <div class="item ${status.index == 0 ? 'active' : ''}">
                 <h4>${notification.title} <small>#Quest2</small></h4>
                 <div class="content">${notification.body}</div>
-
                 <table class="width100">
                     <tr>
                         <td>

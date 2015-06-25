@@ -26,6 +26,9 @@ public interface EventRepository extends CrudRepository<Event, Long> {
     @Query("SELECT e FROM Event e WHERE e.endDate > ?1 AND e.contest = ?2")
     List<Event> findAllFutureEvents(Date now, Contest contest);
 
+    @Query("SELECT new com.myicpc.model.schedule.Event(e.id, e.name, e.startDate, e.endDate, e.contest) " +
+            "FROM Event e WHERE e.endDate >= ?1 AND e.startDate <= ?2 AND e.contest = ?3")
+    List<Event> findTimelineUpcomingEvents(Date fromDate, Date toDate, Contest contest);
 
     /**
      * @return Events starting between these two dates

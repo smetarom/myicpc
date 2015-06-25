@@ -20,7 +20,7 @@ public abstract class IdGeneratedObject extends EntityObject {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "idgen")
-    private Long id;
+    protected Long id;
 
     @Override
     public Long getId() {

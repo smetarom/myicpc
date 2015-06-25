@@ -1,3 +1,4 @@
+<%@ taglib prefix="sp" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
 
 <t:template>
@@ -6,11 +7,12 @@
 
         <script type="application/javascript">
             function timelineAcceptPost(post) {
-                var supportedNotificationTypes = ["submissionSuccess", "analystTeamMsg", "analystMsg", "twitter", "vine"];
+                var supportedNotificationTypes = ["submissionSuccess", "analystTeamMsg", "analystMsg", "twitter", "vine", "instagram", "picasa", "questChallenge", "adminNotification"];
                 return supportedNotificationTypes.indexOf(post.type) != -1;
             }
-
+            var timelineLoadMoreUrl = '<spring:url value="${contestURL}/timeline/loadMore" />';
             $(function() {
+                Timeline.lastTimelineIdLoaded = ${not empty lastTimelineId ? lastTimelineId : 0};
                 Timeline.init();
                 Timeline.acceptFunction = timelineAcceptPost;
                 startSubscribe('${r.contextPath}', '${contest.code}', 'notification', updateTimeline, null);
@@ -50,7 +52,7 @@
             </div>
             <div class="col-sm-4 col-md-4 col-lg-3">
                 <br/>
-                <c:if test="${not empty questNotifications}">
+                <c:if test="${not empty openQuests}">
                     <%@ include file="/WEB-INF/views/timeline/timelineQuest.jsp"%>
                     <hr />
                 </c:if>
@@ -60,7 +62,8 @@
             <br class="clear" />
             <div class="col-sm-0 col-md-2"></div>
             <div class="media col-sm-8 col-md-6 col-lg-5">
-                <button type="button" id="loadMoreTimeline" class="btn btn-default center-block">
+                <button type="button" id="loadMoreTimeline" class="btn btn-default center-block"
+                        onclick="Timeline.loadMorePosts('<spring:url value="${contestURL}/timeline/loadMore" />')">
                     <spring:message code="showMore" />
                 </button>
                 <div class="timeline-loading hidden">

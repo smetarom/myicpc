@@ -123,49 +123,50 @@ public class InstagramService extends ASocialService {
         try {
             JsonObject root = new JsonParser().parse(json).getAsJsonObject();
             JsonArray data = root.getAsJsonArray("data");
-            // process each received JSON record
-            for (JsonElement jsonElement : data) {
-                JSONAdapter mediaAdapter = new JSONAdapter(jsonElement);
-                String id = mediaAdapter.getString("id");
+            if (data != null) {
+                // process each received JSON record
+                for (JsonElement jsonElement : data) {
+                    JSONAdapter mediaAdapter = new JSONAdapter(jsonElement);
+                    String id = mediaAdapter.getString("id");
 
-                Notification notification = notificationRepository.findByContestAndExternalIdAndNotificationType(contest, id, NotificationType.INSTAGRAM);
-                if (notification != null) {
-                    return list;
+                    if (notificationRepository.countByContestAndExternalIdAndNotificationType(contest, id, NotificationType.INSTAGRAM) > 0) {
+                        return list;
+                    }
+                    String mediaType = mediaAdapter.getString("type");
+                    NotificationBuilder builder = new NotificationBuilder();
+                    builder.setNotificationType(NotificationType.INSTAGRAM);
+                    builder.setContest(contest);
+
+                    builder.setExternalId(id);
+                    builder.setUrl(mediaAdapter.getString("link"));
+
+                    JSONAdapter userAdapter = new JSONAdapter(mediaAdapter.get("user"));
+                    String fullname = userAdapter.getString("full_name");
+                    String username = userAdapter.getString("username");
+                    builder.setAuthorName(StringUtils.isEmpty(fullname) ? username : fullname);
+                    builder.setProfilePictureUrl(userAdapter.getString("profile_picture"));
+                    builder.setTimestamp(new Date(mediaAdapter.getLong("created_time") * 1000));
+                    builder.setTitle(username);
+                    builder.setBody(mediaAdapter.getStringFromObject("caption", "text"));
+                    if ("image".equalsIgnoreCase(mediaType)) {
+                        builder.setImageUrl(mediaAdapter.getStringFromObject("images", "standard_resolution", "url"));
+                    } else if ("video".equalsIgnoreCase(mediaType)) {
+                        builder.setVideoUrl(mediaAdapter.getStringFromObject("videos", "standard_resolution", "url"));
+                    }
+                    builder.setThumbnailUrl(mediaAdapter.getStringFromObject("images", "low_resolution", "url"));
+
+                    String[] tags = mediaAdapter.getJsonArrayValues("tags");
+                    builder.setHashtags(createHashtags(tags, contest.getHashtag(), contest.getQuestConfiguration().getHashtagPrefix()));
+
+                    list.add(builder.build());
                 }
-                String mediaType = mediaAdapter.getString("type");
-                NotificationBuilder builder = new NotificationBuilder();
-                builder.setNotificationType(NotificationType.INSTAGRAM);
-                builder.setContest(contest);
 
-                builder.setExternalId(id);
-                builder.setUrl(mediaAdapter.getString("link"));
-
-                JSONAdapter userAdapter = new JSONAdapter(mediaAdapter.get("user"));
-                String fullname = userAdapter.getString("full_name");
-                String username = userAdapter.getString("username");
-                builder.setAuthorName(StringUtils.isEmpty(fullname) ? username : fullname);
-                builder.setProfilePictureUrl(userAdapter.getString("profile_picture"));
-                builder.setTimestamp(new Date(mediaAdapter.getLong("created_time") * 1000));
-                builder.setTitle(username);
-                builder.setBody(mediaAdapter.getStringFromObject("caption", "text"));
-                if ("image".equalsIgnoreCase(mediaType)) {
-                    builder.setImageUrl(mediaAdapter.getStringFromObject("images", "standard_resolution", "url"));
-                } else if ("video".equalsIgnoreCase(mediaType)) {
-                    builder.setVideoUrl(mediaAdapter.getStringFromObject("videos", "standard_resolution", "url"));
-                }
-                builder.setThumbnailUrl(mediaAdapter.getStringFromObject("images", "low_resolution", "url"));
-
-                String[] tags = mediaAdapter.getJsonArrayValues("tags");
-                builder.setHashtags(createHashtags(tags, contest.getHashtag(), contest.getQuestConfiguration().getHashtagPrefix()));
-
-                list.add(builder.build());
-            }
-
-            // if the result has next page
-            if (root.get("pagination").getAsJsonObject().get("next_url") != null) {
-                List<Notification> nextPage = getByHashTag(contest, root.get("pagination").getAsJsonObject().get("next_url").getAsString(), page + 1);
-                if (nextPage != null && !nextPage.isEmpty()) {
-                    list.addAll(nextPage);
+                // if the result has next page
+                if (root.get("pagination").getAsJsonObject().get("next_url") != null) {
+                    List<Notification> nextPage = getByHashTag(contest, root.get("pagination").getAsJsonObject().get("next_url").getAsString(), page + 1);
+                    if (nextPage != null && !nextPage.isEmpty()) {
+                        list.addAll(nextPage);
+                    }
                 }
             }
         } catch (JsonParseException ex) {

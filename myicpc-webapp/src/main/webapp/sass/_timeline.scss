@@ -37,12 +37,19 @@
       cursor: pointer;
     }
   }
+
+  .media-body {
+    width: inherit;
+    display: block;
+  }
 }
 
-#timeline .timeline-loading {
-  text-align: center;
-  font-size: 1.2em;
-  margin: 10px 0;
+#timeline {
+  .timeline-loading {
+    text-align: center;
+    font-size: 1.2em;
+    margin: 10px 0;
+  }
 }
 
 .timeline-mobile {
@@ -63,7 +70,6 @@
     padding-left: 10px;
     padding-right: 10px;
     text-align: justify;
-    height: 150px;
     overflow-y: auto;
     margin-bottom: 5px;
   }

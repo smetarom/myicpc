@@ -25,6 +25,8 @@ public interface NotificationRepository extends PagingAndSortingRepository<Notif
      */
     Notification findByContestAndExternalIdAndNotificationType(Contest contest, String externalId, NotificationType notificationType);
 
+    long countByContestAndExternalIdAndNotificationType(Contest contest, String externalId, NotificationType notificationType);
+
     /**
      * Finds notifications, which were generated from {@code entityIds} and have {@code notificationTypes}
      */
@@ -34,8 +36,11 @@ public interface NotificationRepository extends PagingAndSortingRepository<Notif
     /**
      * Finds notifications with {@code notificationTypes}
      */
-    @Query("SELECT n FROM Notification n WHERE n.notificationType IN ?1 AND n.contest = ?2 ORDER BY n.id DESC")
+    @Query("SELECT n FROM Notification n WHERE n.contest = ?2 AND n.deleted = false AND n.offensive = false AND n.notificationType IN ?1 ORDER BY n.id DESC")
     Page<Notification> findByNotificationTypesOrderByIdDesc(List<NotificationType> notificationTypes, Contest contest, Pageable pageable);
+
+    @Query("SELECT n FROM Notification n WHERE n.timestamp < ?1 AND n.contest = ?3 AND n.offensive = false AND n.notificationType IN ?2 ORDER BY n.timestamp DESC")
+    Page<Notification> findByNotificationTypesOrderByIdDesc(Date timestamp, List<NotificationType> notificationTypes, Contest contest, Pageable pageable);
 
     @Query("SELECT n FROM Notification n WHERE n.notificationType IN ?2 AND n.contest = ?3 AND n.id < ?1 ORDER BY n.id DESC")
     Page<Notification> findByNotificationTypesFromNotificationIdOrderByIdDesc(Long lastNotificationId, List<NotificationType> notificationTypes, Contest contest, Pageable pageable);
@@ -190,7 +195,7 @@ public interface NotificationRepository extends PagingAndSortingRepository<Notif
      * @return notifications for Quest challenges, which are in progress and not
      * ignored by user
      */
-    @Query(value = "SELECT n FROM Notification n WHERE n.entityId IN (SELECT qc.id FROM QuestChallenge qc WHERE ?1 BETWEEN qc.startDate AND qc.endDate OR (qc.startDate < ?1 AND qc.endDate IS NULL)) AND n.id NOT IN ?2 AND n.notificationType = 'QUEST_CHALLENGE' AND n.featuredEligible = true")
+    @Query(value = "SELECT n FROM Notification n WHERE n.notificationType = 'QUEST_CHALLENGE' AND n.featuredEligible = true AND n.deleted = false AND n.entityId IN (SELECT qc.id FROM QuestChallenge qc WHERE ?1 BETWEEN qc.startDate AND qc.endDate OR (qc.startDate < ?1 AND qc.endDate IS NULL)) AND n.id NOT IN ?2")
     List<Notification> findCurrentQuestChallengeNotifications(Date date, List<Long> ignoredFeatured);
 
     @Query("SELECT n FROM Notification n WHERE n.id > ?1 AND n.notificationType IN ?2")

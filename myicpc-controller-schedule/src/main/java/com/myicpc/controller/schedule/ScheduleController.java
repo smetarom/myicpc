@@ -141,11 +141,10 @@ public class ScheduleController extends GeneralController {
     }
 
     @RequestMapping(value = "{contestCode}/schedule/ajax/upcoming-events", method = RequestMethod.GET)
-    public String upcomingEvents(@PathVariable String contestCode, Model model,
-                                 @CookieValue(value = "scheduleRoles", required = false) String scheduleRoles) {
+    public String upcomingEvents(@PathVariable String contestCode, Model model) {
         Contest contest = getContest(contestCode, model);
 
-        List<Event> upcomingEvents = scheduleService.getUpcomingEventsForUser(scheduleRoles, 8, contest);
+        List<Event> upcomingEvents = scheduleService.getUpcomingEventsForUser(8, contest);
 
         model.addAttribute("upcomingEvents", upcomingEvents);
         return "timeline/fragment/timelineUpcomingEvents";

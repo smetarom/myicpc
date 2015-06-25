@@ -12,7 +12,7 @@
 <link rel="Shortcut Icon" href="http://icpc.baylor.edu/img/icon-icpc-small.gif"/>
 
 <%-- Public CDNs --%>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" type="text/css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" type="text/css">
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" type="text/css">
 <%-- MyICPC internal resources --%>
 <link rel="stylesheet" href="<c:url value='/css/myicpc/style.css'/>" type="text/css">

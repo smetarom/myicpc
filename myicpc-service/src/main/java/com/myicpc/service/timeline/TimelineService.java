@@ -12,13 +12,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.Date;
 import java.util.List;
 
 /**
  * @author Roman Smetana
  */
 @Service
-@Transactional
 public class TimelineService {
     public static final int POSTS_PER_PAGE = 30;
     /**
@@ -45,4 +47,10 @@ public class TimelineService {
     }
 
 
+    public List<Notification> getTimelineNotifications(Long lastTimestamp, Contest contest) {
+        Pageable pageable = new PageRequest(0, POSTS_PER_PAGE);
+        Date timestamp = new Date(lastTimestamp);
+        Page<Notification> timelineNotifications = notificationRepository.findByNotificationTypesOrderByIdDesc(timestamp, TIMELINE_TYPES, contest, pageable);
+        return timelineNotifications.getContent();
+    }
 }

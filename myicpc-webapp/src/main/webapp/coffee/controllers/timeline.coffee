@@ -14,16 +14,28 @@ Timeline = {
   },
   handlerMapping: {},
   ignoreScrolling: false,
-
+  lastTimelineIdLoaded: null
 
   init: () ->
     timelineScoreboardTemplate = compileHandlebarsTemplate("timeline-SCOREBOARD_SUCCESS")
+    timelineAnalystTeamTemplate = compileHandlebarsTemplate("timeline-ANALYST_TEAM_MESSAGE")
+    timelineAnalystTemplate = compileHandlebarsTemplate("timeline-ANALYST_MESSAGE")
     timelineTwitterTemplate = compileHandlebarsTemplate("timeline-TWITTER")
+    timelineInstagramTemplate = compileHandlebarsTemplate("timeline-INSTAGRAM")
+    timelineVineTemplate = compileHandlebarsTemplate("timeline-VINE")
+    timelinePicasaTemplate = compileHandlebarsTemplate("timeline-PICASA")
+    timelineQuestChallengeTemplate = compileHandlebarsTemplate("timeline-QUEST_CHALLENGE")
+    timelineAdminNotificationTemplate = compileHandlebarsTemplate("timeline-ADMIN_NOTIFICATION")
 
-    this.handlerMapping["submissionSuccess"] = (notification) ->
-      timelineScoreboardTemplate(notification)
-    this.handlerMapping["twitter"] = (notification) ->
-      timelineTwitterTemplate(notification)
+    this.handlerMapping["submissionSuccess"] = (notification) -> timelineScoreboardTemplate(notification)
+    this.handlerMapping["twitter"] = (notification) -> timelineTwitterTemplate(notification)
+    this.handlerMapping["analystTeamMsg"] = (notification) -> timelineAnalystTeamTemplate(notification)
+    this.handlerMapping["analystMsg"] = (notification) -> timelineAnalystTemplate(notification)
+    this.handlerMapping["instagram"] = (notification) -> timelineInstagramTemplate(notification)
+    this.handlerMapping["vine"] = (notification) -> timelineVineTemplate(notification)
+    this.handlerMapping["picasa"] = (notification) -> timelinePicasaTemplate(notification)
+    this.handlerMapping["questChallenge"] = (notification) -> timelineQuestChallengeTemplate(notification)
+    this.handlerMapping["adminNotification"] = (notification) -> timelineAdminNotificationTemplate(notification)
 
   acceptFunction: (data) ->
     return true
@@ -74,6 +86,25 @@ Timeline = {
             $(elem).hide().prependTo($("#timeline-body")).slideDown(settings.duration).effect("highlight", {}, settings.duration)
         else
           $(elem).appendTo($("#timeline-body"))
+
+  loadMorePosts: (url) ->
+    $.getJSON(url, {lastTimestamp: Timeline.lastTimelineIdLoaded}, (object) ->
+      if $.isEmptyObject(object)
+        $('#timeline .timeline-loading').addClass('hidden')
+      else
+        if object.hasOwnProperty('lastTimelineId')
+          Timeline.lastTimelineIdLoaded = object['lastTimelineId']
+        data = object.data
+
+        for i in [0..data.length-1] by 1
+          Timeline.addNotificationToTimeline(data[i], {'prepend': false, "featured" : false})
+
+        $('#timeline .timeline-loading').addClass('hidden')
+        setTimeout(() ->
+          $('#loadMoreTimeline').removeClass('hidden')
+        , 3000)
+    )
+
 }
 
 updateTimeline = (data, acceptFunction, ngController) ->
@@ -89,4 +120,13 @@ videoAutoplayOnScroll = () ->
     else
       video.pause()
   )
+  return
+
+$(window).scroll ->
+  if $(window).scrollTop() == $(document).height() - $(window).height() and $('#timeline .timeline-loading').hasClass('hidden')
+    $('#timeline .timeline-loading').removeClass('hidden')
+    $('#loadMoreTimeline').addClass('hidden')
+    Timeline.loadMorePosts(timelineLoadMoreUrl)
+  else if $(window).scrollTop() == 0
+    Timeline.displayPendingNotification()
   return

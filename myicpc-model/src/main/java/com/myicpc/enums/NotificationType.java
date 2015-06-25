@@ -13,7 +13,7 @@ public enum NotificationType {
     ANALYST_MESSAGE("Analytics Message", "Analytics Message", "analystMsg"),
     TWITTER("Tweet", "Twitter", "twitter"),
     ARTICLE("Article", "Article", "a"),
-    ADMIN_NOTIFICATION("Admin notification", "Admin notification", "an"),
+    ADMIN_NOTIFICATION("Admin notification", "Admin notification", "adminNotification"),
     PICASA("Gallery", "Gallery", "picasa"),
     VINE("Vine", "Vine", "vine"),
     INSTAGRAM("Instagram", "Instagram photo", "instagram"),
@@ -21,7 +21,7 @@ public enum NotificationType {
     POLL_CLOSE("Poll", "Poll close", "pc"),
     YOUTUBE_VIDEO("YouTube", "YouTube", "yt"),
     SCHEDULE_EVENT_OPEN("Schedule", "Schedule event open", "seo"),
-    QUEST_CHALLENGE("Quest challenge", "Quest challenge", "questChalleng");
+    QUEST_CHALLENGE("Quest challenge", "Quest challenge", "questChallenge");
     /**
      * Human readable name of notification type
      */

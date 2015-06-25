@@ -14,15 +14,44 @@ Timeline = {
   },
   handlerMapping: {},
   ignoreScrolling: false,
+  lastTimelineIdLoaded: null,
   init: function() {
-    var timelineScoreboardTemplate, timelineTwitterTemplate;
+    var timelineAdminNotificationTemplate, timelineAnalystTeamTemplate, timelineAnalystTemplate, timelineInstagramTemplate, timelinePicasaTemplate, timelineQuestChallengeTemplate, timelineScoreboardTemplate, timelineTwitterTemplate, timelineVineTemplate;
     timelineScoreboardTemplate = compileHandlebarsTemplate("timeline-SCOREBOARD_SUCCESS");
+    timelineAnalystTeamTemplate = compileHandlebarsTemplate("timeline-ANALYST_TEAM_MESSAGE");
+    timelineAnalystTemplate = compileHandlebarsTemplate("timeline-ANALYST_MESSAGE");
     timelineTwitterTemplate = compileHandlebarsTemplate("timeline-TWITTER");
+    timelineInstagramTemplate = compileHandlebarsTemplate("timeline-INSTAGRAM");
+    timelineVineTemplate = compileHandlebarsTemplate("timeline-VINE");
+    timelinePicasaTemplate = compileHandlebarsTemplate("timeline-PICASA");
+    timelineQuestChallengeTemplate = compileHandlebarsTemplate("timeline-QUEST_CHALLENGE");
+    timelineAdminNotificationTemplate = compileHandlebarsTemplate("timeline-ADMIN_NOTIFICATION");
     this.handlerMapping["submissionSuccess"] = function(notification) {
       return timelineScoreboardTemplate(notification);
     };
-    return this.handlerMapping["twitter"] = function(notification) {
+    this.handlerMapping["twitter"] = function(notification) {
       return timelineTwitterTemplate(notification);
+    };
+    this.handlerMapping["analystTeamMsg"] = function(notification) {
+      return timelineAnalystTeamTemplate(notification);
+    };
+    this.handlerMapping["analystMsg"] = function(notification) {
+      return timelineAnalystTemplate(notification);
+    };
+    this.handlerMapping["instagram"] = function(notification) {
+      return timelineInstagramTemplate(notification);
+    };
+    this.handlerMapping["vine"] = function(notification) {
+      return timelineVineTemplate(notification);
+    };
+    this.handlerMapping["picasa"] = function(notification) {
+      return timelinePicasaTemplate(notification);
+    };
+    this.handlerMapping["questChallenge"] = function(notification) {
+      return timelineQuestChallengeTemplate(notification);
+    };
+    return this.handlerMapping["adminNotification"] = function(notification) {
+      return timelineAdminNotificationTemplate(notification);
     };
   },
   acceptFunction: function(data) {
@@ -87,6 +116,31 @@ Timeline = {
         }
       }
     }
+  },
+  loadMorePosts: function(url) {
+    return $.getJSON(url, {
+      lastTimestamp: Timeline.lastTimelineIdLoaded
+    }, function(object) {
+      var data, i, _i, _ref;
+      if ($.isEmptyObject(object)) {
+        return $('#timeline .timeline-loading').addClass('hidden');
+      } else {
+        if (object.hasOwnProperty('lastTimelineId')) {
+          Timeline.lastTimelineIdLoaded = object['lastTimelineId'];
+        }
+        data = object.data;
+        for (i = _i = 0, _ref = data.length - 1; _i <= _ref; i = _i += 1) {
+          Timeline.addNotificationToTimeline(data[i], {
+            'prepend': false,
+            "featured": false
+          });
+        }
+        $('#timeline .timeline-loading').addClass('hidden');
+        return setTimeout(function() {
+          return $('#loadMoreTimeline').removeClass('hidden');
+        }, 3000);
+      }
+    });
   }
 };
 
@@ -108,3 +162,13 @@ videoAutoplayOnScroll = function() {
     }
   });
 };
+
+$(window).scroll(function() {
+  if ($(window).scrollTop() === $(document).height() - $(window).height() && $('#timeline .timeline-loading').hasClass('hidden')) {
+    $('#timeline .timeline-loading').removeClass('hidden');
+    $('#loadMoreTimeline').addClass('hidden');
+    Timeline.loadMorePosts(timelineLoadMoreUrl);
+  } else if ($(window).scrollTop() === 0) {
+    Timeline.displayPendingNotification();
+  }
+});
