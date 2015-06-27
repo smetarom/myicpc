@@ -23,18 +23,5 @@
     if (timediff < 18000) {
       setInterval(contestTime, 60 * 1000);
     }
-
-    $(".notification-counter").click(function() {
-        var $featuredNotificationContainer = $("#featured-notification-container");
-        if (!$featuredNotificationContainer.is(":visible")) {
-            $.get("<spring:url value="${contestURL}/notification/featured-panel" />", function(data) {
-                $featuredNotificationContainer.html(data);
-                $featuredNotificationContainer.slideDown();
-                $(window).scrollTop(0);
-            });
-        } else {
-            $featuredNotificationContainer.slideUp();
-        }
-    });
   });
 </script>

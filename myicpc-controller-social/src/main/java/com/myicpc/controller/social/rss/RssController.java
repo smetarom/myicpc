@@ -34,9 +34,6 @@ public class RssController extends GeneralController {
     @Autowired
     private RSSMessageRepository rssMessageRepository;
 
-    @Autowired
-    private RSSFeedRepository rssFeedRepository;
-
     /**
      * Shows all RSS messages
      *
@@ -44,7 +41,7 @@ public class RssController extends GeneralController {
      * @param pageable
      * @return view
      */
-    @RequestMapping(value = "/{contestCode}/rss", method = RequestMethod.GET)
+    @RequestMapping(value = {"/{contestCode}/blog", "/{contestCode}/rss"}, method = RequestMethod.GET)
     public String preview(@PathVariable final String contestCode, Model model, Pageable pageable) {
         Contest contest = getContest(contestCode, model);
 

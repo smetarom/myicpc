@@ -1,20 +1,17 @@
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
 
 <nav id="mobile-top-menu" class="navbar navbar-inverse navbar-fixed-top mobile" style="z-index: 1200">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-            <%--<span class="glyphicon glyphicon-share-alt"> <spring:message code="share"/></span>--%>
-            <span class="label label-danger">${featuredNotificationsCount}</span>
-        </button>
-        <a class="navbar-brand" href='<spring:url value="${contestURL}/" />'><span class="fa fa-home"></span> <spring:message
-                code="app.name"/></a>
-    </div>
-
-    <div class="collapse navbar-collapse navbar-ex1-collapse">
-        <ul class="nav navbar-nav">
-            <%@ include file="/WEB-INF/views/includes/topMenu/socialShare.jsp" %>
-        </ul>
+        <a class="navbar-brand" href='<spring:url value="${contestURL}/" />'>
+            <span class="fa fa-home"></span> <spring:message code="app.name"/>
+        </a>
+        <div class="pull-right" style="margin: 10px 5px;">
+            <a href="javascript:void(0)" style="display: block;" id="notification-counter">
+                <span class="label ${featuredNotificationsCount == 0 ? 'label-default' : 'label-danger'} notification-counter">
+                    ${featuredNotificationsCount}
+                </span>
+            </a>
+        </div>
     </div>
 </nav>
 
@@ -80,9 +77,11 @@
             </td>
             <td>
                 <c:if test="${util:rssModuleEnabled(contest)}">
-                    <t:topSubmenuLink labelCode="nav.rss" url="${contestURL}/rss" icon="fa fa-rss"></t:topSubmenuLink>
+                    <t:topSubmenuLink labelCode="nav.rss" url="${contestURL}/blog" icon="fa fa-rss" />
                 </c:if>
             </td>
         </tr>
     </table>
 </div>
+
+<div id="featured-notification-container"></div>

@@ -2,14 +2,14 @@
 
 <t:template>
     <jsp:attribute name="headline">
-        ${pageTitle}
+        <spring:message code="rss.title" />
     </jsp:attribute>
     <jsp:attribute name="title">
-        ${pageTitle}
+        <spring:message code="rss.title" />
     </jsp:attribute>
 
     <jsp:body>
-        <c:forEach var="message" items="${rssMessagesPage.getContent()}">
+        <c:forEach var="message" items="${rssMessagesPage.content}">
             <div class="col-sm-12 col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-body">
