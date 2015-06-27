@@ -187,7 +187,7 @@ public class TestSocialController extends GeneralController {
         Status status = DataObjectFactory.createStatus(s);
 
 
-        twitterService.createTwitterNotificationFromStatus(status, contest);
+//        twitterService.createTwitterNotificationFromStatus(status, contest);
 
         return null;
     }

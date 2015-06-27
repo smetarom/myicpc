@@ -11,6 +11,13 @@ import java.util.List;
 public interface AdminNotificationRepository extends CrudRepository<AdminNotification, Long> {
     List<AdminNotification> findByContestOrderByEndDateDesc(Contest contest);
 
+    /**
+     * @return All not already published ICPC notifications which has already
+     * started
+     */
+    @Query(value = "SELECT an FROM AdminNotification an WHERE an.published = false AND an.contest = ?2 AND an.startDate < ?1")
+    List<AdminNotification> findAllNonpublishedStartedNotifications(Date date, Contest contest);
+
     @Query("SELECT an FROM AdminNotification an ORDER BY an.endDate ASC")
     List<AdminNotification> findAllOrderByEndDate();
 

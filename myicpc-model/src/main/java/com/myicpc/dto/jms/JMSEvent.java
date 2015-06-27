@@ -9,7 +9,7 @@ public class JMSEvent implements Serializable {
     private static final long serialVersionUID = 8974480822663361020L;
 
     public enum EventType {
-        TWITTER, VINE, INSTAGRAM;
+        TWITTER, VINE, INSTAGRAM, POLL_OPEN, ADMIN_NOTIFICATION
     }
 
     private Long contestId;

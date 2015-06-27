@@ -75,6 +75,8 @@ public class NotificationTag extends SimpleTagSupport {
             tile = new QuestChallengeTile(notification, isTemplate, locale, pageContext);
         } else if (notificationType.isAdminNotification()) {
             tile = new AdminNotificationTile(notification, isTemplate, locale, pageContext);
+        } else if (notificationType.isPollOpen()) {
+            tile = new PollTile(notification, isTemplate, locale, pageContext);
         }
         // TODO more notification types to come
         return tile;

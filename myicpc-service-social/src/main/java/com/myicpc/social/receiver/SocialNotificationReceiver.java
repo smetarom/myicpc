@@ -7,6 +7,8 @@ import com.myicpc.model.social.Notification;
 import com.myicpc.repository.contest.ContestRepository;
 import com.myicpc.service.exception.AuthenticationException;
 import com.myicpc.service.exception.WebServiceException;
+import com.myicpc.service.notification.NotificationService;
+import com.myicpc.social.poll.PollService;
 import com.myicpc.social.service.InstagramService;
 import com.myicpc.social.service.TwitterService;
 import com.myicpc.social.service.VineService;
@@ -36,21 +38,44 @@ public class SocialNotificationReceiver {
     @Autowired
     private InstagramService instagramService;
 
+    @Autowired
+    private PollService pollService;
+
+    @Autowired
+    private NotificationService notificationService;
+
     @JmsListener(destination = "java:/jms/queue/SocialNotificationQueue")
     @Transactional
     public void processSocialNotification(JMSEvent jmsEvent) {
         Contest contest = contestRepository.findOne(jmsEvent.getContestId());
+        if (contest == null) {
+            return;
+        }
         switch (jmsEvent.getEventType()) {
-            case VINE:
-                processVineUpdates(contest);
+//            case VINE:
+//                processVineUpdates(contest);
+//                break;
+//            case INSTAGRAM:
+//                processInstagramUpdates(contest);
+//                break;
+//            case TWITTER:
+//                processTwitterStart(contest);
+//                break;
+            case POLL_OPEN:
+                processPollUpdates(contest);
                 break;
-            case INSTAGRAM:
-                processInstagramUpdates(contest);
-                break;
-            case TWITTER:
-                processTwitterStart(contest);
+            case ADMIN_NOTIFICATION:
+                processAdminNotificationUpdates(contest);
                 break;
         }
+    }
+
+    private void processAdminNotificationUpdates(Contest contest) {
+        notificationService.createNotificationsForNewAdminNotifications(contest);
+    }
+
+    private void processPollUpdates(Contest contest) {
+        pollService.createNotificationsForNewPolls(contest);
     }
 
     private void processTwitterStart(Contest contest) {

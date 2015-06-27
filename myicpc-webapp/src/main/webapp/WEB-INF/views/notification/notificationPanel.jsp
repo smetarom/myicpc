@@ -18,6 +18,15 @@
                             ${notification.title}
                         </a>
                     </c:when>
+                    <c:when test="${notification.notificationType.pollOpen}">
+                        <t:glyphIcon icon="bullhorn" />
+                        ${notification.title}
+                        <t:plainForm action="/${contestURL}/poll/submit-answer-redirect" style="display: inline">
+                            ${util:pollOptionsToSelect(notification.body)}
+                            <input type="hidden" name="pollId" value="${notification.entityId}">
+                            <t:button type="submit" context="primary" styleClass="btn-xs"><spring:message code="voteI" /></t:button>
+                        </t:plainForm>
+                    </c:when>
                 </c:choose>
             </li>
         </c:forEach>
@@ -25,12 +34,13 @@
     <div class="text-center" style="background-color: #E0E0E0; padding: 5px 0">
         <a href="<spring:url value="${contestURL}/notifications" />"><strong><spring:message code="seeAll" /></strong></a>
     </div>
+    <%--Create admin notifications modal windows--%>
     <c:forEach var="notification" items="${featuredNotifications}">
         <c:if test="${notification.notificationType.adminNotification}">
             <t:modalWindow id="admin-notification-${notification.id}">
-                                <jsp:attribute name="title">
-                                    ${notification.title}
-                                </jsp:attribute>
+                <jsp:attribute name="title">
+                    ${notification.title}
+                </jsp:attribute>
                 <jsp:body>
                     ${notification.body}
                 </jsp:body>

@@ -1,6 +1,10 @@
 package com.myicpc.controller.functions;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.myicpc.commons.MyICPCConstants;
+import com.myicpc.commons.adapters.JSONAdapter;
 import com.myicpc.commons.utils.MessageUtils;
 import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.model.contest.Contest;
@@ -134,6 +138,18 @@ public class JSPCustomFunctions {
 
     public static String universityLogoUrl(Long universityExternalId) {
         return MyICPCConstants.UNIVERSITY_LOGO_URL + universityExternalId;
+    }
+
+    public static String pollOptionsToSelect(String optionsJSON) {
+        JsonArray arr = new JsonParser().parse(optionsJSON).getAsJsonArray();
+        StringBuilder html = new StringBuilder();
+        html.append("<select name=\"optionId\">");
+        for (JsonElement jsonElement : arr) {
+            JSONAdapter option = new JSONAdapter(jsonElement);
+            html.append(String.format("<option value=\"%s\" label=\"%s\">%s</option>", option.getInteger("key"), option.getString("name"), option.getString("name")));
+        }
+        html.append("</select>");
+        return html.toString();
     }
 
     public static boolean isMapModuleEnabled(Contest contest) {

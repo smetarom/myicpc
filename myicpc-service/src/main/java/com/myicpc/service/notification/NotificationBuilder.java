@@ -112,6 +112,10 @@ public class NotificationBuilder {
         notification.setExternalId(externalId);
     }
 
+    public void setEntityId(Long entityId) {
+        notification.setEntityId(entityId);
+    }
+
     public void setParentId(Long parentId) {
         notification.setParentId(parentId);
     }

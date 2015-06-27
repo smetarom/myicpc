@@ -4,12 +4,16 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.myicpc.commons.utils.CookieUtils;
 import com.myicpc.commons.utils.TimeUtils;
+import com.myicpc.commons.utils.WikiUtils;
 import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
+import com.myicpc.model.poll.Poll;
 import com.myicpc.model.social.AdminNotification;
 import com.myicpc.model.social.Notification;
 import com.myicpc.repository.social.AdminNotificationRepository;
 import com.myicpc.repository.social.NotificationRepository;
+import com.myicpc.service.dto.TimelineFeaturedNotificationsDTO;
+import com.myicpc.service.publish.PublishService;
 import com.myicpc.service.utils.lists.NotificationList;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +37,6 @@ import java.util.Locale;
  * @author Roman Smetana
  */
 @Service("notificationService")
-@Transactional
 public class NotificationService {
     public static final List<NotificationType> FEATURED_NOTIFICATION_TYPES = NotificationList.newList()
             .addAdminNotification()
@@ -46,11 +49,16 @@ public class NotificationService {
     @Autowired
     private AdminNotificationRepository adminNotificationRepository;
 
+    @Autowired
+    private PublishService publishService;
+
+    @Transactional
     public void markDeleted(Notification notification) {
         notification.setDeleted(true);
         notificationRepository.save(notification);
     }
 
+    @Transactional
     public void markDeleted(List<Notification> notifications) {
         for (Notification notification : notifications) {
             notification.setDeleted(true);
@@ -58,6 +66,26 @@ public class NotificationService {
         notificationRepository.save(notifications);
     }
 
+    @Transactional
+    public void createNotificationsForNewAdminNotifications(Contest contest) {
+        List<AdminNotification> adminNotifications = adminNotificationRepository.findAllNonpublishedStartedNotifications(new Date(), contest);
+        for (AdminNotification adminNotification : adminNotifications) {
+            adminNotification.setPublished(true);
+
+            NotificationBuilder builder = new NotificationBuilder(adminNotification);
+            builder.setTitle(adminNotification.getTitle());
+            builder.setBody(WikiUtils.parseWikiSyntax(adminNotification.getBody()));
+            builder.setEntityId(adminNotification.getId());
+            builder.setNotificationType(NotificationType.ADMIN_NOTIFICATION);
+            builder.setImageUrl(adminNotification.getImageUrl());
+            builder.setVideoUrl(adminNotification.getVideoUrl());
+            builder.setContest(contest);
+            Notification notification = notificationRepository.save(builder.build());
+            publishService.broadcastNotification(notification, contest);
+        }
+    }
+
+    @Transactional
     public void updateAdminNotification(final AdminNotification adminNotification) {
         adminNotificationRepository.save(adminNotification);
         // TODO
@@ -72,6 +100,7 @@ public class NotificationService {
 //        }
     }
 
+    @Transactional
     public void deleteAdminNotification(final AdminNotification adminNotification) {
         adminNotificationRepository.delete(adminNotification);
 
@@ -79,13 +108,22 @@ public class NotificationService {
 //        deleteNoficicationsForEntity(adminNotification.getId(), NotificationType.ADMIN_NOTIFICATION);
     }
 
+    @Transactional(readOnly = true)
     public List<Notification> getFeaturedQuestNotifications(final List<Long> ignoredFeatured) {
         List<Notification> notifications = new ArrayList<>();
         notifications.addAll(notificationRepository.findCurrentQuestChallengeNotifications(new Date(), ignoredFeatured));
 
-        Collections.sort(notifications, new FeaturedNotificationComparator());
-
         return notifications;
+    }
+
+    public TimelineFeaturedNotificationsDTO getTimelineFeaturedNotifications(final List<Long> ignoredFeatured, final Contest contest) {
+        TimelineFeaturedNotificationsDTO timelineFeaturedNotifications = new TimelineFeaturedNotificationsDTO();
+        List<Notification> featuredNotifications = getFeaturedNotifications(ignoredFeatured, contest);
+        for (Notification notification : featuredNotifications) {
+            timelineFeaturedNotifications.addNotification(notification);
+        }
+
+        return timelineFeaturedNotifications;
     }
 
     /**
@@ -96,10 +134,12 @@ public class NotificationService {
      * @param contest
      * @return list of featured notifications
      */
+    @Transactional(readOnly = true)
     public List<Notification> getFeaturedNotifications(final List<Long> ignoredFeatured, final Contest contest) {
         return notificationRepository.findFeaturedNotifications(new Date(), ignoredFeatured, contest);
     }
 
+    @Transactional(readOnly = true)
     public Long countFeaturedNotifications(final List<Long> ignoredFeatured, final Contest contest) {
         return notificationRepository.countFeaturedNotifications(new Date(), ignoredFeatured, contest);
     }

@@ -7,11 +7,16 @@ import com.myicpc.model.poll.Poll;
 import com.myicpc.model.poll.PollOption;
 import com.myicpc.model.social.Notification;
 import com.myicpc.service.notification.NotificationService;
+import org.atmosphere.cpr.AtmosphereFramework;
 import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.cpr.BroadcasterFactory;
+import org.atmosphere.cpr.MetaBroadcaster;
+import org.atmosphere.util.ServletContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.ServletContext;
 
 /**
  * @author Roman Smetana
@@ -98,9 +103,13 @@ public class PublishService {
      * @param message message
      */
     private void atmospherePublish(final String channel, final String message) {
-        BroadcasterFactory bf = BroadcasterFactory.getDefault();
-        if (bf != null) {
-            Broadcaster b = bf.lookup(channel);
+//        ServletContext servletContext = ServletContextFactory.getDefault().getServletContext();
+//        AtmosphereFramework framework = (AtmosphereFramework) servletContext.getAttribute("AtmosphereServlet");
+//        BroadcasterFactory broadcasterFactory = framework.getBroadcasterFactory();
+//        System.out.println(broadcasterFactory);
+        BroadcasterFactory broadcasterFactory = BroadcasterFactory.getDefault();
+        if (broadcasterFactory != null) {
+            Broadcaster b = broadcasterFactory.lookup(channel);
             if (b != null) {
                 b.broadcast(message);
                 return;

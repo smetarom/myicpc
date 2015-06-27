@@ -3,9 +3,13 @@ package com.myicpc.controller.social.poll;
 import com.google.gson.JsonArray;
 import com.myicpc.commons.utils.CookieUtils;
 import com.myicpc.controller.GeneralController;
+import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.poll.Poll;
+import com.myicpc.model.social.Notification;
+import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.social.poll.PollService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.site.SitePreference;
 import org.springframework.stereotype.Controller;
@@ -31,6 +35,9 @@ public class PollController extends GeneralController {
     @Autowired
     private PollService pollService;
 
+    @Autowired
+    private NotificationRepository notificationRepository;
+
     @RequestMapping(value = "/{contestCode}/polls", method = RequestMethod.GET)
     public String polls(@PathVariable final String contestCode, Model model,
                                 @CookieValue(value = "answeredPolls", required = false) String answeredPollsCookie,
@@ -51,10 +58,36 @@ public class PollController extends GeneralController {
     @RequestMapping(value = "/{contestCode}/poll/submit-answer", method = RequestMethod.POST)
     public void submitPollAnswer(@PathVariable final String contestCode, @RequestParam Long pollId, @RequestParam Long optionId,
                                  @CookieValue(value = "answeredPolls", required = false) String answeredPolls,
+                                 @CookieValue(value = "ignoreFeaturedNotifications", required = false) String ignoreFeaturedNotifications,
                                  HttpServletRequest request, HttpServletResponse response) {
+        answerPoll(pollId, optionId, answeredPolls, ignoreFeaturedNotifications, request, response);
+    }
+
+    @RequestMapping(value = "/{contestCode}/poll/submit-answer-redirect", method = RequestMethod.POST)
+    public String submitPollAnswerRedirect(@PathVariable final String contestCode, @RequestParam Long pollId, @RequestParam Long optionId,
+                                 @CookieValue(value = "answeredPolls", required = false) String answeredPolls,
+                                 @CookieValue(value = "ignoreFeaturedNotifications", required = false) String ignoreFeaturedNotifications,
+                                 HttpServletRequest request, HttpServletResponse response) {
+        answerPoll(pollId, optionId, answeredPolls, ignoreFeaturedNotifications, request, response);
+        return "redirect:" + getContestURL(contestCode) + "/polls";
+    }
+
+    private void answerPoll(Long pollId, Long optionId, String answeredPolls, String ignoreFeaturedNotifications,
+                            HttpServletRequest request, HttpServletResponse response) {
         pollService.addVoteToPoll(pollId, optionId);
 
         CookieUtils.appendIdToCookie(answeredPolls, "answeredPolls", pollId.toString(), request, response);
+
+        List<Notification> notifications = notificationRepository.findByEntityIdAndNotificationType(pollId, NotificationType.POLL_OPEN);
+        String cookie = "";
+        for (Notification notification : notifications) {
+            if (StringUtils.isEmpty(ignoreFeaturedNotifications)) {
+                cookie = notification.getId() + "";
+            } else {
+                cookie = ignoreFeaturedNotifications + "," + notification.getId();
+            }
+        }
+        CookieUtils.setCookie(request, response, "ignoreFeaturedNotifications", cookie);
     }
 
     @RequestMapping(value = "/{contestCode}/poll/overview-template", method = RequestMethod.GET)

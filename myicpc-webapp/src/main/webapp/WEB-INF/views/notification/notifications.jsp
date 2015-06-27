@@ -12,8 +12,12 @@
         <script type="application/javascript">
             function dismissFeaturedNotification(button, notificationId) {
                 appendIdToCookieArray('ignoreFeaturedNotifications', notificationId, '${ctx}');
-                $(button).parent().parent().slideUp( "slow" );
+                $(button).parent().parent().slideUp("slow");
             }
+
+            $(function() {
+                $("select").addClass('form-control');
+            });
         </script>
     </jsp:attribute>
 

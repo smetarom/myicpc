@@ -3,6 +3,7 @@ package com.myicpc.controller;
 import com.google.gson.JsonObject;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.Notification;
+import com.myicpc.service.dto.TimelineFeaturedNotificationsDTO;
 import com.myicpc.service.notification.NotificationService;
 import com.myicpc.service.timeline.TimelineService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,11 +42,13 @@ public class TimelineController extends GeneralController {
             model.addAttribute("lastTimelineId", timelineNotifications.get(timelineNotifications.size() - 1).getTimestamp().getTime());
         }
 
-        List<Notification> questNotifications = notificationService.getFeaturedQuestNotifications(NotificationService.getFeaturedIdsFromCookie(request, response));
+        TimelineFeaturedNotificationsDTO featuredNotifications = notificationService.getTimelineFeaturedNotifications(NotificationService.getFeaturedIdsFromCookie(request, response), contest);
 
         model.addAttribute("notifications", timelineNotifications);
         model.addAttribute("availableNotificationTypes", TimelineService.TIMELINE_TYPES);
-        model.addAttribute("openQuests", questNotifications);
+        model.addAttribute("openQuests", NotificationService.getNotificationInJson(featuredNotifications.getQuestNotifications()));
+        model.addAttribute("openPolls", NotificationService.getNotificationInJson(featuredNotifications.getPollNotifications()));
+        model.addAttribute("openAdminNotifications", NotificationService.getNotificationInJson(featuredNotifications.getAdminNotifications()));
         return "timeline/timeline";
     }
 

@@ -3,11 +3,15 @@ package com.myicpc.social.poll;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.poll.Poll;
 import com.myicpc.model.poll.PollOption;
+import com.myicpc.model.social.Notification;
 import com.myicpc.repository.poll.PollOptionRepository;
 import com.myicpc.repository.poll.PollRepository;
+import com.myicpc.repository.social.NotificationRepository;
+import com.myicpc.service.notification.NotificationBuilder;
 import com.myicpc.service.publish.PublishService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +31,6 @@ import java.util.Set;
  * @author Roman Smetana
  */
 @Service
-@Transactional
 public class PollService {
 
     @Autowired
@@ -37,12 +40,33 @@ public class PollService {
     private PollOptionRepository pollOptionRepository;
 
     @Autowired
+    private NotificationRepository notificationRepository;
+
+    @Autowired
     private PublishService publishService;
 
     public List<Poll.PollRepresentationType> getPollTypes() {
         return Arrays.asList(Poll.PollRepresentationType.values());
     }
 
+    @Transactional
+    public void createNotificationsForNewPolls(Contest contest) {
+        List<Poll> polls = pollRepository.findAllNonpublishedStartedPolls(new Date(), contest);
+        for (Poll poll : polls) {
+            poll.setPublished(true);
+
+            NotificationBuilder builder = new NotificationBuilder(poll);
+            builder.setTitle(poll.getQuestion());
+            builder.setBody(getPollChartOptionsJSON(poll).toString());
+            builder.setEntityId(poll.getId());
+            builder.setNotificationType(NotificationType.POLL_OPEN);
+            builder.setContest(contest);
+            Notification notification = notificationRepository.save(builder.build());
+            publishService.broadcastNotification(notification, contest);
+        }
+    }
+
+    @Transactional(readOnly = true)
     public Poll findEditPollById(Long id) {
         Poll poll = pollRepository.findOne(id);
         if (poll == null) {
@@ -56,6 +80,7 @@ public class PollService {
         return poll;
     }
 
+    @Transactional
     public void resolvePoll(Poll poll) {
         Poll managed = pollRepository.findOne(poll.getId());
         managed.setCorrectAnswer(poll.getCorrectAnswer());
@@ -68,6 +93,7 @@ public class PollService {
         // PublishService.broadcastNotification(notificationService.notificationForPollClose(poll));
     }
 
+    @Transactional
     public void updatePoll(Poll poll) {
         synchronizePollOptions(poll);
         pollRepository.save(poll);
@@ -111,6 +137,7 @@ public class PollService {
         }
     }
 
+    @Transactional
     public void addVoteToPoll(final Long pollId, final Long optionId) {
         Poll poll = pollRepository.findOne(pollId);
         if (poll == null || !poll.isActive()) {
@@ -124,6 +151,7 @@ public class PollService {
         publishService.broadcastPollAnswer(poll, option);
     }
 
+    @Transactional(readOnly = true)
     public List<Poll> getOpenPollsWithOptions(Contest contest, Date date) {
         List<Poll> polls = pollRepository.findOpenPolls(contest, date);
         for (Poll poll : polls) {
