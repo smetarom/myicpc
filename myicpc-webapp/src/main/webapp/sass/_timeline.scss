@@ -13,6 +13,7 @@
 .mobile #timeline-notification {
   top: 78px;
 }
+
 .timelineTile {
   padding: 9px 12px;
   border-bottom: 1px solid #e1e8ed;
@@ -60,8 +61,12 @@
   }
 }
 
-.timeline-mobile {
+.mobile #timeline {
   background-color: #e9eaed;
+
+  #timeline-body {
+    margin: -5px -15px 0;
+  }
 
   .timelineTile {
     background-color: white;
@@ -70,6 +75,32 @@
     border-color: #e5e6e9 #dfe0e4 #d0d1d5;
     margin: 7px 7px;
     border-radius: 5px;
+  }
+}
+
+body.mobile #notification-mobile-side-bar {
+  position: fixed;
+  top: 40px;
+  bottom: 0;
+  background-color: rgba(1, 1, 1, 0.85);
+  height: 100%;
+  z-index: 1040;
+  overflow-y: auto;
+  min-width: 46px;
+  right: 0;
+  width: 80%;
+  color: white;
+  padding: 0 8px 60px;
+  margin-top: -10px;
+  display: none;
+
+  select {
+    background-color: #bbb;
+  }
+
+  .table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #bbb;
+
   }
 }
 

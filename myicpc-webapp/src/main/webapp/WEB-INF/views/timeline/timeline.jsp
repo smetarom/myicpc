@@ -54,7 +54,6 @@
     </div>
     <hr/>
 </script>
-
         <script type="application/javascript">
             var timelineLoadMoreUrl = '<spring:url value="${contestURL}/timeline/loadMore" />';
             var featuredPolls = ${not empty openPolls ? openPolls : '[]'};
@@ -103,7 +102,9 @@
                     }));
                 }
             }
-
+            function showTimelineSubmenu() {
+                $("#notification-mobile-side-bar").toggle('slide',{direction: 'right'});
+            }
             $(function() {
                 Timeline.lastTimelineIdLoaded = ${not empty lastTimelineId ? lastTimelineId : 0};
                 Timeline.init();
@@ -122,6 +123,11 @@
                     $("#upcomingEventsContainer").html(data);
                 });
                 </c:if>
+                <c:if test="${sitePreference.mobile}">
+                    $("#mobile-top-menu-addon").html('<a href="javascript:showTimelineSubmenu()" class="mobile-menu-addon">' +
+                            '<span class="glyphicon glyphicon-menu-hamburger"></span>' +
+                            '</a>');
+                </c:if>
             });
         </script>
     </jsp:attribute>
@@ -138,18 +144,6 @@
                         <t:notification notification="${notification}" />
                     </c:forEach>
                 </div>
-            </div>
-            <div class="col-sm-4 col-md-4 col-lg-3 timeline-submenu">
-                <br/>
-                <div id="timeline-featured-admin-notifications"></div>
-                <div id="timeline-featured-polls"></div>
-                <div id="timeline-featured-quest-challenge"></div>
-                <div id="upcomingEventsContainer"></div>
-                <%@ include file="/WEB-INF/views/timeline/timelineFollowedTeams.jsp"%>
-            </div>
-            <br class="clear" />
-            <div class="col-sm-0 col-md-2"></div>
-            <div class="media col-sm-8 col-md-6 col-lg-5">
                 <button type="button" id="loadMoreTimeline" class="btn btn-default center-block"
                         onclick="Timeline.loadMorePosts('<spring:url value="${contestURL}/timeline/loadMore" />')">
                     <spring:message code="showMore" />
@@ -157,6 +151,14 @@
                 <div class="timeline-loading hidden">
                     <i class="fa fa-spinner fa-spin"></i> <spring:message code="loadingCtn" />
                 </div>
+            </div>
+            <div id="notification-mobile-side-bar" class="col-sm-4 col-md-4 col-lg-3 timeline-submenu">
+                <br/>
+                <div id="timeline-featured-admin-notifications"></div>
+                <div id="timeline-featured-polls"></div>
+                <div id="timeline-featured-quest-challenge"></div>
+                <div id="upcomingEventsContainer"></div>
+                <%@ include file="/WEB-INF/views/timeline/timelineFollowedTeams.jsp"%>
             </div>
         </div>
     </jsp:body>

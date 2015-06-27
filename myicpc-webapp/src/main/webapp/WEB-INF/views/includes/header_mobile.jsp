@@ -6,11 +6,14 @@
             <span class="fa fa-home"></span> <spring:message code="app.name"/>
         </a>
         <div class="pull-right" style="margin: 10px 5px;">
-            <a href="javascript:void(0)" style="display: block;" id="notification-counter">
+            <a href="javascript:void(0)" id="notification-counter" style="display: inline-block">
                 <span class="label ${featuredNotificationsCount == 0 ? 'label-default' : 'label-danger'} notification-counter">
                     ${featuredNotificationsCount}
                 </span>
             </a>
+            <span id="mobile-top-menu-addon" style="display: inline-block">
+
+            </span>
         </div>
     </div>
 </nav>
