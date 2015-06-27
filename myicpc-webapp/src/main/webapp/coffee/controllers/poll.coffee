@@ -86,6 +86,7 @@ pollApp.controller('pollsCtrl', ($scope, $rootScope, $http, pollService) ->
   $scope.init = (contextPath, contestCode, data) ->
     $rootScope.$apply(() ->
       $rootScope.polls = data
+      pollService.sortChartOptions(poll) for poll in $rootScope.polls
       $rootScope.contextPath = contextPath
       $rootScope.contestCode = contestCode
     )
@@ -93,7 +94,6 @@ pollApp.controller('pollsCtrl', ($scope, $rootScope, $http, pollService) ->
   $scope.update = (data) ->
     $rootScope.$apply(() ->
       poll = _.find($rootScope.polls, (p) -> p.id == data.pollId)
-      console.log(poll)
       if poll?
         if pollService.isPieChart(poll)
           option = _.find(poll.chart, (o) -> o.key == data.optionId)
@@ -107,6 +107,7 @@ pollApp.controller('pollsCtrl', ($scope, $rootScope, $http, pollService) ->
             option.value = data.votes
           else
             poll.chart[0].values.push({key:data.optionId, name:data.optionName, value:data.votes})
+        pollService.sortChartOptions(poll)
     )
 
   $rootScope.submitAnswer = (pollId, optionId) ->
@@ -132,7 +133,7 @@ pollApp.controller('pollDetailCtrl', ($scope, $rootScope, $routeParams, pollServ
   $scope.init = ->
     if $rootScope.polls.length > 0
       pollId = parseInt($routeParams.pollId)
-      for i in [0..$rootScope.polls.length-1]
+      for i in [0..$rootScope.polls.length-1] by 1
         if $rootScope.polls[i].id == pollId
           $scope.pollIndex = i
           $scope.poll = $rootScope.polls[$scope.pollIndex]

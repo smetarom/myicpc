@@ -3,7 +3,7 @@
 <div ng-if="isBarChart(poll)">
   <c:if test="${not sitePreference.mobile}">
     <nvd3-multi-bar-horizontal-chart
-            data="sortChartOptions(poll)"
+            data="poll.chart"
             id="pollchart{{poll.id}}"
             x="xFunctionShort()"
             y="yFunction()"
@@ -26,7 +26,7 @@
 
   <c:if test="${sitePreference.mobile}">
     <nvd3-multi-bar-horizontal-chart
-            data="sortChartOptions(poll)"
+            data="poll.chart"
             id="pollchart{{poll.id}}"
             x="xFunction()"
             y="yFunction()"
@@ -48,7 +48,7 @@
 
 <div ng-if="isPieChart(poll)">
     <nvd3-pie-chart
-            data="sortChartOptions(poll)"
+            data="poll.chart"
             id="pollchart{{poll.id}}"
             x="xFunction()"
             y="yFunction()"

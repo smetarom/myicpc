@@ -14,10 +14,13 @@ import com.myicpc.model.quest.QuestSubmission;
 import com.myicpc.model.social.Notification;
 import com.myicpc.model.teamInfo.ContestParticipant;
 import com.myicpc.model.teamInfo.ContestParticipantAssociation;
+import com.myicpc.repository.quest.QuestChallengeRepository;
 import com.myicpc.repository.quest.QuestParticipantRepository;
 import com.myicpc.repository.quest.QuestSubmissionRepository;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.repository.teamInfo.ContestParticipantAssociationRepository;
+import com.myicpc.service.notification.NotificationBuilder;
+import com.myicpc.service.publish.PublishService;
 import com.myicpc.service.utils.lists.NotificationList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +41,12 @@ import java.util.Map;
 @Service
 public class QuestService {
     public static final int POSTS_PER_PAGE = 30;
+
+    @Autowired
+    private PublishService publishService;
+
+    @Autowired
+    private QuestChallengeRepository questChallengeRepository;
 
     @Autowired
     private QuestParticipantRepository questParticipantRepository;
@@ -157,4 +167,22 @@ public class QuestService {
         }
     }
 
+    @Transactional
+    public void createNotificationsForNewQuestChallenges(Contest contest) {
+        List<QuestChallenge> challenges = questChallengeRepository.findAllNonpublishedStartedChallenges(new Date(), contest);
+        for (QuestChallenge challenge : challenges) {
+            challenge.setPublished(true);
+
+            NotificationBuilder builder = new NotificationBuilder(challenge);
+            builder.setTitle(challenge.getName());
+            builder.setBody(challenge.getDescription());
+            builder.setImageUrl(challenge.getImageURL());
+            builder.setNotificationType(NotificationType.QUEST_CHALLENGE);
+            builder.setContest(contest);
+            challenge.setHashtagPrefix(contest.getQuestConfiguration().getHashtagPrefix());
+            builder.setHashtag(challenge.getHashtag());
+            Notification notification = notificationRepository.save(builder.build());
+            publishService.broadcastNotification(notification, contest);
+        }
+    }
 }

@@ -69,7 +69,7 @@ public class PollController extends GeneralController {
                                  @CookieValue(value = "ignoreFeaturedNotifications", required = false) String ignoreFeaturedNotifications,
                                  HttpServletRequest request, HttpServletResponse response) {
         answerPoll(pollId, optionId, answeredPolls, ignoreFeaturedNotifications, request, response);
-        return "redirect:" + getContestURL(contestCode) + "/polls";
+        return "redirect:" + getContestURL(contestCode) + "/polls#/" + pollId;
     }
 
     private void answerPoll(Long pollId, Long optionId, String answeredPolls, String ignoreFeaturedNotifications,

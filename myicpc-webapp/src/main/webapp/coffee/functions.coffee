@@ -119,7 +119,7 @@ setCookie = (c_name, value, exdays, path) ->
   exdate.setDate exdate.getDate() + exdays
   if path == undefined or path == ''
     path = '/'
-  c_value = escape(value) + ';path=' + path + (if exdays == null then '' else '; expires=' + exdate.toUTCString())
+  c_value = value + ';path=' + path + (if exdays == null then '' else '; expires=' + exdate.toUTCString())
   document.cookie = c_name + '=' + c_value
   return
 
@@ -154,11 +154,17 @@ getCookie = (c_name) ->
 ###
 appendIdToCookieArray = (c_name, id, path) ->
   value = getCookie(c_name)
-  if typeof value != 'undefined' and value != null
-    value += ',' + id
+  if value?
+    value += ',' + escape(id)
   else
-    value = id
+    value = escape(id)
   setCookie(c_name, value, 7, path)
+
+dismissNotification = (notificationId, path) ->
+  appendIdToCookieArray('ignoreFeaturedNotifications', notificationId, path)
+  $notificationCounter = $("#notification-counter")
+  counter = parseInt($notificationCounter.html())
+  $notificationCounter.html(counter - 1)
 
 ###*
 # Use service to transtate plain text to wiki text

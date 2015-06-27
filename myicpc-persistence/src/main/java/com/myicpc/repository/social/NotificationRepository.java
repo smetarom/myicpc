@@ -108,7 +108,7 @@ public interface NotificationRepository extends PagingAndSortingRepository<Notif
             "           (n.entityId IN (SELECT an.id FROM AdminNotification an WHERE ?1 BETWEEN an.startDate AND an.endDate) AND n.notificationType = 'ADMIN_NOTIFICATION')" +
             "       ) " +
             "ORDER BY n.timestamp DESC")
-    List<Notification> findFeaturedNotifications(Date date, List<Long> ignoredFeatured, Contest contest);
+    List<Notification> findFeaturedNotifications(Date date, List<Long> ignoredFeatured, Contest contest, Pageable pageable);
 
     @Query("SELECT COUNT(n) " +
             "FROM Notification n " +

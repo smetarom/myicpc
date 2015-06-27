@@ -4,7 +4,7 @@
     <ul class="featured-list">
         <c:forEach var="notification" items="${featuredNotifications}">
             <li class="alert alert-info alert-dismissable">
-                <button type="button" onclick="appendIdToCookieArray('ignoreFeaturedNotifications', ${notification.id}, '${ctx}')" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <button type="button" onclick="dismissNotification(${notification.id}, '${ctx}')" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 <c:choose>
                     <c:when test="${notification.notificationType.questChallenge}">
                         <t:faIcon icon="trophy" />

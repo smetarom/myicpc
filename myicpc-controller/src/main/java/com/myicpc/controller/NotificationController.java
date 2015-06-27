@@ -7,6 +7,8 @@ import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.service.notification.NotificationService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -53,7 +55,8 @@ public class NotificationController extends GeneralController {
         if (!StringUtils.isEmpty(ignoreFeaturedNotifications)) {
             ignoredFeatured.addAll(CookieUtils.getCookieAsLongs(ignoreFeaturedNotifications));
         }
-        Iterable<Notification> featuredNotifications = notificationService.getFeaturedNotifications(ignoredFeatured, contest);
+        Pageable pageable = new PageRequest(0, 5);
+        Iterable<Notification> featuredNotifications = notificationService.getFeaturedNotifications(ignoredFeatured, contest, pageable);
 
         model.addAttribute("featuredNotifications", featuredNotifications);
         return "notification/notificationPanel";

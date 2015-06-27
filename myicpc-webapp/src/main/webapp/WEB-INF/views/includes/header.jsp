@@ -66,7 +66,9 @@
         <ul class="nav navbar-nav navbar-right">
             <li>
                 <a href="javascript:void(0)">
-                    <span class="label ${featuredNotificationsCount == 0 ? 'label-default' : 'label-danger'} notification-counter">${featuredNotificationsCount}</span>
+                    <span id="notification-counter" class="label ${featuredNotificationsCount == 0 ? 'label-default' : 'label-danger'} notification-counter">
+                        ${featuredNotificationsCount}
+                    </span>
                 </a>
             </li>
         </ul>

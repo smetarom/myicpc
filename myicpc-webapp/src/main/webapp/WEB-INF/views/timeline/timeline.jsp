@@ -28,19 +28,24 @@
                         </tr>
                     </table>
                     {{#if ../poll}}
-                    <select class="form-control">
-                        <option label="<spring:message code="selectOption" />"><spring:message code="selectOption" /></option>
-                        {{#each body}}
-                          <option id="{{id}}" label="{{name}}">{{name}}</option>
-                        {{/each}}
-                    </select>
+                    <t:plainForm action="/${contestURL}/poll/submit-answer-redirect">
+                        <select name="optionId" class="form-control" onchange="this.form.submit()">
+                            <option label="<spring:message code="selectOption" />"><spring:message code="selectOption" /></option>
+                            {{#each body}}
+                              <option value="{{key}}" label="{{name}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                        <input type="hidden" name="pollId" value="{{entityId}}" />
+                    </t:plainForm>
                     {{/if}}
                     {{#unless ../poll}}
                         {{{body}}}
                     {{/unless}}
                     {{#if ../quest}}
                         <div class="text-center">
-                            <t:button context="primary" styleClass="btn-sm"><spring:message code="quest.challenge.participate" /></t:button>
+                            <a href="<spring:url value="${contestURL}/quest/challenges#" />{{entityId}}" class="btn btn-primary btn-sm">
+                                <spring:message code="quest.challenge.participate" />
+                            </a>
                         </div>
                     {{/if}}
                 </div>

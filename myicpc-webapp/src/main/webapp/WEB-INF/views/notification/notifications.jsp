@@ -11,7 +11,7 @@
     <jsp:attribute name="javascript">
         <script type="application/javascript">
             function dismissFeaturedNotification(button, notificationId) {
-                appendIdToCookieArray('ignoreFeaturedNotifications', notificationId, '${ctx}');
+                dismissNotification(notificationId, '${ctx}');
                 $(button).parent().parent().slideUp("slow");
             }
 

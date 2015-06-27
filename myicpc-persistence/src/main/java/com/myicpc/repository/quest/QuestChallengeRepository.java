@@ -26,6 +26,9 @@ public interface QuestChallengeRepository extends JpaRepository<QuestChallenge, 
     @Query("SELECT qc FROM QuestChallenge qc WHERE qc.startDate < ?1 AND qc.contest = ?2 ORDER BY qc.hashtagSuffix")
     List<QuestChallenge> findOpenChallengesByContestOrderByHashtag(Date now, Contest contest);
 
+    @Query(value = "SELECT qc FROM QuestChallenge qc WHERE qc.published = false AND qc.contest = ?2 AND qc.startDate < ?1")
+    List<QuestChallenge> findAllNonpublishedStartedChallenges(Date date, Contest contest);
+
     // ----
 
     @Query("SELECT qc FROM QuestChallenge qc ORDER BY qc.name")
@@ -53,7 +56,4 @@ public interface QuestChallengeRepository extends JpaRepository<QuestChallenge, 
     List<QuestChallenge> getLeaderboardChallenges();
 
     QuestChallenge findByHashtagSuffix(String hashtag);
-
-    @Query(value = "SELECT qc FROM QuestChallenge qc WHERE qc.published = false AND qc.startDate < ?1")
-    List<QuestChallenge> findAllNonpublishedStartedChallenges(Date date);
 }

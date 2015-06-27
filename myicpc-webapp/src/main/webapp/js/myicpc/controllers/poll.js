@@ -103,7 +103,13 @@ pollApp.controller('pollsCtrl', function($scope, $rootScope, $http, pollService)
   $rootScope.polls = [];
   $scope.init = function(contextPath, contestCode, data) {
     return $rootScope.$apply(function() {
+      var poll, _i, _len, _ref;
       $rootScope.polls = data;
+      _ref = $rootScope.polls;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        poll = _ref[_i];
+        pollService.sortChartOptions(poll);
+      }
       $rootScope.contextPath = contextPath;
       return $rootScope.contestCode = contestCode;
     });
@@ -114,16 +120,15 @@ pollApp.controller('pollsCtrl', function($scope, $rootScope, $http, pollService)
       poll = _.find($rootScope.polls, function(p) {
         return p.id === data.pollId;
       });
-      console.log(poll);
       if (poll != null) {
         if (pollService.isPieChart(poll)) {
           option = _.find(poll.chart, function(o) {
             return o.key === data.optionId;
           });
           if (option != null) {
-            return option.value = data.votes;
+            option.value = data.votes;
           } else {
-            return poll.chart.push({
+            poll.chart.push({
               key: data.optionId,
               name: data.optionName,
               value: data.votes
@@ -134,15 +139,16 @@ pollApp.controller('pollsCtrl', function($scope, $rootScope, $http, pollService)
             return o.key === data.optionId;
           });
           if (option != null) {
-            return option.value = data.votes;
+            option.value = data.votes;
           } else {
-            return poll.chart[0].values.push({
+            poll.chart[0].values.push({
               key: data.optionId,
               name: data.optionName,
               value: data.votes
             });
           }
         }
+        return pollService.sortChartOptions(poll);
       }
     });
   };
@@ -176,7 +182,7 @@ pollApp.controller('pollDetailCtrl', function($scope, $rootScope, $routeParams, 
     if ($rootScope.polls.length > 0) {
       pollId = parseInt($routeParams.pollId);
       _results = [];
-      for (i = _i = 0, _ref = $rootScope.polls.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+      for (i = _i = 0, _ref = $rootScope.polls.length - 1; _i <= _ref; i = _i += 1) {
         if ($rootScope.polls[i].id === pollId) {
           $scope.pollIndex = i;
           $scope.poll = $rootScope.polls[$scope.pollIndex];

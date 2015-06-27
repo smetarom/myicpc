@@ -17,6 +17,7 @@ import com.myicpc.service.publish.PublishService;
 import com.myicpc.service.utils.lists.NotificationList;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -136,7 +137,12 @@ public class NotificationService {
      */
     @Transactional(readOnly = true)
     public List<Notification> getFeaturedNotifications(final List<Long> ignoredFeatured, final Contest contest) {
-        return notificationRepository.findFeaturedNotifications(new Date(), ignoredFeatured, contest);
+        return getFeaturedNotifications(ignoredFeatured, contest, null);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Notification> getFeaturedNotifications(final List<Long> ignoredFeatured, final Contest contest, final Pageable pageable) {
+        return notificationRepository.findFeaturedNotifications(new Date(), ignoredFeatured, contest, pageable);
     }
 
     @Transactional(readOnly = true)

@@ -18,9 +18,9 @@
     
     <jsp:attribute name="javascript">
         <script type="text/javascript">
-            function loadChallengeContent(eventId) {
+            function loadChallengeContent(challengeId) {
                 $("#challengeContainer").html('<div class="inline-spinner"></div>');
-                $.get( '<spring:url value="${contestURL}/quest/ajax/challenge/" />'+eventId, function( data ) {
+                $.get( '<spring:url value="${contestURL}/quest/ajax/challenge/" />'+challengeId, function( data ) {
                     $("#challengeContainer").html(data);
                 });
                 setFixedSubmenuHeight();
@@ -29,7 +29,7 @@
             $(function() {
                 if (window.location.hash != '') {
                     $("#challengeContainer").html('<div class="inline-spinner"></div>');
-                    $.get( '<spring:url value="${contestURL}/quest/ajax/challenge/" />' + window.location.hash.substring(1), function( data ) {
+                    $.get( '<spring:url value="${contestURL}/quest/ajax/challenge/" />' + window.location.hash.substring(1), function(data) {
                         $("#challengeContainer").html(data);
                     });
                 }
