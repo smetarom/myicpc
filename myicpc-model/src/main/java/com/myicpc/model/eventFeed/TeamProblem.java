@@ -1,9 +1,11 @@
 package com.myicpc.model.eventFeed;
 
 import com.myicpc.commons.utils.FormatUtils;
+import com.myicpc.model.IdGeneratedContestObject;
 import com.myicpc.model.IdGeneratedObject;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -82,12 +84,14 @@ public class TeamProblem extends IdGeneratedObject {
     /**
      * Team, which submitted
      */
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "teamId")
     private Team team;
     /**
      * Problem, which the submission tries to solve
      */
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "problemId")
     private Problem problem;

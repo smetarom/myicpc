@@ -1,6 +1,7 @@
 package com.myicpc.model.eventFeed;
 
 import com.myicpc.model.IdGeneratedContestObject;
+import com.myicpc.model.contest.Contest;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,7 +16,10 @@ import javax.validation.constraints.NotNull;
  */
 @Cacheable
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"teamId", "problemId", "teamProblemId"})})
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"teamId", "problemId", "teamProblemId"}),
+        @UniqueConstraint(columnNames = {"teamId", "problemId"})
+})
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "LastTeamProblem_id_seq")
 public class LastTeamProblem extends IdGeneratedContestObject {
     private static final long serialVersionUID = 2037705931029494546L;

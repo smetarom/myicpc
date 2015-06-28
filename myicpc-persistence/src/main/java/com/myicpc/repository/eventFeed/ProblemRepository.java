@@ -16,6 +16,7 @@ public interface ProblemRepository extends JpaRepository<Problem, Long> {
 
     Problem findByCodeIgnoreCaseAndContest(String code, Contest contest);
 
+    @Query("SELECT p FROM Problem p WHERE p.systemId = ?1 AND p.contest = ?2")
     Problem findBySystemIdAndContest(Long systemId, Contest contest);
 
     List<Problem> findByContestOrderByCodeAsc(Contest contest);

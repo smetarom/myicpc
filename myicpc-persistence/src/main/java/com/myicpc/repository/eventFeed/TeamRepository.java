@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface TeamRepository extends JpaRepository<Team, Long> {
+    @Query("SELECT t FROM Team t WHERE t.contest = ?1")
     List<Team> findByContest(Contest contest);
 
     List<Team> findByContestOrderByNameAsc(Contest contest);
@@ -18,6 +19,7 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
     @Query("SELECT t FROM Team t WHERE t.contest = ?1 AND t.id IN ?2")
     List<Team> findByContestAndTeamIds(Contest contest, List<Long> ids);
 
+    @Query("SELECT t FROM Team t WHERE t.systemId = ?1 AND t.contest = ?2")
     Team findBySystemIdAndContest(Long systemId, Contest contest);
 
     Team findByExternalId(Long externalId);

@@ -28,6 +28,9 @@ import com.myicpc.repository.eventFeed.RegionRepository;
 import com.myicpc.repository.eventFeed.TeamProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.repository.teamInfo.TeamInfoRepository;
+import com.myicpc.service.scoreboard.eventFeed.strategy.FeedRunStrategy;
+import com.myicpc.service.scoreboard.eventFeed.strategy.JSONRunStrategy;
+import com.myicpc.service.scoreboard.eventFeed.strategy.NativeRunStrategy;
 import com.myicpc.service.scoreboard.exception.EventFeedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,13 +39,19 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class EventFeedVisitorImpl implements EventFeedVisitor {
     private static final Logger logger = LoggerFactory.getLogger(EventFeedVisitorImpl.class);
+    private static final Map<Long, TestcaseXML> testcaseXMLMap = new ConcurrentHashMap<>();
 
     @Autowired
     private NativeRunStrategy nativeRunStrategy;
+
+    @Autowired
+    private JSONRunStrategy jsonRunStrategy;
 
     @Autowired
     private ContestRepository contestRepository;
@@ -175,12 +184,16 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
             }
             xmlTeamProblem.mergeTo(teamProblem);
             if (teamProblem.getTeam() == null) {
-                System.out.println("loading team");
                 teamProblem.setTeam(teamRepository.findBySystemIdAndContest(xmlTeamProblem.getTeamId(), contest));
             }
             if (teamProblem.getProblem() == null) {
-                System.out.println("loading problem");
                 teamProblem.setProblem(problemRepository.findBySystemIdAndContest(xmlTeamProblem.getProblemId(), contest));
+            }
+            TestcaseXML testcaseXML = testcaseXMLMap.get(teamProblem.getSystemId());
+            if (testcaseXML != null) {
+                teamProblem.setNumTestPassed(testcaseXML.getPassedTests());
+                teamProblem.setTotalNumTests(testcaseXML.getTotalTests());
+                teamProblem.getProblem().setTotalTestcases(testcaseXML.getTotalTests());
             }
             teamProblem = strategy.executeTeamProblem(teamProblem, contest);
 
@@ -188,35 +201,12 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
         } catch (EventFeedException ex) {
             logger.error(ex.getMessage(), ex);
         }
-
-//        try {
-//           if (eventFeedControl.getSkippedRuns() < eventFeedControl.getRunsToSkip()) {
-//                eventFeedControl.increaseSkippedRuns();
-//                logger.info("Skipped {} out of {} runs", eventFeedControl.getSkippedRuns(), eventFeedControl.getRunsToSkip());
-//            } else {
-//                FeedRunStrategy strategy = selectStrategy(contest);
-//                TeamProblem teamProblem = new TeamProblem();
-//                xmlTeamProblem.mergeTo(teamProblem);
-//                teamProblem = strategy.executeTeamProblem(teamProblem, contest);
-//
-//                eventFeedControl = eventFeedControlRepository.findOne(eventFeedControl.getId());
-//                eventFeedControl.increaseProcessedRunsCounter();
-//                eventFeedControlRepository.save(eventFeedControl);
-//                logger.info("Run " + teamProblem.getSystemId() + " processed for team " + teamProblem.getTeam().getSystemId());
-//            }
-//        } catch (EventFeedException ex) {
-//            logger.error(ex.getMessage(), ex);
-//        }
-
     }
 
     @Override
     @Transactional
     public void visit(TestcaseXML xmlTestcase, Contest contest) {
-//        TeamProblem teamProblem = teamProblemRepository.findBySystemIdAndTeamContest(xmlTestcase.getSystemId(), contest);
-//        if (teamProblem != null) {
-//            xmlTestcase.mergeTo(teamProblem);
-//        }
+        testcaseXMLMap.put(xmlTestcase.getSystemId(), xmlTestcase);
     }
 
     @Override
@@ -235,6 +225,8 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
         switch (contest.getContestSettings().getScoreboardStrategyType()) {
             case NATIVE:
                 return nativeRunStrategy;
+            case JSON:
+                return jsonRunStrategy;
             default:
                 throw new EventFeedException("No suitable event feed strategy found.");
         }

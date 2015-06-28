@@ -13,7 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface LastTeamProblemRepository extends JpaRepository<LastTeamProblem, Long> {
+    @Query("SELECT lts FROM LastTeamProblem lts WHERE lts.team = ?1 AND lts.problem = ?2")
     LastTeamProblem findByTeamAndProblem(Team team, Problem problem);
+
+    @Query("SELECT lts FROM LastTeamProblem lts JOIN FETCH lts.teamProblem WHERE lts.team = ?1 AND lts.problem = ?2")
+    LastTeamProblem findByTeamAndProblemWithTeamSubmission(Team team, Problem problem);
 
     List<LastTeamProblem> findByTeam(Team team);
 

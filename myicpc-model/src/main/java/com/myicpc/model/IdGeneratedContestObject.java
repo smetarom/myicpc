@@ -19,7 +19,7 @@ public abstract class IdGeneratedContestObject extends IdGeneratedObject {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "contestId")
+    @JoinColumn(name = "contestId", nullable = false)
     protected Contest contest;
 
     public IdGeneratedContestObject() {

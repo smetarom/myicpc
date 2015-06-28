@@ -50,10 +50,9 @@ public class WebServiceUtils {
      * @param username username for BASIC authentication
      * @param password password for BASIC authentication
      * @return string response
-     * @throws ClientProtocolException
      * @throws IOException
      */
-    public static InputStream connectCDS(final String url, final String username, final String password) throws ClientProtocolException, IOException {
+    public static InputStream connectCDS(final String url, final String username, final String password) throws IOException {
         if (StringUtils.isEmpty(url)) {
             return null;
         }

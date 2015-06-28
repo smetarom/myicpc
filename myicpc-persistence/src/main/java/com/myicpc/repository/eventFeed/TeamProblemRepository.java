@@ -17,7 +17,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public interface TeamProblemRepository extends JpaRepository<TeamProblem, Long>, Serializable {
-    @Query("SELECT tp FROM TeamProblem tp JOIN FETCH tp.team JOIN FETCH tp.problem WHERE tp.systemId = ?1 AND tp.team.contest = ?2")
+    @Query("SELECT tp FROM TeamProblem tp JOIN FETCH tp.team t JOIN FETCH tp.problem p WHERE tp.systemId = ?1 AND t.contest = ?2")
     TeamProblem findBySystemIdAndTeamContest(Long systemId, Contest contest);
 
     List<TeamProblem> findByTeam(Team team);
@@ -53,6 +53,7 @@ public interface TeamProblemRepository extends JpaRepository<TeamProblem, Long>,
     @Query(value = "SELECT COUNT(tp) FROM TeamProblem tp WHERE tp.team = ?1 and tp.problem = ?2")
     Long countTeamProblemsByTeamAndProblem(Team team, Problem problem);
 
+    @Query("SELECT ts FROM TeamProblem ts WHERE ts.team = ?1 AND ts.problem = ?2 ORDER BY ts.time ASC")
     List<TeamProblem> findByTeamAndProblemOrderByTimeAsc(Team team, Problem problem);
 
     Long countByTeamContest(Contest contest);

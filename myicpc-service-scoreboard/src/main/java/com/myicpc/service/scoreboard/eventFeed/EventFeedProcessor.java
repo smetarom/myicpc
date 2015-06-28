@@ -1,5 +1,6 @@
 package com.myicpc.service.scoreboard.eventFeed;
 
+import com.myicpc.commons.utils.WebServiceUtils;
 import com.myicpc.dto.eventFeed.convertor.ProblemConverter;
 import com.myicpc.dto.eventFeed.convertor.TeamConverter;
 import com.myicpc.dto.eventFeed.visitor.EventFeedVisitor;
@@ -82,14 +83,12 @@ public class EventFeedProcessor {
             InputStream in = null;
             System.out.println("event feed start");
             try {
-                in = eventFeedWSService.connectCDS(contestSettings.getEventFeedURL(), contestSettings.getEventFeedUsername(),
+                in = WebServiceUtils.connectCDS(contestSettings.getEventFeedURL(), contestSettings.getEventFeedUsername(),
                         contestSettings.getEventFeedPassword());
                 reader = new InputStreamReader(in);
                 parseXML(reader, contest, eventFeedControl);
             } catch (IOException ex) {
                 logger.error(ex.getMessage(), ex);
-            } catch (EventFeedException ex) {
-                logger.error("Event feed connection failed. Reason: " + ex.getMessage());
             } catch (ClassNotFoundException ex) {
                 logger.error("Non existing Java representation of the XML sctructure", ex);
             } catch (Exception ex) {
@@ -115,9 +114,7 @@ public class EventFeedProcessor {
                 }
                 // Ignore testcases
                 XMLEntity elem = (XMLEntity) in.readObject();
-                if (!(elem instanceof TestcaseXML)) {
-                    elem.accept(eventFeedVisitor, contest);
-                }
+                elem.accept(eventFeedVisitor, contest);
             }
         } catch (EOFException ex) {
             logger.info("Event feed parsing is done.");

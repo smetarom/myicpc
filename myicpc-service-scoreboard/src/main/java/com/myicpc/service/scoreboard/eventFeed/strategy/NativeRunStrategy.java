@@ -1,4 +1,4 @@
-package com.myicpc.service.scoreboard.eventFeed;
+package com.myicpc.service.scoreboard.eventFeed.strategy;
 
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.LastTeamProblem;
