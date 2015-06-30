@@ -20,6 +20,9 @@ public interface TeamProblemRepository extends JpaRepository<TeamProblem, Long>,
     @Query("SELECT tp FROM TeamProblem tp JOIN FETCH tp.team t JOIN FETCH tp.problem p WHERE tp.systemId = ?1 AND t.contest = ?2")
     TeamProblem findBySystemIdAndTeamContest(Long systemId, Contest contest);
 
+    @Query("SELECT tp.judged FROM TeamProblem tp JOIN tp.team t WHERE tp.systemId = ?1 AND t.contest = ?2")
+    Boolean getJudgedBySystemIdAndTeamContest(Long systemId, Contest contest);
+
     List<TeamProblem> findByTeam(Team team);
 
     List<TeamProblem> findByTeamOrderByTimeDesc(Team team);

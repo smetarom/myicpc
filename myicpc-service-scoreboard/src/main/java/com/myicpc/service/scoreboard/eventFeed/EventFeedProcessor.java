@@ -46,9 +46,14 @@ import java.util.concurrent.Future;
 @Service
 public class EventFeedProcessor {
     private static final Logger logger = LoggerFactory.getLogger(EventFeedProcessor.class);
-
-    @Autowired
-    private EventFeedWSService eventFeedWSService;
+    /**
+     * Default value of the backoff timer in ms
+     */
+    private static final long BASE_EXPONENTIAL_BACKOFF = 1000;
+    /**
+     * Maximum value of the backoff timer in ms
+     */
+    private static final long MAX_EXPONENTIAL_BACKOFF = 60 * BASE_EXPONENTIAL_BACKOFF;
 
     @Autowired
     private EventFeedVisitor eventFeedVisitor;
@@ -57,16 +62,7 @@ public class EventFeedProcessor {
     private ContestRepository contestRepository;
 
     @Autowired
-    private TeamRepository teamRepository;
-
-    @Autowired
-    private ProblemRepository problemRepository;
-
-    @Autowired
     private EventFeedControlRepository eventFeedControlRepository;
-
-    @Autowired
-    private RegionRepository regionRepository;
 
     public void run() {
         for (Contest contest : contestRepository.findAll()) {
@@ -81,29 +77,41 @@ public class EventFeedProcessor {
             EventFeedControl eventFeedControl = getCurrentEventFeedControl(contest);
             Reader reader = null;
             InputStream in = null;
-            System.out.println("event feed start");
-            try {
-                in = WebServiceUtils.connectCDS(contestSettings.getEventFeedURL(), contestSettings.getEventFeedUsername(),
-                        contestSettings.getEventFeedPassword());
-                reader = new InputStreamReader(in);
-                parseXML(reader, contest, eventFeedControl);
-            } catch (IOException ex) {
-                logger.error(ex.getMessage(), ex);
-            } catch (ClassNotFoundException ex) {
-                logger.error("Non existing Java representation of the XML sctructure", ex);
-            } catch (Exception ex) {
-                logger.error("Unexpected error occured", ex);
-            } finally {
-                IOUtils.closeQuietly(reader);
-                IOUtils.closeQuietly(in);
+            long exponentialBackoff = BASE_EXPONENTIAL_BACKOFF;
+            logger.info("Starting event feed listener for contest " + contest.getCode());
+            while (true) {
+                try {
+                    in = WebServiceUtils.connectCDS(contestSettings.getEventFeedURL(), contestSettings.getEventFeedUsername(),
+                            contestSettings.getEventFeedPassword());
+                    reader = new InputStreamReader(in);
+                    // reset timer back after successful connection to event feed provider
+                    exponentialBackoff = BASE_EXPONENTIAL_BACKOFF;
+                    parseXML(reader, contest, eventFeedControl);
+                    break;
+                } catch (Exception ex) {
+                    logger.error(ex.getMessage(), ex);
+                    logger.info("Resuming event feed listener for contest " + contest.getCode() + " after interruption.");
+                    exponentialBackoff *= 2;
+                    if (exponentialBackoff > MAX_EXPONENTIAL_BACKOFF) {
+                        exponentialBackoff = MAX_EXPONENTIAL_BACKOFF;
+                    }
+                    try {
+                        Thread.sleep(exponentialBackoff);
+                    } catch (InterruptedException e) {
+                    }
+                } finally {
+                    IOUtils.closeQuietly(reader);
+                    IOUtils.closeQuietly(in);
+                }
             }
         } else {
             logger.error("Event feed settings is not correct for contest " + contest.getName());
         }
-        return new AsyncResult<Void>(null);
+        logger.info("Event feed listener for contest {} is stopped", contest.getCode());
+        return new AsyncResult<>(null);
     }
 
-    protected void parseXML(final Reader reader, final Contest contest, EventFeedControl eventFeedControl) throws IOException, ClassNotFoundException {
+    protected void parseXML(final Reader reader, final Contest contest, EventFeedControl eventFeedControl) throws IOException {
         final XStream xStream = createEventFeedParser();
         ObjectInputStream in = xStream.createObjectInputStream(reader);
         try {
@@ -113,8 +121,12 @@ public class EventFeedProcessor {
                     break;
                 }
                 // Ignore testcases
-                XMLEntity elem = (XMLEntity) in.readObject();
-                elem.accept(eventFeedVisitor, contest);
+                try {
+                    XMLEntity elem = (XMLEntity) in.readObject();
+                    elem.accept(eventFeedVisitor, contest);
+                } catch (ClassNotFoundException e) {
+                    logger.warn("Non existing Java representation of the XML structure: " + e.getMessage(), e);
+                }
             }
         } catch (EOFException ex) {
             logger.info("Event feed parsing is done.");

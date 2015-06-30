@@ -38,6 +38,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -160,22 +162,25 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
         }
     }
 
+    @PersistenceContext
+    private EntityManager em;
+
     @Override
     @Transactional
     public void visit(TeamProblemXML xmlTeamProblem, Contest contest) {
-
-        TeamProblem teamProblem = teamProblemRepository.findBySystemIdAndTeamContest(xmlTeamProblem.getSystemId(), contest);
-
-        if (teamProblem != null) {
+        // TODO Consider remove JOIN team from query
+        Boolean judged = teamProblemRepository.getJudgedBySystemIdAndTeamContest(xmlTeamProblem.getSystemId(), contest);
+        if (judged != null) {
             if ("fresh".equalsIgnoreCase(xmlTeamProblem.getStatus())) {
                 logger.info("Skip 'fresh' submission {} from team {}", xmlTeamProblem.getSystemId(), xmlTeamProblem.getTeamId());
                 return;
             }
-            if ("done".equalsIgnoreCase(xmlTeamProblem.getStatus()) && teamProblem.getJudged()) {
+            if ("done".equalsIgnoreCase(xmlTeamProblem.getStatus()) && judged) {
                 logger.info("Skip 'done' submission {} from team {}", xmlTeamProblem.getSystemId(), xmlTeamProblem.getTeamId());
                 return;
             }
         }
+        TeamProblem teamProblem = teamProblemRepository.findBySystemIdAndTeamContest(xmlTeamProblem.getSystemId(), contest);
 
         try {
             FeedRunStrategy strategy = selectStrategy(contest);
