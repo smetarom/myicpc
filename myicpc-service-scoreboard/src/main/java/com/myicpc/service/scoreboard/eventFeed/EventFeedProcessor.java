@@ -28,6 +28,7 @@ import com.myicpc.dto.eventFeed.parser.TestcaseXML;
 import com.myicpc.dto.eventFeed.parser.XMLEntity;
 import com.myicpc.service.scoreboard.exception.EventFeedException;
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.StreamException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -80,28 +81,33 @@ public class EventFeedProcessor {
             Reader reader = null;
             CountingInputStream in = null;
             logger.info("Starting event feed polling for contest " + contest.getCode());
+            long startTime;
             long spendTime;
             long bytesToSkip = 0;
             while (true) {
+                startTime = System.currentTimeMillis();
                 try {
-                    long startTime = System.currentTimeMillis();
                     in = new CountingInputStream(WebServiceUtils.connectCDS(contestSettings.getEventFeedURL(), contestSettings.getEventFeedUsername(),
                             contestSettings.getEventFeedPassword()));
-                    long skip = in.skip(bytesToSkip);
-                    System.out.println("skipped: " + skip);
-//                    if (bytesToSkip == 0) {
+                    IOUtils.skipFully(in, bytesToSkip);
+                    if (bytesToSkip == 0) {
                         reader = new InputStreamReader(in);
-//                    } else {
-//                        InputStream staringStream = new ByteArrayInputStream(EVENT_FEED_OPENING_TAG.getBytes(FormatUtils.DEFAULT_ENCODING));
-//                        reader = new InputStreamReader(new SequenceInputStream(staringStream, in));
-//                    }
-                    System.out.print(IOUtils.toString(in, FormatUtils.DEFAULT_ENCODING));
-//                    parseXML(reader, contest);
-                    spendTime = System.currentTimeMillis() - startTime;
-                    if (10000 - spendTime > 0) {
-                        Thread.sleep(10000 - spendTime);
+                    } else {
+                        // append starting tag <contest> to make valid XML for parsing
+                        InputStream staringStream = new ByteArrayInputStream(EVENT_FEED_OPENING_TAG.getBytes(FormatUtils.DEFAULT_ENCODING));
+                        reader = new InputStreamReader(new SequenceInputStream(staringStream, in));
                     }
-//                    break;
+                    parseXML(reader, contest);
+                    break;
+                } catch (StreamException e) {
+                    // invalid XML, expected during the polling
+                    spendTime = System.currentTimeMillis() - startTime;
+                    if (pollPeriod - spendTime > 0) {
+                        try {
+                            Thread.sleep(pollPeriod - spendTime);
+                        } catch (InterruptedException e1) {
+                        }
+                    }
                 } catch (Exception e) {
                     logger.error(e.getMessage(), e);
                 } finally {
@@ -115,10 +121,8 @@ public class EventFeedProcessor {
         } else {
             logger.error("Event feed settings is not correct for contest " + contest.getName());
         }
-        logger.info("Event feed listener for contest {} is stopped", contest.getCode());
+        logger.info("Event feed polling for contest {} has stopped", contest.getCode());
         return new AsyncResult<>(null);
-
-//        return new AsyncResult<>(null);
     }
 
     @Async
@@ -157,7 +161,7 @@ public class EventFeedProcessor {
         } else {
             logger.error("Event feed settings is not correct for contest " + contest.getName());
         }
-        logger.info("Event feed listener for contest {} is stopped", contest.getCode());
+        logger.info("Event feed listener for contest {} has stopped", contest.getCode());
         return new AsyncResult<>(null);
     }
 
