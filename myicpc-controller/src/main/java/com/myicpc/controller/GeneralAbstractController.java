@@ -105,6 +105,11 @@ public abstract class GeneralAbstractController {
         return MessageUtils.getMessage(key);
     }
 
+
+    protected String getMessageWithDefault(final String key, final String defaultText) {
+        return MessageUtils.getMessageWithDefault(key, defaultText);
+    }
+
     protected String getMessage(final String key, final Object... params) {
         return MessageUtils.getMessage(key, params);
     }

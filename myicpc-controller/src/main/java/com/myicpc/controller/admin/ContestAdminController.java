@@ -4,12 +4,14 @@ import com.google.common.collect.Lists;
 import com.google.gson.JsonParser;
 import com.myicpc.commons.utils.WebServiceUtils;
 import com.myicpc.controller.GeneralAdminController;
+import com.myicpc.dto.TranslationDto;
 import com.myicpc.enums.FeedRunStrategyType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.repository.contest.ContestRepository;
 import com.myicpc.service.contest.CMService;
 import com.myicpc.service.contest.ContestService;
 import com.myicpc.service.settings.GlobalSettingsService;
+import com.myicpc.service.webSevice.ContestWSService;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -40,6 +42,9 @@ public class ContestAdminController extends GeneralAdminController {
 
     @Autowired
     private ContestRepository contestRepository;
+
+    @Autowired
+    private ContestWSService contestWSService;
 
     @RequestMapping(value = "/private/contests", method = RequestMethod.GET)
     public String contests(Model model) {
@@ -103,25 +108,21 @@ public class ContestAdminController extends GeneralAdminController {
 
     @RequestMapping(value = "/private/contest/checkWebService", method = RequestMethod.GET)
     @ResponseBody
-    public String checkWebService(@ModelAttribute Contest contest, @RequestParam String contestCode, @RequestParam String wsToken,
-                                  RedirectAttributes redirectAttributes) throws IOException {
+    public String checkWebService(@ModelAttribute Contest contest, @RequestParam String contestCode, @RequestParam String wsToken) {
         contest.setCode(contestCode);
         contest.getWebServiceSettings().setWsCMToken(wsToken);
-        String result = "";
         try {
-            // TODO renew web service check, maybe create simple to check in CM4
-            result = cmService.getUniversitiesFromCM(contest);
-            new JsonParser().parse(result);
-            return getMessage("contestAdmin.wsCheck.passed");
+            TranslationDto translationDto = contestWSService.pingCMContest(contest);
+            return getMessageWithDefault(translationDto.getCode(), translationDto.getText());
         } catch (Exception ex) {
-            String error = "";
-            int startFrom = result.indexOf("<message>");
-            int endIn = result.indexOf("</message>");
-            if (startFrom > 0 && endIn > 0) {
-                error = result.substring(startFrom, endIn);
-            }
-            return getMessage("contestAdmin.wsCheck.failed", error);
+            return getMessage("contestAdmin.wsCheck.failed");
         }
+    }
+
+    @RequestMapping(value = "/private/contest/cm-contest-details", method = RequestMethod.GET)
+    @ResponseBody
+    public String getContestDetails(@ModelAttribute Contest contest) throws IOException {
+        return contestWSService.getContestDetailFromCM(contest);
     }
 
     /**

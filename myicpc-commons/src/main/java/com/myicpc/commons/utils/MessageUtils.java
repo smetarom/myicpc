@@ -41,6 +41,14 @@ public class MessageUtils {
         return messageBundle.getString(key);
     }
 
+    public static String getMessageWithDefault(final String key, final String defaultText) {
+        try {
+            return messageBundle.getString(key);
+        } catch (MissingResourceException e) {
+            return defaultText;
+        }
+    }
+
     public static String getMessage(final String key, final Locale locale) {
         return getMessage(key);
     }

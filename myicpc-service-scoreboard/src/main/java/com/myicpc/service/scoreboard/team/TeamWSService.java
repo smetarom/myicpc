@@ -23,6 +23,16 @@ public class TeamWSService extends AbstractWSService {
     }
 
     /**
+     * Get JSON data about regions from ICPC WS
+     *
+     * @return JSON data
+     * @throws IOException
+     */
+    public String getRegionsFromCM(final Contest contest) throws IOException {
+        return (String) connectCM("/ws/myicpc/contest/" + contest.getCode() + "/sites", contest);
+    }
+
+    /**
      * Get JSON data about teams from ICPC WS
      *
      * @return JSON data
