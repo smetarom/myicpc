@@ -30,4 +30,16 @@ public enum FeedRunStrategyType implements GeneralEnum {
     public String getName() {
         return this.toString();
     }
+
+    public boolean isPolling() {
+        return this == POLLING;
+    }
+
+    public boolean isJsonScoreboard() {
+        return this == JSON;
+    }
+
+    public boolean isNative() {
+        return this == NATIVE;
+    }
 }

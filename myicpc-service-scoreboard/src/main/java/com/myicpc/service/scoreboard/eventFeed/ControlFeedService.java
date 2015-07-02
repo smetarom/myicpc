@@ -101,7 +101,12 @@ public class ControlFeedService {
         if (running != null && !running.isDone()) {
             throw new EventFeedException(MessageUtils.getMessage("admin.panel.feed.reset.runningThread"));
         }
-        Future<Void> newFeedProcessor = eventFeedProcessor.runEventFeed(contest);
+        Future<Void> newFeedProcessor;
+        if (hasContestPollingStrategy(contest)) {
+            newFeedProcessor = eventFeedProcessor.pollingEventFeed(contest, 60000);
+        } else {
+            newFeedProcessor = eventFeedProcessor.runEventFeed(contest);
+        }
         runningFeedProcessors.put(contest.getCode(), newFeedProcessor);
     }
 
@@ -157,4 +162,14 @@ public class ControlFeedService {
         Future<Void> running = runningFeedProcessors.get(contest.getCode());
         return running == null ? false : !running.isDone();
     }
+
+    private boolean hasContestPollingStrategy(final Contest contest) {
+        if (contest != null && contest.getContestSettings() != null
+                && contest.getContestSettings().getScoreboardStrategyType() != null) {
+            return contest.getContestSettings().getScoreboardStrategyType().isPolling();
+        }
+        return false;
+    }
+
+
 }

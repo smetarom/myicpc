@@ -232,6 +232,8 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
                 return nativeRunStrategy;
             case JSON:
                 return jsonRunStrategy;
+            case POLLING:
+                return nativeRunStrategy;
             default:
                 throw new EventFeedException("No suitable event feed strategy found.");
         }

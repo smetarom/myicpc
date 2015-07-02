@@ -1,5 +1,8 @@
 package com.myicpc.service.scoreboard.eventFeed;
 
+import com.google.common.io.CountingInputStream;
+import com.myicpc.commons.utils.FormatUtils;
+import com.myicpc.commons.utils.MessageUtils;
 import com.myicpc.commons.utils.WebServiceUtils;
 import com.myicpc.dto.eventFeed.convertor.ProblemConverter;
 import com.myicpc.dto.eventFeed.convertor.TeamConverter;
@@ -35,17 +38,20 @@ import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayInputStream;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.Reader;
+import java.io.SequenceInputStream;
 import java.util.concurrent.Future;
 
 @Service
 public class EventFeedProcessor {
     private static final Logger logger = LoggerFactory.getLogger(EventFeedProcessor.class);
+    private static final String EVENT_FEED_OPENING_TAG = "<contest>";
     /**
      * Default value of the backoff timer in ms
      */
@@ -61,9 +67,6 @@ public class EventFeedProcessor {
     @Autowired
     private ContestRepository contestRepository;
 
-    @Autowired
-    private EventFeedControlRepository eventFeedControlRepository;
-
     public void run() {
         for (Contest contest : contestRepository.findAll()) {
             runEventFeed(contest);
@@ -71,10 +74,57 @@ public class EventFeedProcessor {
     }
 
     @Async
+    public Future<Void> pollingEventFeed(final Contest contest, long pollPeriod) {
+        ContestSettings contestSettings = contest.getContestSettings();
+        if (contestSettings != null && !StringUtils.isEmpty(contestSettings.getEventFeedURL())) {
+            Reader reader = null;
+            CountingInputStream in = null;
+            logger.info("Starting event feed polling for contest " + contest.getCode());
+            long spendTime;
+            long bytesToSkip = 0;
+            while (true) {
+                try {
+                    long startTime = System.currentTimeMillis();
+                    in = new CountingInputStream(WebServiceUtils.connectCDS(contestSettings.getEventFeedURL(), contestSettings.getEventFeedUsername(),
+                            contestSettings.getEventFeedPassword()));
+                    long skip = in.skip(bytesToSkip);
+                    System.out.println("skipped: " + skip);
+//                    if (bytesToSkip == 0) {
+                        reader = new InputStreamReader(in);
+//                    } else {
+//                        InputStream staringStream = new ByteArrayInputStream(EVENT_FEED_OPENING_TAG.getBytes(FormatUtils.DEFAULT_ENCODING));
+//                        reader = new InputStreamReader(new SequenceInputStream(staringStream, in));
+//                    }
+                    System.out.print(IOUtils.toString(in, FormatUtils.DEFAULT_ENCODING));
+//                    parseXML(reader, contest);
+                    spendTime = System.currentTimeMillis() - startTime;
+                    if (10000 - spendTime > 0) {
+                        Thread.sleep(10000 - spendTime);
+                    }
+//                    break;
+                } catch (Exception e) {
+                    logger.error(e.getMessage(), e);
+                } finally {
+                    if (in != null) {
+                        bytesToSkip = in.getCount();
+                    }
+                    IOUtils.closeQuietly(reader);
+                    IOUtils.closeQuietly(in);
+                }
+            }
+        } else {
+            logger.error("Event feed settings is not correct for contest " + contest.getName());
+        }
+        logger.info("Event feed listener for contest {} is stopped", contest.getCode());
+        return new AsyncResult<>(null);
+
+//        return new AsyncResult<>(null);
+    }
+
+    @Async
     public Future<Void> runEventFeed(final Contest contest) {
         ContestSettings contestSettings = contest.getContestSettings();
         if (contestSettings != null && !StringUtils.isEmpty(contestSettings.getEventFeedURL())) {
-            EventFeedControl eventFeedControl = getCurrentEventFeedControl(contest);
             Reader reader = null;
             InputStream in = null;
             long exponentialBackoff = BASE_EXPONENTIAL_BACKOFF;
@@ -86,7 +136,7 @@ public class EventFeedProcessor {
                     reader = new InputStreamReader(in);
                     // reset timer back after successful connection to event feed provider
                     exponentialBackoff = BASE_EXPONENTIAL_BACKOFF;
-                    parseXML(reader, contest, eventFeedControl);
+                    parseXML(reader, contest);
                     break;
                 } catch (Exception ex) {
                     logger.error(ex.getMessage(), ex);
@@ -111,7 +161,7 @@ public class EventFeedProcessor {
         return new AsyncResult<>(null);
     }
 
-    protected void parseXML(final Reader reader, final Contest contest, EventFeedControl eventFeedControl) throws IOException {
+    protected void parseXML(final Reader reader, final Contest contest) throws IOException {
         final XStream xStream = createEventFeedParser();
         ObjectInputStream in = xStream.createObjectInputStream(reader);
         try {
@@ -139,16 +189,5 @@ public class EventFeedProcessor {
         xStream.processAnnotations(new Class[]{ContestXML.class, LanguageXML.class, RegionXML.class, JudgementXML.class, ProblemXML.class, TeamXML.class,
                 TeamProblemXML.class, TestcaseXML.class, FinalizedXML.class, ClarificationXML.class});
         return xStream;
-    }
-
-    @Transactional
-    private EventFeedControl getCurrentEventFeedControl(Contest contest) {
-        EventFeedControl eventFeedControl = eventFeedControlRepository.findByContest(contest);
-        if (eventFeedControl == null) {
-            eventFeedControl = new EventFeedControl(contest);
-            eventFeedControl = eventFeedControlRepository.save(eventFeedControl);
-        }
-        eventFeedControl.restartControl();
-        return eventFeedControl;
     }
 }
