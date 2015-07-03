@@ -31,35 +31,34 @@
 			</p>
 		</c:if>
 
+		<c:if test="${not empty event.location}">
+			<h3>
+				<spring:message code="venue" />: ${event.location.name}
+			</h3>
+			<c:if test="${sitePreference.mobile}">
+				<a href="<spring:url value="${contestURL}/venue/${event.location.code}" />" class="btn btn-info btn-block" style="margin: 10px 0">
+					<t:glyphIcon icon="map-marker" /> <spring:message code="venue.detail"/>
+				</a>
+			</c:if>
+			<c:if test="${not sitePreference.mobile}">
+				<a href="<spring:url value="${contestURL}/venues#${event.location.code}" />" class="btn btn-info btn-block" style="margin: 10px 0">
+					<t:glyphIcon icon="map-marker" /> <spring:message code="venue.detail"/>
+				</a>
+			</c:if>
+			<c:if test="${not empty event.location.googleMapUrl}">
+				<iframe width="100%" height="350" src="${event.location.googleMapUrl}" class="google-map-frame"></iframe>
+			</c:if>
+		</c:if>
+	</div>
+	<div class="col-md-6">
 		<h3>
 			<spring:message code="twitter.for" />
 			${hashTags}
 		</h3>
 
-        <%--TODO--%>
+		<%--TODO--%>
 		<%--<%@ include file="/WEB-INF/views/fragment/social/tweets.jsp"%>--%>
-
-
-	</div>
-	<div class="col-md-6">
-		<c:if test="${not empty event.location}">
-			<h3>
-				<spring:message code="venue" />: ${event.location.name}
-			</h3>
-            <c:if test="${sitePreference.mobile}">
-                <a href="<spring:url value="${contestURL}/venue/${event.location.code}" />" class="btn btn-info btn-block" style="margin: 10px 0">
-                    <t:glyphIcon icon="map-marker" /> <spring:message code="venue.detail"/>
-                </a>
-            </c:if>
-            <c:if test="${not sitePreference.mobile}">
-                <a href="<spring:url value="${contestURL}/venues#${event.location.code}" />" class="btn btn-info btn-block" style="margin: 10px 0">
-                    <t:glyphIcon icon="map-marker" /> <spring:message code="venue.detail"/>
-                </a>
-            </c:if>
-			<c:if test="${not empty event.location.googleMapUrl}">
-				<iframe width="100%" height="350" src="${event.location.googleMapUrl}" class="google-map-frame"></iframe>
-			</c:if>
-		</c:if>
+		
         <%--TODO--%>
 		<%--<jsp:include page="/WEB-INF/views/fragment/team/photos.jsp">--%>
 			<%--<jsp:param name="picasaUrl"--%>

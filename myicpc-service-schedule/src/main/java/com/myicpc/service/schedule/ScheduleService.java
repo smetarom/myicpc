@@ -1,10 +1,8 @@
 package com.myicpc.service.schedule;
 
-import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.myicpc.commons.utils.TimeUtils;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.schedule.Event;
 import com.myicpc.model.schedule.EventRole;
@@ -22,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.text.DateFormat;
@@ -150,9 +149,9 @@ public class ScheduleService extends EntityManagerService {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Event> q = cb.createQuery(Event.class);
         Root<Event> c = q.from(Event.class);
-        Join<Event, EventRole> eventRole = c.join("roles");
+        Join<Event, EventRole> eventRole = c.join("roles", JoinType.LEFT);
         q.select(c).distinct(true);
-        Predicate rolesPredicate = cb.disjunction();
+        Predicate rolesPredicate = cb.isEmpty(c.<List>get("roles"));
         for (String roleId : roleIds) {
             rolesPredicate = cb.or(rolesPredicate, cb.equal(eventRole.<Long> get("id"), roleId));
         }
