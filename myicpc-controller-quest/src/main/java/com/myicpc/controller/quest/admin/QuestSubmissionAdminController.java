@@ -7,6 +7,7 @@ import com.myicpc.repository.quest.QuestChallengeRepository;
 import com.myicpc.repository.quest.QuestParticipantRepository;
 import com.myicpc.repository.quest.QuestSubmissionRepository;
 import com.myicpc.service.quest.QuestMngmService;
+import com.myicpc.service.quest.QuestService;
 import com.myicpc.service.quest.dto.QuestSubmissionFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -77,6 +78,7 @@ public class QuestSubmissionAdminController extends GeneralAdminController {
 
     private void initSubmissionListModel(final Model model, final QuestSubmissionFilter submissionFilter, final Contest contest, final Pageable pageable) {
         Page<QuestSubmission> submissions = questMngmService.getFiltredQuestSumbissions(submissionFilter, contest, pageable);
+        QuestService.applyHashtagPrefixToSubmissions(contest.getQuestConfiguration().getHashtagPrefix(), submissions.getContent());
         model.addAttribute("submissions", submissions);
         model.addAttribute("challenges", challengeRepository.findByContestOrderByNameAsc(contest));
         model.addAttribute("participants", participantRepository.findByContestOrderByContestParticipantLastnameAsc(contest));

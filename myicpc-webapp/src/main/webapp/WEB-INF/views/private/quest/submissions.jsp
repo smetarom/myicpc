@@ -58,7 +58,7 @@
 		</div>
 		
 		<div class="clearfix">
-            <c:forEach var="submission" items="${submissions.getContent()}" varStatus="status">
+            <c:forEach var="submission" items="${submissions.content}" varStatus="status">
                 <div class="col-sm-4">
                     <div class="thumbnail">
                         <t:plainForm action="/private${contestURL}/quest/submission/${submission.id}/accept" style="padding: 10px 10px; background-color: #dff0d8;">
@@ -106,7 +106,7 @@
                     <br class="clear" />
                 </c:if>
             </c:forEach>
-            <c:if test="${empty submissions.getContent()}">
+            <c:if test="${empty submissions.content}">
                 <div class="no-items-available">
                     <spring:message code="questAdmin.submissions.noResult" />
                 </div>

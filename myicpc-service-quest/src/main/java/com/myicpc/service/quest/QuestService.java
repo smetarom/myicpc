@@ -167,6 +167,14 @@ public class QuestService {
         }
     }
 
+    public static void applyHashtagPrefixToSubmissions(String hashtagPrefix, final List<QuestSubmission> submissions) {
+        if (submissions != null) {
+            for (QuestSubmission submission : submissions) {
+                submission.getChallenge().setHashtagPrefix(hashtagPrefix);
+            }
+        }
+    }
+
     @Transactional
     public void createNotificationsForNewQuestChallenges(Contest contest) {
         List<QuestChallenge> challenges = questChallengeRepository.findAllNonpublishedStartedChallenges(new Date(), contest);

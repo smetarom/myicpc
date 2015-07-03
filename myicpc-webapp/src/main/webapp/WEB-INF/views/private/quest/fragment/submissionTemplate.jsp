@@ -4,7 +4,7 @@
     <strong>
         <a href="<spring:url value="${contestURL}/quest/challenges#${submission.challenge.hashtag}" />">${submission.challenge.name}</a>
         <br />
-        ${submission.participant.contestParticipant.fullname}
+        <a href="<spring:url value="${contestURL}/people/${submission.participant.contestParticipant.id}" />">${submission.participant.contestParticipant.fullname}</a>
     </strong>
 </div>
 <hr class="divider" />
