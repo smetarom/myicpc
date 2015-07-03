@@ -16,13 +16,12 @@ import java.util.List;
 @Service
 public class QuestReportService extends AbstractReportService {
 
-    public void downloadQuestChallengesGuide(List<QuestChallenge> questChallenges, OutputStream outputStream) throws DRException {
-        exportToPDF(reportQuestChallengesGuide(questChallenges), outputStream);
+    public void downloadQuestChallengesGuide(List<QuestChallenge> questChallenges, OutputStream outputStream, boolean generateTOC) throws DRException {
+        exportToPDF(reportQuestChallengesGuide(questChallenges, generateTOC), outputStream);
     }
 
-    public JasperReportBuilder reportQuestChallengesGuide(List<QuestChallenge> questChallenges) {
-        QuestChallengeGuide questChallengeGuide = new QuestChallengeGuide();
+    public JasperReportBuilder reportQuestChallengesGuide(List<QuestChallenge> questChallenges, boolean generateTOC) {
+        QuestChallengeGuide questChallengeGuide = new QuestChallengeGuide(generateTOC);
         return questChallengeGuide.build(questChallenges);
-
     }
 }

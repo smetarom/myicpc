@@ -124,13 +124,13 @@ public class QuestChallengeAdminController extends GeneralAdminController {
         return "redirect:/private" + getContestURL(contestCode) + "/quest/challenges";
     }
 
-    @RequestMapping(value = "/private/{contestCode}/quest/report/guide-full", method = RequestMethod.GET)
+    @RequestMapping(value = "/private/{contestCode}/quest/report/QuestGuide.pdf", method = RequestMethod.GET)
     public void exportUsers(@PathVariable final String contestCode, HttpServletResponse response) {
         Contest contest = getContest(contestCode, null);
         try {
-            List<QuestChallenge> challenges = challengeRepository.findByContest(contest);
+            List<QuestChallenge> challenges = challengeRepository.findByContestOrderByNameAsc(contest);
             QuestService.applyHashtagPrefix(contest.getQuestConfiguration().getHashtagPrefix(), challenges);
-            questReportService.downloadQuestChallengesGuide(challenges, response.getOutputStream());
+            questReportService.downloadQuestChallengesGuide(challenges, response.getOutputStream(), true);
             response.setContentType("application/pdf");
             response.addHeader("Content-Disposition", "attachment; filename=\"document.pdf\"");
             response.flushBuffer();

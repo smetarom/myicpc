@@ -5,18 +5,21 @@ import net.sf.dynamicreports.report.base.expression.AbstractSimpleExpression;
 import net.sf.dynamicreports.report.base.expression.AbstractValueFormatter;
 import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
 import net.sf.dynamicreports.report.builder.component.HorizontalListBuilder;
+import net.sf.dynamicreports.report.builder.component.TextFieldBuilder;
 import net.sf.dynamicreports.report.builder.expression.MessageExpression;
 import net.sf.dynamicreports.report.builder.style.StyleBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
+import net.sf.dynamicreports.report.constant.Markup;
 import net.sf.dynamicreports.report.constant.VerticalAlignment;
-import net.sf.dynamicreports.report.definition.ReportParameters;
 
 import java.awt.*;
 import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import static net.sf.dynamicreports.report.builder.DynamicReports.*;
+import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
+import static net.sf.dynamicreports.report.builder.DynamicReports.report;
+import static net.sf.dynamicreports.report.builder.DynamicReports.stl;
 
 /**
  * @author Roman Smetana
@@ -46,13 +49,18 @@ public class ReportTemplate {
     }
 
     public static JasperReportBuilder baseReport() {
+        JasperReportBuilder baseReport = baseSubreport()
+                .pageFooter(createFooter());
+        return baseReport;
+    }
+
+    public static JasperReportBuilder baseSubreport() {
         ResourceBundle reportResourceBundle = ResourceBundle.getBundle("i18n/report", Locale.US);
         JasperReportBuilder baseReport = report()
                 .setResourceBundle(reportResourceBundle)
                 .setColumnStyle(columnStyle)
                 .setColumnTitleStyle(columnTitleStyle)
-                .highlightDetailEvenRows()
-                .pageFooter(createFooter());
+                .highlightDetailEvenRows();
         return baseReport;
     }
 
@@ -71,5 +79,23 @@ public class ReportTemplate {
 
     public static MessageExpression translateText(String resourceKey, Object... arguments) {
         return new MessageExpression(resourceKey, arguments);
+    }
+
+    public static <T> TextFieldBuilder<String> labeledText(String key, T value) {
+        TextFieldBuilder<String> builder = cmp.text(new ReportExpressions.LabelExpression<>(translateText(key), value));
+        builder.setStyle(stl.style().setMarkup(Markup.HTML));
+        return builder;
+    }
+
+    public static <T> TextFieldBuilder<String> labeledText(String key, T value, AbstractValueFormatter formatter) {
+        TextFieldBuilder<String> builder = cmp.text(new ReportExpressions.LabelExpression<>(translateText(key), value, formatter));
+        builder.setStyle(stl.style().setMarkup(Markup.HTML));
+        return builder;
+    }
+
+    public static <T> TextFieldBuilder<String> labeledText(String key, AbstractSimpleExpression<T> expression) {
+        TextFieldBuilder<String> builder = cmp.text(new ReportExpressions.LabelExpression<>(translateText(key), expression));
+        builder.setStyle(stl.style().setMarkup(Markup.HTML));
+        return builder;
     }
 }

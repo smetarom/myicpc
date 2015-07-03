@@ -80,7 +80,13 @@
         </c:if>
 
         <div class="col-sm-6">
-            <h3><spring:message code="quest.challenge.title" /></h3>
+            <h3>
+                <a href="<spring:url value="${contestURL}/quest/challenge/QuestGuide.pdf" />" class="pull-right">
+                    <spring:message var="exportMsg" code="quest.challenge.export.title" />
+                    <t:glyphIcon icon="floppy-disk" title="${exportMsg}" />
+                </a>
+                <spring:message code="quest.challenge.title" />
+            </h3>
             <c:if test="${not empty challenges}">
                 <div id="quest-challanges-carousel" class="carousel slide" data-ride="carousel" data-interval="20000">
                     <!-- Wrapper for slides -->

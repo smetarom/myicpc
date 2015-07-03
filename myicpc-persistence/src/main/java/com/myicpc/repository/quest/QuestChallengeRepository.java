@@ -20,6 +20,9 @@ public interface QuestChallengeRepository extends JpaRepository<QuestChallenge, 
     @Query("SELECT qc FROM QuestChallenge qc WHERE qc.startDate < ?1 AND (qc.endDate IS NULL OR qc.endDate > ?1) AND qc.contest = ?2 ORDER BY qc.endDate")
     List<QuestChallenge> findByContestAvailableChallenges(Date now, Contest contest);
 
+    @Query("SELECT qc FROM QuestChallenge qc WHERE ?1 BETWEEN qc.startDate AND qc.endDate AND qc.contest = ?2 ORDER BY qc.name")
+    List<QuestChallenge> findCurrentChallengesByContestOrderByName(Date now, Contest contest);
+
     @Query("SELECT qc FROM QuestChallenge qc WHERE qc.startDate < ?1 AND qc.contest = ?2 ORDER BY qc.name")
     List<QuestChallenge> findOpenChallengesByContestOrderByName(Date now, Contest contest);
 

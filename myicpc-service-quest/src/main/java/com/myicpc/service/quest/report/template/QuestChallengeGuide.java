@@ -1,7 +1,6 @@
 package com.myicpc.service.quest.report.template;
 
 import com.myicpc.model.quest.QuestChallenge;
-import com.myicpc.service.report.template.ReportExpressions.LabelExpression;
 import com.myicpc.service.report.template.ReportFormatter;
 import com.myicpc.service.report.template.ReportTemplate;
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
@@ -20,9 +19,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import static com.myicpc.service.report.template.ReportTemplate.labeledText;
 import static com.myicpc.service.report.template.ReportTemplate.translateText;
 import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
-import static net.sf.dynamicreports.report.builder.DynamicReports.report;
 import static net.sf.dynamicreports.report.builder.DynamicReports.tableOfContentsHeading;
 
 /**
@@ -30,7 +29,10 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.tableOfContent
  */
 public class QuestChallengeGuide {
 
-    public QuestChallengeGuide() {
+    private boolean generateTOC;
+
+    public QuestChallengeGuide(boolean generateTOC) {
+        this.generateTOC = generateTOC;
     }
 
     public JasperReportBuilder build(List<QuestChallenge> questChallenges) {
@@ -39,8 +41,11 @@ public class QuestChallengeGuide {
         SubreportBuilder subreport = cmp.subreport(new SubreportExpression(questChallenges))
                 .setDataSource(new JREmptyDataSource());
 
-        report.tableOfContents();
+        if (generateTOC) {
+            report.tableOfContents();
+        }
         report.detail(subreport);
+        report.setDetailSplitType(SplitType.PREVENT);
 
         report.setDataSource(new JREmptyDataSource(questChallenges.size()));
         return report;
@@ -58,11 +63,11 @@ public class QuestChallengeGuide {
             int index = reportParameters.getReportRowNumber() - 1;
             QuestChallenge challenge = challenges.get(index);
 
-            TextFieldBuilder<String> title = cmp.text(challenge.getName() + "(#" + challenge.getHashtag() + ")")
+            TextFieldBuilder<String> title = cmp.text(challenge.getName() + " (#" + challenge.getHashtag() + ")")
                     .setStyle(ReportTemplate.h1Style)
                     .setTableOfContentsHeading(tableOfContentsHeading());
 
-            JasperReportBuilder report = report();
+            JasperReportBuilder report = ReportTemplate.baseSubreport();
             report.title(title);
             report.detail(
                     createChallengeComponent(challenge),
@@ -75,12 +80,15 @@ public class QuestChallengeGuide {
 
         VerticalListBuilder verticalList = cmp.verticalList();
 
-        verticalList.add(cmp.text(new LabelExpression<>(translateText("quest.challengeGuide.hashtag"), "#" + challenge.getHashtag())));
-        PointsExpression pointsExpression = new PointsExpression(challenge.getDefaultPoints(), challenge.isRequiresPhoto(), challenge.isRequiresVideo());
-        verticalList.add(cmp.text(new LabelExpression<>(translateText("quest.challengeGuide.points.awarded"), pointsExpression)));
-        verticalList.add(cmp.text(new LabelExpression<>(translateText("quest.challengeGuide.startDate"), challenge.getLocalStartDate(), ReportFormatter.dateTimeFormatter)));
+        verticalList.add(labeledText("quest.challengeGuide.hashtag", "#" + challenge.getHashtag()));
+        verticalList.add(labeledText("quest.challengeGuide.points.awarded", translateText("quest.challengeGuide.points.x", challenge.getDefaultPoints())));
+        verticalList.add(labeledText("quest.challengeGuide.startDate", challenge.getLocalStartDate(), ReportFormatter.dateTimeFormatter));
         if (challenge.getEndDate() != null) {
-            verticalList.add(cmp.text(new LabelExpression<>(translateText("quest.challengeGuide.endDate"), challenge.getLocalEndDate(), ReportFormatter.dateTimeFormatter)));
+            verticalList.add(labeledText("quest.challengeGuide.endDate", challenge.getLocalEndDate(), ReportFormatter.dateTimeFormatter));
+        }
+        if (challenge.isRequiresPhoto() || challenge.isRequiresVideo()) {
+            RequiredAttachmentsExpression requiredAttachmentsExpression = new RequiredAttachmentsExpression(challenge.isRequiresPhoto(), challenge.isRequiresVideo());
+            verticalList.add(labeledText("quest.challengeGuide.points.attachments", requiredAttachmentsExpression));
         }
         verticalList.add(cmp.text(challenge.getDescription()));
         if (challenge.getImageURL() != null) {
@@ -95,13 +103,11 @@ public class QuestChallengeGuide {
         return verticalList;
     }
 
-    private static class PointsExpression extends AbstractSimpleExpression<String> {
-        private final int points;
+    private static class RequiredAttachmentsExpression extends AbstractSimpleExpression<String> {
         private final boolean attachPhoto;
         private final boolean attachVideo;
 
-        public PointsExpression(int points, boolean attachPhoto, boolean attachVideo) {
-            this.points = points;
+        public RequiredAttachmentsExpression(boolean attachPhoto, boolean attachVideo) {
             this.attachPhoto = attachPhoto;
             this.attachVideo = attachVideo;
         }
@@ -109,13 +115,12 @@ public class QuestChallengeGuide {
         @Override
         public String evaluate(ReportParameters reportParameters) {
             StringBuilder sb = new StringBuilder();
-            sb.append(translateText("quest.challengeGuide.points.x", points).evaluate(reportParameters)).append(" ");
             if (attachPhoto && attachVideo) {
-                sb.append("(").append(translateText("quest.challengeGuide.points.attachPhotoOrVideo").evaluate(reportParameters)).append(")");
+                sb.append(translateText("quest.challengeGuide.points.attachPhotoOrVideo").evaluate(reportParameters));
             } else if (attachPhoto) {
-                sb.append("(").append(translateText("quest.challengeGuide.points.attachPhoto").evaluate(reportParameters)).append(")");
+                sb.append(translateText("quest.challengeGuide.points.attachPhoto").evaluate(reportParameters));
             } else if (attachVideo) {
-                sb.append("(").append(translateText("quest.challengeGuide.points.attachVideo").evaluate(reportParameters)).append(")");
+                sb.append(translateText("quest.challengeGuide.points.attachVideo").evaluate(reportParameters));
             }
             return sb.toString();
         }

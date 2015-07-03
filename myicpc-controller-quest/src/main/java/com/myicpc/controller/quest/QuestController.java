@@ -10,10 +10,11 @@ import com.myicpc.model.quest.QuestSubmission.QuestSubmissionState;
 import com.myicpc.model.social.Notification;
 import com.myicpc.repository.quest.QuestChallengeRepository;
 import com.myicpc.repository.quest.QuestLeaderboardRepository;
-import com.myicpc.repository.quest.QuestParticipantRepository;
 import com.myicpc.repository.quest.QuestSubmissionRepository;
+import com.myicpc.service.exception.ReportException;
 import com.myicpc.service.quest.QuestService;
-import com.myicpc.service.timeline.TimelineService;
+import com.myicpc.service.quest.report.QuestReportService;
+import net.sf.dynamicreports.report.exception.DRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.Device;
 import org.springframework.mobile.device.site.SitePreference;
@@ -27,6 +28,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -46,7 +49,7 @@ public class QuestController extends GeneralController {
     private QuestChallengeRepository challengeRepository;
 
     @Autowired
-    private QuestParticipantRepository questParticipantRepository;
+    private QuestReportService questReportService;
 
     @Autowired
     private QuestLeaderboardRepository leaderboardRepository;
@@ -114,6 +117,21 @@ public class QuestController extends GeneralController {
             return "redirect:" + getContestURL(contestCode) + "/quest/challenges";
         }
         return "quest/fragment/challengeDetail";
+    }
+
+    @RequestMapping(value = "/{contestCode}/quest/challenge/QuestGuide.pdf", method = RequestMethod.GET)
+    public void questGuideExport(@PathVariable final String contestCode, HttpServletResponse response) {
+        Contest contest = getContest(contestCode, null);
+        try {
+            List<QuestChallenge> challenges = challengeRepository.findCurrentChallengesByContestOrderByName(new Date(), contest);
+            QuestService.applyHashtagPrefix(contest.getQuestConfiguration().getHashtagPrefix(), challenges);
+            questReportService.downloadQuestChallengesGuide(challenges, response.getOutputStream(), false);
+            response.setContentType("application/pdf");
+            response.addHeader("Content-Disposition", "attachment; filename=\"document.pdf\"");
+            response.flushBuffer();
+        } catch (DRException | IOException ex) {
+            throw new ReportException(ex);
+        }
     }
 
     @RequestMapping(value = "/{contestCode}/quest/leaderboard", method = RequestMethod.GET)

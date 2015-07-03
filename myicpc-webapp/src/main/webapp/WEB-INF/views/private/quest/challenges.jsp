@@ -15,7 +15,7 @@
 
     <jsp:attribute name="controls">
         <a href='<spring:url value="/private${contestURL}/quest/challenge/create" />' class="btn btn-default btn-hover"><t:glyphIcon icon="plus"/> <spring:message code="questAdmin.createBtn" /></a>
-        <a href='<spring:url value="/private${contestURL}/quest/report/guide-full" />' class="btn btn-default btn-hover"><t:glyphIcon icon="floppy-disk"/> <spring:message code="questAdmin.reportGuideBtn" /></a>
+        <a href='<spring:url value="/private${contestURL}/quest/report/QuestGuide.pdf" />' class="btn btn-default btn-hover"><t:glyphIcon icon="floppy-disk"/> <spring:message code="questAdmin.reportGuideBtn" /></a>
     </jsp:attribute>
 
     <jsp:body>

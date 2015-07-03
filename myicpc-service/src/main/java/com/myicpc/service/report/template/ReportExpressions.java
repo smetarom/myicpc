@@ -53,8 +53,7 @@ public class ReportExpressions {
                 formattedValue = formatter.format(expression.evaluate(reportParameters), reportParameters);
             }
 
-            System.out.println(label.evaluate(reportParameters) + " " + formattedValue);
-            return String.format("%s: %s", label.evaluate(reportParameters), formattedValue);
+            return String.format("<b>%s:</b> %s", label.evaluate(reportParameters), formattedValue);
         }
     }
 
