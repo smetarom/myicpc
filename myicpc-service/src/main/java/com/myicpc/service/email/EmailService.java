@@ -1,8 +1,11 @@
 package com.myicpc.service.email;
 
 import com.myicpc.model.contest.Contest;
+import com.myicpc.service.dto.GlobalSettings;
+import com.myicpc.service.settings.GlobalSettingsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -17,7 +20,9 @@ import java.util.Properties;
 @Service
 public class EmailService {
     private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
-    private static final String MYICPC_EMAIL = "myicpc.baylor@gmail.com";
+
+    @Autowired
+    private GlobalSettingsService globalSettingsService;
 
     /**
      * Send feedback on email
@@ -29,17 +34,17 @@ public class EmailService {
      */
     @Async
     public void sendFeedbackEmail(final Contest contest, final String subject, final String msg) {
-        getEmailSender().send(getEmailMessage(MYICPC_EMAIL, contest.getContestSettings().getEmail(), subject, msg));
+        GlobalSettings globalSettings = globalSettingsService.getGlobalSettings();
+        getEmailSender(globalSettings).send(getEmailMessage(globalSettings.getSmtpUsername(), contest.getContestSettings().getEmail(), subject, msg));
         logger.info("Sent feedback email 'Feedback " + subject + "' to " + contest.getContestSettings().getEmail() + ":\n" + msg);
     }
 
-    private MailSender getEmailSender() {
+    private MailSender getEmailSender(GlobalSettings globalSettings) {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        // TODO load info from database
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
-        mailSender.setUsername("myicpc2@gmail.com");
-        mailSender.setPassword("eDc.4rFv");
+        mailSender.setHost(globalSettings.getSmtpHost());
+        mailSender.setPort(Integer.parseInt(globalSettings.getSmtpPort()));
+        mailSender.setUsername(globalSettings.getSmtpUsername());
+        mailSender.setPassword(globalSettings.getSmtpPassword());
 
         Properties mailProperties = new Properties();
         mailProperties.setProperty("mail.smtp.auth", "true");

@@ -15,17 +15,10 @@
     <div class="col-sm-12">
       <spring:url var="formAction" value="/private/settings"/>
       <form:form class="form-horizontal" role="form" action="${formAction}" commandName="globalSettings">
-        <t:springInput labelCode="globalSettings.adminEmail" path="adminEmail" hintCode="globalSettings.adminEmail.hint" />
-        <t:springInput labelCode="globalSettings.callbackURL" path="callbackUrl" hintCode="globalSettings.callbackURL.hint" />
-        <t:springInput labelCode="globalSettings.cmURL" path="contestManagementSystemUrl" hintCode="globalSettings.cmURL.hint" />
-        <t:springInput labelCode="globalSettings.fbAPIKey" path="fbAPIKey" hintCode="globalSettings.fbAPIKey.hint" />
-        <t:springInput labelCode="globalSettings.googleNonAuthenticatedKey"
-                       path="googleNonAuthenticatedKey" hintCode="globalSettings.googleNonAuthenticatedKey.hint"/>
-        <t:springInput labelCode="globalSettings.googleAnalyticsKey" path="googleAnalyticsKey" hintCode="globalSettings.googleAnalyticsKey.hint"/>
-        <t:springInput labelCode="globalSettings.teamPicturesUrl" path="teamPicturesUrl" hintCode="globalSettings.teamPicturesUrl.hint"/>
-        <div class="form-group text-right">
-          <button type="submit" class="btn btn-primary"><spring:message code="save"/></button>
-        </div>
+          <%@ include file="/WEB-INF/views/private/settings/fragment/settingsFormFields.jsp"%>
+          <div class="form-group text-right">
+              <button type="submit" class="btn btn-primary"><spring:message code="save"/></button>
+          </div>
       </form:form>
     </div>
   </jsp:body>

@@ -2,18 +2,20 @@ package com.myicpc.controller.admin;
 
 import com.google.common.collect.Lists;
 import com.myicpc.controller.GeneralAdminController;
-import com.myicpc.model.security.SystemUser;
 import com.myicpc.enums.UserRoleEnum;
+import com.myicpc.model.security.SystemUser;
 import com.myicpc.service.dto.GlobalSettings;
 import com.myicpc.service.settings.GlobalSettingsService;
 import com.myicpc.service.user.SystemUserService;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -38,9 +40,11 @@ public class InstallAdminController extends GeneralAdminController {
         }
         List<ImmutablePair<String, String>> steps = getWizardMenuItems();
         SystemUser adminUser = new SystemUser();
+        GlobalSettings globalSettings = new GlobalSettings();
 
         model.addAttribute("entity", "adminUser");
         model.addAttribute("adminUser", adminUser);
+        model.addAttribute("globalSettings", globalSettings);
         model.addAttribute("steps", steps);
         model.addAttribute("currentStep", 1);
         model.addAttribute("formAction", "/private/install/admin");
@@ -65,12 +69,11 @@ public class InstallAdminController extends GeneralAdminController {
     }
 
     @RequestMapping(value = "/private/install/settings", method = RequestMethod.GET)
-    public String installGlobalSettings(@ModelAttribute("adminUser") SystemUser adminUser, final Model model) {
+    public String installGlobalSettings(@ModelAttribute("adminUser") SystemUser adminUser, @ModelAttribute("globalSettings") GlobalSettings globalSettings, final Model model) {
         if (!globalSettingsService.isInstallPhaseEnabled()) {
             return "redirect:/private/install/error";
         }
         List<ImmutablePair<String, String>> steps = getWizardMenuItems();
-        GlobalSettings globalSettings = new GlobalSettings();
         globalSettings.setAdminEmail(adminUser.getUsername());
 
         model.addAttribute("entity", "globalSettings");

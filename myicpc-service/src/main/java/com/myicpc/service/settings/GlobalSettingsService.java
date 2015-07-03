@@ -4,6 +4,7 @@ import com.myicpc.model.Globals;
 import com.myicpc.repository.GlobalsRepository;
 import com.myicpc.repository.security.SystemUserRoleRepository;
 import com.myicpc.service.dto.GlobalSettings;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,12 +45,18 @@ public class GlobalSettingsService {
             conf.load(settingsInputStream);
             globalSettings.setDefaultMapConfig(conf.getProperty("mapConfig"));
             globalSettings.setUniversityLogosUrl(conf.getProperty("universityLogosURL"));
+            if (StringUtils.isEmpty(globalSettings.getTeamPicturesUrl())) {
+                globalSettings.setTeamPicturesUrl(conf.getProperty("teamPicturesURL"));
+            }
+            if (StringUtils.isEmpty(globalSettings.getContestManagementSystemUrl())) {
+                globalSettings.setContestManagementSystemUrl(conf.getProperty("contestManagementSystemUrl"));
+            }
         } catch (IOException e) {
             logger.warn("Cannot find configuration file defaultSettings.properties");
         }
     }
 
-    public GlobalSettings loadGlobalSettings() {
+    private GlobalSettings loadGlobalSettings() {
         GlobalSettings globalSettings = new GlobalSettings();
         List<Globals> globals = globalsRepository.findAll();
         for (Globals global : globals) {

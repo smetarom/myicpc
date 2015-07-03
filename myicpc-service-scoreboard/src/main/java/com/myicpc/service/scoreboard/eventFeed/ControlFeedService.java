@@ -9,11 +9,11 @@ import com.myicpc.repository.eventFeed.EventFeedControlRepository;
 import com.myicpc.repository.eventFeed.JudgementRepository;
 import com.myicpc.repository.eventFeed.LastTeamProblemRepository;
 import com.myicpc.repository.eventFeed.ProblemRepository;
-import com.myicpc.repository.teamInfo.RegionRepository;
 import com.myicpc.repository.eventFeed.TeamProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRankHistoryRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.repository.social.NotificationRepository;
+import com.myicpc.repository.teamInfo.RegionRepository;
 import com.myicpc.service.scoreboard.exception.EventFeedException;
 import com.myicpc.service.utils.lists.NotificationList;
 import org.slf4j.Logger;
@@ -82,7 +82,6 @@ public class ControlFeedService {
             codeInsightActivityRepository.deleteByContest(contest);
             problemRepository.deleteByContest(contest);
             teamRepository.deleteByContest(contest);
-            regionRepository.deleteByContest(contest);
             judgementRepository.deleteByContest(contest);
             List<NotificationType> notificationTypes = NotificationList.newList().addScoreboardSuccess().addScoreboardSubmitted().addScoreboardFailed()
                     .addAnalystMessage();

@@ -94,4 +94,37 @@ public class GlobalSettings implements Serializable {
     public void setCallbackUrl(String callbackUrl) {
         settingsMap.put(Globals.GlobalsColumn.CALLBACK_URL, callbackUrl);
     }
+
+    public String getSmtpHost() {
+        return settingsMap.get(Globals.GlobalsColumn.SMTP_HOST);
+    }
+
+    public void setSmtpHost(String smtpHost) {
+        settingsMap.put(Globals.GlobalsColumn.SMTP_HOST, smtpHost);
+    }
+
+    public String getSmtpPort() {
+        return settingsMap.get(Globals.GlobalsColumn.SMTP_PORT);
+    }
+
+    public void setSmtpPort(String smtpPort) {
+        settingsMap.put(Globals.GlobalsColumn.SMTP_PORT, smtpPort);
+    }
+
+    public String getSmtpUsername() {
+        return settingsMap.get(Globals.GlobalsColumn.SMTP_USERNAME);
+    }
+
+    public void setSmtpUsername(String smtpUsername) {
+        settingsMap.put(Globals.GlobalsColumn.SMTP_USERNAME, smtpUsername);
+    }
+
+    public String getSmtpPassword() {
+        return settingsMap.get(Globals.GlobalsColumn.SMTP_PASSWORD);
+    }
+
+    public void setSmtpPassword(String smtpPassword) {
+        settingsMap.put(Globals.GlobalsColumn.SMTP_PASSWORD, smtpPassword);
+    }
+
 }

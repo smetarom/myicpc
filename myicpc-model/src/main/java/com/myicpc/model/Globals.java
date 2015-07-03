@@ -16,15 +16,27 @@ import javax.persistence.SequenceGenerator;
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "Globals_id_seq")
 public class Globals extends IdGeneratedObject {
+    private static final long serialVersionUID = -7918646417534688826L;
+
     public enum GlobalsColumn {
-        ADMIN_EMAIL, FB_API_KEY, GOOGLE_NON_AUTHENTICATED_KEY, GOOGLE_ANALYTICS_KEY, DEFAULT_MAP_CONFIG(true),
-        UNIVERSITY_LOGOS_URL, TEAM_PICTURES_URL, CONTEST_MANAGEMENT_SYSTEM_URL, CALLBACK_URL;
+        ADMIN_EMAIL,
+        FB_API_KEY,
+        GOOGLE_NON_AUTHENTICATED_KEY,
+        GOOGLE_ANALYTICS_KEY,
+        DEFAULT_MAP_CONFIG(true),
+        UNIVERSITY_LOGOS_URL,
+        TEAM_PICTURES_URL,
+        CONTEST_MANAGEMENT_SYSTEM_URL,
+        CALLBACK_URL,
+        SMTP_HOST,
+        SMTP_PORT,
+        SMTP_USERNAME,
+        SMTP_PASSWORD
+        ;
 
         private boolean longText;
 
-        GlobalsColumn() {
-
-        }
+        GlobalsColumn() { }
 
         GlobalsColumn(boolean longText) {
             this.longText = longText;
@@ -38,7 +50,9 @@ public class Globals extends IdGeneratedObject {
     @NotBlank
     @Column(unique = true)
     private String name;
+
     private String value;
+
     @Lob
     @Type(type = "org.hibernate.type.StringClobType")
     private String text;

@@ -1,9 +1,10 @@
 package com.myicpc.model.teamInfo;
 
-import com.myicpc.model.IdGeneratedContestObject;
 import com.myicpc.model.IdGeneratedObject;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.SequenceGenerator;
 
 /**
  * Geographical unit to group teams
@@ -12,7 +13,6 @@ import javax.persistence.*;
  */
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "Region_id_seq")
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "contestId"}), @UniqueConstraint(columnNames = {"externalId", "contestId"})})
 public class Region extends IdGeneratedObject {
     private static final long serialVersionUID = 4894738108560406124L;
 
