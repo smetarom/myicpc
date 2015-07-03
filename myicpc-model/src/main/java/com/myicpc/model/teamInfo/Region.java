@@ -1,6 +1,7 @@
-package com.myicpc.model.eventFeed;
+package com.myicpc.model.teamInfo;
 
 import com.myicpc.model.IdGeneratedContestObject;
+import com.myicpc.model.IdGeneratedObject;
 
 import javax.persistence.*;
 
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "Region_id_seq")
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "contestId"}), @UniqueConstraint(columnNames = {"externalId", "contestId"})})
-public class Region extends IdGeneratedContestObject {
+public class Region extends IdGeneratedObject {
     private static final long serialVersionUID = 4894738108560406124L;
 
     /**
@@ -23,7 +24,6 @@ public class Region extends IdGeneratedContestObject {
     /**
      * Region name
      */
-    @Column(unique = true)
     private String name;
     /**
      * Abbreviated region name

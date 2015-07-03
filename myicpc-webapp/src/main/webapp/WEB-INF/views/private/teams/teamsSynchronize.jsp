@@ -59,6 +59,12 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label for="regionJSON" class="col-sm-4 control-label"><spring:message code="teamAdmin.sync.manual.region" />:* </label>
+                        <div class="col-sm-8">
+                            <input type="file" class="form-control" name="regionJSON" id="regionJSON" accept=".json" required="required">
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label for="teamJSON" class="col-sm-4 control-label"><spring:message code="teamAdmin.sync.manual.team" />:* </label>
                         <div class="col-sm-8">
                             <input type="file" class="form-control" name="teamJSON" id="teamJSON" accept=".json" required="required">

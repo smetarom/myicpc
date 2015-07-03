@@ -18,11 +18,9 @@ import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.repository.teamInfo.TeamInfoRepository;
 import com.myicpc.service.listener.ScoreboardListenerAdapter;
 import com.myicpc.service.publish.PublishService;
-import com.myicpc.service.scoreboard.problem.ProblemService;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -169,7 +167,7 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
             if (university != null) {
                 JsonObject teamCoordinates = new JsonObject();
                 teamCoordinates.addProperty("latitude", university.getLatitude());
-                teamCoordinates.addProperty("longtitude", university.getLongtitude());
+                teamCoordinates.addProperty("longtitude", university.getLongitude());
                 teamCoordinates.addProperty("country", university.getCountry());
                 coordinates.add(teamInfo.getExternalId().toString(), teamCoordinates);
             }

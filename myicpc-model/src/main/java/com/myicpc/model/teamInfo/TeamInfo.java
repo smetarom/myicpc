@@ -1,7 +1,6 @@
 package com.myicpc.model.teamInfo;
 
 import com.myicpc.model.IdGeneratedContestObject;
-import com.myicpc.model.eventFeed.Region;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;

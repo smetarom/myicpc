@@ -6,7 +6,7 @@ import com.myicpc.model.eventFeed.Judgement;
 import com.myicpc.model.eventFeed.Language;
 import com.myicpc.model.eventFeed.LastTeamProblem;
 import com.myicpc.model.eventFeed.Problem;
-import com.myicpc.model.eventFeed.Region;
+import com.myicpc.model.teamInfo.Region;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
 import com.myicpc.model.teamInfo.TeamInfo;

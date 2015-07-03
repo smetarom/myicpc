@@ -100,10 +100,11 @@ public class TeamAdminController extends GeneralAdminController {
 
     @RequestMapping(value = "/private/{contestCode}/teams/synchronize-manual", method = RequestMethod.POST)
     public String processTeamSyncManually(@PathVariable String contestCode, @RequestParam("universityJSON") MultipartFile universityJSON,
-                                          @RequestParam("teamJSON") MultipartFile teamJSON, RedirectAttributes redirectAttributes) throws IOException {
+                                          @RequestParam("regionJSON") MultipartFile regionJSON, @RequestParam("teamJSON") MultipartFile teamJSON,
+                                          RedirectAttributes redirectAttributes) throws IOException {
         Contest contest = getContest(contestCode, null);
         try {
-            teamService.synchronizeTeamsFromFile(universityJSON, teamJSON, contest);
+            teamService.synchronizeTeamsFromFile(universityJSON, regionJSON, teamJSON, contest);
             successMessage(redirectAttributes, "teamAdmin.sync.success");
         } catch (ValidationException ex) {
             errorMessage(redirectAttributes, ex);

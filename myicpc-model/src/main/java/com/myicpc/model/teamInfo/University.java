@@ -2,6 +2,7 @@ package com.myicpc.model.teamInfo;
 
 import com.myicpc.model.IdGeneratedObject;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -15,7 +16,6 @@ import javax.persistence.UniqueConstraint;
  * @author Roman Smetana
  */
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"externalId"}))
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "University_id_seq")
 public class University extends IdGeneratedObject {
     private static final long serialVersionUID = 2166770559486231031L;
@@ -23,6 +23,7 @@ public class University extends IdGeneratedObject {
     /**
      * Institution alias id from CM
      */
+    @Column(unique = true)
     private Long externalId;
     /**
      * University name
@@ -51,11 +52,11 @@ public class University extends IdGeneratedObject {
     /**
      * University latitude on the map
      */
-    private Long latitude;
+    private Double latitude;
     /**
      * University longtitude on the map
      */
-    private Long longtitude;
+    private Double longitude;
 
     public Long getExternalId() {
         return externalId;
@@ -113,19 +114,19 @@ public class University extends IdGeneratedObject {
         this.country = country;
     }
 
-    public Long getLatitude() {
+    public Double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(Long latitude) {
+    public void setLatitude(Double latitude) {
         this.latitude = latitude;
     }
 
-    public Long getLongtitude() {
-        return longtitude;
+    public Double getLongitude() {
+        return longitude;
     }
 
-    public void setLongtitude(Long longtitude) {
-        this.longtitude = longtitude;
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 }

@@ -9,7 +9,7 @@ import com.myicpc.repository.eventFeed.EventFeedControlRepository;
 import com.myicpc.repository.eventFeed.JudgementRepository;
 import com.myicpc.repository.eventFeed.LastTeamProblemRepository;
 import com.myicpc.repository.eventFeed.ProblemRepository;
-import com.myicpc.repository.eventFeed.RegionRepository;
+import com.myicpc.repository.teamInfo.RegionRepository;
 import com.myicpc.repository.eventFeed.TeamProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRankHistoryRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;

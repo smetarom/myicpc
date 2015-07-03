@@ -19,10 +19,12 @@ import com.myicpc.model.social.Notification;
 import com.myicpc.model.teamInfo.AttendedContest;
 import com.myicpc.model.teamInfo.ContestParticipant;
 import com.myicpc.model.teamInfo.ContestParticipantAssociation;
+import com.myicpc.model.teamInfo.Region;
 import com.myicpc.model.teamInfo.RegionalResult;
 import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.model.teamInfo.University;
 import com.myicpc.repository.eventFeed.LastTeamProblemRepository;
+import com.myicpc.repository.teamInfo.RegionRepository;
 import com.myicpc.repository.eventFeed.TeamProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRankHistoryRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
@@ -77,6 +79,9 @@ public class TeamService {
     private UniversityRepository universityRepository;
 
     @Autowired
+    private RegionRepository regionRepository;
+
+    @Autowired
     private TeamInfoRepository teamInfoRepository;
 
     @Autowired
@@ -118,6 +123,7 @@ public class TeamService {
     public void synchronizeTeamsWithCM(Contest contest) throws ValidationException {
         try {
             synchronizeUniversities(teamWSService.getUniversitiesFromCM(contest));
+            synchronizeRegions(teamWSService.getRegionsFromCM(contest));
             synchronizeTeams(teamWSService.getTeamsFromCM(contest), contest);
             logger.info("Team & university synchronization finished.");
             initTeamHashtagsAndAbbreviations(contest);
@@ -125,7 +131,7 @@ public class TeamService {
         } catch (ValidationException ex) {
             throw ex;
         } catch (Exception ex) {
-            logger.error("Error parsing synchornization files", ex);
+            logger.error("Error parsing synchronization files", ex);
             throw new ValidationException("Error during response parsing. Check the Contest Management web service settings.", ex);
         }
     }
@@ -137,13 +143,17 @@ public class TeamService {
      * @param teamJSON       file with team info
      * @throws IOException parsing uploaded files failed
      */
-    public void synchronizeTeamsFromFile(final MultipartFile universityJSON, final MultipartFile teamJSON, final Contest contest) throws IOException,
+    public void synchronizeTeamsFromFile(final MultipartFile universityJSON, final MultipartFile regionJSON, final MultipartFile teamJSON, final Contest contest) throws IOException,
             ValidationException {
-        try (InputStream universityInputStream = universityJSON.getInputStream(); InputStream teamInputStream = teamJSON.getInputStream()) {
+        try (InputStream universityInputStream = universityJSON.getInputStream();
+             InputStream regionInputStream = regionJSON.getInputStream();
+             InputStream teamInputStream = teamJSON.getInputStream()) {
             String universityString = IOUtils.toString(universityInputStream, FormatUtils.DEFAULT_ENCODING);
+            String regionString = IOUtils.toString(regionInputStream, FormatUtils.DEFAULT_ENCODING);
             String teamString = IOUtils.toString(teamInputStream, FormatUtils.DEFAULT_ENCODING);
 
             synchronizeUniversities(universityString);
+            synchronizeRegions(regionString);
             synchronizeTeams(teamString, contest);
             logger.info("Team & university synchronization finished.");
             initTeamHashtagsAndAbbreviations(contest);
@@ -181,8 +191,8 @@ public class TeamService {
                     university.setHomepageURL(universityAdapter.getString("homepageurl", university.getHomepageURL()));
                     university.setState(universityAdapter.getString("state", university.getState()));
                     university.setCountry(universityAdapter.getString("country", university.getCountry()));
-                    university.setLatitude(universityAdapter.getLong("latitude", university.getLatitude()));
-                    university.setLongtitude(universityAdapter.getLong("longtitude", university.getLongtitude()));
+                    university.setLatitude(universityAdapter.getDouble("latitude", university.getLatitude()));
+                    university.setLongitude(universityAdapter.getDouble("longitude", university.getLongitude()));
 
                     universityRepository.save(university);
                     logger.info("CM import: university " + university.getExternalId());
@@ -191,6 +201,37 @@ public class TeamService {
         } catch (JsonParseException | IllegalStateException ex) {
             logger.error(ex.getMessage(), ex);
             throw new ValidationException("University parsing failed. Check if it has valid JSON format", ex);
+        }
+    }
+
+    /**
+     * Synchronize regions based on given JSON data
+     *
+     * @param regionJSON region JSON data
+     */
+    private void synchronizeRegions(String regionJSON) {
+        try {
+            JsonObject regionRoot = new JsonParser().parse(regionJSON).getAsJsonObject();
+            JsonArray regionArray = regionRoot.getAsJsonArray("sites");
+
+            if (regionArray != null) {
+                for (JsonElement jsonElement : regionArray) {
+                    JSONAdapter regionAdapter = new JSONAdapter(jsonElement);
+                    Long externalId = regionAdapter.getLong("id");
+                    Region region = regionRepository.findByExternalId(externalId);
+                    if (region == null) {
+                        region = new Region();
+                    }
+                    region.setExternalId(externalId);
+                    region.setName(regionAdapter.getString("name"));
+                    region.setShortName(FormatUtils.getRegionShortName(region.getName()));
+                    regionRepository.save(region);
+                    logger.info("CM import: region " + region.getExternalId());
+                }
+            }
+        } catch (JsonParseException | IllegalStateException ex) {
+            logger.error(ex.getMessage(), ex);
+            throw new ValidationException("Team parsing failed. Check if it has valid JSON format", ex);
         }
     }
 
@@ -227,6 +268,8 @@ public class TeamService {
                     University university = universityRepository.findByExternalId(teamAdapter.getLong("institutionId"));
                     teamInfo.setContest(contest);
                     teamInfo.setUniversity(university);
+                    Region region = regionRepository.findByExternalId(teamAdapter.getLong("siteId"));
+                    teamInfo.setRegion(region);
                     teamInfo.setExternalId(externalId);
                     teamInfo.setName(root.get("name").getAsString());
 

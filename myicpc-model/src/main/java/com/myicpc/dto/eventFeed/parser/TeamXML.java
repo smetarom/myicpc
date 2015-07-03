@@ -2,7 +2,7 @@ package com.myicpc.dto.eventFeed.parser;
 
 import com.myicpc.dto.eventFeed.visitor.EventFeedVisitor;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.model.eventFeed.Region;
+import com.myicpc.model.teamInfo.Region;
 import com.myicpc.model.eventFeed.Team;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
@@ -20,11 +20,6 @@ public class TeamXML extends XMLEntity<Team> {
     private String name;
 
     private String nationality;
-
-    @XStreamAlias("university")
-    private String universityName;
-
-    private Region region;
 
     @Override
     public void mergeTo(final Team team) {

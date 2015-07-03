@@ -25,7 +25,7 @@ import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Judgement;
 import com.myicpc.model.eventFeed.Language;
 import com.myicpc.model.eventFeed.Problem;
-import com.myicpc.model.eventFeed.Region;
+import com.myicpc.model.teamInfo.Region;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
 import com.myicpc.model.social.Notification;
@@ -104,7 +104,6 @@ public class EventFeedVisitorImpl implements EventFeedLocal {
             region = new Region();
             xmlRegion.mergeTo(region);
             region.setShortName(FormatUtils.getRegionShortName(region.getName()));
-            region.setContest(contest);
             region = eventFeedDao.saveContestEntity(region);
             logger.info("Region " + region.getName() + " created");
         }

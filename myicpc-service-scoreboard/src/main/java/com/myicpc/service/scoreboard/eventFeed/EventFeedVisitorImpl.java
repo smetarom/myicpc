@@ -16,7 +16,7 @@ import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Judgement;
 import com.myicpc.model.eventFeed.Language;
 import com.myicpc.model.eventFeed.Problem;
-import com.myicpc.model.eventFeed.Region;
+import com.myicpc.model.teamInfo.Region;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
 import com.myicpc.model.teamInfo.TeamInfo;
@@ -24,7 +24,7 @@ import com.myicpc.repository.contest.ContestRepository;
 import com.myicpc.repository.eventFeed.JudgementRepository;
 import com.myicpc.repository.eventFeed.LanguageRepository;
 import com.myicpc.repository.eventFeed.ProblemRepository;
-import com.myicpc.repository.eventFeed.RegionRepository;
+import com.myicpc.repository.teamInfo.RegionRepository;
 import com.myicpc.repository.eventFeed.TeamProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.repository.teamInfo.TeamInfoRepository;
@@ -102,17 +102,8 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
     }
 
     @Override
-    @Transactional
     public void visit(RegionXML xmlRegion, Contest contest) {
-        Region region = regionRepository.findByNameAndContest(xmlRegion.getName(), contest);
-        if (region == null) {
-            region = new Region();
-            xmlRegion.mergeTo(region);
-            region.setShortName(FormatUtils.getRegionShortName(region.getName()));
-            region.setContest(contest);
-            region = regionRepository.saveAndFlush(region);
-            logger.info("Region " + region.getName() + " created");
-        }
+        // Ignore regions from the feed
     }
 
     @Override

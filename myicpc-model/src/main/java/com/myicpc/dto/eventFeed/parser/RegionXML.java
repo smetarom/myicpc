@@ -2,7 +2,7 @@ package com.myicpc.dto.eventFeed.parser;
 
 import com.myicpc.dto.eventFeed.visitor.EventFeedVisitor;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.model.eventFeed.Region;
+import com.myicpc.model.teamInfo.Region;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
 /**
