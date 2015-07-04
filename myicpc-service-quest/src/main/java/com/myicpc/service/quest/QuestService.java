@@ -22,6 +22,7 @@ import com.myicpc.repository.teamInfo.ContestParticipantAssociationRepository;
 import com.myicpc.service.notification.NotificationBuilder;
 import com.myicpc.service.publish.PublishService;
 import com.myicpc.service.utils.lists.NotificationList;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -87,6 +88,20 @@ public class QuestService {
             arr.add(o);
         }
         return arr;
+    }
+
+    public QuestParticipant getQuestParticipantBySocialUsernames(String twitterUsername, String vineUsername, String instagramUsername, final Contest contest) {
+        QuestParticipant questParticipant = null;
+        if (questParticipant == null && StringUtils.isNotEmpty(twitterUsername)) {
+            questParticipant = questParticipantRepository.findByContestAndContestParticipantTwitterUsernameIgnoreCase(contest, twitterUsername);
+        }
+        if (questParticipant == null && StringUtils.isNotEmpty(twitterUsername)) {
+            questParticipant = questParticipantRepository.findByContestAndContestParticipantVineUsernameIgnoreCase(contest, vineUsername);
+        }
+        if (questParticipant == null && StringUtils.isNotEmpty(twitterUsername)) {
+            questParticipant = questParticipantRepository.findByContestAndContestParticipantInstagramUsernameIgnoreCase(contest, instagramUsername);
+        }
+        return questParticipant;
     }
 
     @Transactional(readOnly = true)

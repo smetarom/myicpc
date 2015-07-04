@@ -10,6 +10,7 @@ import com.myicpc.model.quest.QuestSubmission.QuestSubmissionState;
 import com.myicpc.model.social.Notification;
 import com.myicpc.repository.quest.QuestChallengeRepository;
 import com.myicpc.repository.quest.QuestLeaderboardRepository;
+import com.myicpc.repository.quest.QuestParticipantRepository;
 import com.myicpc.repository.quest.QuestSubmissionRepository;
 import com.myicpc.service.exception.ReportException;
 import com.myicpc.service.quest.QuestService;
@@ -24,6 +25,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.persistence.EntityNotFoundException;
@@ -47,6 +49,9 @@ public class QuestController extends GeneralController {
 
     @Autowired
     private QuestChallengeRepository challengeRepository;
+
+    @Autowired
+    private QuestParticipantRepository participantRepository;
 
     @Autowired
     private QuestReportService questReportService;
@@ -85,6 +90,25 @@ public class QuestController extends GeneralController {
         return resolveView("quest/challenges", "quest/challenges_mobile", sitePreference);
     }
 
+    @RequestMapping(value = "/{contestCode}/quest/challenges/participant/{participantId}", method = RequestMethod.GET)
+    public String questParticipantChallenges(@PathVariable final String contestCode,
+                                             @PathVariable Long participantId,
+                                             Model model, RedirectAttributes redirectAttributes,
+                                             SitePreference sitePreference) {
+        Contest contest = getContest(contestCode, model);
+
+        QuestParticipant questParticipant = participantRepository.findOne(participantId);
+        if (questParticipant == null) {
+            errorMessage(redirectAttributes, "quest.challenges.missing.notFound");
+            return "redirect:" + getContestURL(contestCode) + "/quest/challenges";
+        }
+        List<QuestChallenge> challenges = challengeRepository.findOpenChallengesByQuestParticipantOrderByName(new Date(), questParticipant, contest);
+        QuestService.applyHashtagPrefix(contest.getQuestConfiguration().getHashtagPrefix(), challenges);
+        model.addAttribute("challenges", challenges);
+
+        return resolveView("quest/challenges", "quest/challenges_mobile", sitePreference);
+    }
+
     @RequestMapping(value = "/{contestCode}/quest/challenge/{challengeId}", method = RequestMethod.GET)
     public String questChallengeDetail(@PathVariable final String contestCode, @PathVariable String challengeId, Model model, RedirectAttributes redirectAttributes, final Device device) {
         try {
@@ -117,6 +141,21 @@ public class QuestController extends GeneralController {
             return "redirect:" + getContestURL(contestCode) + "/quest/challenges";
         }
         return "quest/fragment/challengeDetail";
+    }
+
+    @RequestMapping(value = "/{contestCode}/quest/challenge/missing-challenges", method = RequestMethod.POST)
+    public String questChallengeAjaxDetail(@PathVariable final String contestCode,
+                                           @RequestParam(required = false) String twitterUsername,
+                                           @RequestParam(required = false) String vineUsername,
+                                           @RequestParam(required = false) String instagramUsername,
+                                           RedirectAttributes redirectAttributes) {
+        Contest contest = getContest(contestCode, null);
+        QuestParticipant questParticipant = questService.getQuestParticipantBySocialUsernames(twitterUsername, vineUsername, instagramUsername, contest);
+        if (questParticipant == null) {
+            errorMessage(redirectAttributes, "quest.challenges.missing.notFound");
+            return "redirect:" + getContestURL(contestCode) + "/quest/challenges";
+        }
+        return "redirect:" + getContestURL(contestCode) + "/quest/challenges/participant/" + questParticipant.getId();
     }
 
     @RequestMapping(value = "/{contestCode}/quest/challenge/QuestGuide.pdf", method = RequestMethod.GET)

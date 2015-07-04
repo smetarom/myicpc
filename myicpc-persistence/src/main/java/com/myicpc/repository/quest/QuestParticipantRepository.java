@@ -21,6 +21,13 @@ public interface QuestParticipantRepository extends PagingAndSortingRepository<Q
 
     QuestParticipant findByContestAndContestParticipantInstagramUsernameIgnoreCase(Contest contest, String instagramUsername);
 
+    @Query("SELECT qp " +
+            "FROM QuestParticipant qp JOIN qp.contestParticipant cp " +
+            "WHERE qp.contest = ?3 " +
+            "   AND UPPER(cp.twitterUsername) = UPPER(?1) " +
+            "   AND UPPER(cp.vineUsername) = UPPER(?2) ")
+    QuestParticipant findBySocialUsernames(String twitterUsername, String vineUsername, Contest contest);
+
     @Query("SELECT DISTINCT qp FROM QuestParticipant qp JOIN FETCH qp.contestParticipant tm JOIN tm.teamAssociations ta WHERE ta.contestParticipantRole IN ?1 AND qp.contest = ?2 ORDER BY qp.points DESC, tm.firstname ASC")
     List<QuestParticipant> findByRoles(List<ContestParticipantRole> roles, Contest contest, Pageable pageable);
 

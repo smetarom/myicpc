@@ -11,8 +11,8 @@
 
 <label for="${id}"><spring:message code="${labelCode}"/>: </label>
 <c:if test="${required}">
-    <input type="${type}" class="form-control" id="${id}" size="${size}">
+    <input type="${type}" class="form-control" id="${id}" name="${id}" size="${size}">
 </c:if>
 <c:if test="${not required}">
-    <input type="${type}" class="form-control" id="${id}" size="${size}">
+    <input type="${type}" class="form-control" id="${id}" name="${id}" size="${size}">
 </c:if>

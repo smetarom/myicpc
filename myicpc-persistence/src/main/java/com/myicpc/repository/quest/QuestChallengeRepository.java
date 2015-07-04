@@ -2,6 +2,7 @@ package com.myicpc.repository.quest;
 
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.quest.QuestChallenge;
+import com.myicpc.model.quest.QuestParticipant;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -28,6 +29,12 @@ public interface QuestChallengeRepository extends JpaRepository<QuestChallenge, 
 
     @Query("SELECT qc FROM QuestChallenge qc WHERE qc.startDate < ?1 AND qc.contest = ?2 ORDER BY qc.hashtagSuffix")
     List<QuestChallenge> findOpenChallengesByContestOrderByHashtag(Date now, Contest contest);
+
+    @Query("SELECT qc FROM QuestChallenge qc " +
+            "WHERE qc.startDate < ?1 AND qc.contest = ?3 " +
+            "   AND qc NOT IN (SELECT qs.challenge FROM QuestSubmission qs WHERE qs.submissionState = 'ACCEPTED' AND qs.participant = ?2)" +
+            "ORDER BY qc.name")
+    List<QuestChallenge> findOpenChallengesByQuestParticipantOrderByName(Date now, QuestParticipant questParticipant, Contest contest);
 
     @Query(value = "SELECT qc FROM QuestChallenge qc WHERE qc.published = false AND qc.contest = ?2 AND qc.startDate < ?1")
     List<QuestChallenge> findAllNonpublishedStartedChallenges(Date date, Contest contest);
