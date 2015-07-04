@@ -66,6 +66,9 @@ scorebar.controller('worldMapCtrl', function($scope) {
     });
   };
   $scope.filterTeams = function(team) {
+    console.log($scope.config.isCountryBased);
+    console.log($scope.activeComponent.id);
+    console.log(team.regionName);
     if ($scope.config.isCountryBased) {
       return team.nationality === $scope.activeComponent.id;
     } else {
@@ -222,7 +225,7 @@ scorebar.controller('worldMapCtrl', function($scope) {
       barSpace = $scope.config.legendWidth / $scope.config.teamCount;
       svg.append("text").attr("text-anchor", "start").attr("y", $scope.config.legendYTextBottomCorner).attr("x", $scope.config.legendXCorner).text("Team rank legend");
       _results = [];
-      for (i = _i = 0, _ref = $scope.config.teamCount; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+      for (i = _i = 0, _ref = $scope.config.teamCount; _i <= _ref; i = _i += 1) {
         svg.append("rect").attr("x", i * barSpace + $scope.config.legendXCorner).attr("y", $scope.config.legendYTextBottomCorner + $scope.config.legendYSpaceTitleBars).attr("width", barSpace - 1).attr("height", $scope.config.legendBarHeight).style("fill", $scope._textRankColor(i)).style("z-index", 99);
         if ((i + 1) % $scope.config.legendLabelFrequency === 0 || (i + 1) === 1) {
           _results.push(svg.append("text").attr("text-anchor", "middle").attr("y", $scope.config.legendYTextBottomCorner + $scope.config.legendYSpaceTitleBars + $scope.config.legendBarHeight + $scope.config.legendYSpaceBottomTicks).attr("x", i * barSpace + $scope.config.legendXCorner + (barSpace / 2)).text(i + 1));
@@ -299,7 +302,7 @@ scorebar.controller('worldMapCtrl', function($scope) {
       html = '<table style="width:' + $("#mapPopoverPanel .panel-body").width() + 'px">';
       html += '<tbody>';
       html += '<tr>';
-      for (i = _i = 0, _ref = $scope.problems.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+      for (i = _i = 0, _ref = $scope.problems.length - 1; _i <= _ref; i = _i += 1) {
         if (i % 4 === 0) {
           html += '</tr><tr>';
         }

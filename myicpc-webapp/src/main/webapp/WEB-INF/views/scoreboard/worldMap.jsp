@@ -6,7 +6,7 @@
         <script src="<c:url value='/js/myicpc/controllers/worldMap.js'/>"></script>
         <script type="application/javascript">
             $(function() {
-                var teamCoordinates = ${not empty teamCoordinates ? teamCoordinates : '{}'};
+                var teamCoordinates = ${not empty teamCoordinatesJSON ? teamCoordinatesJSON : '{}'};
                 var teams = ${not empty teamJSON ? teamJSON : '[]'};
                 var problems = ${not empty problemJSON ? problemJSON : '[]'};
                 var mapConfigurations = ${not empty mapConfigurations ? mapConfigurations : '[]'};

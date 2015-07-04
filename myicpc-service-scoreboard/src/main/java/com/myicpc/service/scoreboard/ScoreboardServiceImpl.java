@@ -6,6 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.myicpc.dto.eventFeed.LastTeamSubmissionDTO;
+import com.myicpc.dto.eventFeed.TeamDTO;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.LastTeamProblem;
 import com.myicpc.model.eventFeed.Problem;
@@ -22,6 +23,7 @@ import com.myicpc.service.publish.PublishService;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -65,8 +67,9 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
      * submissions
      */
     @Override
+    @Transactional(readOnly = true)
     public JsonArray getTeamsFullTemplate(final Contest contest) {
-        List<Team> teams = teamRepository.findByContest(contest);
+        List<TeamDTO> teams = teamRepository.findTeamDTOByContest(contest);
         List<LastTeamSubmissionDTO> submissions = lastTeamProblemRepository.findLastTeamSubmissionDTOByContest(contest);
         return getTeamsFullTemplate(teams, submissions, contest);
 
@@ -80,25 +83,30 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
      * @return JSON representation of selected teams paired with last team
      * submissions
      */
-    private JsonArray getTeamsFullTemplate(final List<Team> teams, final List<LastTeamSubmissionDTO> submissions, final Contest contest) {
+    private JsonArray getTeamsFullTemplate(final List<TeamDTO> teams, final List<LastTeamSubmissionDTO> submissions, final Contest contest) {
         Multimap<Long, LastTeamSubmissionDTO> submissionMultimap = HashMultimap.create();
         for (LastTeamSubmissionDTO submission : submissions) {
             submissionMultimap.put(submission.getTeamId(), submission);
         }
 
         JsonArray root = new JsonArray();
-        for (Team team : teams) {
+        for (TeamDTO team : teams) {
             JsonObject teamObject = new JsonObject();
             teamObject.addProperty("teamId", team.getExternalId());
             teamObject.addProperty("teamExternalId", team.getExternalId());
             teamObject.addProperty("teamRank", team.getRank());
             teamObject.addProperty("teamName", team.getName());
+            teamObject.addProperty("nSolved", team.getProblemsSolved());
+            teamObject.addProperty("totalTime", team.getTotalTime());
             if (contest.getContestSettings().isShowCountry()) {
                 teamObject.addProperty("nationality", team.getNationality());
             }
-            teamObject.addProperty("nSolved", team.getProblemsSolved());
-            teamObject.addProperty("totalTime", team.getTotalTime());
-            teamObject.addProperty("followed", team.isFollowed());
+            if (contest.getContestSettings().isShowUniversity()) {
+                teamObject.addProperty("universityName", team.getUniversityName());
+            }
+            if (contest.getContestSettings().isShowRegion()) {
+                teamObject.addProperty("regionName", team.getRegionName());
+            }
 
             JsonObject teamProblems = new JsonObject();
             for (LastTeamSubmissionDTO submission : submissionMultimap.get(team.getId())) {

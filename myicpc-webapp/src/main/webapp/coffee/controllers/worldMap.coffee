@@ -46,6 +46,9 @@ scorebar.controller('worldMapCtrl', ($scope) ->
     return _.find($scope.teams, (obj) -> return obj.teamId == teamId)
 
   $scope.filterTeams = (team) ->
+    console.log($scope.config.isCountryBased)
+    console.log($scope.activeComponent.id)
+    console.log(team.regionName)
     if $scope.config.isCountryBased
       return team.nationality == $scope.activeComponent.id
     else
@@ -199,7 +202,7 @@ scorebar.controller('worldMapCtrl', ($scope) ->
         .attr("x", $scope.config.legendXCorner)
         .text("Team rank legend")
 
-      for i in [0..$scope.config.teamCount]
+      for i in [0..$scope.config.teamCount] by 1
         svg.append("rect")
           .attr("x", i * barSpace + $scope.config.legendXCorner)
           .attr("y", $scope.config.legendYTextBottomCorner + $scope.config.legendYSpaceTitleBars)
@@ -260,7 +263,7 @@ scorebar.controller('worldMapCtrl', ($scope) ->
       html = '<table style="width:'+$("#mapPopoverPanel .panel-body").width()+'px">';
       html += '<tbody>';
       html += '<tr>';
-      for i in [0..$scope.problems.length - 1]
+      for i in [0..$scope.problems.length - 1] by 1
         if ( (i) % 4 == 0)
           html += '</tr><tr>'
 

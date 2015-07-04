@@ -1,7 +1,7 @@
 package com.myicpc.repository.eventFeed;
 
+import com.myicpc.dto.eventFeed.TeamDTO;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.model.eventFeed.Problem;
 import com.myicpc.model.eventFeed.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,6 +15,11 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
     List<Team> findByContest(Contest contest);
 
     List<Team> findByContestOrderByNameAsc(Contest contest);
+
+    @Query("SELECT new com.myicpc.dto.eventFeed.TeamDTO(t.id, t.externalId, t.rank, t.name, t.nationality, t.problemsSolved, t.totalTime, u.externalId, u.name, r.externalId, r.name) " +
+            "FROM Team t LEFT JOIN t.teamInfo ti LEFT JOIN ti.university u LEFT JOIN ti.region r " +
+            "WHERE t.contest = ?1")
+    List<TeamDTO> findTeamDTOByContest(Contest contest);
 
     @Query("SELECT t FROM Team t WHERE t.contest = ?1 AND t.id IN ?2")
     List<Team> findByContestAndTeamIds(Contest contest, List<Long> ids);
