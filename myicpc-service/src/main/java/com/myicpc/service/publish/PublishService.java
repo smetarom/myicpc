@@ -2,7 +2,6 @@ package com.myicpc.service.publish;
 
 import com.google.gson.JsonObject;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.model.eventFeed.TeamProblem;
 import com.myicpc.model.poll.Poll;
 import com.myicpc.model.poll.PollOption;
 import com.myicpc.model.social.Notification;
@@ -10,7 +9,6 @@ import com.myicpc.service.notification.NotificationService;
 import org.atmosphere.cpr.AtmosphereFramework;
 import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.cpr.BroadcasterFactory;
-import org.atmosphere.cpr.MetaBroadcaster;
 import org.atmosphere.util.ServletContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +44,17 @@ public class PublishService {
      * Web socket channel for Quest
      */
     public static final String QUEST = "quest";
+
+    private BroadcasterFactory broadcasterFactory;
+
+    private BroadcasterFactory getBroadcasterFactory() {
+        if (broadcasterFactory == null) {
+            ServletContext servletContext = ServletContextFactory.getDefault().getServletContext();
+            AtmosphereFramework framework = (AtmosphereFramework) servletContext.getAttribute("AtmosphereServlet");
+            broadcasterFactory = framework.getBroadcasterFactory();
+        }
+        return broadcasterFactory;
+    }
 
     /**
      * Broadcast a team submission to channel SCOREBOARD_CHANNEL
@@ -103,15 +112,12 @@ public class PublishService {
      * @param message message
      */
     private void atmospherePublish(final String channel, final String message) {
-//        ServletContext servletContext = ServletContextFactory.getDefault().getServletContext();
-//        AtmosphereFramework framework = (AtmosphereFramework) servletContext.getAttribute("AtmosphereServlet");
-//        BroadcasterFactory broadcasterFactory = framework.getBroadcasterFactory();
-//        System.out.println(broadcasterFactory);
-        BroadcasterFactory broadcasterFactory = BroadcasterFactory.getDefault();
+        BroadcasterFactory broadcasterFactory = getBroadcasterFactory();
         if (broadcasterFactory != null) {
-            Broadcaster b = broadcasterFactory.lookup(channel);
-            if (b != null) {
-                b.broadcast(message);
+            Broadcaster broadcaster = broadcasterFactory.lookup(channel);
+            if (broadcaster != null) {
+                broadcaster.broadcast(message);
+                System.out.println(message);
                 return;
             }
         }

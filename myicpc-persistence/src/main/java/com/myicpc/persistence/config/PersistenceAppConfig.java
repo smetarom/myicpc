@@ -56,7 +56,7 @@ public class PersistenceAppConfig {
     private Properties additionalProperties() {
         Properties prop = new Properties();
         prop.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL9Dialect");
-        prop.setProperty("hibernate.show_sql", "true");
+        prop.setProperty("hibernate.show_sql", "false");
         prop.setProperty("hibernate.hbm2ddl.auto", "update");
         prop.setProperty("hibernate.connection.characterEncoding", "UTF-8");
         prop.setProperty("hibernate.connection.useUnicode", "true");
