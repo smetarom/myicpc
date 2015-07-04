@@ -308,7 +308,7 @@ sortTeamRanks = function(teams, offset) {
 };
 
 updateScorebar = function(data, ngController) {
-  var effectedTeam, effectedTeams, i, index, key, team, teamId, _i, _ref;
+  var effectedTeam, effectedTeams, i, index, team, teamId, _i, _j, _ref, _ref1;
   if (ngController == null) {
     ngController = null;
   }
@@ -330,14 +330,16 @@ updateScorebar = function(data, ngController) {
         team.failed.push(data["problemCode"]);
       }
       if (data.judged && data.solved) {
-        for (key in data.teams) {
-          teamId = parseInt(key);
-          effectedTeam = ngController.findById(teamId);
-          effectedTeam.teamRank = data.teams[key].teamRank;
+        if (data.teams.length > 0) {
+          for (i = _i = 0, _ref = data.teams.length - 1; _i <= _ref; i = _i += 1) {
+            teamId = parseInt(data.teams[i][0]);
+            effectedTeam = ngController.findById(teamId);
+            effectedTeam.teamRank = data.teams[i][1];
+          }
         }
         effectedTeams = ngController.sortTeams(sortTeamRanks, team);
         console.log(effectedTeams.length);
-        for (i = _i = 0, _ref = effectedTeams.length - 1; _i <= _ref; i = _i += 1) {
+        for (i = _j = 0, _ref1 = effectedTeams.length - 1; _j <= _ref1; i = _j += 1) {
           ngController.drawTeamBar(effectedTeams[i]);
           ngController.updateTeamInfo(effectedTeams[i]);
         }

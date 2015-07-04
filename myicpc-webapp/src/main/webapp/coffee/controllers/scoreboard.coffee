@@ -94,8 +94,9 @@ updateScoreboard = (data, ngController = null) ->
       $(".team_" + data.teamId).effect("highlight", {color: colorBg}, 3000)
 
       ngController.$apply(() ->
-        for key of data.teams
-          ngController.updateRank(data.teams[key].teamId, data.teams[key].teamRank)
+        if data.teams.length > 0
+          for i in [0..data.teams.length-1] by 1
+            ngController.updateRank(data.teams[i][0], data.teams[i][1])
 
         if data.solved
           ngController.updateNumSolvedAndTotalTime(data.teamId, data.numSolved, data.total)

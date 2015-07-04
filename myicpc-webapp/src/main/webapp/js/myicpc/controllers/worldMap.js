@@ -389,10 +389,12 @@ updateWorldMap = function(data, ngController) {
         }, 3000);
       }
       return ngController.$apply(function() {
-        var key;
-        for (key in data.teams) {
-          ngController.updateRank(data.teams[key].teamId, data.teams[key].teamRank);
-          ngController.updateTeamOnMap(ngController.getTeamById(data.teams[key].teamId));
+        var i, _i, _ref;
+        if (data.teams.length > 0) {
+          for (i = _i = 0, _ref = data.teams.length - 1; _i <= _ref; i = _i += 1) {
+            ngController.updateRank(data.teams[i][0], data.teams[i][1]);
+            ngController.updateTeamOnMap(ngController.getTeamById(data.teams[i][0]));
+          }
         }
         if (data.solved) {
           ngController.updateNumSolvedAndTotalTime(data.teamId, data.numSolved, data.total);

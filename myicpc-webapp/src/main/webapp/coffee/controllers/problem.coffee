@@ -71,7 +71,7 @@ problemApp.factory('problemService', ($rootScope) ->
   problemService.getSubmissionIndex = (submissions, submission) ->
     index = -1
     if submissions? && submissions.length > 0
-      for i in [0..submissions.length-1]
+      for i in [0..submissions.length-1] by 1
         if (submissions[i].id == submission.id)
           index = i
           break
@@ -133,7 +133,7 @@ problemApp.controller('problemTeamsCtrl', ($scope, $rootScope, $http, problemSer
     $http.get(url).success((submissions) ->
       if submissions.length > 0
         teamsObject = {}
-        for i in [0..submissions.length-1]
+        for i in [0..submissions.length-1] by 1
           submission = submissions[i]
 
           createJudgementDetail(submission)
@@ -155,7 +155,7 @@ problemApp.controller('problemTeamsCtrl', ($scope, $rootScope, $http, problemSer
       createJudgementDetail(submission)
       teamIndex = -1
       if ($scope.teams.length > 0)
-        for i in [0..$scope.teams.length-1]
+        for i in [0..$scope.teams.length-1] by 1
           if $scope.teams[i].teamExternalId == submission.teamExternalId
             teamIndex = i
 
@@ -219,7 +219,7 @@ problemApp.controller('problemOverviewCtrl', ($scope, $rootScope, $http, problem
         index = -1
         console.log($scope.data[0])
         if $scope.data[0].values.length > 0
-          for i in [0..$scope.data[0].values.length-1]
+          for i in [0..$scope.data[0].values.length-1] by 1
             if $scope.data[0].values[i][0].teamExternalId == submission.teamExternalId
               index = i
               break

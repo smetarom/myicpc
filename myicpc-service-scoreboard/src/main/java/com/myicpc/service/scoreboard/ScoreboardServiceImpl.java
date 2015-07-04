@@ -4,9 +4,10 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.myicpc.dto.eventFeed.LastTeamSubmissionDTO;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.LastTeamProblem;
-import com.myicpc.dto.eventFeed.LastTeamSubmissionDTO;
 import com.myicpc.model.eventFeed.Problem;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
@@ -193,29 +194,23 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
         JsonObject tpObject = new JsonObject();
         tpObject.addProperty("type", "submission");
         tpObject.addProperty("teamId", teamProblem.getTeam().getExternalId());
-        tpObject.addProperty("teamName", teamProblem.getTeam().getName());
         tpObject.addProperty("problemId", teamProblem.getProblem().getId());
-        tpObject.addProperty("problemCode", teamProblem.getProblem().getCode());
-        tpObject.addProperty("problemName", teamProblem.getProblem().getName());
         tpObject.addProperty("attempts", teamProblem.getAttempts());
         tpObject.addProperty("judged", teamProblem.getJudged());
         tpObject.addProperty("solved", teamProblem.getSolved());
-        tpObject.addProperty("passed", teamProblem.getNumTestPassed());
         tpObject.addProperty("first", teamProblem.isFirstSolved());
-        tpObject.addProperty("testcases", teamProblem.getProblem().getTotalTestcases());
         tpObject.addProperty("penalty", teamProblem.getPenalty());
         tpObject.addProperty("time", teamProblem.getTime());
         tpObject.addProperty("total", teamProblem.getTeam().getTotalTime());
         tpObject.addProperty("numSolved", teamProblem.getTeam().getProblemsSolved());
-        tpObject.addProperty("oldRank", teamProblem.getOldRank());
         tpObject.addProperty("teamRank", teamProblem.getTeam().getRank());
 
-        JsonObject teamsObject = new JsonObject();
+        JsonArray teamsObject = new JsonArray();
         for (Team team : effectedTeams) {
-            JsonObject teamObject = new JsonObject();
-            teamObject.addProperty("teamId", team.getExternalId());
-            teamObject.addProperty("teamRank", team.getRank());
-            teamsObject.add(team.getExternalId().toString(), teamObject);
+            JsonArray teamUpdate = new JsonArray();
+            teamUpdate.add(new JsonPrimitive(team.getExternalId()));
+            teamUpdate.add(new JsonPrimitive(team.getRank()));
+            teamsObject.add(teamUpdate);
         }
         tpObject.add("teams", teamsObject);
         return tpObject;

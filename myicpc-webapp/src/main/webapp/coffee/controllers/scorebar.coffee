@@ -373,10 +373,11 @@ updateScorebar = (data, ngController = null) ->
         team.failed.push(data["problemCode"]);
 
       if data.judged && data.solved
-        for key of data.teams
-          teamId = parseInt(key)
-          effectedTeam = ngController.findById(teamId)
-          effectedTeam.teamRank = data.teams[key].teamRank
+        if data.teams.length > 0
+          for i in [0..data.teams.length-1] by 1
+            teamId = parseInt(data.teams[i][0])
+            effectedTeam = ngController.findById(teamId)
+            effectedTeam.teamRank = data.teams[i][1]
 
         effectedTeams = ngController.sortTeams(sortTeamRanks, team)
         console.log(effectedTeams.length)

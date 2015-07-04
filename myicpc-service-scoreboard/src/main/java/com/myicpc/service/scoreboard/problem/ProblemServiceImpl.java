@@ -1,9 +1,7 @@
 package com.myicpc.service.scoreboard.problem;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import com.myicpc.dto.eventFeed.TeamSubmissionDTO;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Judgement;
@@ -16,19 +14,13 @@ import com.myicpc.repository.eventFeed.TeamProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.service.listener.ScoreboardListenerAdapter;
 import com.myicpc.service.publish.PublishService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * @author Roman Smetana
@@ -134,7 +126,6 @@ public class ProblemServiceImpl extends ScoreboardListenerAdapter implements Pro
         return arr;
     }
 
-    static Random random = new Random(System.currentTimeMillis());
     public static JsonObject getTeamSubmissionJSON(final TeamSubmissionDTO teamProblem) {
         JsonObject submissionJSON = new JsonObject();
         submissionJSON.addProperty("id", teamProblem.getTeamSubmissionId());
@@ -145,8 +136,6 @@ public class ProblemServiceImpl extends ScoreboardListenerAdapter implements Pro
         submissionJSON.addProperty("judgement", teamProblem.getJudgement());
         submissionJSON.addProperty("passed", teamProblem.getNumTestPassed());
         submissionJSON.addProperty("testcases", teamProblem.getTotalNumTests());
-        submissionJSON.addProperty("passed", random.nextInt(50));
-        submissionJSON.addProperty("testcases", 50);
         submissionJSON.addProperty("teamExternalId", teamProblem.getTeamId());
         submissionJSON.addProperty("teamName", teamProblem.getTeamName());
         return submissionJSON;

@@ -68,7 +68,7 @@ problemApp.factory('problemService', function($rootScope) {
     var i, index, _i, _ref;
     index = -1;
     if ((submissions != null) && submissions.length > 0) {
-      for (i = _i = 0, _ref = submissions.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+      for (i = _i = 0, _ref = submissions.length - 1; _i <= _ref; i = _i += 1) {
         if (submissions[i].id === submission.id) {
           index = i;
           break;
@@ -136,7 +136,7 @@ problemApp.controller('problemTeamsCtrl', function($scope, $rootScope, $http, pr
       var i, submission, teamsObject, _i, _ref;
       if (submissions.length > 0) {
         teamsObject = {};
-        for (i = _i = 0, _ref = submissions.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+        for (i = _i = 0, _ref = submissions.length - 1; _i <= _ref; i = _i += 1) {
           submission = submissions[i];
           createJudgementDetail(submission);
           if (teamsObject[submission.teamExternalId] == null) {
@@ -161,7 +161,7 @@ problemApp.controller('problemTeamsCtrl', function($scope, $rootScope, $http, pr
       createJudgementDetail(submission);
       teamIndex = -1;
       if ($scope.teams.length > 0) {
-        for (i = _i = 0, _ref = $scope.teams.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+        for (i = _i = 0, _ref = $scope.teams.length - 1; _i <= _ref; i = _i += 1) {
           if ($scope.teams[i].teamExternalId === submission.teamExternalId) {
             teamIndex = i;
           }
@@ -232,7 +232,7 @@ problemApp.controller('problemOverviewCtrl', function($scope, $rootScope, $http,
         index = -1;
         console.log($scope.data[0]);
         if ($scope.data[0].values.length > 0) {
-          for (i = _i = 0, _ref = $scope.data[0].values.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+          for (i = _i = 0, _ref = $scope.data[0].values.length - 1; _i <= _ref; i = _i += 1) {
             if ($scope.data[0].values[i][0].teamExternalId === submission.teamExternalId) {
               index = i;
               break;
