@@ -10,89 +10,20 @@
         ${pageTitle}
     </jsp:attribute>
     <jsp:attribute name="javascript">
-        <script type="application/javascript">
-            var currentTile = null;
-            var currentMedia = "${not empty active ? active : 'gallery'}";
 
-            function showGalleryModal(tile) {
-                var modalTemplate = compileHandlebarsTemplate("gallery-modal-template");
-                var context = {};
-                context['notificationId'] = $(tile).data('id');
-                context['originalUrl'] = $(tile).data('url');
-                context['imageUrl'] = $(tile).data('image-url');
-                context['videoUrl'] = $(tile).data('video-url');
-                context['authorName'] = $(tile).data('author-name');
-                context['avatarUrl'] = $(tile).data('author-avatar');
-                context['text'] = $(tile).data('text');
-
-                $("#galleryPopupContent").html(modalTemplate(context));
-                currentTile = tile;
-            }
-
-            function previousTile() {
-                if (currentTile !== null) {
-                    var $currentTile = $(currentTile);
-                    if($currentTile.prev().length) {
-                        var previousTile = $currentTile.prev();
-                        showGalleryModal(previousTile);
-                        currentTile = previousTile;
-                    } else {
-                        $('#galleryPopup').modal('hide');
-                    }
-                }
-            }
-
-            function nextTile() {
-                if (currentTile !== null) {
-                    var nextTile = $(currentTile).next();
-                    showGalleryModal(nextTile);
-                    currentTile = nextTile;
-                }
-                $("#gallery-content").empty();
-            }
-
-            function loadingTile() {
-                $("#gallery-submenu").empty();
-            }
-
-            function loadMore(url) {
-                $.get(url, {'since-notification-id': lastNotificationId, 'media': currentMedia}, function( data ) {
-                    if (data.trim() === "") {
-                        $(".load-more-btn").addClass('hidden');
-                        return false;
-                    }
-                    $("#galleryTiles").append(data);
-                    return true;
-                });
-            }
-
-            function removeOnError(elem, id) {
-                console.log($(elem));
-                $(elem).parent().remove();
-                $.post("<spring:url value="${contestURL}/gallery/remove/" />" + id);
-            }
-
-            var $galleryPopup = $('#galleryPopup');
-            $galleryPopup.on('hide.bs.modal', function () {
-                $("#galleryPopupContent").html('');
-                currentTile = null;
-            });
-
-            $galleryPopup.keydown(function(e) {
-                if (e.keyCode === 37) {
-                    previousTile();
-                } else if (e.keyCode === 39) {
-                    nextTile();
-                }
-            });
-
-            $(window).scroll(function() {
-                if($(window).scrollTop() == $(document).height() - $(window).height() && !$(".load-more-btn").hasClass('hidden')) {
-
-                    $(".load-more-btn").removeClass('hidden');
-                    loadMore("<spring:url value="${contestURL}/gallery/loadMore" />");
-                }
-            });
+        <script id="gallery-item-template" type="text/x-jquery-tmpl">
+            <a href="#" onclick="Gallery.showGalleryModal(this);" class="gallery-thumbnail" data-toggle="modal" data-target="#galleryPopup"
+               data-id="{{id}}"
+               data-image-url="{{imageUrl}}"
+               data-video-url="{{videoUrl}}"
+               data-url="{{url}}"
+               data-author-name="{{authorName}}"
+               data-author-avatar="{{profileUrl}}">
+                {{#if isVideo}}
+                    <div class="play-button glyphicon glyphicon-play-circle"></div>
+                {{/if}}
+                <img src="{{thumbnailUrl}}" alt="{{title}}" width="250" height="250" onerror="removeOnError(this, {{id}})">
+            </a>
         </script>
 
         <script id="gallery-modal-template" type="text/x-jquery-tmpl">
@@ -109,9 +40,9 @@
         </div>
         <div class="col-sm-4 gallery-submenu">
             <div class="text-center">
-                <button type="button" onclick="previousTile();" class="btn btn-link"><t:glyphIcon icon="arrow-left" /> <spring:message code="previous" /></button>
+                <button type="button" onclick="Gallery.previousTile();" class="btn btn-link"><t:glyphIcon icon="arrow-left" /> <spring:message code="previous" /></button>
                 <button type="button" class="btn btn-link" data-dismiss="modal"><t:glyphIcon icon="th" /></button>
-                <button type="button" onclick="nextTile();" class="btn btn-link"><spring:message code="next" /> <t:glyphIcon icon="arrow-right" /></button>
+                <button type="button" onclick="Gallery.nextTile();" class="btn btn-link"><spring:message code="next" /> <t:glyphIcon icon="arrow-right" /></button>
             </div>
             <table>
                 <tr>
@@ -123,10 +54,60 @@
             </table>
 
             <div>
-                <a href="{{originalUrl}}" target="_blank" class="btn btn-primary btn-block"><spring:message code="view.originalPost" /></a>
+                <a href="{{originalUrl}}" target="_blank" class="btn btn-link btn-block"><spring:message code="view.originalPost" /></a>
             </div>
         </div>
         </script>
+
+        <script src="<c:url value='/js/myicpc/gallery.js'/>" defer></script>
+        <script type="application/javascript">
+            var currentTile = null;
+            var currentMedia = "${not empty active ? active : 'gallery'}";
+
+            function removeOnError(elem, id) {
+                console.log($(elem));
+                $(elem).parent().remove();
+                $.post("<spring:url value="${contestURL}/gallery/remove/" />" + id);
+            }
+
+            var $galleryPopup = $('#galleryPopup');
+            $galleryPopup.on('hide.bs.modal', function () {
+                $("#galleryPopupContent").html('');
+                currentTile = null;
+            });
+
+            $galleryPopup.keydown(function(e) {
+                if (e.keyCode === 37) {
+                    Gallery.previousTile();
+                } else if (e.keyCode === 39) {
+                    Gallery.nextTile();
+                }
+            });
+
+            function acceptGalleryPost(notification) {
+                var acceptedTypes = ${not empty acceptedTypes ? acceptedTypes : []};
+                if (acceptedTypes.valueOf(notification.type) !== -1) {
+                    if (notification.imageUrl !== null || notification.videoUrl !== null) {
+                        return true;
+                    }
+                }
+                return false;
+            };
+
+            $(window).scroll(function() {
+                if($(window).scrollTop() == $(document).height() - $(window).height() && !$(".load-more-btn").hasClass('hidden')) {
+                    $(".load-more-btn").removeClass('hidden');
+                    Gallery.loadMore("<spring:url value="${contestURL}/gallery/loadMore" />");
+                }
+            });
+
+            $(function() {
+                Gallery.acceptGalleryPost = acceptGalleryPost;
+                startSubscribe('${r.contextPath}', '${contest.code}', 'notification', Gallery.updateGallery, null);
+            })
+        </script>
+
+
     </jsp:attribute>
 
     <jsp:body>
@@ -170,7 +151,7 @@
                 <%@ include file="/WEB-INF/views/gallery/fragment/galleryTiles.jsp" %>
             </div>
             <br />
-            <button onclick="loadMore('<spring:url value="${contestURL}/gallery/loadMore" />');" class="load-more-btn btn btn-default" type="button">
+            <button onclick="Gallery.loadMore('<spring:url value="${contestURL}/gallery/loadMore" />');" class="load-more-btn btn btn-default" type="button">
                 <spring:message code="showMore" />
             </button>
         </div>

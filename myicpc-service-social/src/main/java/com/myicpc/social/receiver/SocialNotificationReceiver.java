@@ -1,12 +1,8 @@
 package com.myicpc.social.receiver;
 
 import com.myicpc.dto.jms.JMSEvent;
-import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.model.social.Notification;
 import com.myicpc.repository.contest.ContestRepository;
-import com.myicpc.service.exception.AuthenticationException;
-import com.myicpc.service.exception.WebServiceException;
 import com.myicpc.service.notification.NotificationService;
 import com.myicpc.social.poll.PollService;
 import com.myicpc.social.service.InstagramService;
@@ -52,15 +48,15 @@ public class SocialNotificationReceiver {
             return;
         }
         switch (jmsEvent.getEventType()) {
-//            case VINE:
-//                processVineUpdates(contest);
-//                break;
-//            case INSTAGRAM:
-//                processInstagramUpdates(contest);
-//                break;
-//            case TWITTER:
-//                processTwitterStart(contest);
-//                break;
+            case VINE:
+                processVineUpdates(contest);
+                break;
+            case INSTAGRAM:
+                processInstagramUpdates(contest);
+                break;
+            case TWITTER:
+                processTwitterStart(contest);
+                break;
             case POLL_OPEN:
                 processPollUpdates(contest);
                 break;

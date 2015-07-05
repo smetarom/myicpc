@@ -1,6 +1,9 @@
 package com.myicpc.controller.social.gallery;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonPrimitive;
 import com.myicpc.controller.GeneralController;
+import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.Notification;
 import com.myicpc.service.exception.WebServiceException;
@@ -76,6 +79,12 @@ public class GalleryController extends GeneralController {
         model.addAttribute("sideMenuActive", "gallery");
         model.addAttribute("pageTitle", getMessage("nav."+media));
         model.addAttribute("active", media);
+        JsonArray acceptedTypes = new JsonArray();
+        for (NotificationType galleryType : GalleryService.GALLERY_TYPES) {
+            acceptedTypes.add(new JsonPrimitive(galleryType.getCode()));
+        }
+        model.addAttribute("acceptedTypes", acceptedTypes.toString());
+
         // TODO
 //        model.addAttribute("picasaUserId", contest.getWebServiceSettings().getPicasaUsername());
 //        model.addAttribute("picasaAlbumId", WebServiceUtils.getCrowdPicasaAlbumId());

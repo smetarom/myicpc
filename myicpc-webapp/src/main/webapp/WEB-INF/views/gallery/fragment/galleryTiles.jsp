@@ -1,7 +1,7 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
 
 <c:forEach var="notification" items="${notifications}">
-    <a href="#" onclick="showGalleryModal(this);" class="gallery-thumbnail" data-toggle="modal" data-target="#galleryPopup"
+    <a href="#" onclick="Gallery.showGalleryModal(this);" class="gallery-thumbnail" data-toggle="modal" data-target="#galleryPopup"
        data-id="${notification.id}"
        data-image-url="${notification.imageUrl}"
        data-video-url="${notification.videoUrl}"
