@@ -203,6 +203,19 @@ public class QuestController extends GeneralController {
         return resolveView("quest/leaderboard", "quest/leaderboard_mobile", sitePreference);
     }
 
+    @RequestMapping(value = "/{contestCode}/quest/leaderboard/{urlCode}/update", method = RequestMethod.GET)
+    public String leaderboardUpdate(@PathVariable String urlCode, @PathVariable final String contestCode, Model model, HttpServletRequest request, SitePreference sitePreference) {
+        Contest contest = getContest(contestCode, model);
+
+        QuestLeaderboard activeLeaderboard = leaderboardRepository.findByUrlCodeAndContestAndPublished(urlCode, contest, true);
+
+        model.addAttribute("activeLeaderboard", activeLeaderboard);
+        model.addAttribute("includeJavascript", true);
+        initiateLeaderboard(activeLeaderboard, contest, model, request);
+
+        return resolveView("quest/fragment/leaderboard_desktop", "quest/fragment/leaderboard_mobile", sitePreference);
+    }
+
     private void initiateLeaderboard(QuestLeaderboard activeLeaderboard, Contest contest, Model model, HttpServletRequest request) {
         SitePreference sitePreference = SitePreferenceUtils.getCurrentSitePreference(request);
 
@@ -235,9 +248,9 @@ public class QuestController extends GeneralController {
         challenge.setHashtagPrefix(contest.getQuestConfiguration().getHashtagPrefix());
         model.addAttribute("device", device);
         model.addAttribute("challenge", challenge);
-        model.addAttribute("acceptedSubmissions", submissionRepository.findByChallengeAndSubmissionStateOrderByCreatedDesc(challenge, QuestSubmissionState.ACCEPTED));
-        model.addAttribute("pendingSubmissions", submissionRepository.findByChallengeAndSubmissionStateOrderByCreatedDesc(challenge, QuestSubmissionState.PENDING));
-        model.addAttribute("rejectedSubmissions", submissionRepository.findByChallengeAndSubmissionStateOrderByCreatedDesc(challenge, QuestSubmissionState.REJECTED));
+        model.addAttribute("acceptedSubmissions", submissionRepository.findByChallengeAndSubmissionStateOrderByNotificationTimestampDesc(challenge, QuestSubmissionState.ACCEPTED));
+        model.addAttribute("pendingSubmissions", submissionRepository.findByChallengeAndSubmissionStateOrderByNotificationTimestampDesc(challenge, QuestSubmissionState.PENDING));
+        model.addAttribute("rejectedSubmissions", submissionRepository.findByChallengeAndSubmissionStateOrderByNotificationTimestampDesc(challenge, QuestSubmissionState.REJECTED));
 
         return challenge;
     }

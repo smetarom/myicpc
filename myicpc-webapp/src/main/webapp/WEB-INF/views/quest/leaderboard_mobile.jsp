@@ -10,6 +10,29 @@
     <jsp:attribute name="title">
         <spring:message code="quest.leaderboard" />
     </jsp:attribute>
+    <jsp:attribute name="javascript">
+        <script type="application/javascript">
+            function updateLeaderboard() {
+                var $leaderboardNotification = $("#leaderboard-notification");
+                $leaderboardNotification.removeClass('hidden');
+            }
+
+            $(function() {
+                startSubscribe('${r.contextPath}', '${contest.code}', 'quest', updateLeaderboard, null);
+
+                $("#leaderboard-notification a").click(function() {
+                    var $leaderboardNotification = $("#leaderboard-notification");
+                    $leaderboardNotification.append('<span class="fa fa-spinner fa-spin"></span>');
+                    $.get("<spring:url value="/${contestURL}/quest/leaderboard/${activeLeaderboard.urlCode}/update" />", function(data) {
+                        $("#mainLeaderboardMobile").html(data);
+                        $leaderboardNotification.addClass('hidden');
+                        $leaderboardNotification.find(':last-child').remove();
+                    })
+                });
+            })
+        </script>
+    </jsp:attribute>
+
 
     <jsp:body>
         <%@ include file="/WEB-INF/views/quest/fragment/questInfo.jsp" %>
@@ -23,26 +46,14 @@
                 </t:secondLevelSubmenu>
             </c:if>
 
-            <table class="table table-striped table-condensed">
-                <thead>
-                    <tr class="leaderboard-header-row">
-                        <th><spring:message code="quest.leaderboard.rank" /></th>
-                        <th ><spring:message code="quest.leaderboard.participant" /></th>
-                        <th class="text-center"><spring:message code="quest.leaderboard.points" /></th>
-                        <th class="text-center"><spring:message code="quest.leaderboard.numSolved" /></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="questParticipant" items="${participants}" varStatus="status">
-                        <tr style="position: relative">
-                            <td>${status.index + 1}</td>
-                            <td><a href="<spring:url value="${contestURL}/person/${questParticipant.contestParticipant.id}" />">${questParticipant.contestParticipant.fullname}</a></td>
-                            <td class="text-center">${questParticipant.totalPoints}</td>
-                            <td class="text-center">${questParticipant.acceptedSubmissions}</td>
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
+            <div id="leaderboard-notification" class="alert alert-warning alert-dismissible hidden">
+                <button type="button" class="close" onclick="$(this).parent().addClass('hidden');">&times;</button>
+                <spring:message code="quest.leaderboard.newSubmission" /> <a href="javascript:void(0)" class="alert-link"><spring:message code="quest.leaderboard.newSubmission.refresh" /></a>
+            </div>
+
+            <div id="mainLeaderboardMobile">
+                <%@include file="/WEB-INF/views/quest/fragment/leaderboard_mobile.jsp" %>
+            </div>
         </c:if>
 
         <c:if test="${empty leaderboards}">

@@ -162,6 +162,7 @@ public class QuestMngmService extends EntityManagerService {
         CriteriaQuery<QuestSubmission> q = cb.createQuery(QuestSubmission.class);
         Root<QuestSubmission> c = q.from(QuestSubmission.class);
         Join<QuestSubmission, QuestChallenge> challengeJoin = c.join("challenge");
+        Join<QuestSubmission, Notification> notificationJoin = c.join("notification");
         // total count
         CriteriaQuery<Long> countQ = cb.createQuery(Long.class);
         Root<QuestSubmission> countRoot = countQ.from(QuestSubmission.class);
@@ -182,7 +183,7 @@ public class QuestMngmService extends EntityManagerService {
             countPredicate = cb.and(countPredicate, cb.equal(countRoot.<QuestParticipant>get("participant"), submissionFilter.getParticipant()));
         }
 
-        Path<Date> orderBy = c.get("created");
+        Path<Date> orderBy = notificationJoin.get("timestamp");
         Order order = cb.asc(orderBy);
         if (submissionFilter.getSortOrder() == SortOrder.DESC) {
             order = cb.desc(orderBy);
@@ -199,46 +200,44 @@ public class QuestMngmService extends EntityManagerService {
 
     /**
      * Accept a Quest submission
-     *
-     * @param submission
+     *  @param submission
      *            submission
      * @param questPoints
-     *            number of points awarded for this submission
+     * @param contest
      */
-    public void acceptQuestSubmission(QuestSubmission submission, final Integer questPoints) {
-        submission.setReasonToReject(null);
-        submission.setSubmissionState(QuestSubmissionState.ACCEPTED);
-        submission.setQuestPoints(questPoints);
-        submission = submissionRepository.save(submission);
+    public void acceptQuestSubmission(final QuestSubmission submission, final Integer questPoints, Contest contest) {
+        QuestSubmission submissionDB = submissionRepository.findOne(submission.getId());
+        submissionDB.setReasonToReject(null);
+        submissionDB.setSubmissionState(QuestSubmissionState.ACCEPTED);
+        submissionDB.setQuestPoints(questPoints);
+        submissionDB = submissionRepository.save(submissionDB);
 
-        submission.getParticipant().calcQuestPoints();
-        participantRepository.save(submission.getParticipant());
+        submissionDB.getParticipant().calcQuestPoints();
+        participantRepository.save(submissionDB.getParticipant());
 
-        // TODO broadcast a submission?
-//        PublishService.broadcastQuestSubmission(submission);
+        publishService.broadcastQuestSubmission(submissionDB, contest.getCode());
     }
 
     /**
      * Reject a Quest submission
-     *
-     * @param submission
+     *  @param submission
      *            submission
      * @param reasonToReject
-     *            reason, why submission was rejected
+     * @param contest
      */
-    public void rejectQuestSubmission(final QuestSubmission submission, final String reasonToReject) {
+    public void rejectQuestSubmission(final QuestSubmission submission, final String reasonToReject, Contest contest) {
+        QuestSubmission submissionDB = submissionRepository.findOne(submission.getId());
         if (!StringUtils.isEmpty(reasonToReject)) {
-            submission.setReasonToReject(reasonToReject);
+            submissionDB.setReasonToReject(reasonToReject);
         }
-        submission.setSubmissionState(QuestSubmissionState.REJECTED);
-        submission.setQuestPoints(0);
-        submissionRepository.save(submission);
+        submissionDB.setSubmissionState(QuestSubmissionState.REJECTED);
+        submissionDB.setQuestPoints(0);
+        submissionDB = submissionRepository.save(submissionDB);
 
-        submission.getParticipant().calcQuestPoints();
-        participantRepository.save(submission.getParticipant());
+        submissionDB.getParticipant().calcQuestPoints();
+        participantRepository.save(submissionDB.getParticipant());
 
-        // TODO broadcast a submission?
-//        PublishService.broadcastQuestSubmission(submission);
+        publishService.broadcastQuestSubmission(submissionDB, contest.getCode());
     }
 
     /**

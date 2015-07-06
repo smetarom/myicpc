@@ -103,8 +103,8 @@ public class QuestSubmissionAdminController extends GeneralAdminController {
         if (submission == null) {
             return "redirect:/private" + getContestURL(contestCode) + "/quest/submissions";
         }
-
-        questMngmService.rejectQuestSubmission(submission, reasonToReject);
+        Contest contest = getContest(contestCode, null);
+        questMngmService.rejectQuestSubmission(submission, reasonToReject, contest);
 
         return "redirect:/private" + getContestURL(contestCode) + "/quest/submissions";
     }
@@ -125,8 +125,9 @@ public class QuestSubmissionAdminController extends GeneralAdminController {
         if (submission == null) {
             return "redirect:/private" + getContestURL(contestCode) + "/quest/submissions";
         }
+        Contest contest = getContest(contestCode, null);
 
-        questMngmService.acceptQuestSubmission(submission, questPoints);
+        questMngmService.acceptQuestSubmission(submission, questPoints, contest);
 
         return "redirect:/private" + getContestURL(contestCode) + "/quest/submissions";
     }

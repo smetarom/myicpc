@@ -37,14 +37,14 @@ public class QuestSubmissionTag extends SimpleTagSupport {
         JspWriter out = getJspContext().getOut();
 
         if (questSubmission != null) {
-            if (showDescription && !StringUtils.isEmpty(questSubmission.getText())) {
-                out.write(String.format("<p>%s</p>",questSubmission.getText()));
+            if (showDescription && !StringUtils.isEmpty(questSubmission.getNotification().getBody())) {
+                out.write(String.format("<p>%s</p>",questSubmission.getNotification().getBody()));
             }
-            if (!StringUtils.isEmpty(questSubmission.getVideoUrl())) {
+            if (!StringUtils.isEmpty(questSubmission.getNotification().getVideoUrl())) {
                 String format = videoAutoplay ? VIDEO_FORMAT_AUTOPLAY : VIDEO_FORMAT;
-                out.print(String.format(format, questSubmission.getVideoUrl()));
-            } else if (!StringUtils.isEmpty(questSubmission.getImageUrl())) {
-                out.print(String.format(IMAGE_FORMAT, questSubmission.getImageUrl()));
+                out.print(String.format(format, questSubmission.getNotification().getVideoUrl()));
+            } else if (!StringUtils.isEmpty(questSubmission.getNotification().getImageUrl())) {
+                out.print(String.format(IMAGE_FORMAT, questSubmission.getNotification().getImageUrl()));
             }
         }
     }

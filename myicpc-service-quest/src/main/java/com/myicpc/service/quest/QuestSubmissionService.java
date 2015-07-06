@@ -13,6 +13,7 @@ import com.myicpc.repository.quest.QuestParticipantRepository;
 import com.myicpc.repository.quest.QuestSubmissionRepository;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.repository.teamInfo.ContestParticipantRepository;
+import com.myicpc.service.publish.PublishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -45,6 +46,9 @@ public class QuestSubmissionService {
 
     @Autowired
     private ContestParticipantRepository contestParticipantRepository;
+
+    @Autowired
+    private PublishService publishService;
 
     public void processAllSubmissions(final Contest contest) {
         List<QuestChallenge> challenges = challengeRepository.findByContest(contest);
@@ -80,6 +84,7 @@ public class QuestSubmissionService {
         Long sinceId = getLastProcessedId(contest);
 
         List<QuestChallenge> challenges = challengeRepository.findByContest(contest);
+        QuestService.applyHashtagPrefix(contest.getQuestConfiguration().getHashtagPrefix(), challenges);
         for (QuestChallenge challenge : challenges) {
             // find all submissions for challenge newer than last processed
             List<Notification> submissions = getAllSubmissionsSinceId(challenge.getHashtag(), contest.getHashtag(), sinceId);
@@ -113,13 +118,11 @@ public class QuestSubmissionService {
         questSubmission.setParticipant(questParticipant);
         questSubmission.setSubmissionState(QuestSubmissionState.PENDING);
         questSubmission.setQuestPoints(challenge.getDefaultPoints());
-        questSubmission.setText(submission.getBody());
-        questSubmission.setCreated(submission.getTimestamp());
-        questSubmission.setImageUrl(submission.getImageUrl());
-        questSubmission.setVideoUrl(submission.getVideoUrl());
-        questSubmission.setNotificationId(submission.getId());
+        questSubmission.setNotification(submission);
 
-        return submissionRepository.saveAndFlush(questSubmission);
+        QuestSubmission questSubmissionPersisted = submissionRepository.saveAndFlush(questSubmission);
+        publishService.broadcastQuestSubmission(questSubmissionPersisted, challenge.getContest().getCode());
+        return questSubmissionPersisted;
     }
 
     private QuestParticipant getQuestParticipant(final Contest contest, final Notification submission) {

@@ -155,7 +155,6 @@
   }
 
   #leaderboard-not-fixed table {
-
     table-layout: fixed;
   }
 
@@ -199,5 +198,25 @@
       vertical-align: bottom;
     }
   }
+}
+
+#leaderboard-notification {
+  display: block;
+  position: fixed;
+  top: 50px;
+  width: 100%;
+  text-align: center;
+  padding: 8px 35px 8px 8px;
+  z-index: 800;
+  color: #8a6d3b;
+  font-weight: bold;
+
+  button.close {
+    z-index: 801;
+  }
+}
+
+.mobile #leaderboard-notification {
+  top: 78px;
 }
 

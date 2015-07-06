@@ -1,24 +1,20 @@
 package com.myicpc.model.quest;
 
 import com.myicpc.model.IdGeneratedObject;
-import org.hibernate.annotations.Type;
+import com.myicpc.model.social.Notification;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
 
 /**
  * Quest submission, which tries to solve the {@link QuestChallenge}
@@ -80,37 +76,9 @@ public class QuestSubmission extends IdGeneratedObject {
     private int votes = 0;
 
     /**
-     * {@link com.myicpc.model.social.Notification} ID, from which we received the submission
-     */
-    private Long notificationId;
-
-    /**
-     * Text of the submission
-     */
-    @Lob
-    @Type(type = "org.hibernate.type.StringClobType")
-    private String text;
-
-    /**
-     * URL of image/video or other media
-     */
-    private String imageUrl;
-
-    /**
-     * URL of video or other media
-     */
-    private String videoUrl;
-
-    /**
      * Reason why the submission was rejected
      */
     private String reasonToReject;
-
-    /**
-     * Create timestamp
-     */
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date created;
 
     /**
      * Submission for {@link QuestChallenge}
@@ -127,6 +95,14 @@ public class QuestSubmission extends IdGeneratedObject {
     @NotNull
     @JoinColumn(name = "participantId")
     private QuestParticipant participant;
+
+
+    /**
+     * {@link com.myicpc.model.social.Notification}, from which we received the submission
+     */
+    @ManyToOne
+    @JoinColumn(name = "notificationId")
+    private Notification notification;
 
     /**
      * Submission state
@@ -157,45 +133,6 @@ public class QuestSubmission extends IdGeneratedObject {
         this.votes = votePoints;
     }
 
-    public Long getNotificationId() {
-        return notificationId;
-    }
-
-    public void setNotificationId(final Long notificationId) {
-        this.notificationId = notificationId;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(final String text) {
-        this.text = text;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    public String getVideoUrl() {
-        return videoUrl;
-    }
-
-    public void setVideoUrl(String videoUrl) {
-        this.videoUrl = videoUrl;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(final Date created) {
-        this.created = created;
-    }
 
     public QuestChallenge getChallenge() {
         return challenge;
@@ -211,6 +148,14 @@ public class QuestSubmission extends IdGeneratedObject {
 
     public void setParticipant(final QuestParticipant participant) {
         this.participant = participant;
+    }
+
+    public Notification getNotification() {
+        return notification;
+    }
+
+    public void setNotification(Notification notification) {
+        this.notification = notification;
     }
 
     public String getReasonToReject() {
@@ -247,14 +192,6 @@ public class QuestSubmission extends IdGeneratedObject {
         if (participant != null) {
             participant.calcQuestPoints();
         }
-    }
-
-    /**
-     * @return submission without HTML tags
-     */
-    @Transient
-    public String getEscapedText() {
-        return text.replaceAll("<.*?>", "");
     }
 
     @Transient

@@ -1,12 +1,10 @@
 package com.myicpc.service.quest.receiver;
 
 import com.myicpc.dto.jms.JMSEvent;
-import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.model.social.Notification;
 import com.myicpc.repository.contest.ContestRepository;
-import com.myicpc.service.quest.QuestMngmService;
 import com.myicpc.service.quest.QuestService;
+import com.myicpc.service.quest.QuestSubmissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Service;
@@ -19,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class QuestNotificationReceiver {
     @Autowired
     private QuestService questService;
+
+    @Autowired
+    private QuestSubmissionService questSubmissionService;
 
     @Autowired
     private ContestRepository contestRepository;
@@ -34,7 +35,15 @@ public class QuestNotificationReceiver {
             case QUEST_CHALLENGE:
                 processQuestChallengeUpdates(contest);
                 break;
+            case QUEST_SUBMISSIONS:
+                processQuestSubmissionUpdates(contest);
+                break;
+
         }
+    }
+
+    private void processQuestSubmissionUpdates(Contest contest) {
+        questSubmissionService.processRecentSubmissions(contest);
     }
 
     private void processQuestChallengeUpdates(Contest contest) {

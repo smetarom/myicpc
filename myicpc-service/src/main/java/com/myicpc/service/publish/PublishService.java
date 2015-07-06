@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.poll.Poll;
 import com.myicpc.model.poll.PollOption;
+import com.myicpc.model.quest.QuestSubmission;
 import com.myicpc.model.social.Notification;
 import com.myicpc.service.notification.NotificationService;
 import org.atmosphere.cpr.AtmosphereFramework;
@@ -88,6 +89,12 @@ public class PublishService {
     public void broadcastProblem(JsonObject teamSubmission, String problemCode, String contestCode) {
         atmospherePublish(PREFIX + contestCode + "/" + PROBLEM_CHANNEL + "/" + problemCode,
                 teamSubmission.toString());
+    }
+
+    public void broadcastQuestSubmission(QuestSubmission questSubmission, String contestCode) {
+        JsonObject submissionObject = new JsonObject();
+        submissionObject.addProperty("type", "submission");
+        atmospherePublish(PREFIX + contestCode + "/" + QUEST, submissionObject.toString());
     }
 
     /**

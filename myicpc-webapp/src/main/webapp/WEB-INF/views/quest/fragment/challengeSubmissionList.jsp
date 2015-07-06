@@ -7,7 +7,7 @@
             <td>
                 <strong>${submission.participant.contestParticipant.fullname}</strong>
                 <br/>
-                <fmt:formatDate value="${submission.created}" type="both" />
+                <fmt:formatDate value="${submissionnotification.timestamp}" type="both" />
             </td>
         </tr>
     </c:forEach>
