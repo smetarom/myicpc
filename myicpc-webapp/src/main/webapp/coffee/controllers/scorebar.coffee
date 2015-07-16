@@ -304,62 +304,39 @@ scorebar.controller('scorebarCtrl', ($scope) ->
     .attr("onmouseover", "scorebarDisplayText(this);")
     .attr("onmouseout", "scorebarHideText(this);")
 
+  $scope.getBarWidth = (team) ->
+    return $scope.config.zeroBar + team["solvedNum"] * $scope.config.problemBarSize + team["failedNum"] * $scope.config.problemBarSize
+
   $scope.findById = (teamId) ->
     _.find($scope.teams, (obj) ->
       obj.teamId == teamId
     )
 
   $scope.sortTeams = (sortFunc, team) ->
-    console.log($scope.teams)
-    arr = $scope.teams.slice(team.teamRank - 1, team.rank + 1)
-    arr = sortFunc(arr, team['teamRank'] - 1)
-    console.log(team)
-    console.log(arr)
-    console.log($scope.teams)
-    arr
+    sortTeamRanks($scope.teams, team.teamRank - 1, team.rank)
+    return $scope.teams
 )
 
-scorebarDisplayText = (element) ->
-  s = element.id.substring(10);
-  # do not change substring size - all IDs are made to follow the 10
-  # character format
-  # e.g. "#passed-bar", "#bar-Ntitle", etc.
-  d3.select("#passed-bar" + s).attr("class", "barhover");
-  d3.select("#failed-bar" + s).attr("class", "barhover");
-  d3.select("#neutrl-bar" + s).attr("class", "barhover");
-  d3.select("#workon-bar" + s).attr("class", "barhover");
-  d3.select("#bar-Ntitle" + s).style("fill", "blue");
-  d3.select("#info-" + s).attr("class", "teamInfoVisible");
-
-scorebarHideText = (element) ->
-  s = element.id.substring(10)
-  # do not change substring size - all IDs are made to follow the 10
-  # character format
-  # e.g. "#passed-bar", "#bar-Ntitle", etc.
-  d3.select("#passed-bar" + s).attr("class", "passed")
-  d3.select("#failed-bar" + s).attr("class", "failed")
-  d3.select("#neutrl-bar" + s).attr("class", "neutral")
-  d3.select("#workon-bar" + s).attr("class", "workon")
-  d3.select("#bar-Ntitle" + s).style("fill", "black")
-  d3.select(".teamInfoVisible").attr("class", "teamInfoHidden")
-
-sortTeamRanks = (teams, offset = 0) ->
-  if teams.length == 0 then return teams
-  teams.sort((t1, t2) ->
+sortTeamRanks = (teams, start = 0, end = teams.length) ->
+  preSorted = teams.slice(0, start)
+  postSorted = teams.slice(end)
+  sorted = teams.slice(start, end).sort((t1, t2) ->
     return if t1.teamRank == t2.teamRank then t1.teamShortName.localeCompare(t2.teamShortName) else t1.teamRank - t2.teamRank
   )
-#  effectedTeams = []
-  for i in [0..teams.length-1] by 1
-#    if !(teams[i].rank?) || teams[i].rank != i + 1
-#      effectedTeams.push(teams[i])
-    teams[i].rank = i + 1 + offset
-#  return effectedTeams
-  return teams
+  teams.length = 0
+  teams.push.apply(teams, preSorted.concat(sorted).concat(postSorted))
+  effectedTeams = []
+  for i in [start..end-1] by 1
+    if !(teams[i].rank?) || teams[i].rank != start + i + 1
+      effectedTeams.push(teams[i])
+    teams[i].rank = i + 1
+  return effectedTeams
 
 updateScorebar = (data, ngController = null) ->
   if data.type == 'submission'
     if ngController != null
       team = ngController.findById(data["teamId"])
+      # TODO fix letter code
       if data.solved
         if team.solved.indexOf(data["problemCode"]) == -1
           team.solvedNum += 1
@@ -380,11 +357,10 @@ updateScorebar = (data, ngController = null) ->
             effectedTeam.teamRank = data.teams[i][1]
 
         effectedTeams = ngController.sortTeams(sortTeamRanks, team)
-        console.log(effectedTeams.length)
-        for i in [0..effectedTeams.length-1] by 1
-          ngController.drawTeamBar(effectedTeams[i])
-          ngController.updateTeamInfo(effectedTeams[i])
-
+        if effectedTeams.length > 0
+          for i in [0..effectedTeams.length-1] by 1
+            ngController.drawTeamBar(effectedTeams[i])
+            ngController.updateTeamInfo(effectedTeams[i])
 
       ngController.drawTeamBar(team)
       ngController.updateTeamInfo(team)

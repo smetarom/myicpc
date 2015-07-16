@@ -46,9 +46,6 @@ scorebar.controller('worldMapCtrl', ($scope) ->
     return _.find($scope.teams, (obj) -> return obj.teamId == teamId)
 
   $scope.filterTeams = (team) ->
-    console.log($scope.config.isCountryBased)
-    console.log($scope.activeComponent.id)
-    console.log(team.regionName)
     if $scope.config.isCountryBased
       return team.nationality == $scope.activeComponent.id
     else

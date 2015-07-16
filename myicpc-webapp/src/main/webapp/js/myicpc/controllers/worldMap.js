@@ -66,9 +66,6 @@ scorebar.controller('worldMapCtrl', function($scope) {
     });
   };
   $scope.filterTeams = function(team) {
-    console.log($scope.config.isCountryBased);
-    console.log($scope.activeComponent.id);
-    console.log(team.regionName);
     if ($scope.config.isCountryBased) {
       return team.nationality === $scope.activeComponent.id;
     } else {

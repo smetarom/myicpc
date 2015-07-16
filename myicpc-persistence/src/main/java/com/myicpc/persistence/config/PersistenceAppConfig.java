@@ -57,13 +57,15 @@ public class PersistenceAppConfig {
         Properties prop = new Properties();
         prop.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL9Dialect");
         prop.setProperty("hibernate.show_sql", "false");
+//        prop.setProperty("hibernate.show_sql", "true");
+//        prop.setProperty("hibernate.generate_statistics", "true");
         prop.setProperty("hibernate.hbm2ddl.auto", "update");
         prop.setProperty("hibernate.connection.characterEncoding", "UTF-8");
         prop.setProperty("hibernate.connection.useUnicode", "true");
 
+        prop.setProperty("hibernate.cache.use_second_level_cache", "true");
 //        prop.setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.infinispan.JndiInfinispanRegionFactory");
-//        prop.setProperty("hibernate.cache.infinispan.cachemanager", "java:jboss/infinispan/container/hibernate");
-//        prop.setProperty("hibernate.cache.use_second_level_cache", "true");
+//        prop.setProperty("hibernate.cache.infinispan.cachemanager", "java:CacheManager");
 //        prop.setProperty("hibernate.cache.use_query_cache", "true");
         return prop;
     }

@@ -59,27 +59,11 @@
   .teamInfoVisible, .teamInfoHidden {
     min-height: 90px;
   }
+}
 
-  #map-team-info {
-    div {
-      min-width: 50px;
-      background-color: rgba(255, 255, 255, 0.8);
-      padding: 5px;
-      border: solid 2px black;
-
-      h5 {
-        background-color: rgba(100, 100, 100, 0.8);
-        color: white;
-        padding: 3px;
-      }
-    }
-
-    .teamInfoVisible {
-      position: absolute;
-      border: black solid 1px;
-      background-color: rgba(255, 255, 255, 0.8);
-      padding: 5px;
-      min-width: 250px;
-    }
-  }
+#scorebar-popup {
+  width: 350px;
+  position: absolute;
+  z-index: 500;
+  text-align: left;
 }
