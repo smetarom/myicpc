@@ -2,7 +2,12 @@ package com.myicpc.model.eventFeed;
 
 import com.myicpc.model.IdGeneratedContestObject;
 
-import javax.persistence.*;
+import javax.persistence.Cacheable;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.util.List;
 
 /**
@@ -31,10 +36,6 @@ public class Problem extends IdGeneratedContestObject {
      * Number of total test cases
      */
     private int totalTestcases;
-    /**
-     * Time of the first solution
-     */
-    private Double solvedTime;
 
     /**
      * Team submissions
@@ -88,13 +89,5 @@ public class Problem extends IdGeneratedContestObject {
 
     public void setTotalTestcases(final int totalTestcases) {
         this.totalTestcases = totalTestcases;
-    }
-
-    public Double getSolvedTime() {
-        return solvedTime;
-    }
-
-    public void setSolvedTime(final Double solvedTime) {
-        this.solvedTime = solvedTime;
     }
 }

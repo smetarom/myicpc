@@ -8,14 +8,46 @@ import com.myicpc.repository.eventFeed.TeamProblemRepository;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class NativeRunStrategy extends FeedRunStrategy {
     @Override
     protected List<Team> processScoreboardChanges(TeamProblem teamProblem, Contest contest) {
-        // TODO Mark if the first solved problem
+        markIfFirstProblemSolution(teamProblem);
         return computeNewRank(teamProblem.getTeam(), contest.getPenalty());
+    }
+
+    /**
+     * decide, if the run is the first problem, which solves a problem or not
+     *
+     * @param teamProblem received team submission
+     */
+    protected void markIfFirstProblemSolution(final TeamProblem teamProblem) {
+        List<TeamProblem> firstSubmissions = teamProblemRepository.findByProblemAndFirstSolved(teamProblem.getProblem(), true);
+        if (firstSubmissions.isEmpty()) {
+            // if there is no solved problem for a problem, mark this submission
+            // as the first solution
+            teamProblem.setFirstSolved(true);
+        } else if (firstSubmissions.size() == 1) {
+            TeamProblem currentFirstSolution = firstSubmissions.get(0);
+            if (Double.compare(currentFirstSolution.getTime(), teamProblem.getTime()) == 1) {
+                /*
+                 * if there is the first solved problem for a problem, but
+                 * submission time is after this submission, mark this submission as
+                 * the first solution
+                 *
+                 * this can be caused by submission rejudgement
+                 */
+                removeFirstSolvedProblem(currentFirstSolution.getProblem());
+                teamProblem.setFirstSolved(true);
+            }
+        }
     }
 
     /**
@@ -45,7 +77,7 @@ public class NativeRunStrategy extends FeedRunStrategy {
         team.setProblemsSolved(solved);
         team.setTotalTime((int) Math.floor(totalTime));
 
-        List<Team> teams = (List<Team>) teamRepository.findAll();
+        List<Team> teams = teamRepository.findAll();
 
         // sort teams
         Collections.sort(teams, new ScoreboardComparator(teamProblemRepository));
