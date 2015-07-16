@@ -1,4 +1,6 @@
-<%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="t" uri="http://myicpc.baylor.edu/tags" %>
+
 <tr>
     <td><t:topSubmenuLink labelCode="nav.scoreboard" url="${contestURL}/scoreboard"
                           icon="glyphicon glyphicon-list"/></td>

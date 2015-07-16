@@ -1,6 +1,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" uri="http://myicpc.baylor.edu/tags" %>
+<%@ taglib prefix="util" uri="http://myicpc.baylor.edu/functions"%>
 
 <nav id="top-menu-nav" class="navbar navbar-inverse navbar-fixed-top desktop">
     <div class="container-fluid">

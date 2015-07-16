@@ -1,4 +1,5 @@
-<%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
+<%@ taglib prefix="t" uri="http://myicpc.baylor.edu/tags" %>
+
 <tr>
     <td><t:topSubmenuLink labelCode="nav.myschedule" url="${contestURL}/my-schedule"
                           icon="glyphicon glyphicon-user"/></td>

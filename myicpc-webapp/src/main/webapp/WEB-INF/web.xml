@@ -5,6 +5,8 @@
          version="3.0">
     <display-name>MyICPC</display-name>
 
+    <!--<distributable />-->
+
     <context-param>
         <param-name>contextClass</param-name>
         <param-value>

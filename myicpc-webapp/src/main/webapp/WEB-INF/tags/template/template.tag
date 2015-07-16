@@ -18,17 +18,17 @@
         </c:if>
             ${contest.shortName} &middot; MyICPC
     </title>
-    <jsp:include page="/WEB-INF/views/includes/head.jsp"/>
+    <%@ include file="/WEB-INF/views/includes/head.jsp" %>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <jsp:invoke fragment="head" />
 </head>
 <body class="${sitePreference.mobile ? 'mobile' : ''}">
 <div id="bodyContainer">
     <c:if test="${not sitePreference.mobile}">
-        <jsp:include page="/WEB-INF/views/includes/header.jsp"/>
+        <%@ include file="/WEB-INF/views/includes/header.jsp" %>
     </c:if>
     <c:if test="${sitePreference.mobile}">
-        <jsp:include page="/WEB-INF/views/includes/header_mobile.jsp"/>
+        <%@ include file="/WEB-INF/views/includes/header_mobile.jsp" %>
     </c:if>
     <c:if test="${not empty headline}">
         <div id="pageTitle" class="page-header clearfix" style="margin-bottom: 10px;">
@@ -53,10 +53,10 @@
 
 <%@ include file="/WEB-INF/views/includes/foot.jsp" %>
 <c:if test="${not sitePreference.mobile}">
-    <jsp:include page="/WEB-INF/views/includes/foot_desktop.jsp"/>
+    <%@ include file="/WEB-INF/views/includes/foot_desktop.jsp" %>
 </c:if>
 <c:if test="${sitePreference.mobile}">
-    <jsp:include page="/WEB-INF/views/includes/foot_mobile.jsp"/>
+    <%@ include file="/WEB-INF/views/includes/foot_mobile.jsp" %>
 </c:if>
 <jsp:invoke fragment="javascript" />
 </body>

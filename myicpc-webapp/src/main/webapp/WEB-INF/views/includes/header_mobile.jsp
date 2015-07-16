@@ -1,4 +1,7 @@
-<%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="t" uri="http://myicpc.baylor.edu/tags" %>
+<%@ taglib prefix="util" uri="http://myicpc.baylor.edu/functions"%>
 
 <nav id="mobile-top-menu" class="navbar navbar-inverse navbar-fixed-top mobile" style="z-index: 1200">
     <div class="navbar-header">

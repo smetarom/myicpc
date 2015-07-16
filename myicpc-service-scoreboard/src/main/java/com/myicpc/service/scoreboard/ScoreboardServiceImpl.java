@@ -23,7 +23,6 @@ import com.myicpc.service.publish.PublishService;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -67,7 +66,7 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
      * submissions
      */
     @Override
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     public JsonArray getTeamsFullTemplate(final Contest contest) {
         List<TeamDTO> teams = teamRepository.findTeamDTOByContest(contest);
         List<LastTeamSubmissionDTO> submissions = lastTeamProblemRepository.findLastTeamSubmissionDTOByContest(contest);
