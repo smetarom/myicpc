@@ -5,6 +5,7 @@
        data-id="${notification.id}"
        data-image-url="${notification.imageUrl}"
        data-video-url="${notification.videoUrl}"
+       data-thumbnail-url="${notification.thumbnailUrl}"
        data-url="${notification.url}"
        data-author-name="${notification.authorName}"
        data-author-avatar="${notification.profilePictureUrl}">

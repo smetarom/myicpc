@@ -5,10 +5,13 @@ import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.BlacklistedUser;
 import com.myicpc.model.social.Notification;
 import com.myicpc.service.notification.NotificationBuilder;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import twitter4j.ExtendedMediaEntity;
 import twitter4j.FilterQuery;
 import twitter4j.Status;
 import twitter4j.StatusAdapter;
@@ -29,16 +32,13 @@ import java.util.regex.Pattern;
 @Transactional
 public class TwitterService extends ASocialService {
     private static final Logger logger = LoggerFactory.getLogger(TwitterService.class);
+    private static final String VIDEO_FORMAT = "video/mp4";
 
     private static final ConcurrentMap<Long, TwitterStream> streamMapping = new ConcurrentHashMap<>();
 
     public void startTwitterStreaming(Contest contest) {
         System.err.println("START TWITTER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
-        ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setOAuthConsumerKey(contest.getWebServiceSettings().getTwitterConsumerKey())
-                .setOAuthConsumerSecret(contest.getWebServiceSettings().getTwitterConsumerSecret())
-                .setOAuthAccessToken(contest.getWebServiceSettings().getTwitterAccessToken())
-                .setOAuthAccessTokenSecret(contest.getWebServiceSettings().getTwitterAccessTokenSecret());
+        ConfigurationBuilder cb = createTwitterConfiguration(contest);
         TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
         twitterStream.addListener(new TwitterStatusListener(contest));
         twitterStream.filter(new FilterQuery(0, null, new String[]{"#" + contest.getHashtag()}));
@@ -84,6 +84,30 @@ public class TwitterService extends ASocialService {
         publishService.broadcastNotification(notification, notification.getContest());
     }
 
+    private String extractVideoUrlFromTweet(Status twitterStatus) {
+        if (ArrayUtils.isNotEmpty(twitterStatus.getExtendedMediaEntities())) {
+            for (ExtendedMediaEntity mediaEntity : twitterStatus.getExtendedMediaEntities()) {
+                if ("video".equalsIgnoreCase(mediaEntity.getType())) {
+                    for (ExtendedMediaEntity.Variant variant : mediaEntity.getVideoVariants()) {
+                        if (VIDEO_FORMAT.equalsIgnoreCase(variant.getContentType())) {
+                            return variant.getUrl();
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        return null;
+    }
+
+    private ConfigurationBuilder createTwitterConfiguration(final Contest contest) {
+        ConfigurationBuilder cb = new ConfigurationBuilder();
+        cb.setOAuthConsumerKey(contest.getWebServiceSettings().getTwitterConsumerKey())
+                .setOAuthConsumerSecret(contest.getWebServiceSettings().getTwitterConsumerSecret())
+                .setOAuthAccessToken(contest.getWebServiceSettings().getTwitterAccessToken())
+                .setOAuthAccessTokenSecret(contest.getWebServiceSettings().getTwitterAccessTokenSecret());
+        return cb;
+    }
 
     class TwitterStatusListener extends StatusAdapter {
         private Contest contest;
@@ -114,10 +138,18 @@ public class TwitterService extends ASocialService {
             builder.setContest(contest);
 
             if (!twitterStatus.isRetweet()) {
-                if (twitterStatus.getMediaEntities() != null && twitterStatus.getMediaEntities().length > 0) {
-                    String imageUrl = twitterStatus.getMediaEntities()[0].getMediaURL();
-                    builder.setThumbnailUrl(imageUrl + ":small");
-                    builder.setImageUrl(imageUrl);
+                String videoUrl = extractVideoUrlFromTweet(twitterStatus);
+                if (StringUtils.isEmpty(videoUrl)) {
+                    // tweet does not contain video, extract image if it contains
+                    if (ArrayUtils.isNotEmpty(twitterStatus.getMediaEntities())) {
+                        String imageUrl = twitterStatus.getMediaEntities()[0].getMediaURL();
+                        builder.setThumbnailUrl(imageUrl + ":small");
+                        builder.setImageUrl(imageUrl);
+                    }
+                } else {
+                    String thumbnailUrl = twitterStatus.getMediaEntities()[0].getMediaURL();
+                    builder.setThumbnailUrl(thumbnailUrl + ":small");
+                    builder.setVideoUrl(videoUrl);
                 }
             }
 

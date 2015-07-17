@@ -10,6 +10,7 @@ Gallery =
     context['originalUrl'] = $(tile).data('url')
     context['imageUrl'] = $(tile).data('image-url')
     context['videoUrl'] = $(tile).data('video-url')
+    context['thumbnailUrl'] = $(tile).data('thumbnail-url')
     context['authorName'] = $(tile).data('author-name')
     context['avatarUrl'] = $(tile).data('author-avatar')
     context['text'] = $(tile).data('text')

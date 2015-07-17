@@ -16,6 +16,7 @@
                data-id="{{id}}"
                data-image-url="{{imageUrl}}"
                data-video-url="{{videoUrl}}"
+               data-thumbnail-url="{{thumbnailUrl}}"
                data-url="{{url}}"
                data-author-name="{{authorName}}"
                data-author-avatar="{{profileUrl}}">
@@ -30,7 +31,7 @@
         <div class="col-sm-8 gallery-content">
             <div>
                 {{#if videoUrl}}
-                    <video src="{{videoUrl}}" controls autoplay width="100%" onerror="removeOnError(this, {{notificationId}})">
+                    <video src="{{videoUrl}}" poster="{{thumbnailUrl}}" controls autoplay width="100%" onerror="removeOnError(this, {{notificationId}})">
                         Your browser does not support the video player.
                     </video>
                 {{else}}

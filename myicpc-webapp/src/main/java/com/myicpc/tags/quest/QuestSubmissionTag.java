@@ -42,7 +42,7 @@ public class QuestSubmissionTag extends SimpleTagSupport {
             }
             if (!StringUtils.isEmpty(questSubmission.getNotification().getVideoUrl())) {
                 String format = videoAutoplay ? VIDEO_FORMAT_AUTOPLAY : VIDEO_FORMAT;
-                out.print(String.format(format, questSubmission.getNotification().getVideoUrl()));
+                out.print(String.format(format, questSubmission.getNotification().getVideoUrl(), questSubmission.getNotification().getThumbnailUrl()));
             } else if (!StringUtils.isEmpty(questSubmission.getNotification().getImageUrl())) {
                 out.print(String.format(IMAGE_FORMAT, questSubmission.getNotification().getImageUrl()));
             }

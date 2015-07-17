@@ -3,11 +3,4 @@ var teamDetail;
 
 teamDetail = angular.module('teamDetail', ['nvd3ChartDirectives']);
 
-teamDetail.controller('TeamDeatilCtrl', function($scope) {
-  $scope.rankHistory = [];
-  return $scope.setRankHistory = function(rankHistory) {
-    return $scope.$apply(function() {
-      return $scope.rankHistory = rankHistory;
-    });
-  };
-});
+teamDetail.controller('TeamDetailCtrl', function($scope) {});
