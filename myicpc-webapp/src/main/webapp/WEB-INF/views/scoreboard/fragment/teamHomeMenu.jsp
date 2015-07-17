@@ -2,7 +2,7 @@
 
 <t:secondLevelSubmenu isMobile="${sitePreference.mobile}">
     <c:if test="${not empty teamContestId}">
-        <t:menuItem activeItem="contest" active="${tab}" url="${contestURL}/team/teamContestId}"><spring:message code="teamHome.nav.contest" /></t:menuItem>
+        <t:menuItem activeItem="contest" active="${tab}" url="${contestURL}/team/${teamContestId}"><spring:message code="teamHome.nav.contest" /></t:menuItem>
     </c:if>
     <c:if test="${not empty teamPresentationId}">
         <t:menuItem activeItem="profile" active="${tab}" url="${contestURL}/team/${teamPresentationId}/profile"><spring:message code="teamHome.nav.about" /></t:menuItem>

@@ -6,8 +6,6 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.3.3/d3.min.js" defer></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/nvd3/1.1.13-beta/nv.d3.min.js" defer="defer"></script>
         <script src="<c:url value='/js/angular/angularjs-nvd3-directives.min.js'/>"></script>
-
-        <script src="<c:url value='/js/myicpc/controllers/teamDetail.js'/>" defer></script>
     </jsp:attribute>
 
   <jsp:attribute name="title">
@@ -22,7 +20,7 @@
       <c:set var="teamContestId" value="${team.externalId}" />
       <c:set var="teamPresentationId" value="${teamInfo.externalId}" />
       <%@ include file="/WEB-INF/views/scoreboard/fragment/teamHomeMenu.jsp"%>
-      <div id="teamDetail" ng-app="teamDetail" ng-controller="TeamDeatilCtrl">
+      <div id="teamDetail">
           <div class="col-sm-6">
               <h3><spring:message code="teamHome.contest.timeline"/></h3>
               <table class="table table-condensed team-timeline">
@@ -48,22 +46,6 @@
           </div>
 
           <div class="col-sm-6">
-              <h3><spring:message code="teamHome.contest.rankHistory" /></h3>
-              <nvd3-line-chart
-                      data="rankHistory"
-                      id="exampleId"
-                      xAxisTickFormat="xAxisTickFormatFunction()"
-                      yAxisTickFormat="yAxisTickFormatFunction()"
-                      width="100%"
-                      height="350"
-                      isArea="true"
-                      forcey="[120]"
-                      interactive="true"
-                      useInteractiveGuideLine="true"
-                      showYAxis="true">
-                  <svg></svg>
-              </nvd3-line-chart>
-
               <h3><spring:message code="teamHome.contest.problems" /></h3>
 
               <table class="table">
@@ -103,12 +85,5 @@
               </table>
           </div>
       </div>
-
-      <script type="application/javascript">
-          $(function() {
-              var ngController = angular.element($("#teamDetail")).scope();
-              ngController.setRankHistory(${not empty rankHistoryJSON ? rankHistoryJSON : '[]'});
-          });
-      </script>
   </jsp:body>
 </t:template>

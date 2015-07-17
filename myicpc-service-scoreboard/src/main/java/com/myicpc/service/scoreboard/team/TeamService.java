@@ -24,7 +24,6 @@ import com.myicpc.model.teamInfo.RegionalResult;
 import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.model.teamInfo.University;
 import com.myicpc.repository.eventFeed.LastTeamProblemRepository;
-import com.myicpc.repository.teamInfo.RegionRepository;
 import com.myicpc.repository.eventFeed.TeamProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRankHistoryRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
@@ -32,6 +31,7 @@ import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.repository.teamInfo.AttendedContestRepository;
 import com.myicpc.repository.teamInfo.ContestParticipantAssociationRepository;
 import com.myicpc.repository.teamInfo.ContestParticipantRepository;
+import com.myicpc.repository.teamInfo.RegionRepository;
 import com.myicpc.repository.teamInfo.TeamInfoRepository;
 import com.myicpc.repository.teamInfo.UniversityRepository;
 import com.myicpc.service.exception.WebServiceException;
@@ -123,7 +123,7 @@ public class TeamService {
     public void synchronizeTeamsWithCM(Contest contest) throws ValidationException {
         try {
             synchronizeUniversities(teamWSService.getUniversitiesFromCM(contest));
-            synchronizeRegions(teamWSService.getRegionsFromCM(contest));
+//            synchronizeRegions(teamWSService.getRegionsFromCM(contest));
             synchronizeTeams(teamWSService.getTeamsFromCM(contest), contest);
             logger.info("Team & university synchronization finished.");
             initTeamHashtagsAndAbbreviations(contest);
