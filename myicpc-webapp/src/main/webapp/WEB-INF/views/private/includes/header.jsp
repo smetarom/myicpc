@@ -66,6 +66,7 @@
             <c:if test="${util:galleryModuleEnabled(contest)}">
                 <li><a href='<spring:url value="/private${contestURL}/gallery" />'><spring:message code="nav.admin.gallery" /></a></li>
             </c:if>
+                <li><a href='<spring:url value="/private${contestURL}/kiosk" />'><spring:message code="nav.admin.kiosk" /></a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li>

@@ -3,17 +3,20 @@ package com.myicpc.service.kiosk;
 import com.google.gson.JsonArray;
 import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
+import com.myicpc.model.kiosk.KioskContent;
 import com.myicpc.model.social.Notification;
+import com.myicpc.repository.kiosk.KioskContentRepository;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.service.notification.NotificationService;
 import com.myicpc.service.utils.lists.NotificationList;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +25,6 @@ import java.util.List;
  * @author Roman Smetana
  */
 @Service
-@Transactional
 public class KioskService {
     public static final int POSTS_PER_PAGE = 30;
 
@@ -45,6 +47,10 @@ public class KioskService {
     @Autowired
     private NotificationRepository notificationRepository;
 
+    @Autowired
+    private KioskContentRepository kioskContentRepository;
+
+    @Transactional(readOnly = true)
     public List<Notification> getKioskNotifications(Contest contest) {
         Pageable pageable = new PageRequest(0, POSTS_PER_PAGE);
         Page<Notification> timelineNotifications = notificationRepository.findByNotificationTypesOrderByIdDesc(KIOSK_TYPES, contest, pageable);
@@ -56,5 +62,14 @@ public class KioskService {
     public JsonArray getKioskNotificationsJSON(Contest contest) {
         List<Notification> notifications = getKioskNotifications(contest);
         return NotificationService.getNotificationInJson(notifications);
+    }
+
+    @Transactional(readOnly = true)
+    public KioskContent getActiveKioskContent(Contest contest) {
+        List<KioskContent> activeList = kioskContentRepository.findByActive(true);
+        if (CollectionUtils.isEmpty(activeList)) {
+            return null;
+        }
+        return activeList.get(0);
     }
 }

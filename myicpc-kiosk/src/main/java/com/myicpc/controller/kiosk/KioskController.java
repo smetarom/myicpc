@@ -2,6 +2,7 @@ package com.myicpc.controller.kiosk;
 
 import com.myicpc.controller.GeneralController;
 import com.myicpc.model.contest.Contest;
+import com.myicpc.model.kiosk.KioskContent;
 import com.myicpc.service.kiosk.KioskService;
 import com.myicpc.service.schedule.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Date;
 
@@ -42,5 +44,29 @@ public class KioskController extends GeneralController {
         model.addAttribute("scheduleJSON", scheduleService.getScheduleDaysJSON(new Date(), contest));
 
         return "kiosk/kioskCalendar";
+    }
+
+    @RequestMapping(value = "/{contestCode}/kiosk/custom", method = RequestMethod.GET)
+    public String kioskCustom(Model model, @PathVariable String contestCode) {
+        Contest contest = getContest(contestCode, model);
+
+
+
+        return "kiosk/kioskCustom";
+    }
+
+    @RequestMapping(value = "/{contestCode}/kiosk/custom/content", method = RequestMethod.GET)
+    @ResponseBody
+    public String kioskCustomContent(Model model, @PathVariable String contestCode) {
+        Contest contest = getContest(contestCode, model);
+
+        KioskContent activeKioskContent = kioskService.getActiveKioskContent(contest);
+
+        if (activeKioskContent == null) {
+            // TODO no active content
+            return "";
+        }
+
+        return activeKioskContent.getContent();
     }
 }
