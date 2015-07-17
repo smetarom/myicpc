@@ -6,6 +6,7 @@ import com.myicpc.model.kiosk.KioskContent;
 import com.myicpc.repository.kiosk.KioskContentRepository;
 import com.myicpc.service.kiosk.KioskMngService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,7 +35,7 @@ public class KioskAdminController extends GeneralAdminController {
     public String kiosk(Model model, @PathVariable String contestCode) {
         Contest contest = getContest(contestCode, model);
 
-        model.addAttribute("contentList", kioskContentRepository.findByContest(contest));
+        model.addAttribute("contentList", kioskContentRepository.findByContest(contest, new Sort(Sort.Direction.ASC, "name")));
 
         return "private/kiosk/kiosk";
     }
