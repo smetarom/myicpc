@@ -17,6 +17,17 @@
         </style>
     </jsp:attribute>
     <jsp:attribute name="javascript">
+        <script type="application/javascript">
+            updateKioskPage = function(data) {
+                location.reload();
+            };
+
+            $(function() {
+                startSubscribe('${r.contextPath}', '${contest.code}', 'kiosk', updateKioskPage, null);
+            });
+
+        </script>
+
     </jsp:attribute>
     <jsp:body>
         <div style="padding-top: 100px; height: 100%">

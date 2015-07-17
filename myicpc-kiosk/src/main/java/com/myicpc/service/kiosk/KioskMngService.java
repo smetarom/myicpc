@@ -3,6 +3,7 @@ package com.myicpc.service.kiosk;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.kiosk.KioskContent;
 import com.myicpc.repository.kiosk.KioskContentRepository;
+import com.myicpc.service.publish.PublishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,9 @@ import java.util.List;
  */
 @Service
 public class KioskMngService {
+
+    @Autowired
+    private PublishService publishService;
 
     @Autowired
     private KioskContentRepository kioskContentRepository;
@@ -30,5 +34,8 @@ public class KioskMngService {
             kioskContentRepository.save(kioskContents);
         }
         kioskContentRepository.save(kioskContent);
+        if (kioskContent.isActive()) {
+            publishService.broadcastKioskPage(contest.getCode());
+        }
     }
 }

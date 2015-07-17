@@ -45,6 +45,10 @@ public class PublishService {
      * Web socket channel for Quest
      */
     public static final String QUEST = "quest";
+    /**
+     * Web socket channel for kiosk
+     */
+    public static final String KIOSK = "kiosk";
 
     private BroadcasterFactory broadcasterFactory;
 
@@ -110,6 +114,12 @@ public class PublishService {
         pollUpdate.addProperty("optionName", option.getName());
         pollUpdate.addProperty("votes", option.getVotes());
         atmospherePublish(PREFIX + poll.getContest().getCode() + "/" + POLL, pollUpdate.toString());
+    }
+
+    public void broadcastKioskPage(String contestCode) {
+        JsonObject kioskPageObject = new JsonObject();
+        kioskPageObject.addProperty("type", "pageChange");
+        atmospherePublish(PREFIX + contestCode + "/" + KIOSK, kioskPageObject.toString());
     }
 
     /**
