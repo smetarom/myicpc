@@ -45,3 +45,9 @@ a.gallery-thumbnail {
   vertical-align: top;
   padding-left: 7px;
 }
+
+.gallery-filter {
+  select {
+    max-width: 250px;
+  }
+}

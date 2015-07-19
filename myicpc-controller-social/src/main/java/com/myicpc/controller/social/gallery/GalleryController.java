@@ -154,5 +154,4 @@ public class GalleryController extends GeneralController {
         }
     }
 
-
 }

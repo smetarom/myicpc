@@ -1,8 +1,9 @@
 package com.myicpc.repository.teamInfo;
 
 import com.myicpc.enums.ContestParticipantRole;
-import com.myicpc.model.teamInfo.TeamInfo;
+import com.myicpc.model.contest.Contest;
 import com.myicpc.model.teamInfo.ContestParticipant;
+import com.myicpc.model.teamInfo.TeamInfo;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -26,6 +27,12 @@ public interface ContestParticipantRepository extends CrudRepository<ContestPart
 
     @Query(value = "SELECT DISTINCT tm FROM ContestParticipant tm LEFT JOIN FETCH tm.teamAssociations ta WHERE ta.contestParticipantRole = ?1 ORDER BY tm.lastname")
     List<ContestParticipant> findByContestParticipantRoleOrderByName(ContestParticipantRole role);
+
+    @Query(value = "SELECT DISTINCT cp " +
+            "FROM ContestParticipant cp JOIN cp.teamAssociations ta JOIN ta.teamInfo ti " +
+            "WHERE ti.contest = ?1 " +
+            "ORDER BY cp.firstname")
+    List<ContestParticipant> findByContest(Contest contest);
 
     @Query(value = "SELECT COUNT(tm) FROM ContestParticipant tm WHERE tm.linkedinOauthToken IS NOT NULL")
     Long countLinkedInSynchronized();

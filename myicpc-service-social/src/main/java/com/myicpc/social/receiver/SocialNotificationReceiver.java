@@ -54,9 +54,9 @@ public class SocialNotificationReceiver {
 //            case INSTAGRAM:
 //                processInstagramUpdates(contest);
 //                break;
-            case TWITTER:
-                processTwitterStart(contest);
-                break;
+//            case TWITTER:
+//                processTwitterStart(contest);
+//                break;
             case POLL_OPEN:
                 processPollUpdates(contest);
                 break;
