@@ -126,7 +126,7 @@ public class KioskAdminController extends GeneralAdminController {
             return "private/kiosk/editKioskContent";
         }
 
-        kioskMngService.updateKioskContent(kioskContent, contest);
+        kioskMngService.updateKioskContent(kioskContent);
         return "redirect:/private" + getContestURL(contestCode) + "/kiosk";
     }
 

@@ -62,8 +62,13 @@ public class KioskService {
     public List<Notification> getKioskNotifications(Contest contest) {
         Pageable pageable = new PageRequest(0, POSTS_PER_PAGE);
         Page<Notification> timelineNotifications = notificationRepository.findByNotificationTypesOrderByIdDesc(KIOSK_TYPES, contest, pageable);
-        List<Notification> notifications = new ArrayList<>(timelineNotifications.getContent());
-        Collections.reverse(notifications);
+        List<Notification> notifications;
+        if (timelineNotifications != null) {
+            notifications = new ArrayList<>(timelineNotifications.getContent());
+            Collections.reverse(notifications);
+        } else {
+            notifications = Collections.EMPTY_LIST;
+        }
         return notifications;
     }
 

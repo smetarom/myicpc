@@ -1,6 +1,5 @@
 package com.myicpc.service.kiosk;
 
-import com.myicpc.model.contest.Contest;
 import com.myicpc.model.kiosk.KioskContent;
 import com.myicpc.repository.kiosk.KioskContentRepository;
 import com.myicpc.service.publish.PublishService;
@@ -33,12 +32,14 @@ public class KioskMngService {
      * It broadcasts the change to the live channel
      *
      * @param kioskContent updated {@link KioskContent}
-     * @param contest {@link KioskContent} contest
      */
     @Transactional
-    public void updateKioskContent(final KioskContent kioskContent, final Contest contest) {
+    public void updateKioskContent(final KioskContent kioskContent) {
+        if (kioskContent == null || kioskContent.getContest() == null) {
+            return;
+        }
         if (kioskContent.isActive()) {
-            List<KioskContent> kioskContents = kioskContentRepository.findByContest(contest);
+            List<KioskContent> kioskContents = kioskContentRepository.findByContest(kioskContent.getContest());
             for (KioskContent content : kioskContents) {
                 if (!content.equals(kioskContent)) {
                     content.setActive(false);
@@ -48,7 +49,7 @@ public class KioskMngService {
         }
         kioskContentRepository.save(kioskContent);
         if (kioskContent.isActive()) {
-            publishService.broadcastKioskPage(contest.getCode());
+            publishService.broadcastKioskPage(kioskContent.getContest().getCode());
         }
     }
 }
