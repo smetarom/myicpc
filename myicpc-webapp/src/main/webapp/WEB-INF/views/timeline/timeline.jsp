@@ -61,7 +61,7 @@
             var featuredAdminnotifications = ${not empty openAdminNotifications ? openAdminNotifications : '[]'};
             var featuredCarouselTemplate = compileHandlebarsTemplate("featured-notification-template")
             function timelineAcceptPost(post) {
-                var supportedNotificationTypes = ["submissionSuccess", "analystTeamMsg", "analystMsg", "twitter", "vine", "instagram", "picasa", "questChallenge", "adminNotification"];
+                var supportedNotificationTypes = ["submissionSuccess", "analystTeamMsg", "analystMsg", "twitter", "vine", "instagram", "picasa", "gallery", "questChallenge", "adminNotification"];
                 return supportedNotificationTypes.indexOf(post.type) != -1;
             }
             function renderFeaturedNotifications() {
@@ -104,6 +104,9 @@
             }
             function showTimelineSubmenu() {
                 $("#notification-mobile-side-bar").toggle('slide',{direction: 'right'});
+            }
+            function showOfficialGallery(tag) {
+                window.location.href = "<spring:url value="${contestURL}/gallery/official" />#" + tag;
             }
             $(function() {
                 Timeline.lastTimelineIdLoaded = ${not empty lastTimelineId ? lastTimelineId : 0};

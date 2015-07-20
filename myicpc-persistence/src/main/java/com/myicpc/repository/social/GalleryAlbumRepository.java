@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface GalleryAlbumRepository extends JpaRepository<GalleryAlbum, Long> {
+    GalleryAlbum findByNameAndContest(String name, Contest contest);
+
     List<GalleryAlbum> findByContest(Contest contest);
 
     List<GalleryAlbum> findByContest(Contest contest, Sort sort);

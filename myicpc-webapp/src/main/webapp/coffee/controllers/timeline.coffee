@@ -24,6 +24,7 @@ Timeline = {
     timelineInstagramTemplate = compileHandlebarsTemplate("timeline-INSTAGRAM")
     timelineVineTemplate = compileHandlebarsTemplate("timeline-VINE")
     timelinePicasaTemplate = compileHandlebarsTemplate("timeline-PICASA")
+    timelineOfficialGalleryTemplate = compileHandlebarsTemplate("timeline-OFFICIAL_GALLERY")
     timelineQuestChallengeTemplate = compileHandlebarsTemplate("timeline-QUEST_CHALLENGE")
     timelineAdminNotificationTemplate = compileHandlebarsTemplate("timeline-ADMIN_NOTIFICATION")
 
@@ -34,6 +35,7 @@ Timeline = {
     this.handlerMapping["instagram"] = (notification) -> timelineInstagramTemplate(notification)
     this.handlerMapping["vine"] = (notification) -> timelineVineTemplate(notification)
     this.handlerMapping["picasa"] = (notification) -> timelinePicasaTemplate(notification)
+    this.handlerMapping["gallery"] = (notification) -> timelineOfficialGalleryTemplate(notification)
     this.handlerMapping["questChallenge"] = (notification) -> timelineQuestChallengeTemplate(notification)
     this.handlerMapping["adminNotification"] = (notification) -> timelineAdminNotificationTemplate(notification)
 

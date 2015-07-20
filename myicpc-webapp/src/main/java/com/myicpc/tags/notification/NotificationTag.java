@@ -71,6 +71,8 @@ public class NotificationTag extends SimpleTagSupport {
             tile = new VineTile(notification, isTemplate, locale, pageContext);
         } else if (notificationType.isPicasa()) {
             tile = new PicasaTile(notification, isTemplate, locale, pageContext);
+        } else if (notificationType.isOfficialGallery()) {
+            tile = new OfficialGalleryTile(notification, isTemplate, locale, pageContext);
         } else if (notificationType.isQuestChallenge()) {
             tile = new QuestChallengeTile(notification, isTemplate, locale, pageContext);
         } else if (notificationType.isAdminNotification()) {

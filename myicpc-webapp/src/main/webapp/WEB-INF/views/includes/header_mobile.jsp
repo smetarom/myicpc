@@ -3,7 +3,7 @@
 <%@ taglib prefix="t" uri="http://myicpc.baylor.edu/tags" %>
 <%@ taglib prefix="util" uri="http://myicpc.baylor.edu/functions"%>
 
-<nav id="mobile-top-menu" class="navbar navbar-inverse navbar-fixed-top mobile" style="z-index: 1200">
+<nav id="mobile-top-menu" class="navbar navbar-inverse navbar-fixed-top mobile">
     <div class="navbar-header">
         <a class="navbar-brand" href='<spring:url value="${contestURL}/" />'>
             <span class="fa fa-home"></span> <spring:message code="app.name"/>

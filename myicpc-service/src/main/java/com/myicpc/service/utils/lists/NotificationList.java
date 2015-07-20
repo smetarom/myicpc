@@ -51,6 +51,11 @@ public class NotificationList extends ArrayList<NotificationType> {
         return this;
     }
 
+    public NotificationList addOfifcialGallery() {
+        this.add(NotificationType.OFFICIAL_GALLERY);
+        return this;
+    }
+
     public NotificationList addVine() {
         this.add(NotificationType.VINE);
         return this;

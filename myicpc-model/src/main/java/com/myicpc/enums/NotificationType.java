@@ -15,6 +15,7 @@ public enum NotificationType {
     ARTICLE("Article", "Article", "a"),
     ADMIN_NOTIFICATION("Admin notification", "Admin notification", "adminNotification"),
     PICASA("Gallery", "Gallery", "picasa"),
+    OFFICIAL_GALLERY("Gallery", "Gallery", "gallery"),
     VINE("Vine", "Vine", "vine"),
     INSTAGRAM("Instagram", "Instagram photo", "instagram"),
     POLL_OPEN("Poll", "Poll open", "po"),
@@ -79,6 +80,10 @@ public enum NotificationType {
 
     public boolean isPicasa() {
         return this == PICASA;
+    }
+
+    public boolean isOfficialGallery() {
+        return this == OFFICIAL_GALLERY;
     }
 
     public boolean isVine() {

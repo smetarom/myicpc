@@ -27,10 +27,6 @@ a.gallery-thumbnail {
       display: table-cell;
       vertical-align: middle;
     }
-
-    @media screen and (max-width: 400px) {
-      width: 300px;
-    }
   }
 
   video {
@@ -39,6 +35,12 @@ a.gallery-thumbnail {
     width: 100%;
     margin: 0 auto;
   }
+}
+
+.mobile #galleryPopupContent .gallery-content {
+  min-height: inherit;
+  width: 100%;
+  padding: 10px;
 }
 
 .gallery-detail-author {

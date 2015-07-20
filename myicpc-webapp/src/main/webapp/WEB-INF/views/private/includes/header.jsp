@@ -64,7 +64,12 @@
                 <li><a href='<spring:url value="/private${contestURL}/polls" />'><spring:message code="nav.admin.polls" /></a></li>
             </c:if>
             <c:if test="${util:galleryModuleEnabled(contest)}">
-                <li><a href='<spring:url value="/private${contestURL}/gallery" />'><spring:message code="nav.admin.gallery" /></a></li>
+                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="nav.admin.gallery" /> <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href='<spring:url value="/private${contestURL}/gallery/official" />'><spring:message code="nav.admin.gallery.official" /></a></li>
+                        <li><a href='<spring:url value="/private${contestURL}/gallery" />'><spring:message code="nav.admin.gallery.upload" /></a></li>
+                    </ul>
+                </li>
             </c:if>
                 <li><a href='<spring:url value="/private${contestURL}/kiosk" />'><spring:message code="nav.admin.kiosk" /></a></li>
         </ul>

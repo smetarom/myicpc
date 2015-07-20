@@ -1,22 +1,30 @@
 package com.myicpc.social.service;
 
+import au.com.bytecode.opencsv.CSVReader;
+import com.google.gdata.client.Service.GDataRequest;
+import com.google.gdata.client.Service.GDataRequest.RequestType;
 import com.google.gdata.client.photos.PicasawebService;
 import com.google.gdata.data.PlainTextConstruct;
 import com.google.gdata.data.media.MediaSource;
 import com.google.gdata.data.media.MediaStreamSource;
 import com.google.gdata.data.media.mediarss.MediaThumbnail;
 import com.google.gdata.data.photos.AlbumEntry;
+import com.google.gdata.data.photos.AlbumFeed;
 import com.google.gdata.data.photos.GphotoEntry;
 import com.google.gdata.data.photos.PhotoEntry;
 import com.google.gdata.data.photos.UserFeed;
-import com.google.gdata.client.Service.GDataRequest.RequestType;
-import com.google.gdata.client.Service.GDataRequest;
 import com.google.gdata.util.AuthenticationException;
 import com.google.gdata.util.ContentType;
 import com.google.gdata.util.ServiceException;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
+import com.myicpc.model.social.GalleryAlbum;
 import com.myicpc.model.social.Notification;
+import com.myicpc.repository.social.GalleryAlbumRepository;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.service.exception.WebServiceException;
 import com.myicpc.service.notification.NotificationBuilder;
@@ -27,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -36,15 +45,17 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
  * @author Roman Smetana
  */
 @Service
-@Transactional
 public class PicasaService {
     private static final String MYICPC_AUTHOR = "UPLOADED_BY_MYICPC";
     private static final String CROWD_ALBUM_NAME = "CROWD_ALBUM";
@@ -57,6 +68,9 @@ public class PicasaService {
 
     @Autowired
     private NotificationRepository notificationRepository;
+
+    @Autowired
+    private GalleryAlbumRepository galleryAlbumRepository;
 
     @Autowired
     private PublishService publishService;
@@ -202,6 +216,7 @@ public class PicasaService {
      *            photo caption
      * @throws WebServiceException
      */
+    @Transactional
     public void approvePrivatePhoto(String photoId, String photoTitle, final Contest contest) throws WebServiceException {
         try {
             // Get picasa photo from web service
@@ -259,4 +274,77 @@ public class PicasaService {
         return thumbnail;
     }
 
+    @Transactional
+    public void saveGalleryAlbum(final GalleryAlbum galleryAlbum) {
+        galleryAlbumRepository.save(galleryAlbum);
+        if (galleryAlbum.isPublished()) {
+            NotificationBuilder builder = new NotificationBuilder(galleryAlbum);
+            builder.setTitle(galleryAlbum.getName());
+            builder.setNotificationType(NotificationType.OFFICIAL_GALLERY);
+            builder.setContest(galleryAlbum.getContest());
+            try {
+                builder.setBody(buildGalleryAlbumNotificationBody(galleryAlbum).toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Notification notification = notificationRepository.save(builder.build());
+            publishService.broadcastNotification(notification, galleryAlbum.getContest());
+        }
+    }
+
+    public JsonObject buildGalleryAlbumNotificationBody(final GalleryAlbum galleryAlbum) throws IOException, ServiceException {
+        JsonObject body = new JsonObject();
+        String tag = galleryAlbum.getName();
+        try {
+            tag = UriUtils.encodeQueryParam(tag, FormatUtils.DEFAULT_ENCODING.displayName());
+        } catch (UnsupportedEncodingException e) {
+        }
+        tag = "event$" + tag;
+        body.addProperty("tag", tag);
+        Calendar cal = Calendar.getInstance();
+        if (galleryAlbum.getContest().getStartTime() != null) {
+            cal.setTime(galleryAlbum.getContest().getStartTime());
+        }
+        int year = cal.get(Calendar.YEAR);
+        PicasawebService picasawebService = new PicasawebService("myicpc-baylor");
+        URL url = new URL("http://picasaweb.google.com/data/feed/api/user/hq.icpc/?kind=photo&" +
+                "q=Album" + year + "%20%22" + tag + "%22&thumbsize=288c&start-index=1&max-results=4&access=public");
+
+        AlbumFeed feed = picasawebService.getFeed(url, AlbumFeed.class);
+        if (feed != null) {
+            body.addProperty("count", feed.getTotalResults());
+
+            if (feed.getEntries() != null) {
+                JsonArray arr = new JsonArray();
+                for (GphotoEntry gphotoEntry : feed.getEntries()) {
+                    AlbumEntry albumEntry = new AlbumEntry(gphotoEntry.getSelf());
+                    if (albumEntry.getMediaThumbnails() != null) {
+                        MediaThumbnail thumbnail = albumEntry.getMediaThumbnails().get(albumEntry.getMediaThumbnails().size() - 1);
+                        arr.add(new JsonPrimitive(thumbnail.getUrl()));
+                    }
+                }
+                body.add("photos", arr);
+            }
+        }
+        return body;
+    }
+
+    @Transactional
+    public void importGalleryAlbums(MultipartFile galleriesFile, Contest contest) {
+        try (InputStream in = galleriesFile.getInputStream();
+             CSVReader galleryReader = new CSVReader(new InputStreamReader(in, FormatUtils.DEFAULT_ENCODING))) {
+            String[] line;
+            while ((line = galleryReader.readNext()) != null) {
+                GalleryAlbum galleryAlbum = galleryAlbumRepository.findByNameAndContest(line[0], contest);
+                if (galleryAlbum == null) {
+                    galleryAlbum = new GalleryAlbum();
+                    galleryAlbum.setContest(contest);
+                    galleryAlbum.setName(line[0]);
+                    galleryAlbumRepository.save(galleryAlbum);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

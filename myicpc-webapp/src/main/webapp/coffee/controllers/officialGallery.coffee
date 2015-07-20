@@ -13,7 +13,7 @@ officialGalleryApp.factory('officialGalleryService', ($http, $interval) ->
   officialGalleryAppService.buildSearchUrl = (config, tag, start = 1) ->
     if start < 1 then start = 1
     return "http://picasaweb.google.com/data/feed/api/user/#{config.picasaUser}/?kind=photo&q=Album#{config.year}%20\"#{tag}\"&" +
-        "start-index=#{start}&max-results=#{config.maxResult}&thumbsize=#{config.thumbsize}c&imgmax=512&access=public&alt=json";
+        "start-index=#{start}&max-results=#{config.maxResult}&thumbsize=#{config.thumbsize}c&imgmax=512&alt=json";
 
   officialGalleryAppService.buildCountUrl = (config, tag) ->
     return "http://picasaweb.google.com/data/feed/api/user/#{config.picasaUser}/?fields=openSearch:totalResults&" +
@@ -44,9 +44,9 @@ officialGalleryApp.factory('officialGalleryService', ($http, $interval) ->
     if tokens.length > 0
       for i in [0..tokens.length-1] by 1
         token = tokens[i].trim()
-        if tagPrefix(token) == OfficialGalleryConstants.eventPrefix
+        if officialGalleryAppService.tagPrefix(token) == OfficialGalleryConstants.eventPrefix
           entity.events.push(sanitizeTag(token, OfficialGalleryConstants.eventPrefix))
-        else if tagPrefix(token) == OfficialGalleryConstants.teamPrefix
+        else if officialGalleryAppService.tagPrefix(token) == OfficialGalleryConstants.teamPrefix
           entity.teams.push(sanitizeTag(token, OfficialGalleryConstants.teamPrefix))
         else
           entity.people.push(sanitizeTag(token, OfficialGalleryConstants.personPrefix))
@@ -66,7 +66,7 @@ officialGalleryApp.factory('officialGalleryService', ($http, $interval) ->
   # Decide, which prefix tag has if any
   # @return identified tag
   ###
-  tagPrefix = (tag) ->
+  officialGalleryAppService.tagPrefix = (tag) ->
     tag = tag.trim()
     if tag.substr(0, OfficialGalleryConstants.eventPrefix.length) == OfficialGalleryConstants.eventPrefix
       OfficialGalleryConstants.eventPrefix
@@ -83,7 +83,7 @@ officialGalleryApp.controller('officialGalleryCtrl', ($scope, $http, $location, 
   $scope.currentPhoto = {}
   $scope.currentIndex = 0
   $scope.maxResult = 0
-  $scope.currentTag = "Photo Tour"
+  $scope.currentTag = OfficialGalleryConstants.eventPrefix+"$Photo Tour"
   $scope.currentEvent = "Photo Tour"
   $scope.currentTeam = ""
   $scope.currentPerson = ""
@@ -100,11 +100,12 @@ officialGalleryApp.controller('officialGalleryCtrl', ($scope, $http, $location, 
     $scope.searchEvent($scope.currentEvent)
 
   $scope.searchEvent = (eventName) ->
-    $scope.currentEvent = $scope.currentTag = eventName
+    $scope.currentEvent = eventName
     $scope.currentTeam = ""
     $scope.currentPerson = ""
     if eventName.length > 0
-      tag = OfficialGalleryConstants.eventPrefix + "$" + encodeURIComponent(eventName)
+      tag = OfficialGalleryConstants.eventPrefix + "$" + eventName
+      $scope.currentTag = tag
       getInitPhotos(tag)
 
   $scope.teamFilterChanged = () ->
@@ -112,10 +113,10 @@ officialGalleryApp.controller('officialGalleryCtrl', ($scope, $http, $location, 
 
   $scope.searchTeam = (teamName) ->
     $scope.currentEvent = ""
-    $scope.currentTeam = $scope.currentTag = teamName
+    $scope.currentTeam = teamName
     $scope.currentPerson = ""
     if teamName.length > 0
-      tag = OfficialGalleryConstants.teamPrefix + "$" + encodeURIComponent(teamName)
+      tag = $scope.currentTag = OfficialGalleryConstants.teamPrefix + "$" + teamName
       getInitPhotos(tag)
 
   $scope.peopleFilterChanged = () ->
@@ -124,12 +125,12 @@ officialGalleryApp.controller('officialGalleryCtrl', ($scope, $http, $location, 
   $scope.searchPeople = (personName) ->
     $scope.currentEvent = ""
     $scope.currentTeam = ""
-    $scope.currentPerson = $scope.currentTag = personName
     if personName.length > 0
-      tag = encodeURIComponent(personName)
+      tag = $scope.currentTag = personName
       getInitPhotos(tag)
 
   $scope.loadMore = () ->
+    console.log($scope.currentTag)
     if $scope.photos.length < $scope.maxResult
       getPhotos($scope.currentTag, $scope.photos.length + 1)
     else
@@ -140,31 +141,25 @@ officialGalleryApp.controller('officialGalleryCtrl', ($scope, $http, $location, 
     $scope.photos.length = 0
     $('#galleryPopup').modal('hide')
     $(".load-more-btn").removeClass('hidden')
-    location.hash = tag
+    $location.path(tag)
     getPhotos(tag)
 
   getPhotos = (tag, start = 1) ->
-    console.log(tag)
-    $http.get(officialGalleryService.buildCountUrl($scope.config, tag))
-      .success((data) ->
-        $scope.maxResult = data.feed['openSearch$totalResults']['$t'];
-        $http.get(officialGalleryService.buildSearchUrl($scope.config, tag, start))
-          .success(appendResultToPhotos)
-      )
+      console.log(tag)
+      $http.get(officialGalleryService.buildSearchUrl($scope.config, tag, start))
+        .success(appendResultToPhotos)
 
   appendResultToPhotos = (data) ->
     console.log(data)
     console.log(officialGalleryService.transformToGalleryEntities(data))
     $scope.photos = $scope.photos.concat(officialGalleryService.transformToGalleryEntities(data))
-    console.log($scope.photos.length)
-    console.log($scope.maxResult)
+    $scope.maxResult = data.feed['openSearch$totalResults']['$t']
     if $scope.photos.length == $scope.maxResult
       $(".load-more-btn").addClass('hidden')
     return
 
 
   $scope.showPhotoDetail = (index) ->
-    console.log(index)
     $scope.currentPhoto = $scope.photos[index]
     $scope.currentIndex = index
     console.log($scope.currentPhoto)
@@ -180,5 +175,32 @@ officialGalleryApp.controller('officialGalleryCtrl', ($scope, $http, $location, 
   $scope.nextPhoto = () ->
     $scope.showPhotoDetail($scope.currentIndex + 1)
 
-  $scope.searchEvent($scope.currentEvent)
+  processHashtag = () ->
+    hash = $location.path();
+    console.log(hash)
+    tagType = null
+    tag = null
+    if hash? && hash.length > 0
+      hash = hash.substr(1)
+      tagType = officialGalleryService.tagPrefix(hash)
+      if (tagType == OfficialGalleryConstants.eventPrefix || tagType == OfficialGalleryConstants.teamPrefix)
+        tag = hash.substr(tagType.length + 1)
+      else
+        tag = hash
+      console.log(tag)
+      if tag?
+        if (tagType == OfficialGalleryConstants.eventPrefix)
+          $scope.currentEvent = $scope.currentTag = tag
+          $scope.searchEvent($scope.currentEvent)
+        else if (tagType == OfficialGalleryConstants.teamPrefix)
+          $scope.currentTeam = $scope.currentTag = tag
+          $scope.searchTeam($scope.currentTeam)
+        else
+          $scope.currentPerson = $scope.currentTag = tag
+          $scope.searchPeople($scope.currentPerson)
+    else
+        $scope.searchEvent($scope.currentEvent)
+
+
+  processHashtag()
 )

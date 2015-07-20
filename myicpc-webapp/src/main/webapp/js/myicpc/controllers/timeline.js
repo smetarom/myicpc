@@ -16,7 +16,7 @@ Timeline = {
   ignoreScrolling: false,
   lastTimelineIdLoaded: null,
   init: function() {
-    var timelineAdminNotificationTemplate, timelineAnalystTeamTemplate, timelineAnalystTemplate, timelineInstagramTemplate, timelinePicasaTemplate, timelineQuestChallengeTemplate, timelineScoreboardTemplate, timelineTwitterTemplate, timelineVineTemplate;
+    var timelineAdminNotificationTemplate, timelineAnalystTeamTemplate, timelineAnalystTemplate, timelineInstagramTemplate, timelineOfficialGalleryTemplate, timelinePicasaTemplate, timelineQuestChallengeTemplate, timelineScoreboardTemplate, timelineTwitterTemplate, timelineVineTemplate;
     timelineScoreboardTemplate = compileHandlebarsTemplate("timeline-SCOREBOARD_SUCCESS");
     timelineAnalystTeamTemplate = compileHandlebarsTemplate("timeline-ANALYST_TEAM_MESSAGE");
     timelineAnalystTemplate = compileHandlebarsTemplate("timeline-ANALYST_MESSAGE");
@@ -24,6 +24,7 @@ Timeline = {
     timelineInstagramTemplate = compileHandlebarsTemplate("timeline-INSTAGRAM");
     timelineVineTemplate = compileHandlebarsTemplate("timeline-VINE");
     timelinePicasaTemplate = compileHandlebarsTemplate("timeline-PICASA");
+    timelineOfficialGalleryTemplate = compileHandlebarsTemplate("timeline-OFFICIAL_GALLERY");
     timelineQuestChallengeTemplate = compileHandlebarsTemplate("timeline-QUEST_CHALLENGE");
     timelineAdminNotificationTemplate = compileHandlebarsTemplate("timeline-ADMIN_NOTIFICATION");
     this.handlerMapping["submissionSuccess"] = function(notification) {
@@ -46,6 +47,9 @@ Timeline = {
     };
     this.handlerMapping["picasa"] = function(notification) {
       return timelinePicasaTemplate(notification);
+    };
+    this.handlerMapping["gallery"] = function(notification) {
+      return timelineOfficialGalleryTemplate(notification);
     };
     this.handlerMapping["questChallenge"] = function(notification) {
       return timelineQuestChallengeTemplate(notification);

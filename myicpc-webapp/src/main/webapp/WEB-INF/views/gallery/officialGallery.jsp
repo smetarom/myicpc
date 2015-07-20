@@ -4,16 +4,13 @@
     <jsp:attribute name="head">
     </jsp:attribute>
     <jsp:attribute name="headline">
-        ${pageTitle}
+        <spring:message code="officialGallery" />
     </jsp:attribute>
     <jsp:attribute name="title">
-        ${pageTitle}
+        <spring:message code="officialGallery" />
     </jsp:attribute>
     <jsp:attribute name="javascript">
         <script src="<c:url value='/js/myicpc/controllers/officialGallery.js'/>"></script>
-
-        <script type="application/javascript">
-        </script>
     </jsp:attribute>
 
     <jsp:body>
@@ -56,7 +53,9 @@
                     <div class="modal-content">
                         <div id="galleryPopupContent" class="modal-body clearfix">
                             <div class="col-sm-8 gallery-content">
-                                <img ng-src="{{currentPhoto.imageUrl}}" alt="" class="img-responsive center-block">
+                                <div>
+                                    <img ng-src="{{currentPhoto.imageUrl}}" alt="" class="img-responsive center-block">
+                                </div>
                             </div>
                             <div class="col-sm-4 gallery-submenu">
                                 <div class="text-center">
