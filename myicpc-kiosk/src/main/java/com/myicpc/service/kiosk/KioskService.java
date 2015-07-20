@@ -22,6 +22,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * Service for public kiosk views
+ *
  * @author Roman Smetana
  */
 @Service
@@ -50,6 +52,12 @@ public class KioskService {
     @Autowired
     private KioskContentRepository kioskContentRepository;
 
+    /**
+     * Finds the last {@code POSTS_PER_PAGE} notifications with {@code KIOSK_TYPES} types
+     *
+     * @param contest contest
+     * @return notification list sorted from oldest to newest
+     */
     @Transactional(readOnly = true)
     public List<Notification> getKioskNotifications(Contest contest) {
         Pageable pageable = new PageRequest(0, POSTS_PER_PAGE);
@@ -59,11 +67,23 @@ public class KioskService {
         return notifications;
     }
 
+    /**
+     * JSON representation of {@link #getKioskNotifications(Contest)}
+     *
+     * @param contest contest
+     * @return JSON object with notifications
+     */
     public JsonArray getKioskNotificationsJSON(Contest contest) {
         List<Notification> notifications = getKioskNotifications(contest);
         return NotificationService.getNotificationInJson(notifications);
     }
 
+    /**
+     * Finds the active custom kiosk page content
+     *
+     * @param contest contest
+     * @return active {@link KioskContent} or null, if there is no active
+     */
     @Transactional(readOnly = true)
     public KioskContent getActiveKioskContent(Contest contest) {
         List<KioskContent> activeList = kioskContentRepository.findByActive(true);

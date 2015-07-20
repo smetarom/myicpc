@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.Date;
 
 /**
+ * Controller for public kiosk pages
+ *
  * @author Roman Smetana
  */
 @Controller
@@ -27,6 +29,13 @@ public class KioskController extends GeneralController {
     @Autowired
     private ScheduleService scheduleService;
 
+    /**
+     * Social notification wall
+     *
+     * @param model
+     * @param contestCode
+     * @return JSP view
+     */
     @RequestMapping(value = {"/{contestCode}/kiosk", "/{contestCode}/kiosk/feed"}, method = RequestMethod.GET)
     public String kioskFeed(Model model, @PathVariable String contestCode) {
         Contest contest = getContest(contestCode, model);
@@ -37,6 +46,13 @@ public class KioskController extends GeneralController {
         return "kiosk/kioskFeed";
     }
 
+    /**
+     * Kiosk calendar view, where each day has a list of events
+     *
+     * @param model
+     * @param contestCode
+     * @return JSP view
+     */
     @RequestMapping(value = "/{contestCode}/kiosk/calendar", method = RequestMethod.GET)
     public String kioskCalendar(Model model, @PathVariable String contestCode) {
         Contest contest = getContest(contestCode, model);
@@ -46,15 +62,26 @@ public class KioskController extends GeneralController {
         return "kiosk/kioskCalendar";
     }
 
+    /**
+     * Kiosk view, which supports custom HTML content
+     *
+     * @param model
+     * @param contestCode
+     * @return JSP view
+     */
     @RequestMapping(value = "/{contestCode}/kiosk/custom", method = RequestMethod.GET)
     public String kioskCustom(Model model, @PathVariable String contestCode) {
         Contest contest = getContest(contestCode, model);
-
-
-
         return "kiosk/kioskCustom";
     }
 
+    /**
+     * HTML content of custom kiosk view
+     *
+     * @param model
+     * @param contestCode
+     * @return HTML code
+     */
     @RequestMapping(value = "/{contestCode}/kiosk/custom/content", method = RequestMethod.GET)
     @ResponseBody
     public String kioskCustomContent(Model model, @PathVariable String contestCode) {

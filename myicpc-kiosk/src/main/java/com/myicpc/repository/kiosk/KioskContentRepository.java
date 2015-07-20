@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 /**
+ * DAO repository for {@link KioskContent}
+ *
  * @author Roman Smetana
  */
 public interface KioskContentRepository extends JpaRepository<KioskContent, Long> {

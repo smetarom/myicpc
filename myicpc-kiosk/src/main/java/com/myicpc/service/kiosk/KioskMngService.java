@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
+ * Service for {@link KioskContent} management
+ *
  * @author Roman Smetana
  */
 @Service
@@ -22,6 +24,17 @@ public class KioskMngService {
     @Autowired
     private KioskContentRepository kioskContentRepository;
 
+    /**
+     * Process the update of {@link KioskContent}
+     *
+     * If {@link KioskContent} is marked as true, it deactivates all
+     * all other {@link KioskContent}s
+     *
+     * It broadcasts the change to the live channel
+     *
+     * @param kioskContent updated {@link KioskContent}
+     * @param contest {@link KioskContent} contest
+     */
     @Transactional
     public void updateKioskContent(final KioskContent kioskContent, final Contest contest) {
         if (kioskContent.isActive()) {

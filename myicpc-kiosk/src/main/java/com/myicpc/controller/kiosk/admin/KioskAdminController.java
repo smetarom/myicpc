@@ -20,6 +20,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 
 /**
+ * Admin controller for kiosk
+ *
  * @author Roman Smetana
  */
 @Controller
@@ -31,6 +33,13 @@ public class KioskAdminController extends GeneralAdminController {
     @Autowired
     private KioskContentRepository kioskContentRepository;
 
+    /**
+     * List of custom HTML pages for kiosk
+     *
+     * @param model
+     * @param contestCode
+     * @return JSP page
+     */
     @RequestMapping(value = "/private/{contestCode}/kiosk", method = RequestMethod.GET)
     public String kiosk(Model model, @PathVariable String contestCode) {
         Contest contest = getContest(contestCode, model);
@@ -40,6 +49,13 @@ public class KioskAdminController extends GeneralAdminController {
         return "private/kiosk/kiosk";
     }
 
+    /**
+     * Creates a new HTML custom kiosk page
+     *
+     * @param contestCode
+     * @param model
+     * @return JSP view
+     */
     @RequestMapping(value = "/private/{contestCode}/kiosk/content/create", method = RequestMethod.GET)
     public String createKioskContent(@PathVariable String contestCode, final Model model) {
         Contest contest = getContest(contestCode, model);
@@ -52,6 +68,15 @@ public class KioskAdminController extends GeneralAdminController {
         return "private/kiosk/editKioskContent";
     }
 
+    /**
+     * Edits HTML custom kiosk page
+     *
+     * @param contestCode
+     * @param kioskContentId     kiosk content ID
+     * @param model
+     * @param redirectAttributes
+     * @return JSP view
+     */
     @RequestMapping(value = "/private/{contestCode}/kiosk/content/{kioskContentId}/edit", method = RequestMethod.GET)
     public String editPoll(@PathVariable final String contestCode, @PathVariable final Long kioskContentId, final Model model,
                            RedirectAttributes redirectAttributes) {
@@ -69,6 +94,14 @@ public class KioskAdminController extends GeneralAdminController {
         return "private/kiosk/editKioskContent";
     }
 
+    /**
+     * Deletes HTML custom kiosk page
+     *
+     * @param contestCode
+     * @param kioskContentId     kiosk content ID
+     * @param redirectAttributes
+     * @return redirect to kiosk page list
+     */
     @RequestMapping(value = "/private/{contestCode}/kiosk/content/{kioskContentId}/delete", method = RequestMethod.GET)
     public String deletePoll(@PathVariable final String contestCode, @PathVariable final Long kioskContentId, final RedirectAttributes redirectAttributes) {
         kioskContentRepository.delete(kioskContentId);
@@ -76,6 +109,15 @@ public class KioskAdminController extends GeneralAdminController {
         return "redirect:/private" + getContestURL(contestCode) + "/kiosk";
     }
 
+    /**
+     * Process HTML custom kiosk page update
+     *
+     * @param contestCode
+     * @param kioskContent edited {@link KioskContent}
+     * @param result
+     * @param model
+     * @return redirect to kiosk page list if successful. Stays on the page on validation error
+     */
     @RequestMapping(value = "/private/{contestCode}/kiosk/content/update", method = RequestMethod.POST)
     public String updatePoll(@PathVariable String contestCode, @Valid @ModelAttribute("kioskContent") KioskContent kioskContent, BindingResult result, Model model) {
         Contest contest = getContest(contestCode, model);

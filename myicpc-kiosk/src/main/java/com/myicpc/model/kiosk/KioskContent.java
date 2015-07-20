@@ -8,18 +8,29 @@ import javax.persistence.Lob;
 import javax.persistence.SequenceGenerator;
 
 /**
+ * Represents a HTML custom kiosk page
+ *
  * @author Roman Smetana
  */
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "KioskContent_id_seq")
 public class KioskContent extends IdGeneratedContestObject {
-    private boolean active;
-
+    /**
+     * Kiosk custom page label
+     */
     private String name;
 
+    /**
+     * HTML content code
+     */
     @Lob
     @Type(type = "org.hibernate.type.StringClobType")
     private String content;
+
+    /**
+     * Is this page displayed on the kiosk custom view
+     */
+    private boolean active;
 
     public boolean isActive() {
         return active;
