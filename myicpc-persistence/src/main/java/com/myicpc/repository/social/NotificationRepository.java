@@ -132,6 +132,30 @@ public interface NotificationRepository extends PagingAndSortingRepository<Notif
             "   AND UPPER(n.body) LIKE UPPER(?3)")
     Page<Notification> findFilteredNotifications(List<NotificationType> notificationTypes, String title, String body, Contest contest, Pageable pageable);
 
+    @Query("SELECT COUNT(n) " +
+            "FROM Notification n " +
+            "WHERE n.entityId = ?1" +
+            " AND n.body = ?2" +
+            " AND n.contest = ?3" +
+            " AND (n.notificationType = 'SCOREBOARD_SUCCESS' OR n.notificationType = 'SCOREBOARD_FAILED' OR n.notificationType = 'SCOREBOARD_SUBMIT')")
+    long countAnalystSubmissionMessage(Long submissionId, String message, Contest contest);
+
+    @Query("SELECT COUNT(n) " +
+            "FROM Notification n " +
+            "WHERE  n.entityId = ?1" +
+            " AND n.body = ?2" +
+            " AND n.contest = ?3" +
+            " AND n.notificationType = 'ANALYST_TEAM_MESSAGE'")
+    long countAnalystTeamMessage(Long teamId, String message, Contest contest);
+
+    @Query("SELECT COUNT(n) " +
+            "FROM Notification n " +
+            "WHERE n.entityId IS NULL" +
+            " AND n.body = ?1" +
+            " AND n.contest = ?2" +
+            " AND n.notificationType = 'ANALYST_MESSAGE'")
+    long countAnalystGeneralMessage(String message, Contest contest);
+
     // ---
 
     List<Notification> findByNotificationType(NotificationType notificationType);
@@ -218,4 +242,5 @@ public interface NotificationRepository extends PagingAndSortingRepository<Notif
     @Transactional
     @Query("DELETE FROM Notification n WHERE n.contest = ?1 AND n.notificationType IN ?2")
     void deleteScoreboardNotificationsByContest(Contest contest, List<NotificationType> notificationTypes);
+
 }

@@ -1,6 +1,5 @@
 package com.myicpc.service.scoreboard.eventFeed;
 
-import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.dto.eventFeed.parser.AnalystMessageXML;
 import com.myicpc.dto.eventFeed.parser.ContestXML;
 import com.myicpc.dto.eventFeed.parser.FinalizedXML;
@@ -16,38 +15,41 @@ import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Judgement;
 import com.myicpc.model.eventFeed.Language;
 import com.myicpc.model.eventFeed.Problem;
-import com.myicpc.model.teamInfo.Region;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
+import com.myicpc.model.social.Notification;
 import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.repository.contest.ContestRepository;
 import com.myicpc.repository.eventFeed.JudgementRepository;
 import com.myicpc.repository.eventFeed.LanguageRepository;
 import com.myicpc.repository.eventFeed.ProblemRepository;
-import com.myicpc.repository.teamInfo.RegionRepository;
 import com.myicpc.repository.eventFeed.TeamProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
+import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.repository.teamInfo.TeamInfoRepository;
+import com.myicpc.service.publish.PublishService;
 import com.myicpc.service.scoreboard.eventFeed.strategy.FeedRunStrategy;
 import com.myicpc.service.scoreboard.eventFeed.strategy.JSONRunStrategy;
 import com.myicpc.service.scoreboard.eventFeed.strategy.NativeRunStrategy;
 import com.myicpc.service.scoreboard.exception.EventFeedException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@Component
+@Service
 public class EventFeedVisitorImpl implements EventFeedVisitor {
     private static final Logger logger = LoggerFactory.getLogger(EventFeedVisitorImpl.class);
     private static final Map<Long, TestcaseXML> testcaseXMLMap = new ConcurrentHashMap<>();
+
+    @Autowired
+    private PublishService publishService;
 
     @Autowired
     private NativeRunStrategy nativeRunStrategy;
@@ -56,13 +58,13 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
     private JSONRunStrategy jsonRunStrategy;
 
     @Autowired
+    private AnalystMessageService analystMessageService;
+
+    @Autowired
     private ContestRepository contestRepository;
 
     @Autowired
     private LanguageRepository languageRepository;
-
-    @Autowired
-    private RegionRepository regionRepository;
 
     @Autowired
     private JudgementRepository judgementRepository;
@@ -78,6 +80,9 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
 
     @Autowired
     private TeamProblemRepository teamProblemRepository;
+
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     @Override
     @Transactional
@@ -153,9 +158,6 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
         }
     }
 
-    @PersistenceContext
-    private EntityManager em;
-
     @Override
     @Transactional
     public void visit(TeamProblemXML xmlTeamProblem, Contest contest) {
@@ -208,7 +210,43 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
     @Override
     @Transactional
     public void visit(AnalystMessageXML analystMessage, Contest contest) {
-        // TODO handle analyst message
+        if (StringUtils.isEmpty(analystMessage.getMessage())) {
+            // skip, if the message is empty
+            return;
+        }
+        Notification notification = null;
+        if (analystMessage.getRunId() != null) { // notification for submission
+            TeamProblem teamProblem = teamProblemRepository.findBySystemIdAndTeamContest(analystMessage.getRunId(), contest);
+            // if team submission exists and message does not exist
+            if (teamProblem != null
+                    && notificationRepository.countAnalystSubmissionMessage(teamProblem.getId(), analystMessage.getMessage(), contest) == 0) {
+                if (teamProblem.getJudged()) {
+                    if (teamProblem.getSolved()) {
+                        notification = analystMessageService.createOnTeamSubmissionSuccess(teamProblem, analystMessage.getMessage());
+                    } else {
+                        notification = analystMessageService.createOnTeamSubmissionFailed(teamProblem, analystMessage.getMessage());
+                    }
+                } else {
+                    notification = analystMessageService.createOnTeamSubmissionSubmitted(teamProblem, analystMessage.getMessage());
+                }
+            }
+        } else if (analystMessage.getTeamId() != null) { // notification for a team
+            Team team = teamRepository.findBySystemIdAndContest(analystMessage.getTeamId(), contest);
+            if (team != null
+                    && notificationRepository.countAnalystTeamMessage(team.getId(), analystMessage.getMessage(), contest) == 0) {
+                notification = analystMessageService.createTeamAnalyticsMessage(team, analystMessage.getMessage());
+            }
+        } else { // general analytics notification
+            if (notificationRepository.countAnalystGeneralMessage(analystMessage.getMessage(), contest) == 0) {
+                Contest msgContest = contestRepository.findOne(contest.getId());
+                notification = analystMessageService.createAnalyticsMessage(msgContest, analystMessage.getMessage());
+            }
+        }
+
+        if (notification != null) {
+            notificationRepository.save(notification);
+            publishService.broadcastNotification(notification, notification.getContest());
+        }
     }
 
     @Override
