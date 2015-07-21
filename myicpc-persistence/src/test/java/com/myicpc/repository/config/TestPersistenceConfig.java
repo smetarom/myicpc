@@ -23,7 +23,6 @@ import java.util.Properties;
 public class TestPersistenceConfig {
     @Bean
     public DataSource dataSource() {
-//		return new EmbeddedDatabaseBuilder().setType(EmbeddedDatabaseType.HSQL).build();
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
 
         dataSource.setDriverClassName("org.postgresql.Driver");

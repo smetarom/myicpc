@@ -13,6 +13,9 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 /**
  * @author Roman Smetana
  */
@@ -26,4 +29,8 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 public abstract class AbstractRepositoryTest extends groovy.util.GroovyTestCase {
     @Autowired
     protected ContestRepository contestRepository;
+
+    protected Date getDate(int year, int month, int day) {
+        return new GregorianCalendar(year, month - 1, day).getTime();
+    }
 }
