@@ -2,9 +2,10 @@ package com.myicpc.model.schedule;
 
 import com.myicpc.model.IdGeneratedContestObject;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotNull;
  * @author smetana
  */
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"code", "contestId"}))
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "Location_id_seq")
 public class Location extends IdGeneratedContestObject {
     private static final long serialVersionUID = 5736319309531520386L;
@@ -26,7 +28,6 @@ public class Location extends IdGeneratedContestObject {
      * Code of the location used as a slug
      */
     @NotNull
-    @Column(unique = true)
     private String code;
 
     /**

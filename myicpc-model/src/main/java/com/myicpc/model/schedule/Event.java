@@ -5,7 +5,16 @@ import com.myicpc.model.contest.Contest;
 import com.myicpc.validator.annotation.ValidateDateRange;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.HashSet;
@@ -17,6 +26,7 @@ import java.util.Set;
  * @author Roman Smetana
  */
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"code", "contestId"}))
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "Event_id_seq")
 @ValidateDateRange
 public class Event extends StartEndDateObject {
@@ -54,7 +64,6 @@ public class Event extends StartEndDateObject {
      * Event code used as a slug
      */
     @NotNull
-    @Column(unique = true)
     private String code;
     /**
      * Event social hashtag

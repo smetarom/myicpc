@@ -11,18 +11,13 @@ import com.myicpc.model.schedule.ScheduleDay;
 import com.myicpc.repository.schedule.EventRepository;
 import com.myicpc.repository.schedule.EventRoleRepository;
 import com.myicpc.service.EntityManagerService;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,10 +30,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Service method for {@link Event} and related entities actions
+ *
  * @author Roman Smetana
  */
 @Service
-@Transactional
 public class ScheduleService extends EntityManagerService {
     @Autowired
     private EventRepository eventRepository;
@@ -46,25 +42,38 @@ public class ScheduleService extends EntityManagerService {
     @Autowired
     private EventRoleRepository eventRoleRepository;
 
-    public Event getEventByIdOrCode(String eventId) {
+    /**
+     * Finds an event by identifier
+     * <p/>
+     * Identifier can be event ID or event code
+     *
+     * @param eventId event ID or event code
+     * @param contest contest
+     * @return event matching the identifier
+     */
+    @Transactional(readOnly = true)
+    public Event getEventByIdOrCode(String eventId, final Contest contest) {
         Event event;
         try {
             Long id = Long.parseLong(eventId);
             event = eventRepository.findOne(id);
         } catch (Exception ex) {
-            event = eventRepository.findByCode(eventId);
+            event = eventRepository.findByCodeAndContest(eventId, contest);
         }
-        event.getRoles().size();
+        if (event != null && event.getRoles() != null) {
+            // fetch roles to prevent lazy-loading exception
+            event.getRoles().size();
+        }
         return event;
     }
 
     /**
      * Returns all events which ends after the given date
      *
-     * @param today
-     *            deadline date
+     * @param today deadline date
      * @return events which ends after the given date
      */
+    @Transactional(readOnly = true)
     public Iterable<ScheduleDay> getCurrentContestSchedule(final Date today, final Contest contest) {
         Iterable<Event> events = eventRepository.findAllFutureEvents(today, contest);
         return getEventsGroupedByScheduleDay(events);
@@ -73,15 +82,14 @@ public class ScheduleService extends EntityManagerService {
     /**
      * Returns all events for given roles and which ends after the given date
      *
-     * @param roleIds
-     *            ids of selected roles
-     * @param today
-     *            deadline date
+     * @param roleIds ids of selected roles
+     * @param today   deadline date
      * @param contest
      * @return events for given roles and which ends after the given date
      */
+    @Transactional(readOnly = true)
     public Iterable<ScheduleDay> getMyCurrentSchedule(final String[] roleIds, final Date today, Contest contest) {
-        Iterable<Event> events = getEventsForRoles(roleIds, today, contest);
+        Iterable<Event> events = eventRepository.findEventsForRoles(roleIds, today, contest);
         return getEventsGroupedByScheduleDay(events);
     }
 
@@ -90,6 +98,7 @@ public class ScheduleService extends EntityManagerService {
      *
      * @return complete schedule
      */
+    @Transactional(readOnly = true)
     public Iterable<ScheduleDay> getEntireContestSchedule(final Contest contest) {
         Iterable<Event> events = eventRepository.findByContestWithScheduleDayAndLocation(contest);
         return getEventsGroupedByScheduleDay(events);
@@ -98,86 +107,26 @@ public class ScheduleService extends EntityManagerService {
     /**
      * Returns all events, which take place in the given {@link com.myicpc.model.schedule.Location}
      *
-     * @param location
-     *            location for events
+     * @param location location for events
      * @return events in the location
      */
+    @Transactional(readOnly = true)
     public Iterable<ScheduleDay> getScheduleEventsInLocation(final Location location) {
         Iterable<Event> events = eventRepository.findByLocationWithScheduleDayAndLocation(location);
         return getEventsGroupedByScheduleDay(events);
     }
 
     /**
-     * Return all events for given roles
-     *
-     * @param roleIds
-     *            selected roles
-     * @return events for given roles
-     */
-    public List<Event> getEventsForRoles(final String[] roleIds, Contest contest) {
-        return getEventsForRoles(roleIds, null, contest);
-    }
-
-    /**
-     * Returns all events for given roles and which ends after the given date
-     *
-     * @param roleIds
-     *            ids of selected roles
-     * @param now
-     *            deadline date
-     * @param contest
-     * @return events for given roles and which ends after the given date
-     */
-    public List<Event> getEventsForRoles(final String[] roleIds, final Date now, Contest contest) {
-        return getEventsForRoles(roleIds, now, null, contest, false);
-    }
-
-    /**
-     * Returns all events for given roles and which ends after the given date
-     *
-     * @param roleIds
-     *            ids of selected roles
-     * @param now
-     *            events must end after this date
-     * @param limit
-     *            events must start before this date
-     * @param contest
-     *@param sorted
-     *            if sorted by start date  @return events for roles, in the given time range
-     */
-    public List<Event> getEventsForRoles(final String[] roleIds, final Date now, final Date limit, Contest contest, final boolean sorted) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Event> q = cb.createQuery(Event.class);
-        Root<Event> c = q.from(Event.class);
-        Join<Event, EventRole> eventRole = c.join("roles", JoinType.LEFT);
-        q.select(c).distinct(true);
-        Predicate rolesPredicate = cb.isEmpty(c.<List>get("roles"));
-        for (String roleId : roleIds) {
-            rolesPredicate = cb.or(rolesPredicate, cb.equal(eventRole.<Long> get("id"), roleId));
-        }
-
-        Predicate datesPredicate = cb.conjunction();
-        if (now != null) {
-            datesPredicate = cb.and(datesPredicate, cb.greaterThanOrEqualTo(c.<Date> get("endDate"), now));
-        }
-        if (limit != null) {
-            datesPredicate = cb.and(datesPredicate, cb.lessThanOrEqualTo(c.<Date> get("startDate"), limit));
-        }
-        q.where(cb.and(datesPredicate, rolesPredicate, cb.equal(c.<Contest> get("contest"), contest)));
-        if (sorted) {
-            q.orderBy(cb.asc(c.<Date> get("startDate")));
-        }
-        return em.createQuery(q).getResultList();
-    }
-
-    /**
      * Groups a list of events by {@link ScheduleDay}
      *
-     * @param events
-     *            events to be grouped
+     * @param events events to be grouped
      * @return schedule days with events
      */
     private Iterable<ScheduleDay> getEventsGroupedByScheduleDay(final Iterable<Event> events) {
+        if (events == null) {
+            return Collections.EMPTY_LIST;
+        }
+
         Map<ScheduleDay, List<Event>> dayMap = new HashMap<>();
 
         for (Event event : events) {
@@ -204,9 +153,10 @@ public class ScheduleService extends EntityManagerService {
      *
      * @return all schedule roles IDs, separated by comma
      */
+    @Transactional(readOnly = true)
     public String getAllScheduleRoles(final Contest contest) {
         List<EventRole> roles = eventRoleRepository.findByContest(contest);
-        if (roles == null || roles.isEmpty()) {
+        if (CollectionUtils.isEmpty(roles)) {
             return null;
         }
         StringBuilder sb = new StringBuilder();
@@ -223,7 +173,7 @@ public class ScheduleService extends EntityManagerService {
      * @return
      */
     public Map<Long, Boolean> getActiveEventRoleMapping(String scheduleRoles) {
-        Map<Long, Boolean> activeRoles = new HashMap<Long, Boolean>();
+        Map<Long, Boolean> activeRoles = new HashMap<>();
 
         if (!StringUtils.isEmpty(scheduleRoles)) {
             String[] ss = scheduleRoles.split(",");
@@ -236,19 +186,14 @@ public class ScheduleService extends EntityManagerService {
     }
 
     /**
-     * Events which start after startDate and end before endDate
+     * Events, which are active in next {@code hours} from now
      *
-     * @param startDate
-     *            start date of period
-     * @param endDate
-     *            end date of period
-     * @return events in the period
+     * @param hours   the length of time range
+     * @param contest contest
+     * @return events active in time range
      */
-    public List<Event> getEventsInPeriod(final Date startDate, final Date endDate, final Contest contest) {
-        return eventRepository.findAllBetweenDates(startDate, endDate, contest);
-    }
-
-    public List<Event> getUpcomingEventsForUser(int hours, final Contest contest) {
+    public List<Event> getUpcomingEvents(int hours, final Contest contest) {
+        // TODO replace with new Date()
         Date now = new GregorianCalendar(2014, 5, 22, 12, 0, 0).getTime();
         Calendar cal = Calendar.getInstance();
         cal.setTime(now);
@@ -256,6 +201,17 @@ public class ScheduleService extends EntityManagerService {
         return eventRepository.findTimelineUpcomingEvents(now, cal.getTime(), contest);
     }
 
+    /**
+     * Creates a JSON representation of the schedule
+     * <p/>
+     * The structure is following:
+     * - on the top level are {@link ScheduleDay}s
+     * - under each @{link ScheduleDay} is a list of all {@link Event}s, which belong to the day
+     *
+     * @param now     current date
+     * @param contest contest
+     * @return JSON schedule representation
+     */
     public JsonArray getScheduleDaysJSON(Date now, Contest contest) {
         Iterable<ScheduleDay> iterable = getCurrentContestSchedule(now, contest);
         JsonArray arr = new JsonArray();

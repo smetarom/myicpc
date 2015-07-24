@@ -86,7 +86,7 @@ public class ScheduleAdminController extends GeneralAdminController {
     @RequestMapping(value = "/private/{contestCode}/schedule/event/{eventId}/edit", method = RequestMethod.GET)
     public String editEvent(@PathVariable final String contestCode, @PathVariable final Long eventId, final Model model,
                             final RedirectAttributes redirectAttributes) {
-        getContest(contestCode, model);
+        Contest contest = getContest(contestCode, model);
 
         Event event = eventRepository.findOne(eventId);
 
@@ -95,7 +95,7 @@ public class ScheduleAdminController extends GeneralAdminController {
             return "redirect:/private/" + contestCode + "/schedule";
         }
 
-        Iterable<EventRole> roles = eventRoleRepository.findAllOrderedByNameAsc();
+        Iterable<EventRole> roles = eventRoleRepository.findByContestOrderByNameAsc(contest);
         Map<Long, Boolean> rolesMap = new HashMap<>();
         for (EventRole role : event.getRoles()) {
             rolesMap.put(role.getId(), true);

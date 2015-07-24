@@ -33,4 +33,8 @@ public abstract class AbstractRepositoryTest extends groovy.util.GroovyTestCase 
     protected Date getDate(int year, int month, int day) {
         return new GregorianCalendar(year, month - 1, day).getTime();
     }
+
+    protected Date getDateTime(int year, int month, int day, int hours, int minutes) {
+        return new GregorianCalendar(year, month - 1, day, hours, minutes).getTime();
+    }
 }

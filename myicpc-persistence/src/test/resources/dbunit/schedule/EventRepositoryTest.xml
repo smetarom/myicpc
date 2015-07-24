@@ -1,0 +1,74 @@
+<dataset>
+    <contestsettings id="1" jsonscoreboardurl="http://localhost/scoreboard" eventfeedusername="myicpc" eventfeedpassword="myicpc" eventfeedurl="http://localhost/events" generatemessages="false" scoreboardstrategytype="NATIVE" showcountry="true" showregion="false" showuniversity="false" year="2015"/>
+    <mapconfiguration id="1" zoomablemap="false"/>
+    <moduleconfiguration id="1" codeinsightmodule="true" gallerymodule="true" mapmodule="true" pollmodule="true" questmodule="true" rssmodule="true" schedulemodule="true" techtrekmodule="true"/>
+    <questconfiguration id="1" hashtagprefix="Quest" instructionurl="http://localhost/instructions" pointsforvote="10" deadline="2015-06-08 00:00:00.0"/>
+    <webservicesettings id="1" instagramkey="instagramkey" instagramsecret="instagramsecret" showpicasaphotos="false" twitteraccesstoken="twitteraccesstoken" twitteraccesstokensecret="twitteraccesstokensecret" twitterconsumerkey="twitterconsumerkey" twitterconsumersecret="twitterconsumersecret" vineemail="vineemail" vinepassword="vinepassword" wscmtoken="wscmtoken"/>
+    <contest id="1" code="contest-1" hashtag="contest1" length="18000" name="Contest 1" penalty="20.0" shortname="C1" showteamnames="false" starttime="2013-07-13 10:15:02.0" timedifference="60" contestsettingsid="1" mapconfigurationid="1" moduleconfigurationid="1" questconfigurationid="1" webservicesettingsid="1"/>
+
+    <contestsettings id="2" jsonscoreboardurl="http://localhost/scoreboard" eventfeedusername="myicpc" eventfeedpassword="myicpc" eventfeedurl="http://localhost/events" generatemessages="false" scoreboardstrategytype="NATIVE" showcountry="true" showregion="false" showuniversity="false" year="2015"/>
+    <mapconfiguration id="2" zoomablemap="false"/>
+    <moduleconfiguration id="2" codeinsightmodule="true" gallerymodule="true" mapmodule="true" pollmodule="true" questmodule="true" rssmodule="true" schedulemodule="true" techtrekmodule="true"/>
+    <questconfiguration id="2" hashtagprefix="Quest" instructionurl="http://localhost/instructions" pointsforvote="10" deadline="2015-06-08 00:00:00.0"/>
+    <webservicesettings id="2" instagramkey="instagramkey" instagramsecret="instagramsecret" showpicasaphotos="false" twitteraccesstoken="twitteraccesstoken" twitteraccesstokensecret="twitteraccesstokensecret" twitterconsumerkey="twitterconsumerkey" twitterconsumersecret="twitterconsumersecret" vineemail="vineemail" vinepassword="vinepassword" wscmtoken="wscmtoken"/>
+    <contest id="2" code="contest-2" hashtag="contest2" length="18000" name="Contest 2" penalty="20.0" shortname="C2" showteamnames="true" starttime="2013-07-13 10:15:02.0" timedifference="60" contestsettingsid="2" mapconfigurationid="2" moduleconfigurationid="2" questconfigurationid="2" webservicesettingsid="2"/>
+
+    <location id="1" code="location1" name="Location 1" contestid="1"/>
+    <location id="2" code="location2" name="Location 2" contestid="1"/>
+    <location id="3" code="location3" name="Location 3" contestid="1"/>
+
+    <location id="4" code="location4" name="Location 4" contestid="2"/>
+    <location id="5" code="location5" name="Location 5" contestid="2"/>
+
+    <scheduleday id="1" date="2014-06-21 00:00:00.0" dayorder="1" name="Day 1" contestid="1"/>
+    <scheduleday id="2" date="2014-06-22 00:00:00.0" dayorder="2" name="Day 2" contestid="1"/>
+    <scheduleday id="3" date="2014-06-23 00:00:00.0" dayorder="3" name="Day 3" contestid="1"/>
+
+    <scheduleday id="4" date="2014-06-21 00:00:00.0" dayorder="1" name="Day 1" contestid="2"/>
+    <scheduleday id="5" date="2014-06-22 00:00:00.0" dayorder="2" name="Day 2" contestid="2"/>
+
+    <event id="1" contestid="1" locationid="1" scheduledayid="2" enddate="2014-06-22 10:00:00.0" startdate="2014-06-22 07:00:00.0" published="false" code="event1" hashtag="Event1" name="Event 1" />
+    <event id="2" contestid="1" locationid="2" scheduledayid="1" enddate="2014-06-21 13:00:00.0" startdate="2014-06-21 11:00:00.0" published="true" code="event2" hashtag="Event2" name="Event 2" />
+    <event id="3" contestid="1" locationid="3" scheduledayid="3" enddate="2014-06-23 12:00:00.0" startdate="2014-06-23 09:00:00.0" published="false" code="event3" hashtag="Event3" name="Event 3" />
+    <event id="4" contestid="1" locationid="1" scheduledayid="1" enddate="2014-06-21 16:00:00.0" startdate="2014-06-21 15:00:00.0" published="false" code="event4" hashtag="Event4" name="Event 4" />
+    <event id="5" contestid="1" locationid="2" scheduledayid="3" enddate="2014-06-23 19:00:00.0" startdate="2014-06-23 18:00:00.0" published="true" code="event5" hashtag="Event5" name="Event 5" />
+    <event id="6" contestid="1" locationid="3" scheduledayid="2" enddate="2014-06-22 20:00:00.0" startdate="2014-06-22 19:00:00.0" published="false" code="event6" hashtag="Event6" name="Event 6" />
+
+    <event id="10" contestid="2" locationid="4" scheduledayid="4" enddate="2014-06-21 10:00:00.0" startdate="2014-06-21 14:00:00.0" published="false" code="event1" hashtag="Event1" name="Event 1" />
+    <event id="11" contestid="2" locationid="5" scheduledayid="4" enddate="2014-06-21 14:00:00.0" startdate="2014-06-22 18:00:00.0" published="false" code="event2" hashtag="Event2" name="Event 2" />
+    <event id="12" contestid="2" locationid="4" scheduledayid="5" enddate="2014-06-21 21:00:00.0" startdate="2014-06-21 23:00:00.0" published="false" code="event3" hashtag="Event3" name="Event 3" />
+    <event id="13" contestid="2" locationid="5" scheduledayid="5" enddate="2014-06-22 09:00:00.0" startdate="2014-06-22 19:00:00.0" published="false" code="event4" hashtag="Event4" name="Event 4" />
+    <event id="14" contestid="2" locationid="4" scheduledayid="5" enddate="2014-06-22 16:00:00.0" startdate="2014-06-22 18:00:00.0" published="false" code="event5" hashtag="Event5" name="Event 5" />
+    <event id="15" contestid="2" locationid="5" scheduledayid="4" enddate="2014-06-22 18:00:00.0" startdate="2014-06-22 19:00:00.0" published="false" code="event6" hashtag="Event6" name="Event 6" />
+
+    <eventrole id="1" name="Role 1" contestid="1"/>
+    <eventrole id="2" name="Role 2" contestid="1"/>
+    <eventrole id="3" name="Role 3" contestid="1"/>
+
+    <eventrole id="10" name="Role 1" contestid="2"/>
+    <eventrole id="11" name="Role 2" contestid="2"/>
+    <eventrole id="12" name="Role 3" contestid="2"/>
+    <eventrole id="13" name="Role 4" contestid="2"/>
+
+    <eventroleeventassociation eventid="1" eventroleid="1"/>
+    <eventroleeventassociation eventid="1" eventroleid="2"/>
+    <eventroleeventassociation eventid="2" eventroleid="3"/>
+    <eventroleeventassociation eventid="2" eventroleid="2"/>
+    <eventroleeventassociation eventid="3" eventroleid="3"/>
+    <eventroleeventassociation eventid="3" eventroleid="1"/>
+    <eventroleeventassociation eventid="4" eventroleid="2"/>
+    <eventroleeventassociation eventid="4" eventroleid="1"/>
+    <eventroleeventassociation eventid="5" eventroleid="2"/>
+    <eventroleeventassociation eventid="6" eventroleid="3"/>
+
+    <eventroleeventassociation eventid="10" eventroleid="10"/>
+    <eventroleeventassociation eventid="10" eventroleid="13"/>
+    <eventroleeventassociation eventid="11" eventroleid="12"/>
+    <eventroleeventassociation eventid="11" eventroleid="11"/>
+    <eventroleeventassociation eventid="12" eventroleid="13"/>
+    <eventroleeventassociation eventid="12" eventroleid="12"/>
+    <eventroleeventassociation eventid="14" eventroleid="10"/>
+    <eventroleeventassociation eventid="14" eventroleid="11"/>
+
+
+</dataset>

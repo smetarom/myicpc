@@ -16,7 +16,7 @@ public class ScheduleDayValidator extends BusinessEntityValidator<ScheduleDay> {
 
     @Override
     public void validate(ScheduleDay scheduleDay) throws BusinessValidationException {
-        ScheduleDay duplicated = scheduleDayRepository.findByDayOrder(scheduleDay.getDayOrder());
+        ScheduleDay duplicated = scheduleDayRepository.findByDayOrderAndContest(scheduleDay.getDayOrder(), scheduleDay.getContest());
 
         if (duplicated != null && !duplicated.getId().equals(scheduleDay.getId())) {
             throw new BusinessValidationException("scheduleDay.duplicatedDayOrder");

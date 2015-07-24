@@ -3,6 +3,7 @@ package com.myicpc.commons.utils;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * @author Roman Smetana
@@ -85,5 +86,31 @@ public class TimeUtils {
      */
     public static SimpleDateFormat getExcelDateFormat() {
         return new SimpleDateFormat("M/dd/yy");
+    }
+
+    /**
+     * Creates a date from year, month, and day
+     *
+     * @param year  year
+     * @param month month
+     * @param day   day
+     * @return date representing given year, month, and day
+     */
+    public static Date getDate(int year, int month, int day) {
+        return new GregorianCalendar(year, month - 1, day).getTime();
+    }
+
+    /**
+     * Creates a date from year, month, and day, hour, minute
+     *
+     * @param year   year
+     * @param month  month
+     * @param day    day
+     * @param hour   hour
+     * @param minute minute
+     * @return date representing given year, month, and day
+     */
+    public static Date getDateTime(int year, int month, int day, int hour, int minute) {
+        return new GregorianCalendar(year, month - 1, day, hour, minute).getTime();
     }
 }

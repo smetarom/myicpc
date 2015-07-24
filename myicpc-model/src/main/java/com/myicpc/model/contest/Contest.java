@@ -3,7 +3,16 @@ package com.myicpc.model.contest;
 import com.myicpc.model.IdGeneratedObject;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+import javax.persistence.Cacheable;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -61,24 +70,29 @@ public class Contest extends IdGeneratedObject {
     /**
      * Represents the settings for the contest
      */
+    @NotNull
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "contestSettingsId")
+    @JoinColumn(name = "contestSettingsId", nullable = false)
     private ContestSettings contestSettings = new ContestSettings();
 
+    @NotNull
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "webServiceSettingsId")
+    @JoinColumn(name = "webServiceSettingsId", nullable = false)
     private WebServiceSettings webServiceSettings = new WebServiceSettings();
 
+    @NotNull
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "mapConfigurationId")
+    @JoinColumn(name = "mapConfigurationId", nullable = false)
     private MapConfiguration mapConfiguration = new MapConfiguration();
 
+    @NotNull
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "questConfigurationId")
+    @JoinColumn(name = "questConfigurationId", nullable = false)
     private QuestConfiguration questConfiguration = new QuestConfiguration();
 
+    @NotNull
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "moduleConfigurationId")
+    @JoinColumn(name = "moduleConfigurationId", nullable = false)
     private ModuleConfiguration moduleConfiguration = new ModuleConfiguration();
 
     public String getName() {

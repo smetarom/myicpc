@@ -6,7 +6,6 @@ import com.myicpc.model.contest.Contest;
 import com.myicpc.model.schedule.Event;
 import com.myicpc.model.schedule.EventRole;
 import com.myicpc.model.schedule.Location;
-import com.myicpc.repository.schedule.EventRepository;
 import com.myicpc.repository.schedule.EventRoleRepository;
 import com.myicpc.repository.schedule.LocationRepository;
 import com.myicpc.service.schedule.ScheduleService;
@@ -123,7 +122,7 @@ public class ScheduleController extends GeneralController {
 
     protected String _eventDetail(Contest contest, String view, String redirectView, String eventId, Model model,
                                   RedirectAttributes redirectAttributes) {
-        Event event = scheduleService.getEventByIdOrCode(eventId);
+        Event event = scheduleService.getEventByIdOrCode(eventId, contest);
         if (event == null) {
             errorMessage(redirectAttributes, "scheduleAdmin.noResult");
             return redirectView;
@@ -144,7 +143,7 @@ public class ScheduleController extends GeneralController {
     public String upcomingEvents(@PathVariable String contestCode, Model model) {
         Contest contest = getContest(contestCode, model);
 
-        List<Event> upcomingEvents = scheduleService.getUpcomingEventsForUser(8, contest);
+        List<Event> upcomingEvents = scheduleService.getUpcomingEvents(8, contest);
 
         model.addAttribute("upcomingEvents", upcomingEvents);
         return "timeline/fragment/timelineUpcomingEvents";
@@ -164,7 +163,7 @@ public class ScheduleController extends GeneralController {
     @RequestMapping(value = "/{contestCode}/venue/{venueId}", method = RequestMethod.GET)
     public String venueDetail(@PathVariable String contestCode, @PathVariable String venueId, Model model, HttpServletRequest request,
                               HttpServletResponse response) {
-        getContest(contestCode, model);
+        Contest contest = getContest(contestCode, model);
 
         SitePreference sitePreference = SitePreferenceUtils.getCurrentSitePreference(request);
         if (!sitePreference.isMobile()) {
@@ -172,7 +171,7 @@ public class ScheduleController extends GeneralController {
         }
 
 
-        _venueDetail(venueId, model);
+        _venueDetail(venueId, contest, model);
         model.addAttribute("sideMenuActive", "schedule");
 
         return "schedule/venueDetail";
@@ -181,21 +180,21 @@ public class ScheduleController extends GeneralController {
     @RequestMapping(value = "/{contestCode}/venue/ajax/{venueId}", method = RequestMethod.GET)
     public String venueDetailAjax(@PathVariable String contestCode, @PathVariable String venueId, Model model, HttpServletRequest request,
                                   HttpServletResponse response) {
-        getContest(contestCode, model);
+        Contest contest = getContest(contestCode, model);
 
-        _venueDetail(venueId, model);
+        _venueDetail(venueId, contest, model);
         model.addAttribute("showHeadline", true);
 
         return "schedule/fragment/venueDetail";
     }
 
-    protected void _venueDetail(String venueId, Model model) {
+    protected void _venueDetail(String venueId, Contest contest, Model model) {
         Location location;
         try {
             Long id = Long.parseLong(venueId);
             location = locationRepository.findOne(id);
         } catch (Exception ex) {
-            location = locationRepository.findByCode(venueId);
+            location = locationRepository.findByCodeAndContest(venueId, contest);
         }
 
         model.addAttribute("venue", location);

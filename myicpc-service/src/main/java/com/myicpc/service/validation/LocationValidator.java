@@ -17,7 +17,7 @@ public class LocationValidator extends BusinessEntityValidator<Location> {
 
     @Override
     public void validate(Location location) throws BusinessValidationException {
-        Location duplicated = locationRepository.findByCode(location.getCode());
+        Location duplicated = locationRepository.findByCodeAndContest(location.getCode(), location.getContest());
 
         if (duplicated != null && !duplicated.getId().equals(location.getId())) {
             throw new BusinessValidationException("location.duplicatedCode");

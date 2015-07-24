@@ -5,7 +5,15 @@ import com.myicpc.model.IdGeneratedContestObject;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Lob;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,6 +26,7 @@ import java.util.List;
  * @author Roman Smetana
  */
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"dayOrder", "contestId"}))
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "ScheduleDay_id_seq")
 public class ScheduleDay extends IdGeneratedContestObject implements Comparable<ScheduleDay> {
     private static final long serialVersionUID = -8937265473589617602L;
@@ -42,7 +51,6 @@ public class ScheduleDay extends IdGeneratedContestObject implements Comparable<
     /**
      * Order of the day within the schedule
      */
-    @Column(unique = true)
     private int dayOrder;
     /**
      * List of events in the day
