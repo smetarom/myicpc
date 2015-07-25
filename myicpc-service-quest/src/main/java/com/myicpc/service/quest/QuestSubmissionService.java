@@ -24,10 +24,16 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * Service responsible for processing {@link QuestSubmission}
+ * <p/>
+ * Service searches {@link Notification}s for quest submissions and parse them to
+ * {@link QuestSubmission}s
+ * <p/>
+ * Service processes the voting lifecycle of quest submissions
+ *
  * @author Roman Smetana
  */
 @Service
-@Transactional
 public class QuestSubmissionService {
     public static final int VOTE_ROUND_SIZE = 4;
     public static final int MIN_VOTES_REQUIRED = 5;
@@ -50,11 +56,18 @@ public class QuestSubmissionService {
     @Autowired
     private PublishService publishService;
 
+    /**
+     * Searches through all {@link Notification}s and parse missing notifications into {@link QuestSubmission}s
+     *
+     * @param contest contest
+     */
+    @Transactional(readOnly = true)
     public void processAllSubmissions(final Contest contest) {
         List<QuestChallenge> challenges = challengeRepository.findByContest(contest);
+        QuestService.applyHashtagPrefix(contest.getQuestConfiguration().getHashtagPrefix(), challenges);
         for (QuestChallenge challenge : challenges) {
             // find all submissions for challenge newer than last processed
-            List<Notification> submissions = getAllSubmissions(challenge.getHashtag(), contest.getHashtag());
+            List<Notification> submissions = getAllSubmissions(challenge.getHashtag(), contest.getHashtag(), contest);
             for (Notification submission : submissions) {
                 if (ignoreSubmission(challenge, submission)) {
                     // if the submission is not eligible for processing, skip
@@ -80,6 +93,13 @@ public class QuestSubmissionService {
         }
     }
 
+    /**
+     * Searches through new {@link Notification}s, which were created after the last check,
+     * and parse missing notifications into {@link QuestSubmission}s
+     *
+     * @param contest contest
+     */
+    @Transactional(readOnly = true)
     public void processRecentSubmissions(final Contest contest) {
         Long sinceId = getLastProcessedId(contest);
 
@@ -87,7 +107,7 @@ public class QuestSubmissionService {
         QuestService.applyHashtagPrefix(contest.getQuestConfiguration().getHashtagPrefix(), challenges);
         for (QuestChallenge challenge : challenges) {
             // find all submissions for challenge newer than last processed
-            List<Notification> submissions = getAllSubmissionsSinceId(challenge.getHashtag(), contest.getHashtag(), sinceId);
+            List<Notification> submissions = getAllSubmissionsSinceId(challenge.getHashtag(), contest.getHashtag(), sinceId, contest);
             for (Notification submission : submissions) {
                 if (ignoreSubmission(challenge, submission)) {
                     // if the submission is not eligible for processing, skip
@@ -125,27 +145,27 @@ public class QuestSubmissionService {
         return questSubmissionPersisted;
     }
 
-    private QuestParticipant getQuestParticipant(final Contest contest, final Notification submission) {
+    private QuestParticipant getQuestParticipant(final Contest contest, final Notification notification) {
         QuestParticipant questParticipant = null;
-        switch (submission.getNotificationType()) {
+        switch (notification.getNotificationType()) {
             case TWITTER:
-                questParticipant = questParticipantRepository.findByContestAndContestParticipantTwitterUsernameIgnoreCase(contest, submission.getAuthorUsername());
+                questParticipant = questParticipantRepository.findByContestAndContestParticipantTwitterUsernameIgnoreCase(contest, notification.getAuthorUsername());
                 break;
             case INSTAGRAM:
-                questParticipant = questParticipantRepository.findByContestAndContestParticipantInstagramUsernameIgnoreCase(contest, submission.getAuthorUsername());
+                questParticipant = questParticipantRepository.findByContestAndContestParticipantInstagramUsernameIgnoreCase(contest, notification.getAuthorUsername());
                 break;
             case VINE:
-                questParticipant = questParticipantRepository.findByContestAndContestParticipantVineUsernameIgnoreCase(contest, submission.getAuthorUsername());
+                questParticipant = questParticipantRepository.findByContestAndContestParticipantVineUsernameIgnoreCase(contest, notification.getAuthorUsername());
                 break;
         }
         if (questParticipant == null) {
-            ContestParticipant contestParticipant = getContestParticipantByNotification(submission);
+            ContestParticipant contestParticipant = getContestParticipantByNotification(notification);
             if (contestParticipant == null) {
                 return null;
             }
             questParticipant = new QuestParticipant();
             questParticipant.setContestParticipant(contestParticipant);
-            questParticipant.setContest(submission.getContest());
+            questParticipant.setContest(notification.getContest());
             questParticipant = questParticipantRepository.save(questParticipant);
         }
         return questParticipant;
@@ -166,7 +186,7 @@ public class QuestSubmissionService {
     }
 
     private boolean ignoreSubmission(QuestChallenge challenge, Notification submission) {
-        if (challenge.getEndDate() != null && submission.getTimestamp().after(challenge.getEndDate())) {
+        if (challenge.getEndDate() != null && submission.getTimestamp() != null && submission.getTimestamp().after(challenge.getEndDate())) {
             // skip this submission, if it was posted after deadline
             return true;
         }
@@ -177,20 +197,32 @@ public class QuestSubmissionService {
         return false;
     }
 
-    public List<Notification> getAllSubmissions(final String challengeHashtag, final String contestHashtag) {
-        return notificationRepository.findByHashTags("%|" + challengeHashtag + "|%", "%|" + contestHashtag + "|%");
+    private List<Notification> getAllSubmissions(final String challengeHashtag, final String contestHashtag, final Contest contest) {
+        return notificationRepository.findByHashTagsAndContest("%|" + challengeHashtag + "|%", "%|" + contestHashtag + "|%", contest);
     }
 
-    public List<Notification> getAllSubmissionsSinceId(final String challengeHashtag, final String contestHashtag, final long sinceId) {
-        return notificationRepository.findByHashTagsSinceId("%|" + challengeHashtag + "|%", "%|" + contestHashtag + "|%", sinceId);
+    private List<Notification> getAllSubmissionsSinceId(final String challengeHashtag, final String contestHashtag, final long sinceId, final Contest contest) {
+        return notificationRepository.findByHashTagsAndContestSinceId("%|" + challengeHashtag + "|%", "%|" + contestHashtag + "|%", sinceId, contest);
     }
 
-    protected Long getLastProcessedId(final Contest contest) {
+    private Long getLastProcessedId(final Contest contest) {
         Long max = submissionRepository.getMaxNotificationId(contest);
         return max != null ? max : 0L;
     }
 
-    public void moveVotingToNextRound(final Contest contest) {
+    /**
+     * Controls the quest submission voting lifecycle
+     * <p/>
+     * It evaluates current voting round and finds a submission with most votes. This
+     * submission is winner, if it has more votes than {@link QuestSubmissionService#MIN_VOTES_REQUIRED}
+     * <p/>
+     * If the quest deadline was not reached, it randomly finds next submissions to next voting round
+     *
+     * @param contest contest
+     * @return winning submission
+     */
+    @Transactional
+    public QuestSubmission moveVotingToNextRound(final Contest contest) {
         // determite winner
         QuestSubmission winningSubmission = null;
         int maxVotes = -1;
@@ -224,5 +256,7 @@ public class QuestSubmissionService {
             }
             submissionRepository.save(newInProgressSubmissions);
         }
+
+        return winningSubmission;
     }
 }

@@ -77,8 +77,8 @@ public interface NotificationRepository extends PagingAndSortingRepository<Notif
      * @param hashtag2 the second hashtag
      * @return notifications with hashtags
      */
-    @Query(value = "FROM Notification n WHERE UPPER(n.hashtags) LIKE UPPER(?1) AND UPPER(n.hashtags) LIKE UPPER(?2) ORDER BY n.id DESC")
-    List<Notification> findByHashTags(String hashtag1, String hashtag2);
+    @Query(value = "FROM Notification n WHERE n.contest = ?3 AND UPPER(n.hashtags) LIKE UPPER(?1) AND UPPER(n.hashtags) LIKE UPPER(?2) ORDER BY n.id DESC")
+    List<Notification> findByHashTagsAndContest(String hashtag1, String hashtag2, Contest contest);
 
     /**
      * Finds all notifications which contains both hashtags and have ID higher than {@code sinceId}
@@ -87,8 +87,8 @@ public interface NotificationRepository extends PagingAndSortingRepository<Notif
      * @param sinceId since ID criteria
      * @return notifications with hashtags and newer than {@code sinceId}
      */
-    @Query(value = "FROM Notification n WHERE UPPER(n.hashtags) LIKE UPPER(?1) AND UPPER(n.hashtags) LIKE UPPER(?2) AND n.id > ?3 ORDER BY n.id DESC")
-    List<Notification> findByHashTagsSinceId(String hashtag1, String hashtag2, long sinceId);
+    @Query(value = "FROM Notification n WHERE n.contest = ?4 AND UPPER(n.hashtags) LIKE UPPER(?1) AND UPPER(n.hashtags) LIKE UPPER(?2) AND n.id > ?3 ORDER BY n.id DESC")
+    List<Notification> findByHashTagsAndContestSinceId(String hashtag1, String hashtag2, long sinceId, Contest contest);
 
     List<Notification> findByParentIdAndNotificationTypeAndContest(Long parentId, NotificationType notificationType, Contest contest);
 

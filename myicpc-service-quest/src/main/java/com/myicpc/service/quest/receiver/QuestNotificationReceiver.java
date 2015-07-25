@@ -11,6 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
+ * Receives JMS messages related to Quest
+ * <p/>
+ * It invokes methods to process the coming messages
+ *
  * @author Roman Smetana
  */
 @Service
@@ -24,9 +28,17 @@ public class QuestNotificationReceiver {
     @Autowired
     private ContestRepository contestRepository;
 
+    /**
+     * Listens to JMS queue {@code QuestNotificationQueue}
+     *
+     * @param jmsEvent incoming message
+     */
     @JmsListener(destination = "java:/jms/queue/QuestNotificationQueue")
     @Transactional
-    public void processQuestNotification(JMSEvent jmsEvent) {
+    public void processQuestEvent(JMSEvent jmsEvent) {
+        if (jmsEvent == null) {
+            return;
+        }
         Contest contest = contestRepository.findOne(jmsEvent.getContestId());
         if (contest == null) {
             return;
@@ -38,8 +50,14 @@ public class QuestNotificationReceiver {
             case QUEST_SUBMISSIONS:
                 processQuestSubmissionUpdates(contest);
                 break;
-
+            case QUEST_SUBMISSIONS_FULL:
+                processQuestSubmissionUpdatesFull(contest);
+                break;
         }
+    }
+
+    private void processQuestSubmissionUpdatesFull(Contest contest) {
+        questSubmissionService.processAllSubmissions(contest);
     }
 
     private void processQuestSubmissionUpdates(Contest contest) {

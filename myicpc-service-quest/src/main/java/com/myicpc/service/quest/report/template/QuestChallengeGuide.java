@@ -13,7 +13,8 @@ import net.sf.dynamicreports.report.constant.HorizontalAlignment;
 import net.sf.dynamicreports.report.constant.SplitType;
 import net.sf.dynamicreports.report.definition.ReportParameters;
 import net.sf.jasperreports.engine.JREmptyDataSource;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -25,16 +26,30 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.cmp;
 import static net.sf.dynamicreports.report.builder.DynamicReports.tableOfContentsHeading;
 
 /**
+ * Report template for Quest challenge guide
+ *
  * @author Roman Smetana
  */
 public class QuestChallengeGuide {
+    private static final Logger logger = LoggerFactory.getLogger(QuestChallengeGuide.class);
 
     private boolean generateTOC;
 
+    /**
+     * Constructor
+     *
+     * @param generateTOC generate table of content
+     */
     public QuestChallengeGuide(boolean generateTOC) {
         this.generateTOC = generateTOC;
     }
 
+    /**
+     * Creates a report template
+     *
+     * @param questChallenges quest challenges included in the report
+     * @return report template
+     */
     public JasperReportBuilder build(List<QuestChallenge> questChallenges) {
         JasperReportBuilder report = ReportTemplate.baseReport();
 
@@ -51,6 +66,11 @@ public class QuestChallengeGuide {
         return report;
     }
 
+    /**
+     * Subreport template for each challenge
+     *
+     * @author Roman Smetana
+     */
     private class SubreportExpression extends AbstractSimpleExpression<JasperReportBuilder> {
         private final List<QuestChallenge> challenges;
 
@@ -76,8 +96,7 @@ public class QuestChallengeGuide {
         }
     }
 
-    protected ComponentBuilder<?, ?> createChallengeComponent(QuestChallenge challenge) {
-
+    private ComponentBuilder<?, ?> createChallengeComponent(QuestChallenge challenge) {
         VerticalListBuilder verticalList = cmp.verticalList();
 
         verticalList.add(labeledText("quest.challengeGuide.hashtag", "#" + challenge.getHashtag()));
@@ -96,13 +115,16 @@ public class QuestChallengeGuide {
                 URL imageURL = new URL(challenge.getImageURL());
                 verticalList.add(cmp.image(imageURL).setHorizontalAlignment(HorizontalAlignment.CENTER));
             } catch (MalformedURLException e) {
-                e.printStackTrace();
+                logger.error("Quest challenge guide report: image URL {0} is invalid in challenge with ID {1}", challenge.getImageURL(), challenge.getId());
             }
         }
 
         return verticalList;
     }
 
+    /**
+     * Creates a label based on required attachments for a challenge
+     */
     private static class RequiredAttachmentsExpression extends AbstractSimpleExpression<String> {
         private final boolean attachPhoto;
         private final boolean attachVideo;
@@ -125,26 +147,4 @@ public class QuestChallengeGuide {
             return sb.toString();
         }
     }
-
-
-
-    public JasperReportBuilder build2(List<QuestChallenge> questChallenges) {
-        JasperReportBuilder report = ReportTemplate.baseReport();
-
-        report.tableOfContents();
-
-        ComponentBuilder<?, ?>[] details = new ComponentBuilder[questChallenges.size()];
-        int index = 0;
-        for (QuestChallenge challenge : questChallenges) {
-            details[index++] = createChallengeComponent(challenge);
-//            report.detail(createChallengeComponent(challenge)).setDetailSplitType(SplitType.PREVENT);
-        }
-        report.detail(details);
-//        report.setDetailSplitType(SplitType.PREVENT);
-
-        report.setDataSource(new JRBeanCollectionDataSource(questChallenges));
-        report.setDataSource(new JREmptyDataSource());
-        return report;
-    }
-
 }

@@ -2,8 +2,6 @@ package com.myicpc.service.quest;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.myicpc.dto.quest.QuestSubmissionDTO;
 import com.myicpc.enums.ContestParticipantRole;
 import com.myicpc.enums.NotificationType;
@@ -79,17 +77,6 @@ public class QuestService {
         return questNotifications.getContent();
     }
 
-    public JsonArray getJSONChallenges(final List<QuestChallenge> challenges) {
-        JsonArray arr = new JsonArray();
-        for (QuestChallenge questChallenge : challenges) {
-            JsonObject o = new JsonObject();
-            o.addProperty("id", questChallenge.getId());
-            o.addProperty("name", questChallenge.getHashtagSuffix());
-            arr.add(o);
-        }
-        return arr;
-    }
-
     public QuestParticipant getQuestParticipantBySocialUsernames(String twitterUsername, String vineUsername, String instagramUsername, final Contest contest) {
         QuestParticipant questParticipant = null;
         if (questParticipant == null && StringUtils.isNotEmpty(twitterUsername)) {
@@ -140,38 +127,6 @@ public class QuestService {
         }
 
         return participants;
-    }
-
-    public JsonArray getJSONParticipants(final List<ContestParticipantRole> roles, final Contest contest, boolean extended) {
-        List<QuestParticipant> participants = questParticipantRepository.findByRoles(roles, contest, null);
-        List<Long> participantIds = new ArrayList<>(participants.size());
-        for (QuestParticipant participant : participants) {
-            participantIds.add(participant.getId());
-        }
-        List<QuestSubmissionDTO> submissions = questSubmissionRepository.findQuestSubmissionDTOByQuestParticipantId(participantIds, contest);
-        Multimap<Long, QuestSubmissionDTO> submissionMap = HashMultimap.create();
-        for (QuestSubmissionDTO submission : submissions) {
-            submissionMap.put(submission.getQuestParticipantId(), submission);
-        }
-
-        JsonArray arr = new JsonArray();
-        for (QuestParticipant questParticipant : participants) {
-            JsonObject o = new JsonObject();
-            o.addProperty("id", questParticipant.getId());
-            o.addProperty("name", questParticipant.getContestParticipant().getFullname());
-            o.addProperty("points", questParticipant.getPoints());
-//            o.addProperty("solved", questParticipant.getNumSolvedSubmissions());
-            if (extended) {
-                for (QuestSubmissionDTO submission : submissionMap.get(questParticipant.getId())) {
-                    JsonObject s = new JsonObject();
-                    s.addProperty("state", submission.getSubmissionState().toString());
-                    s.addProperty("reason", submission.getReasonToReject());
-                    o.add(String.valueOf(submission.getQuestChallengeId()), s);
-                }
-            }
-            arr.add(o);
-        }
-        return arr;
     }
 
     public static void applyHashtagPrefix(String hashtagPrefix, final List<QuestChallenge> challenges) {

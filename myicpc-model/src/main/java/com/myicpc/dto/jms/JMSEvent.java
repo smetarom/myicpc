@@ -10,7 +10,7 @@ public class JMSEvent implements Serializable {
 
     public enum EventType {
         TWITTER, VINE, INSTAGRAM, POLL_OPEN, ADMIN_NOTIFICATION,
-        QUEST_CHALLENGE, QUEST_SUBMISSIONS
+        QUEST_CHALLENGE, QUEST_SUBMISSIONS, QUEST_SUBMISSIONS_FULL
     }
 
     private Long contestId;
