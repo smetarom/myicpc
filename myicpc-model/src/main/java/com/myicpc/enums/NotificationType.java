@@ -21,7 +21,7 @@ public enum NotificationType {
     POLL_OPEN("Poll", "Poll open", "po"),
     POLL_CLOSE("Poll", "Poll close", "pc"),
     YOUTUBE_VIDEO("YouTube", "YouTube", "yt"),
-    SCHEDULE_EVENT_OPEN("Schedule", "Schedule event open", "seo"),
+    SCHEDULE_EVENT_OPEN("Schedule", "Schedule event open", "eventOpen"),
     QUEST_CHALLENGE("Quest challenge", "Quest challenge", "questChallenge");
     /**
      * Human readable name of notification type

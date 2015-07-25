@@ -61,7 +61,7 @@
             var featuredAdminnotifications = ${not empty openAdminNotifications ? openAdminNotifications : '[]'};
             var featuredCarouselTemplate = compileHandlebarsTemplate("featured-notification-template")
             function timelineAcceptPost(post) {
-                var supportedNotificationTypes = ["submissionSuccess", "analystTeamMsg", "analystMsg", "twitter", "vine", "instagram", "picasa", "gallery", "questChallenge", "adminNotification"];
+                var supportedNotificationTypes = ["submissionSuccess", "analystTeamMsg", "analystMsg", "twitter", "vine", "instagram", "picasa", "gallery", "questChallenge", "adminNotification", "eventOpen"];
                 return supportedNotificationTypes.indexOf(post.type) != -1;
             }
             function renderFeaturedNotifications() {

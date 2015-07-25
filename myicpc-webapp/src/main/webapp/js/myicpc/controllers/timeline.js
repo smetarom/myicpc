@@ -16,7 +16,7 @@ Timeline = {
   ignoreScrolling: false,
   lastTimelineIdLoaded: null,
   init: function() {
-    var timelineAdminNotificationTemplate, timelineAnalystTeamTemplate, timelineAnalystTemplate, timelineInstagramTemplate, timelineOfficialGalleryTemplate, timelinePicasaTemplate, timelineQuestChallengeTemplate, timelineScoreboardTemplate, timelineTwitterTemplate, timelineVineTemplate;
+    var timelineAdminNotificationTemplate, timelineAnalystTeamTemplate, timelineAnalystTemplate, timelineEventOpenNotificationTemplate, timelineInstagramTemplate, timelineOfficialGalleryTemplate, timelinePicasaTemplate, timelineQuestChallengeTemplate, timelineScoreboardTemplate, timelineTwitterTemplate, timelineVineTemplate;
     timelineScoreboardTemplate = compileHandlebarsTemplate("timeline-SCOREBOARD_SUCCESS");
     timelineAnalystTeamTemplate = compileHandlebarsTemplate("timeline-ANALYST_TEAM_MESSAGE");
     timelineAnalystTemplate = compileHandlebarsTemplate("timeline-ANALYST_MESSAGE");
@@ -27,6 +27,7 @@ Timeline = {
     timelineOfficialGalleryTemplate = compileHandlebarsTemplate("timeline-OFFICIAL_GALLERY");
     timelineQuestChallengeTemplate = compileHandlebarsTemplate("timeline-QUEST_CHALLENGE");
     timelineAdminNotificationTemplate = compileHandlebarsTemplate("timeline-ADMIN_NOTIFICATION");
+    timelineEventOpenNotificationTemplate = compileHandlebarsTemplate("timeline-SCHEDULE_EVENT_OPEN");
     this.handlerMapping["submissionSuccess"] = function(notification) {
       return timelineScoreboardTemplate(notification);
     };
@@ -54,8 +55,13 @@ Timeline = {
     this.handlerMapping["questChallenge"] = function(notification) {
       return timelineQuestChallengeTemplate(notification);
     };
-    return this.handlerMapping["adminNotification"] = function(notification) {
+    this.handlerMapping["adminNotification"] = function(notification) {
       return timelineAdminNotificationTemplate(notification);
+    };
+    return this.handlerMapping["eventOpen"] = function(notification) {
+      notification.body = $.parseJSON(notification.body);
+      console.log(notification.body);
+      return timelineEventOpenNotificationTemplate(notification);
     };
   },
   acceptFunction: function(data) {

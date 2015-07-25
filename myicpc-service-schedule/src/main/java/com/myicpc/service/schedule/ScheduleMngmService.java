@@ -18,6 +18,8 @@ import com.myicpc.repository.schedule.LocationRepository;
 import com.myicpc.repository.schedule.ScheduleDayRepository;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.service.exception.BusinessValidationException;
+import com.myicpc.service.notification.NotificationBuilder;
+import com.myicpc.service.publish.PublishService;
 import com.myicpc.service.validation.EventRoleValidator;
 import com.myicpc.service.validation.LocationValidator;
 import com.myicpc.service.validation.ScheduleDayValidator;
@@ -77,6 +79,9 @@ public class ScheduleMngmService {
 
     @Autowired
     private NotificationRepository notificationRepository;
+
+    @Autowired
+    private PublishService publishService;
 
     /**
      * Saves the updates of {@code event}
@@ -172,6 +177,28 @@ public class ScheduleMngmService {
     public EventRole saveEventRole(EventRole eventRole) throws BusinessValidationException {
         eventRoleValidator.validate(eventRole);
         return eventRoleRepository.save(eventRole);
+    }
+
+    /**
+     * Creates {@link Notification}s for all non published {@link Event}s,
+     * which are open now
+     *
+     * @param contest contest
+     */
+    @Transactional
+    public void createNonPublishedEventNotifications(final Contest contest) {
+        List<Event> nonpublishedEvents = eventRepository.findNonpublishedOpenEvents(new Date(), contest);
+        for (Event event : nonpublishedEvents) {
+            NotificationBuilder builder = new NotificationBuilder(event);
+            builder.setTitle(event.getName());
+            builder.setBody(ScheduleMngmService.createEventNotificationBody(event).toString());
+            builder.setNotificationType(NotificationType.SCHEDULE_EVENT_OPEN);
+
+            Notification notification = notificationRepository.save(builder.build());
+            publishService.broadcastNotification(notification, contest);
+            event.setPublished(true);
+        }
+        eventRepository.save(nonpublishedEvents);
     }
 
     /**

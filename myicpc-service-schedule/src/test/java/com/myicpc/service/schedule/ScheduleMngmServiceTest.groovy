@@ -15,6 +15,7 @@ import com.myicpc.repository.schedule.LocationRepository
 import com.myicpc.repository.schedule.ScheduleDayRepository
 import com.myicpc.repository.social.NotificationRepository
 import com.myicpc.service.exception.BusinessValidationException
+import com.myicpc.service.publish.PublishService
 import com.myicpc.service.validation.EventRoleValidator
 import com.myicpc.service.validation.LocationValidator
 import com.myicpc.service.validation.ScheduleDayValidator
@@ -54,6 +55,9 @@ class ScheduleMngmServiceTest extends GroovyTestCase {
 
     @Mock
     private NotificationRepository notificationRepository;
+
+    @Mock
+    private PublishService publishService;
 
     @InjectMocks
     private ScheduleMngmService scheduleMngmService;
@@ -207,7 +211,20 @@ class ScheduleMngmServiceTest extends GroovyTestCase {
         }
 
         Mockito.verifyZeroInteractions(eventRoleRepository)
+    }
 
+    void testCreateNonPublishedEventNotifications() {
+        def contest = new Contest(id: 1L, timeDifference: 0)
+        def event1 = new Event(id: 1L, startDate: TimeUtils.getDateTime(2014, 6, 21, 12, 0), endDate: TimeUtils.getDateTime(2014, 6, 21, 14, 0), contest: contest)
+        def event2 = new Event(id: 2L, startDate: TimeUtils.getDateTime(2014, 6, 21, 16, 0), endDate: TimeUtils.getDateTime(2014, 6, 21, 19, 0), contest: contest)
+        Mockito.when(eventRepository.findNonpublishedOpenEvents(Matchers.any(Date.class), Matchers.any(Contest.class)))
+                .thenReturn([event1, event2])
+        Mockito.when(notificationRepository.save(Matchers.any(Notification.class))).then(AdditionalAnswers.returnsFirstArg())
+
+        scheduleMngmService.createNonPublishedEventNotifications(contest)
+
+        Mockito.verify(notificationRepository, Mockito.times(2)).save(Matchers.any(Notification.class))
+        Mockito.verify(publishService, Mockito.times(2)).broadcastNotification(Matchers.any(Notification.class), Matchers.any(Contest.class))
     }
 
     void testImportSchedule() {

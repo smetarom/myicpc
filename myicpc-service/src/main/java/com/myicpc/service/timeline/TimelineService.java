@@ -33,7 +33,8 @@ public class TimelineService {
             .addPicasa()
             .addOfifcialGallery()
             .addQuestChallenge()
-            .addAdminNotification();
+            .addAdminNotification()
+            .addScheduleEventOpen();
 
     @Autowired
     private NotificationRepository notificationRepository;

@@ -27,6 +27,7 @@ Timeline = {
     timelineOfficialGalleryTemplate = compileHandlebarsTemplate("timeline-OFFICIAL_GALLERY")
     timelineQuestChallengeTemplate = compileHandlebarsTemplate("timeline-QUEST_CHALLENGE")
     timelineAdminNotificationTemplate = compileHandlebarsTemplate("timeline-ADMIN_NOTIFICATION")
+    timelineEventOpenNotificationTemplate = compileHandlebarsTemplate("timeline-SCHEDULE_EVENT_OPEN")
 
     this.handlerMapping["submissionSuccess"] = (notification) -> timelineScoreboardTemplate(notification)
     this.handlerMapping["twitter"] = (notification) -> timelineTwitterTemplate(notification)
@@ -38,6 +39,10 @@ Timeline = {
     this.handlerMapping["gallery"] = (notification) -> timelineOfficialGalleryTemplate(notification)
     this.handlerMapping["questChallenge"] = (notification) -> timelineQuestChallengeTemplate(notification)
     this.handlerMapping["adminNotification"] = (notification) -> timelineAdminNotificationTemplate(notification)
+    this.handlerMapping["eventOpen"] = (notification) ->
+      notification.body = $.parseJSON(notification.body)
+      console.log(notification.body)
+      timelineEventOpenNotificationTemplate(notification)
 
   acceptFunction: (data) ->
     return true
