@@ -12,6 +12,7 @@ import com.myicpc.repository.schedule.LocationRepository;
 import com.myicpc.repository.schedule.ScheduleDayRepository;
 import com.myicpc.service.exception.BusinessValidationException;
 import com.myicpc.service.schedule.ScheduleMngmService;
+import com.myicpc.service.schedule.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
@@ -45,6 +46,9 @@ public class ScheduleAdminController extends GeneralAdminController {
 
     @Autowired
     private ScheduleMngmService scheduleMngmService;
+
+    @Autowired
+    private ScheduleService scheduleService;
 
     @Autowired
     private EventRepository eventRepository;
@@ -88,7 +92,7 @@ public class ScheduleAdminController extends GeneralAdminController {
                             final RedirectAttributes redirectAttributes) {
         Contest contest = getContest(contestCode, model);
 
-        Event event = eventRepository.findOne(eventId);
+        Event event = scheduleService.getEventByIdOrCode(String.valueOf(eventId), contest);
 
         if (event == null) {
             errorMessage(redirectAttributes, "scheduleAdmin.noResult");
