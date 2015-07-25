@@ -10,7 +10,6 @@ import com.myicpc.model.schedule.Location;
 import com.myicpc.model.schedule.ScheduleDay;
 import com.myicpc.repository.schedule.EventRepository;
 import com.myicpc.repository.schedule.EventRoleRepository;
-import com.myicpc.service.EntityManagerService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -35,7 +34,7 @@ import java.util.Map;
  * @author Roman Smetana
  */
 @Service
-public class ScheduleService extends EntityManagerService {
+public class ScheduleService {
     @Autowired
     private EventRepository eventRepository;
 

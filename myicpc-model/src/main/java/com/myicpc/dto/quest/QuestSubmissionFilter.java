@@ -1,4 +1,4 @@
-package com.myicpc.service.quest.dto;
+package com.myicpc.dto.quest;
 
 import com.myicpc.enums.SortOrder;
 import com.myicpc.model.quest.QuestChallenge;

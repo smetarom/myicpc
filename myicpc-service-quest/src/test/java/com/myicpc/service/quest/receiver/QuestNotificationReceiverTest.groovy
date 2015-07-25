@@ -3,7 +3,7 @@ package com.myicpc.service.quest.receiver
 import com.myicpc.dto.jms.JMSEvent
 import com.myicpc.model.contest.Contest
 import com.myicpc.repository.contest.ContestRepository
-import com.myicpc.service.quest.QuestService
+import com.myicpc.service.quest.QuestMngmService
 import com.myicpc.service.quest.QuestSubmissionService
 import org.mockito.InjectMocks
 import org.mockito.Mock
@@ -17,7 +17,7 @@ import org.mockito.MockitoAnnotations
  */
 class QuestNotificationReceiverTest extends GroovyTestCase {
     @Mock
-    private QuestService questService
+    private QuestMngmService questMngmService
 
     @Mock
     private QuestSubmissionService questSubmissionService
@@ -44,7 +44,7 @@ class QuestNotificationReceiverTest extends GroovyTestCase {
 
         questNotificationReceiver.processQuestEvent(jmsEvent)
 
-        Mockito.verify(questService).createNotificationsForNewQuestChallenges(contest)
+        Mockito.verify(questMngmService).createNotificationsForNewQuestChallenges(contest)
     }
 
     void testProcessQuestEventQuestSubmissions() {

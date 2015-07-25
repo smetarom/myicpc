@@ -2,19 +2,10 @@ package com.myicpc.controller.quest.admin;
 
 import com.myicpc.controller.GeneralAdminController;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.model.quest.QuestChallenge;
 import com.myicpc.model.quest.QuestLeaderboard;
-import com.myicpc.model.quest.QuestSubmission;
-import com.myicpc.repository.quest.QuestChallengeRepository;
 import com.myicpc.repository.quest.QuestLeaderboardRepository;
-import com.myicpc.repository.quest.QuestParticipantRepository;
-import com.myicpc.service.exception.BusinessValidationException;
 import com.myicpc.service.quest.QuestMngmService;
-import com.myicpc.service.quest.dto.QuestSubmissionFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,9 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.Arrays;
 
 /**
  * @author Roman Smetana

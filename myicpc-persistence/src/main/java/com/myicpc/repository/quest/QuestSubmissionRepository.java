@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface QuestSubmissionRepository extends JpaRepository<QuestSubmission, Long> {
+public interface QuestSubmissionRepository extends JpaRepository<QuestSubmission, Long>, QuestSubmissionDAO {
     @Query("SELECT qs FROM QuestSubmission qs WHERE qs.submissionState = 'ACCEPTED' AND qs.voteSubmissionState = 'VOTE_WINNER' AND qs.challenge.contest = ?1")
     List<QuestSubmission> getVoteWinnersSubmissions(Contest contest);
 

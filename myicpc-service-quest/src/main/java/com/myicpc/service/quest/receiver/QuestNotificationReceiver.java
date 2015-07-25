@@ -3,7 +3,7 @@ package com.myicpc.service.quest.receiver;
 import com.myicpc.dto.jms.JMSEvent;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.repository.contest.ContestRepository;
-import com.myicpc.service.quest.QuestService;
+import com.myicpc.service.quest.QuestMngmService;
 import com.myicpc.service.quest.QuestSubmissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class QuestNotificationReceiver {
     @Autowired
-    private QuestService questService;
+    private QuestMngmService questMngmService;
 
     @Autowired
     private QuestSubmissionService questSubmissionService;
@@ -65,6 +65,6 @@ public class QuestNotificationReceiver {
     }
 
     private void processQuestChallengeUpdates(Contest contest) {
-        questService.createNotificationsForNewQuestChallenges(contest);
+        questMngmService.createNotificationsForNewQuestChallenges(contest);
     }
 }

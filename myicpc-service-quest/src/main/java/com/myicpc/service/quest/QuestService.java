@@ -17,7 +17,6 @@ import com.myicpc.repository.quest.QuestParticipantRepository;
 import com.myicpc.repository.quest.QuestSubmissionRepository;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.repository.teamInfo.ContestParticipantAssociationRepository;
-import com.myicpc.service.notification.NotificationBuilder;
 import com.myicpc.service.publish.PublishService;
 import com.myicpc.service.utils.lists.NotificationList;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +28,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -145,22 +143,4 @@ public class QuestService {
         }
     }
 
-    @Transactional
-    public void createNotificationsForNewQuestChallenges(Contest contest) {
-        List<QuestChallenge> challenges = questChallengeRepository.findAllNonpublishedStartedChallenges(new Date(), contest);
-        for (QuestChallenge challenge : challenges) {
-            challenge.setPublished(true);
-
-            NotificationBuilder builder = new NotificationBuilder(challenge);
-            builder.setTitle(challenge.getName());
-            builder.setBody(challenge.getDescription());
-            builder.setImageUrl(challenge.getImageURL());
-            builder.setNotificationType(NotificationType.QUEST_CHALLENGE);
-            builder.setContest(contest);
-            challenge.setHashtagPrefix(contest.getQuestConfiguration().getHashtagPrefix());
-            builder.setHashtag(challenge.getHashtag());
-            Notification notification = notificationRepository.save(builder.build());
-            publishService.broadcastNotification(notification, contest);
-        }
-    }
 }
