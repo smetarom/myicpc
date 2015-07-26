@@ -81,13 +81,12 @@ public class QuestSubmissionService {
 
                 QuestSubmission questSubmission = submissionRepository.findByChallengeAndParticipant(challenge, questParticipant);
 
-                if (questSubmission != null && questSubmission.getSubmissionState() == QuestSubmissionState.ACCEPTED) {
-                    // skip, if does not exist or participant already solved the challenge
+                if (questSubmission != null) {
+                    // if submission from participant for challenge found, skip
+                    // because it was already processed
                     continue;
                 }
-                if (questSubmission == null) {
-                    questSubmission = new QuestSubmission();
-                }
+                questSubmission = new QuestSubmission();
                 updateSubmission(questSubmission, challenge, questParticipant, submission);
             }
         }
@@ -223,7 +222,7 @@ public class QuestSubmissionService {
      */
     @Transactional
     public QuestSubmission moveVotingToNextRound(final Contest contest) {
-        // determite winner
+        // determine winner
         QuestSubmission winningSubmission = null;
         int maxVotes = -1;
         List<QuestSubmission> inProgressSubmissions = submissionRepository.getVoteInProgressSubmissions(contest);
@@ -249,7 +248,7 @@ public class QuestSubmissionService {
         Date deadline = contest.getQuestConfiguration().getDeadline();
         if (deadline == null || deadline.after(new Date())) {
             // select new candidates
-            Pageable pageable = new PageRequest(0, 4);
+            Pageable pageable = new PageRequest(0, VOTE_ROUND_SIZE);
             List<QuestSubmission> newInProgressSubmissions = submissionRepository.getVoteEligableSubmissions(contest, pageable);
             for (QuestSubmission submission : newInProgressSubmissions) {
                 submission.setVoteSubmissionState(VoteSubmissionState.IN_PROGRESS);
