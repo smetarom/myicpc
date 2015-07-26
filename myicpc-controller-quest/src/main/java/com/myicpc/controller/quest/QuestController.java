@@ -19,7 +19,6 @@ import net.sf.dynamicreports.report.exception.DRException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mobile.device.Device;
 import org.springframework.mobile.device.site.SitePreference;
-import org.springframework.mobile.device.site.SitePreferenceUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -217,9 +216,7 @@ public class QuestController extends GeneralController {
     }
 
     private void initiateLeaderboard(QuestLeaderboard activeLeaderboard, Contest contest, Model model, HttpServletRequest request) {
-        SitePreference sitePreference = SitePreferenceUtils.getCurrentSitePreference(request);
-
-        List<QuestParticipant> participants = questService.getParticipantsWithRoles(activeLeaderboard.getContestParticipantRoles(), contest, !sitePreference.isMobile());
+        List<QuestParticipant> participants = questService.getParticipantsWithRoles(activeLeaderboard.getContestParticipantRoles(), contest);
         List<QuestChallenge> challenges = challengeRepository.findOpenChallengesByContestOrderByHashtag(new Date(), contest);
         QuestService.applyHashtagPrefix(contest.getQuestConfiguration().getHashtagPrefix(), challenges);
 
