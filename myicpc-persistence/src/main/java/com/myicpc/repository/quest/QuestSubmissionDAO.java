@@ -20,5 +20,5 @@ public interface QuestSubmissionDAO {
      * @param pageable         page controller
      * @return filtered page of Quest notifications
      */
-    Page<QuestSubmission> getFiltredQuestSumbissions(QuestSubmissionFilter submissionFilter, Contest contest, Pageable pageable);
+    Page<QuestSubmission> getFilteredQuestSubmissions(QuestSubmissionFilter submissionFilter, Contest contest, Pageable pageable);
 }

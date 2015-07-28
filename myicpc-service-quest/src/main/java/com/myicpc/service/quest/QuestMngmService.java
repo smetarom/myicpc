@@ -8,7 +8,6 @@ import com.myicpc.model.quest.QuestParticipant;
 import com.myicpc.model.quest.QuestSubmission;
 import com.myicpc.model.quest.QuestSubmission.QuestSubmissionState;
 import com.myicpc.model.social.Notification;
-import com.myicpc.repository.contest.ContestRepository;
 import com.myicpc.repository.quest.QuestChallengeRepository;
 import com.myicpc.repository.quest.QuestParticipantRepository;
 import com.myicpc.repository.quest.QuestSubmissionRepository;
@@ -39,9 +38,6 @@ import java.util.Map;
 @Transactional
 public class QuestMngmService {
     private static final Logger logger = LoggerFactory.getLogger(QuestMngmService.class);
-
-    @Autowired
-    private ContestRepository contestRepository;
 
     @Autowired
     private QuestChallengeRepository challengeRepository;
@@ -93,10 +89,9 @@ public class QuestMngmService {
             return;
         }
         challengeRepository.delete(questChallenge);
-
         challengeRepository.flush();
 
-        Iterable<QuestParticipant> participants = participantRepository.findAll();
+        Iterable<QuestParticipant> participants = participantRepository.findByContest(questChallenge.getContest());
         for (QuestParticipant participant : participants) {
             participant.calcQuestPoints();
         }

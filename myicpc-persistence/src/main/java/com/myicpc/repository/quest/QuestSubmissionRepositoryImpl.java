@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
@@ -19,6 +20,7 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +33,10 @@ import java.util.List;
 public class QuestSubmissionRepositoryImpl extends AbstractDao implements QuestSubmissionDAO {
 
     @Override
-    public Page<QuestSubmission> getFiltredQuestSumbissions(final QuestSubmissionFilter submissionFilter, final Contest contest, final Pageable pageable) {
+    public Page<QuestSubmission> getFilteredQuestSubmissions(final QuestSubmissionFilter submissionFilter, final Contest contest, final Pageable pageable) {
+        if (submissionFilter == null) {
+            return new PageImpl<>(Collections.<QuestSubmission> emptyList());
+        }
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
 
         // content
@@ -66,7 +71,11 @@ public class QuestSubmissionRepositoryImpl extends AbstractDao implements QuestS
         }
 
         q.select(c).where(predicate).orderBy(order);
-        List<QuestSubmission> list = getEntityManager().createQuery(q).setFirstResult(pageable.getOffset()).setMaxResults(pageable.getPageSize()).getResultList();
+        TypedQuery<QuestSubmission> query = getEntityManager().createQuery(q);
+        if (pageable != null) {
+            query.setFirstResult(pageable.getOffset()).setMaxResults(pageable.getPageSize());
+        }
+        List<QuestSubmission> list = query.getResultList();
 
         countQ.select(cb.count(countRoot)).where(countPredicate);
         long totalCount = getEntityManager().createQuery(countQ).getSingleResult();

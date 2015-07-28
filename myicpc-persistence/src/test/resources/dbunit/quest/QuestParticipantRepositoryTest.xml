@@ -1,0 +1,30 @@
+<dataset>
+    <contestsettings id="1" jsonscoreboardurl="http://localhost/scoreboard" eventfeedusername="myicpc" eventfeedpassword="myicpc" eventfeedurl="http://localhost/events" generatemessages="false" scoreboardstrategytype="NATIVE" showcountry="true" showregion="false" showuniversity="false" year="2015"/>
+    <mapconfiguration id="1" zoomablemap="false"/>
+    <moduleconfiguration id="1" codeinsightmodule="true" gallerymodule="true" mapmodule="true" pollmodule="true" questmodule="true" rssmodule="true" schedulemodule="true" techtrekmodule="true"/>
+    <questconfiguration id="1" hashtagprefix="Quest" instructionurl="http://localhost/instructions" pointsforvote="10" deadline="2015-06-08 00:00:00.0"/>
+    <webservicesettings id="1" instagramkey="instagramkey" instagramsecret="instagramsecret" showpicasaphotos="false" twitteraccesstoken="twitteraccesstoken" twitteraccesstokensecret="twitteraccesstokensecret" twitterconsumerkey="twitterconsumerkey" twitterconsumersecret="twitterconsumersecret" vineemail="vineemail" vinepassword="vinepassword" wscmtoken="wscmtoken"/>
+    <contest id="1" code="contest-1" hashtag="contest1" length="18000" name="Contest 1" penalty="20.0" shortname="C1" showteamnames="false" starttime="2013-07-13 10:15:02.0" timedifference="60" contestsettingsid="1" mapconfigurationid="1" moduleconfigurationid="1" questconfigurationid="1" webservicesettingsid="1"/>
+
+    <contestParticipant id="1" externalId="1" firstname="John 1" lastname="Smith 1" />
+    <contestParticipant id="2" externalId="2" firstname="John 2" lastname="Smith 2" />
+    <contestParticipant id="3" externalId="3" firstname="John 3" lastname="Smith 3" />
+    <contestParticipant id="4" externalId="4" firstname="John 4" lastname="Smith 4" />
+    <contestParticipant id="5" externalId="5" firstname="John 5" lastname="Smith 5" />
+
+    <contestparticipantassociation id="1" contestparticipantid="1" contestparticipantrole="CONTESTANT" />
+    <contestparticipantassociation id="2" contestparticipantid="1" contestparticipantrole="COACH" />
+    <contestparticipantassociation id="3" contestparticipantid="2" contestparticipantrole="ATTENDEE" />
+    <contestparticipantassociation id="4" contestparticipantid="2" contestparticipantrole="CONTESTANT" />
+    <contestparticipantassociation id="5" contestparticipantid="3" contestparticipantrole="ATTENDEE" />
+    <contestparticipantassociation id="6" contestparticipantid="3" contestparticipantrole="RESERVE" />
+    <contestparticipantassociation id="7" contestparticipantid="4" contestparticipantrole="COACH" />
+
+    <questparticipant id="1" points="30" pointsFromVoting="0" pointsadjustment="0" contestParticipantId="1" contestId="1" />
+    <questparticipant id="2" points="25" pointsFromVoting="0" pointsadjustment="0" contestParticipantId="2" contestId="1" />
+    <questparticipant id="3" points="32" pointsFromVoting="0" pointsadjustment="0" contestParticipantId="3" contestId="1" />
+    <questparticipant id="4" points="38" pointsFromVoting="0" pointsadjustment="0" contestParticipantId="4" contestId="1" />
+    <questparticipant id="5" points="11" pointsFromVoting="0" pointsadjustment="0" contestParticipantId="5" contestId="1" />
+
+
+</dataset>

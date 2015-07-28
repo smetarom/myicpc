@@ -340,7 +340,7 @@ class QuestSubmissionServiceTest extends GroovyTestCase {
 
         Mockito.when(submissionRepository.getVoteInProgressSubmissions(contest))
                 .thenReturn([])
-        Mockito.when(submissionRepository.getVoteEligableSubmissions(contest, new PageRequest(0, QuestSubmissionService.VOTE_ROUND_SIZE)))
+        Mockito.when(submissionRepository.getVoteEligibleSubmissions(contest, new PageRequest(0, QuestSubmissionService.VOTE_ROUND_SIZE)))
                 .thenReturn([questSubmission1, questSubmission2, questSubmission3, questSubmission4])
 
         def winningSubmission = questSubmissionService.moveVotingToNextRound(contest)

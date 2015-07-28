@@ -124,11 +124,11 @@ public class QuestService {
         }
         int maxContestParticipantRoles = ContestParticipantRole.values().length;
         List<QuestParticipant> participants;
-        // if not all roles are in the list, search by roles, otherwise by contest
-        if (roles.size() < maxContestParticipantRoles) {
-            participants = questParticipantRepository.findByRoles(roles, contest, null);
-        } else {
+        // if no roles specified or all roles chosen, then search by contest, else by roles
+        if (roles.isEmpty() || roles.size() == maxContestParticipantRoles) {
             participants = questParticipantRepository.findByContest(contest);
+        } else {
+            participants = questParticipantRepository.findByRoles(roles, contest);
         }
         // skip if no participants found
         if (participants.isEmpty()) {

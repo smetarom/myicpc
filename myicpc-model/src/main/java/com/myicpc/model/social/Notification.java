@@ -10,9 +10,19 @@ import org.hibernate.annotations.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Lob;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 /**
@@ -109,6 +119,13 @@ public class Notification extends IdGeneratedContestObject {
      */
     private boolean deleted;
 
+    /**
+     * Type of the notification
+     */
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private NotificationType notificationType;
+
     @Transient
     private String highlightedBody;
     /**
@@ -116,13 +133,6 @@ public class Notification extends IdGeneratedContestObject {
      */
     @Transient
     private Map<String, String> parsedCode;
-
-    /**
-     * Type of the notification
-     */
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    private NotificationType notificationType;
 
     public String getTitle() {
         return title;

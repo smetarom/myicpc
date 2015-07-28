@@ -6,6 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
+/**
+ * DAO repository for {@link QuestLeaderboard}
+ *
+ * @author Roman Smetana
+ */
 public interface QuestLeaderboardRepository extends JpaRepository<QuestLeaderboard, Long> {
     List<QuestLeaderboard> findByContestOrderByNameAsc(Contest contest);
 

@@ -3,7 +3,14 @@ package com.myicpc.model.teamInfo;
 import com.myicpc.enums.ContestParticipantRole;
 import com.myicpc.model.IdGeneratedObject;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 /**
  * Association between {@link TeamInfo} and {@link ContestParticipant} which holds
@@ -23,6 +30,7 @@ public class ContestParticipantAssociation extends IdGeneratedObject {
     @JoinColumn(name = "teamInfoId", referencedColumnName = "id")
     private TeamInfo teamInfo;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "contestParticipantId", referencedColumnName = "id")
     private ContestParticipant contestParticipant;

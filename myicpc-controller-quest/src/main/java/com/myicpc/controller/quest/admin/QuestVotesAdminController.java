@@ -23,7 +23,7 @@ public class QuestVotesAdminController extends GeneralAdminController {
     public String submissions(@PathVariable final String contestCode, Model model) {
         Contest contest = getContest(contestCode, model);
 
-        model.addAttribute("inProgressVoteSubmissions", submissionRepository.getVotesInProgressSubmissions(contest));
+        model.addAttribute("inProgressVoteSubmissions", submissionRepository.getVoteInProgressSubmissions(contest));
         model.addAttribute("winnerVoteSubmissions", submissionRepository.getVoteWinnersSubmissions(contest));
 
         return "private/quest/votes";

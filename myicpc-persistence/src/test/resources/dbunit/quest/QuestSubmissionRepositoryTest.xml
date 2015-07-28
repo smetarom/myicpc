@@ -1,0 +1,54 @@
+<dataset>
+    <contestsettings id="1" jsonscoreboardurl="http://localhost/scoreboard" eventfeedusername="myicpc" eventfeedpassword="myicpc" eventfeedurl="http://localhost/events" generatemessages="false" scoreboardstrategytype="NATIVE" showcountry="true" showregion="false" showuniversity="false" year="2015"/>
+    <mapconfiguration id="1" zoomablemap="false"/>
+    <moduleconfiguration id="1" codeinsightmodule="true" gallerymodule="true" mapmodule="true" pollmodule="true" questmodule="true" rssmodule="true" schedulemodule="true" techtrekmodule="true"/>
+    <questconfiguration id="1" hashtagprefix="Quest" instructionurl="http://localhost/instructions" pointsforvote="10" deadline="2015-06-08 00:00:00.0"/>
+    <webservicesettings id="1" instagramkey="instagramkey" instagramsecret="instagramsecret" showpicasaphotos="false" twitteraccesstoken="twitteraccesstoken" twitteraccesstokensecret="twitteraccesstokensecret" twitterconsumerkey="twitterconsumerkey" twitterconsumersecret="twitterconsumersecret" vineemail="vineemail" vinepassword="vinepassword" wscmtoken="wscmtoken"/>
+    <contest id="1" code="contest-1" hashtag="contest1" length="18000" name="Contest 1" penalty="20.0" shortname="C1" showteamnames="false" starttime="2013-07-13 10:15:02.0" timedifference="60" contestsettingsid="1" mapconfigurationid="1" moduleconfigurationid="1" questconfigurationid="1" webservicesettingsid="1"/>
+
+    <contestsettings id="2" jsonscoreboardurl="http://localhost/scoreboard" eventfeedusername="myicpc" eventfeedpassword="myicpc" eventfeedurl="http://localhost/events" generatemessages="false" scoreboardstrategytype="NATIVE" showcountry="true" showregion="false" showuniversity="false" year="2015"/>
+    <mapconfiguration id="2" zoomablemap="false"/>
+    <moduleconfiguration id="2" codeinsightmodule="true" gallerymodule="true" mapmodule="true" pollmodule="true" questmodule="true" rssmodule="true" schedulemodule="true" techtrekmodule="true"/>
+    <questconfiguration id="2" hashtagprefix="Quest" instructionurl="http://localhost/instructions" pointsforvote="10" deadline="2015-06-08 00:00:00.0"/>
+    <webservicesettings id="2" instagramkey="instagramkey" instagramsecret="instagramsecret" showpicasaphotos="false" twitteraccesstoken="twitteraccesstoken" twitteraccesstokensecret="twitteraccesstokensecret" twitterconsumerkey="twitterconsumerkey" twitterconsumersecret="twitterconsumersecret" vineemail="vineemail" vinepassword="vinepassword" wscmtoken="wscmtoken"/>
+    <contest id="2" code="contest-2" hashtag="contest2" length="18000" name="Contest 2" penalty="20.0" shortname="C2" showteamnames="true" starttime="2013-07-13 10:15:02.0" timedifference="60" contestsettingsid="2" mapconfigurationid="2" moduleconfigurationid="2" questconfigurationid="2" webservicesettingsid="2"/>
+
+    <questchallenge id="1" published="true" startdate="2014-06-09 00:00:00.0" enddate="2015-06-15 00:00:00.0" defaultpoints="30" name="Quest 1" description="Description 1" hashtagsuffix="1" contestid="1" requiresphoto="false" requiresvideo="true"/>
+    <questchallenge id="2" published="true" startdate="2014-06-08 00:00:00.0" enddate="2015-06-14 00:00:00.0" defaultpoints="20" name="Quest 2" description="Description 2" hashtagsuffix="2" contestid="1" requiresphoto="true" requiresvideo="false"/>
+    <questchallenge id="3" published="true" startdate="2014-06-07 00:00:00.0" defaultpoints="10" name="Quest 3" description="Description 3" hashtagsuffix="3" contestid="1" requiresphoto="false" requiresvideo="false"/>
+    <questchallenge id="4" published="true" startdate="2014-06-10 00:00:00.0" enddate="2015-06-16 00:00:00.0" defaultpoints="25" name="Quest 4" description="Description 4" hashtagsuffix="4" contestid="1" requiresphoto="true" requiresvideo="true"/>
+
+    <questchallenge id="5" published="true" startdate="2014-06-08 00:00:00.0" enddate="2015-06-14 00:00:00.0" defaultpoints="20" name="Quest 1" description="Description 2" hashtagsuffix="2" contestid="2" requiresphoto="true" requiresvideo="false"/>
+    <questchallenge id="6" published="false" startdate="2014-06-07 00:00:00.0" enddate="2015-06-13 00:00:00.0" defaultpoints="10" name="Quest 2" description="Description 3" hashtagsuffix="3" contestid="2" requiresphoto="false" requiresvideo="false"/>
+    <questchallenge id="7" published="true" startdate="2014-06-10 00:00:00.0" enddate="2015-06-16 00:00:00.0" defaultpoints="25" name="Quest 3" description="Description 4" hashtagsuffix="4" contestid="2" requiresphoto="true" requiresvideo="true"/>
+
+    <contestParticipant id="1" externalId="1" firstname="Jon" lastname="Snow" />
+    <contestParticipant id="2" externalId="2" firstname="Arya" lastname="Stark" />
+    <contestParticipant id="3" externalId="3" firstname="John" lastname="Brown" />
+
+    <questparticipant id="1" points="30" pointsFromVoting="0" pointsadjustment="0" contestParticipantId="1" contestId="1" />
+    <questparticipant id="2" points="30" pointsFromVoting="0" pointsadjustment="0" contestParticipantId="2" contestId="1" />
+    <questparticipant id="3" points="30" pointsFromVoting="0" pointsadjustment="0" contestParticipantId="3" contestId="1" />
+
+    <notification id="1" contestId="1" offensive="false" featuredEligible="true" deleted="false" notificationType="TWITTER" timestamp="2015-06-11 00:00:00.0" />
+    <notification id="2" contestId="1" offensive="false" featuredEligible="true" deleted="false" notificationType="TWITTER" timestamp="2015-06-12 00:00:00.0" />
+    <notification id="3" contestId="1" offensive="false" featuredEligible="true" deleted="false" notificationType="TWITTER" timestamp="2015-06-13 00:00:00.0" />
+    <notification id="4" contestId="1" offensive="false" featuredEligible="true" deleted="false" notificationType="TWITTER" timestamp="2015-06-14 00:00:00.0" />
+    <notification id="5" contestId="1" offensive="false" featuredEligible="true" deleted="false" notificationType="TWITTER" timestamp="2015-06-15 00:00:00.0" />
+    <notification id="6" contestId="1" offensive="false" featuredEligible="true" deleted="false" notificationType="TWITTER" timestamp="2015-06-16 00:00:00.0" />
+    <notification id="7" contestId="1" offensive="false" featuredEligible="true" deleted="false" notificationType="TWITTER" timestamp="2015-06-17 00:00:00.0" />
+    <notification id="8" contestId="1" offensive="false" featuredEligible="true" deleted="false" notificationType="TWITTER" timestamp="2015-06-18 00:00:00.0" />
+    <notification id="9" contestId="1" offensive="false" featuredEligible="true" deleted="false" notificationType="TWITTER" timestamp="2015-06-19 00:00:00.0" />
+
+    <questsubmission id="7" challengeId="1" participantId="1" notificationId="7" questPoints="10" votes="0" submissionState = "ACCEPTED" voteSubmissionState="VOTE_WINNER" />
+    <questsubmission id="4" challengeId="1" participantId="2" notificationId="4" questPoints="10" votes="0" submissionState = "REJECTED" voteSubmissionState="IN_PROGRESS" />
+    <questsubmission id="1" challengeId="1" participantId="3" notificationId="1" questPoints="10" votes="0" submissionState = "ACCEPTED" voteSubmissionState="IN_PROGRESS" />
+    <questsubmission id="5" challengeId="2" participantId="1" notificationId="5" questPoints="10" votes="0" submissionState = "ACCEPTED" voteSubmissionState="IN_PROGRESS" />
+    <questsubmission id="2" challengeId="2" participantId="2" notificationId="2" questPoints="10" votes="0" submissionState = "ACCEPTED" voteSubmissionState="VOTE_WINNER" />
+    <questsubmission id="8" challengeId="2" participantId="3" notificationId="8" questPoints="10" votes="0" submissionState = "REJECTED" />
+    <questsubmission id="9" challengeId="3" participantId="1" notificationId="9" questPoints="10" votes="0" submissionState = "PENDING" voteSubmissionState="VOTE_WINNER" />
+    <questsubmission id="3" challengeId="3" participantId="2" notificationId="3" questPoints="10" votes="0" submissionState = "ACCEPTED" />
+    <questsubmission id="6" challengeId="3" participantId="3" notificationId="6" questPoints="10" votes="0" submissionState = "PENDING" />
+
+
+</dataset>

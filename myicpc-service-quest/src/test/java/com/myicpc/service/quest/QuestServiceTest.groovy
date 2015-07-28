@@ -177,7 +177,7 @@ class QuestServiceTest extends GroovyTestCase {
 
 
     void testGetParticipantsWithRolesNullContest() {
-        Mockito.when(questParticipantRepository.findByRoles([], null, null)).thenReturn([])
+        Mockito.when(questParticipantRepository.findByRoles([], null)).thenReturn([])
 
         def participants = questService.getParticipantsWithRoles([], null)
         Assert.assertTrue participants.isEmpty()
@@ -185,7 +185,7 @@ class QuestServiceTest extends GroovyTestCase {
 
     void testGetParticipantsWithRolesNullRoles() {
         def contest = new Contest(id: 1L)
-        Mockito.when(questParticipantRepository.findByRoles(null, contest, null)).thenReturn([])
+        Mockito.when(questParticipantRepository.findByRoles(null, contest)).thenReturn([])
 
         def participants = questService.getParticipantsWithRoles(null, contest)
         Assert.assertTrue participants.isEmpty()

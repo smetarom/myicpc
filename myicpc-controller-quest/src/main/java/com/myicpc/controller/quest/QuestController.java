@@ -62,7 +62,7 @@ public class QuestController extends GeneralController {
     public String questHomepage(@PathVariable final String contestCode, Model model) {
         Contest contest = getContest(contestCode, model);
 
-        List<QuestSubmission> list = submissionRepository.getVotesInProgressSubmissions(contest);
+        List<QuestSubmission> list = submissionRepository.getVoteInProgressSubmissions(contest);
         if (list.size() >= 4) {
             model.addAttribute("voteCandidates", list);
         }
@@ -101,7 +101,7 @@ public class QuestController extends GeneralController {
             errorMessage(redirectAttributes, "quest.challenges.missing.notFound");
             return "redirect:" + getContestURL(contestCode) + "/quest/challenges";
         }
-        List<QuestChallenge> challenges = challengeRepository.findOpenChallengesByQuestParticipantOrderByName(new Date(), questParticipant, contest);
+        List<QuestChallenge> challenges = challengeRepository.findAvailableChallengesByQuestParticipantOrderByName(new Date(), questParticipant, contest);
         QuestService.applyHashtagPrefix(contest.getQuestConfiguration().getHashtagPrefix(), challenges);
         model.addAttribute("challenges", challenges);
 
@@ -161,7 +161,7 @@ public class QuestController extends GeneralController {
     public void questGuideExport(@PathVariable final String contestCode, HttpServletResponse response) {
         Contest contest = getContest(contestCode, null);
         try {
-            List<QuestChallenge> challenges = challengeRepository.findCurrentChallengesByContestOrderByName(new Date(), contest);
+            List<QuestChallenge> challenges = challengeRepository.findByContestAvailableChallenges(new Date(), contest);
             QuestService.applyHashtagPrefix(contest.getQuestConfiguration().getHashtagPrefix(), challenges);
             questReportService.downloadQuestChallengesGuide(challenges, response.getOutputStream(), false);
             response.setContentType("application/pdf");
@@ -237,7 +237,7 @@ public class QuestController extends GeneralController {
             challenge = challengeRepository.findOne(id);
         } catch (Exception ex) {
             String code = challengeId.substring(contest.getQuestConfiguration().getHashtagPrefix().length());
-            challenge = challengeRepository.findByHashtagSuffix(code);
+            challenge = challengeRepository.findByHashtagSuffix(code, contest);
         }
         if (challenge == null) {
             throw new EntityNotFoundException();

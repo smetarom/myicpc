@@ -77,7 +77,7 @@ public class QuestSubmissionAdminController extends GeneralAdminController {
     }
 
     private void initSubmissionListModel(final Model model, final QuestSubmissionFilter submissionFilter, final Contest contest, final Pageable pageable) {
-        Page<QuestSubmission> submissions = submissionRepository.getFiltredQuestSumbissions(submissionFilter, contest, pageable);
+        Page<QuestSubmission> submissions = submissionRepository.getFilteredQuestSubmissions(submissionFilter, contest, pageable);
         QuestService.applyHashtagPrefixToSubmissions(contest.getQuestConfiguration().getHashtagPrefix(), submissions.getContent());
         model.addAttribute("submissions", submissions);
         model.addAttribute("challenges", challengeRepository.findByContestOrderByNameAsc(contest));

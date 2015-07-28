@@ -5,7 +5,14 @@ import com.myicpc.validator.annotation.ValidateDateRange;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Lob;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
@@ -17,6 +24,7 @@ import java.util.List;
  * @author Roman Smetana
  */
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"hashtagSuffix", "contestId"}))
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "QuestChallange_id_seq")
 @ValidateDateRange
 public class QuestChallenge extends StartEndDateObject {
@@ -63,7 +71,6 @@ public class QuestChallenge extends StartEndDateObject {
      * settings.properties) common to all quest challenges and hashtag suffix,
      * which is unique to each challenge
      */
-    @Column(unique = true)
     @NotNull
     @NotEmpty
     private String hashtagSuffix;

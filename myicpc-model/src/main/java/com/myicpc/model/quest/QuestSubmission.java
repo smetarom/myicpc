@@ -101,6 +101,7 @@ public class QuestSubmission extends IdGeneratedObject {
      * {@link com.myicpc.model.social.Notification}, from which we received the submission
      */
     @ManyToOne
+    @NotNull
     @JoinColumn(name = "notificationId")
     private Notification notification;
 

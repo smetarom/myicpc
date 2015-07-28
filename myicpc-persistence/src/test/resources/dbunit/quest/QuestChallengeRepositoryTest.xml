@@ -13,11 +13,25 @@
     <webservicesettings id="2" instagramkey="instagramkey" instagramsecret="instagramsecret" showpicasaphotos="false" twitteraccesstoken="twitteraccesstoken" twitteraccesstokensecret="twitteraccesstokensecret" twitterconsumerkey="twitterconsumerkey" twitterconsumersecret="twitterconsumersecret" vineemail="vineemail" vinepassword="vinepassword" wscmtoken="wscmtoken"/>
     <contest id="2" code="contest-2" hashtag="contest2" length="18000" name="Contest 2" penalty="20.0" shortname="C2" showteamnames="true" starttime="2013-07-13 10:15:02.0" timedifference="60" contestsettingsid="2" mapconfigurationid="2" moduleconfigurationid="2" questconfigurationid="2" webservicesettingsid="2"/>
 
-    <poll id="1" question="Q1?" contestid="1" startdate="2014-12-14 10:12:49.199" enddate="2014-12-16 10:12:49.199" published="true" opened="true" pollrepresentationtype="BAR_CHART" />
-    <poll id="2" question="Q2?" contestid="1" startdate="2014-12-15 10:12:49.199" enddate="2014-12-17 10:12:49.199" published="true" opened="true" pollrepresentationtype="BAR_CHART" />
-    <poll id="3" question="Q3?" contestid="1" startdate="2014-12-16 10:12:49.199" enddate="2014-12-13 10:12:49.199" published="true" opened="true" pollrepresentationtype="BAR_CHART" />
+    <questchallenge id="1" published="true" startdate="2014-06-09 00:00:00.0" enddate="2015-06-15 00:00:00.0" defaultpoints="30" name="Quest 1" description="Description 1" hashtagsuffix="1" contestid="1" requiresphoto="false" requiresvideo="true"/>
+    <questchallenge id="2" published="true" startdate="2014-06-08 00:00:00.0" enddate="2015-06-14 00:00:00.0" defaultpoints="20" name="Quest 2" description="Description 2" hashtagsuffix="2" contestid="1" requiresphoto="true" requiresvideo="false"/>
+    <questchallenge id="3" published="true" startdate="2014-06-07 00:00:00.0" defaultpoints="10" name="Quest 3" description="Description 3" hashtagsuffix="3" contestid="1" requiresphoto="false" requiresvideo="false"/>
+    <questchallenge id="4" published="true" startdate="2014-06-10 00:00:00.0" enddate="2015-06-16 00:00:00.0" defaultpoints="25" name="Quest 4" description="Description 4" hashtagsuffix="4" contestid="1" requiresphoto="true" requiresvideo="true"/>
 
-    <poll id="4" question="Q4?" contestid="2" startdate="2014-12-12 10:12:49.199" enddate="2014-12-13 10:12:49.199" published="false" opened="true" pollrepresentationtype="BAR_CHART" />
-    <poll id="5" question="Q5?" contestid="2" startdate="2014-12-14 10:12:49.199" enddate="2014-12-13 10:12:49.199" published="true" opened="true" pollrepresentationtype="BAR_CHART" />
-    <poll id="6" question="Q6?" contestid="2" startdate="2014-12-16 10:12:49.199" enddate="2014-12-13 10:12:49.199" published="false" opened="true" pollrepresentationtype="BAR_CHART" />
+    <questchallenge id="5" published="true" startdate="2014-06-08 00:00:00.0" enddate="2015-06-14 00:00:00.0" defaultpoints="20" name="Quest 1" description="Description 2" hashtagsuffix="2" contestid="2" requiresphoto="true" requiresvideo="false"/>
+    <questchallenge id="6" published="false" startdate="2014-06-07 00:00:00.0" enddate="2015-06-13 00:00:00.0" defaultpoints="10" name="Quest 2" description="Description 3" hashtagsuffix="3" contestid="2" requiresphoto="false" requiresvideo="false"/>
+    <questchallenge id="7" published="true" startdate="2014-06-10 00:00:00.0" enddate="2015-06-16 00:00:00.0" defaultpoints="25" name="Quest 3" description="Description 4" hashtagsuffix="4" contestid="2" requiresphoto="true" requiresvideo="true"/>
+
+    <contestParticipant id="1" externalId="1" firstname="Jon" lastname="Snow" />
+
+    <questparticipant id="1" points="30" pointsFromVoting="0" pointsadjustment="0" contestParticipantId="1" contestId="1" />
+
+    <notification id="1" contestId="1" offensive="false" featuredEligible="true" deleted="false" notificationType="TWITTER" />
+    <notification id="2" contestId="1" offensive="false" featuredEligible="true" deleted="false" notificationType="TWITTER" />
+
+    <questsubmission id="1" challengeId="1" participantId="1" notificationId="1" questPoints="10" votes="0" submissionState = "ACCEPTED" />
+    <questsubmission id="2" challengeId="2" participantId="1" notificationId="2" questPoints="10" votes="0" submissionState = "ACCEPTED" />
+    <questsubmission id="3" challengeId="3" participantId="1" notificationId="2" questPoints="10" votes="0" submissionState = "PENDING" />
+
+
 </dataset>

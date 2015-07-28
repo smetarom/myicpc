@@ -249,7 +249,7 @@ public class QuestSubmissionService {
         if (deadline == null || deadline.after(new Date())) {
             // select new candidates
             Pageable pageable = new PageRequest(0, VOTE_ROUND_SIZE);
-            List<QuestSubmission> newInProgressSubmissions = submissionRepository.getVoteEligableSubmissions(contest, pageable);
+            List<QuestSubmission> newInProgressSubmissions = submissionRepository.getVoteEligibleSubmissions(contest, pageable);
             for (QuestSubmission submission : newInProgressSubmissions) {
                 submission.setVoteSubmissionState(VoteSubmissionState.IN_PROGRESS);
             }
