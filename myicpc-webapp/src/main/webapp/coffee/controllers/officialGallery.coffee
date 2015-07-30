@@ -129,10 +129,10 @@ officialGalleryApp.controller('officialGalleryCtrl', ($scope, $http, $location, 
       tag = $scope.currentTag = personName
       getInitPhotos(tag)
 
-  $scope.loadMore = () ->
+  $scope.loadMore = (onSuccess) ->
     console.log($scope.currentTag)
     if $scope.photos.length < $scope.maxResult
-      getPhotos($scope.currentTag, $scope.photos.length + 1)
+      getPhotos($scope.currentTag, $scope.photos.length + 1, onSuccess)
     else
       $(".load-more-btn").addClass('hidden')
     return
@@ -144,10 +144,13 @@ officialGalleryApp.controller('officialGalleryCtrl', ($scope, $http, $location, 
     $location.path(tag)
     getPhotos(tag)
 
-  getPhotos = (tag, start = 1) ->
-      console.log(tag)
+  getPhotos = (tag, start = 1, onSuccess = null) ->
       $http.get(officialGalleryService.buildSearchUrl($scope.config, tag, start))
-        .success(appendResultToPhotos)
+        .success((data) ->
+          appendResultToPhotos(data)
+          if onSuccess?
+            onSuccess()
+        )
 
   appendResultToPhotos = (data) ->
     console.log(data)
@@ -173,7 +176,15 @@ officialGalleryApp.controller('officialGalleryCtrl', ($scope, $http, $location, 
     return null
 
   $scope.nextPhoto = () ->
-    $scope.showPhotoDetail($scope.currentIndex + 1)
+    if $scope.currentIndex + 1 >= $scope.maxResult
+      $('#galleryPopup').modal('hide')
+    else if $scope.currentIndex + 1 >= $scope.photos.length
+      $scope.loadMore(() ->
+        $scope.showPhotoDetail($scope.currentIndex + 1)
+      )
+    else
+      $scope.showPhotoDetail($scope.currentIndex + 1)
+    return null
 
   processHashtag = () ->
     hash = $location.path();

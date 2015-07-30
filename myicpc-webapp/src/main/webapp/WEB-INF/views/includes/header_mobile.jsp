@@ -27,28 +27,31 @@
         <tr>
             <c:if test="${util:scheduleModuleEnabled(contest)}">
                 <td class="${sideMenuActive eq 'schedule' ? 'active' : '' }">
-                    <t:emptyLink id="main-schedule-link" styleClass="side-menu-schedule"><span
-                            class="glyphicon glyphicon-calendar"></span></t:emptyLink>
+                    <t:emptyLink id="main-schedule-link">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </t:emptyLink>
                 </td>
             </c:if>
             <td class="${sideMenuActive eq 'scoreboard' ? 'active' : '' }">
-                <t:emptyLink id="main-scoreboard-link" styleClass="side-menu-scoreboard"><span
-                        class="glyphicon glyphicon-list"></span></t:emptyLink>
+                <t:emptyLink id="main-scoreboard-link">
+                    <span class="glyphicon glyphicon-list"></span>
+                </t:emptyLink>
             </td>
             <c:if test="${util:questModuleEnabled(contest)}">
                 <td class="${sideMenuActive eq 'quest' ? 'active' : '' }">
-                    <t:emptyLink id="main-quest-link" styleClass="side-menu-quest"><span
-                            class="glyphicon glyphicon-screenshot"></span></t:emptyLink>
+                    <t:emptyLink id="main-quest-link">
+                        <span class="glyphicon glyphicon-screenshot"></span>
+                    </t:emptyLink>
                 </td>
             </c:if>
             <c:if test="${util:galleryModuleEnabled(contest)}">
                 <td class="${sideMenuActive eq 'gallery' ? 'active' : '' }">
-                    <a id="main-gallery-link" href="<spring:url value="${contestURL}/gallery" />" class="side-menu-gallery"><span
-                            class="glyphicon glyphicon-camera"
-                            ></span></a>
+                    <t:emptyLink id="main-gallery-link">
+                        <span class="glyphicon glyphicon-camera"></span>
+                    </t:emptyLink>
                 </td>
             </c:if>
-            <td><t:emptyLink id="main-misc-link" styleClass="side-menu-misc"><span
+            <td><t:emptyLink id="main-misc-link"><span
                     class="fa fa-ellipsis-v"></span></t:emptyLink>
         </tr>
         </tbody>
@@ -70,6 +73,12 @@
 <div id="main-quest-submenu" style="display: none;">
     <table class="width100 text-center mobile-submenu">
         <%@ include file="/WEB-INF/views/includes/topMenu/questSubmenu.jsp" %>
+    </table>
+</div>
+
+<div id="main-gallery-submenu" style="display: none;">
+    <table class="width100 text-center mobile-submenu">
+        <%@ include file="/WEB-INF/views/includes/topMenu/gallerySubmenu.jsp" %>
     </table>
 </div>
 

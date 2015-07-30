@@ -37,12 +37,18 @@ a.gallery-thumbnail {
   }
 }
 
-.mobile #galleryPopupContent .gallery-content {
-  min-height: inherit;
-  width: 100%;
-  padding: 10px;
+.mobile {
+  #galleryPopupContent .gallery-content {
+    min-height: inherit;
+    width: 100%;
+    padding: 10px;
+  }
+  #officialGalleryFilter {
+    select {
+      max-width: inherit;
+    }
+  }
 }
-
 .gallery-detail-author {
   vertical-align: top;
   padding-left: 7px;

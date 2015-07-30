@@ -15,7 +15,7 @@
 
     <jsp:body>
         <div ng-app="officialGallery" ng-controller="officialGalleryCtrl">
-            <form class="form-inline gallery-filter text-right col-sm-12">
+            <form class="form-inline gallery-filter text-right col-sm-12" id="officialGalleryFilter">
                 <select class="form-control" ng-change="eventFilterChanged()" ng-model="currentEvent">
                     <option value=""><spring:message code="officialGallery.event" /></option>
                     <c:forEach var="gallery" items="${galleries}">

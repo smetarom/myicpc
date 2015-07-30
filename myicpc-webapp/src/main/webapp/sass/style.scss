@@ -186,7 +186,7 @@ td.fit-content {
   }
 }
 
-#main-schedule-submenu, #main-scoreboard-submenu, #main-quest-submenu, #main-misc-submenu {
+#main-schedule-submenu, #main-scoreboard-submenu, #main-quest-submenu, #main-gallery-submenu, #main-misc-submenu {
   position: fixed;
   top: 50px;
   z-index: 1100;
@@ -194,7 +194,7 @@ td.fit-content {
 }
 
 .mobile {
-  #main-schedule-submenu, #main-scoreboard-submenu, #main-quest-submenu, #main-misc-submenu {
+  #main-schedule-submenu, #main-scoreboard-submenu, #main-quest-submenu, #main-gallery-submenu, #main-misc-submenu {
     top: 78px;
     width: 100%;
 
