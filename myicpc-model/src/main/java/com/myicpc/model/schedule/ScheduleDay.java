@@ -134,6 +134,11 @@ public class ScheduleDay extends IdGeneratedContestObject implements Comparable<
         });
     }
 
+    @Transient
+    public String getDayLabel() {
+        return "Day " + dayOrder;
+    }
+
     @Override
     public int compareTo(ScheduleDay o) {
         return getDate().compareTo(o.getDate());

@@ -83,7 +83,7 @@ public class ScheduleService {
      *
      * @param roleIds ids of selected roles
      * @param today   deadline date
-     * @param contest
+     * @param contest contest
      * @return events for given roles and which ends after the given date
      */
     @Transactional(readOnly = true)

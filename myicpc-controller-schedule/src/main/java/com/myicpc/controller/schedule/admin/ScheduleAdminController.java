@@ -13,6 +13,7 @@ import com.myicpc.repository.schedule.ScheduleDayRepository;
 import com.myicpc.service.exception.BusinessValidationException;
 import com.myicpc.service.schedule.ScheduleMngmService;
 import com.myicpc.service.schedule.ScheduleService;
+import com.myicpc.service.schedule.dto.EditScheduleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.stereotype.Controller;
@@ -41,7 +42,7 @@ import java.util.Set;
  * @author Roman Smetana
  */
 @Controller
-@SessionAttributes({ "event", "location", "scheduleDay", "eventRole" })
+@SessionAttributes({ "event", "location", "scheduleDay", "eventRole", "eventsWrapper" })
 public class ScheduleAdminController extends GeneralAdminController {
 
     @Autowired
@@ -71,6 +72,26 @@ public class ScheduleAdminController extends GeneralAdminController {
         model.addAttribute("scheduleDays", scheduleDayRepository.findByContestOrderByDateAsc(contest));
         model.addAttribute("eventRoles", eventRoleRepository.findByContestOrderByNameAsc(contest));
         return "private/schedule/schedule";
+    }
+
+    @RequestMapping(value = "/private/{contestCode}/schedule/edit", method = RequestMethod.GET)
+    public String editSchedule(@PathVariable final String contestCode, final Model model) {
+        Contest contest = getContest(contestCode, model);
+
+        model.addAttribute("eventsWrapper", scheduleMngmService.createEditSchedule(contest));
+        model.addAttribute("locations", locationRepository.findByContestOrderByNameAsc(contest));
+        model.addAttribute("scheduleDays", scheduleDayRepository.findByContestOrderByDateAsc(contest));
+        model.addAttribute("eventRoles", eventRoleRepository.findByContestOrderByNameAsc(contest));
+        return "private/schedule/scheduleEdit";
+    }
+
+    @RequestMapping(value = "/private/{contestCode}/schedule/edit", method = RequestMethod.POST)
+    public String updateSchedule(@PathVariable final String contestCode, @Valid @ModelAttribute("eventsWrapper") final EditScheduleDTO scheduleDTO,
+                              final RedirectAttributes redirectAttributes) {
+        scheduleMngmService.saveBulkEdit(scheduleDTO);
+        successMessage(redirectAttributes, "save.success");
+
+        return "redirect:/private/" + contestCode + "/schedule";
     }
 
     @RequestMapping(value = "/private/{contestCode}/schedule/event/create", method = RequestMethod.GET)
@@ -362,7 +383,7 @@ public class ScheduleAdminController extends GeneralAdminController {
         return "redirect:/private/" + contestCode + "/schedule";
     }
 
-    @InitBinder("event")
+    @InitBinder({"event", "eventsWrapper"})
     protected void initEventBinder(final WebDataBinder binder) {
         bindDateTimeFormat(binder);
     }

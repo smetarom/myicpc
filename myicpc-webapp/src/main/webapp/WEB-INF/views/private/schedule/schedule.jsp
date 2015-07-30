@@ -14,7 +14,8 @@
 	</jsp:attribute>
 
     <jsp:attribute name="controls">
-        <a href="<spring:url value="/private${contestURL}/schedule/event/create" />" class="btn btn-hover btn-primary"><span class="glyphicon glyphicon-plus"></span> <spring:message code="scheduleAdmin.create" /></a>
+        <a href="<spring:url value="/private${contestURL}/schedule/event/create" />" class="btn btn-hover btn-default"><span class="glyphicon glyphicon-plus"></span> <spring:message code="scheduleAdmin.create" /></a>
+        <a href="<spring:url value="/private${contestURL}/schedule/edit" />" class="btn btn-hover btn-default"><span class="glyphicon glyphicon-pencil"></span> <spring:message code="scheduleAdmin.editBulk" /></a>
         <button data-toggle="modal" data-target="#importSchedule" class="btn btn-hover btn-default"><t:glyphIcon icon="import"/> <spring:message code="scheduleAdmin.import" /></button>
 
 		<t:modalWindow id="importSchedule">
@@ -51,7 +52,7 @@
             <spring:message code="scheduleDays" />
         </h3>
         <c:if test="${not empty scheduleDays}">
-            <table class="table">
+            <table class="table table-striped">
                 <thead>
                 <tr>
                     <th></th>
@@ -84,7 +85,7 @@
             <spring:message code="locations" />
         </h3>
         <c:if test="${not empty locations}">
-            <table class="table">
+            <table class="table table-striped">
                 <thead>
                 <tr>
                     <th><spring:message code="location.name" /></th>
@@ -115,7 +116,7 @@
             <spring:message code="eventRoles" />
         </h3>
         <c:if test="${not empty eventRoles}">
-            <table class="table">
+            <table class="table table-striped">
                 <thead>
                 <tr>
                     <th><spring:message code="eventRole.name" /></th>
@@ -145,7 +146,7 @@
 
     <jsp:body>
         <c:if test="${not empty events}">
-            <table class="table">
+            <table class="table table-striped">
                 <thead>
                 <tr>
                     <th class="nowrap"><spring:message code="event.name" /></th>

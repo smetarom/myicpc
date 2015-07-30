@@ -21,6 +21,7 @@ import com.myicpc.service.exception.BusinessValidationException;
 import com.myicpc.service.notification.NotificationBuilder;
 import com.myicpc.service.notification.NotificationService;
 import com.myicpc.service.publish.PublishService;
+import com.myicpc.service.schedule.dto.EditScheduleDTO;
 import com.myicpc.service.validation.EventRoleValidator;
 import com.myicpc.service.validation.LocationValidator;
 import com.myicpc.service.validation.ScheduleDayValidator;
@@ -41,6 +42,7 @@ import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -118,6 +120,38 @@ public class ScheduleMngmService {
     public void deleteEvent(final Event event) {
         notificationRepository.deleteByEntityIdAndNotificationType(event.getId(), NotificationType.SCHEDULE_EVENT_OPEN, event.getContest());
         eventRepository.delete(event);
+    }
+
+    /**
+     * Creates a wrapper for a bulk schedule update
+     *
+     * @param contest contest
+     * @return schedule edit wrapper
+     */
+    @Transactional(readOnly = true)
+    public EditScheduleDTO createEditSchedule(final Contest contest) {
+        List<Event> events = eventRepository.findByContestWithScheduleDayAndLocation(contest);
+        // prevent lazy-loading exception
+        for (Event event : events) {
+            event.getRoles().size();
+        }
+        Collections.sort(events);
+        return new EditScheduleDTO(events);
+    }
+
+    /**
+     * Saves all events in the bulk update
+     *
+     * @param editScheduleDTO holder with updated events
+     */
+    @Transactional
+    public void saveBulkEdit(final EditScheduleDTO editScheduleDTO) {
+        if (editScheduleDTO == null || CollectionUtils.isEmpty(editScheduleDTO.getEvents())) {
+            return;
+        }
+        for (Event event : editScheduleDTO.getEvents()) {
+            saveEvent(event);
+        }
     }
 
     /**

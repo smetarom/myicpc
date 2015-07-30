@@ -15,7 +15,9 @@ import com.myicpc.repository.schedule.LocationRepository
 import com.myicpc.repository.schedule.ScheduleDayRepository
 import com.myicpc.repository.social.NotificationRepository
 import com.myicpc.service.exception.BusinessValidationException
+import com.myicpc.service.notification.NotificationService
 import com.myicpc.service.publish.PublishService
+import com.myicpc.service.schedule.dto.EditScheduleDTO
 import com.myicpc.service.validation.EventRoleValidator
 import com.myicpc.service.validation.LocationValidator
 import com.myicpc.service.validation.ScheduleDayValidator
@@ -59,6 +61,9 @@ class ScheduleMngmServiceTest extends GroovyTestCase {
     @Mock
     private PublishService publishService;
 
+    @Mock
+    private NotificationService notificationService;
+
     @InjectMocks
     private ScheduleMngmService scheduleMngmService;
 
@@ -94,6 +99,54 @@ class ScheduleMngmServiceTest extends GroovyTestCase {
 
         Mockito.verify(notificationRepository).deleteByEntityIdAndNotificationType(event.id, NotificationType.SCHEDULE_EVENT_OPEN, contest)
         Mockito.verify(eventRepository).delete(Mockito.any(Event.class))
+    }
+
+    void testCreateEditSchedule() {
+        def contest = new Contest(id: 1L)
+        def events = [
+                new Event(id: 1L, startDate: TimeUtils.getDate(2014, 6, 22)),
+                new Event(id: 2L, startDate: TimeUtils.getDate(2014, 6, 23)),
+                new Event(id: 3L, startDate: TimeUtils.getDate(2014, 6, 21)),
+        ]
+        Mockito.when(eventRepository.findByContestWithScheduleDayAndLocation(contest)).thenReturn(events)
+        def editScheduleDTO = scheduleMngmService.createEditSchedule(contest)
+
+        Assert.assertEquals 3, editScheduleDTO.events.size()
+        def tmpDate = TimeUtils.getDate(1990, 1, 1)
+        editScheduleDTO.events.each {
+            Assert.assertFalse tmpDate.after(it.startDate)
+            tmpDate = it.startDate
+        }
+
+    }
+
+    void testCreateEditScheduleNullContest() {
+        Mockito.when(eventRepository.findByContestWithScheduleDayAndLocation(null)).thenReturn([])
+        def editScheduleDTO = scheduleMngmService.createEditSchedule(null)
+
+        Assert.assertNotNull editScheduleDTO
+        Assert.assertTrue editScheduleDTO.events.isEmpty()
+    }
+
+    void testSaveBulkEdit() {
+        def events = [
+                new Event(id: 1L, startDate: TimeUtils.getDate(2014, 6, 22)),
+                new Event(id: 2L, startDate: TimeUtils.getDate(2014, 6, 23)),
+                new Event(id: 3L, startDate: TimeUtils.getDate(2014, 6, 21)),
+        ]
+        def editSchedule =  new EditScheduleDTO(events)
+        scheduleMngmService.saveBulkEdit(editSchedule)
+        Mockito.verify(eventRepository, Mockito.times(3)).save(Matchers.any(Event.class))
+    }
+
+    void testSaveBulkEditNullContest() {
+        scheduleMngmService.saveBulkEdit(null)
+        Mockito.verifyZeroInteractions(eventRepository)
+    }
+
+    void testSaveBulkEditNullEvents() {
+        scheduleMngmService.saveBulkEdit(new EditScheduleDTO(null))
+        Mockito.verifyZeroInteractions(eventRepository)
     }
 
     void testSaveLocation() {

@@ -1,5 +1,6 @@
 package com.myicpc.model.schedule;
 
+import com.google.common.collect.ComparisonChain;
 import com.myicpc.model.StartEndDateObject;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.validator.annotation.ValidateDateRange;
@@ -29,7 +30,7 @@ import java.util.Set;
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"code", "contestId"}))
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "Event_id_seq")
 @ValidateDateRange
-public class Event extends StartEndDateObject {
+public class Event extends StartEndDateObject implements Comparable<Event> {
     private static final long serialVersionUID = -4924079934694291712L;
 
     public Event() {
@@ -185,5 +186,10 @@ public class Event extends StartEndDateObject {
     @Transient
     public String getFullPicasaTag() {
         return "event$" + picasaTag;
+    }
+
+    @Override
+    public int compareTo(Event o) {
+        return ComparisonChain.start().compare(this.startDate, o.startDate).result();
     }
 }
