@@ -17,9 +17,12 @@
     </a>
 </c:forEach>
 
-<script type="application/javascript">
+<script type="application/javascript" class="gallery-tiles-load-script">
     var lastNotificationId = ${not empty lastNotificationId ? lastNotificationId : -1};
     if (lastNotificationId == -1) {
         $('.load-more-btn').hide();
+    }
+    if(window.jQuery) {
+        $('.gallery-tiles-load-script').remove();
     }
 </script>

@@ -103,6 +103,7 @@
             });
 
             $(function() {
+                Gallery.setLoadMoreUrl('<spring:url value="${contestURL}/gallery/loadMore" />')
                 Gallery.acceptGalleryPost = acceptGalleryPost;
                 startSubscribe('${r.contextPath}', '${contest.code}', 'notification', Gallery.updateGallery, null);
             })

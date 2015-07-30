@@ -5,6 +5,10 @@ currentTile = null;
 
 Gallery = {
   galleryTemplate: compileHandlebarsTemplate('gallery-item-template'),
+  loadMoreUrl: null,
+  setLoadMoreUrl: function(url) {
+    return Gallery.loadMoreUrl = url;
+  },
   showGalleryModal: function(tile) {
     var context, modalTemplate;
     modalTemplate = compileHandlebarsTemplate('gallery-modal-template');
@@ -24,8 +28,8 @@ Gallery = {
     var $currentTile, previousTile;
     if (currentTile !== null) {
       $currentTile = $(currentTile);
-      if ($currentTile.prev().length) {
-        previousTile = $currentTile.prev();
+      previousTile = $currentTile.prev('a.gallery-thumbnail');
+      if (previousTile.length) {
         Gallery.showGalleryModal(previousTile);
         return currentTile = previousTile;
       } else {
@@ -41,7 +45,15 @@ Gallery = {
         Gallery.showGalleryModal(nextTile);
         currentTile = nextTile;
       } else {
-        $('#galleryPopup').modal('hide');
+        Gallery.loadMore(Gallery.loadMoreUrl, function() {
+          nextTile = $(currentTile).next('a.gallery-thumbnail');
+          if (nextTile.length) {
+            Gallery.showGalleryModal(nextTile);
+            return currentTile = nextTile;
+          }
+        }, function() {
+          return $('#galleryPopup').modal('hide');
+        });
       }
     }
     return $('#gallery-content').empty();
@@ -49,16 +61,28 @@ Gallery = {
   loadingTile: function() {
     return $('#gallery-submenu').empty();
   },
-  loadMore: function(url) {
+  loadMore: function(url, onSuccess, onEmpty) {
+    if (onSuccess == null) {
+      onSuccess = null;
+    }
+    if (onEmpty == null) {
+      onEmpty = null;
+    }
     return $.get(url, {
       'since-notification-id': lastNotificationId,
       'media': currentMedia
     }, function(data) {
       if (data.trim() === '') {
         $('.load-more-btn').addClass('hidden');
+        if (onEmpty != null) {
+          onEmpty();
+        }
         return false;
       }
       $('#galleryTiles').append(data);
+      if (onSuccess != null) {
+        onSuccess();
+      }
       return true;
     });
   },

@@ -2,6 +2,10 @@ currentTile = null
 
 Gallery =
   galleryTemplate: compileHandlebarsTemplate('gallery-item-template')
+  loadMoreUrl: null
+
+  setLoadMoreUrl: (url) ->
+    Gallery.loadMoreUrl = url
 
   showGalleryModal: (tile) ->
     modalTemplate = compileHandlebarsTemplate('gallery-modal-template')
@@ -20,8 +24,8 @@ Gallery =
   previousTile: ->
     if currentTile != null
       $currentTile = $(currentTile)
-      if $currentTile.prev().length
-        previousTile = $currentTile.prev()
+      previousTile = $currentTile.prev('a.gallery-thumbnail')
+      if previousTile.length
         Gallery.showGalleryModal(previousTile)
         currentTile = previousTile
       else
@@ -34,22 +38,34 @@ Gallery =
         Gallery.showGalleryModal(nextTile)
         currentTile = nextTile
       else
-        $('#galleryPopup').modal('hide')
+        Gallery.loadMore(Gallery.loadMoreUrl,
+          () ->
+            nextTile = $(currentTile).next('a.gallery-thumbnail')
+            if nextTile.length
+              Gallery.showGalleryModal(nextTile)
+              currentTile = nextTile
+          , () ->
+            $('#galleryPopup').modal('hide')
+        )
     $('#gallery-content').empty()
 
   loadingTile: ->
     $('#gallery-submenu').empty()
 
-  loadMore: (url) ->
+  loadMore: (url, onSuccess = null, onEmpty = null) ->
     $.get url, {
       'since-notification-id': lastNotificationId
       'media': currentMedia
     }, (data) ->
       if data.trim() == ''
         $('.load-more-btn').addClass('hidden')
+        if onEmpty?
+          onEmpty()
         return false
       $('#galleryTiles').append(data)
-      true
+      if onSuccess?
+        onSuccess()
+      return true
 
   acceptGalleryPost: (notification) ->
     return true
