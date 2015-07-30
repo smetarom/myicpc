@@ -1,14 +1,12 @@
-package com.myicpc.repository.contest;
+package com.myicpc.repository.contest
 
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import com.github.springtestdbunit.annotation.DatabaseTearDown;
-import com.myicpc.model.contest.Contest;
-import com.myicpc.repository.AbstractRepositoryTest;
-import org.junit.Assert;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.transaction.annotation.Transactional;
+import com.github.springtestdbunit.annotation.DatabaseSetup
+import com.myicpc.model.contest.Contest
+import com.myicpc.repository.AbstractRepositoryTest
+import org.junit.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.transaction.annotation.Transactional
 
 /**
  * @author Roman Smetana

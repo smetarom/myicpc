@@ -19,7 +19,7 @@ import org.springframework.data.domain.PageRequest
  *
  * @author Roman Smetana
  */
-@DatabaseSetup("classpath:dbunit/quest/QuestSubmissionRepositoryTest.xml")
+@DatabaseSetup(["classpath:dbunit/contest/ContestRepositoryTest.xml", "classpath:dbunit/quest/QuestSubmissionRepositoryTest.xml"])
 class QuestSubmissionRepositoryTest extends AbstractRepositoryTest {
     @Autowired
     private QuestSubmissionRepository questSubmissionRepository;

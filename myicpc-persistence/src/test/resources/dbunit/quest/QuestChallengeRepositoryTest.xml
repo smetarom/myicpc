@@ -1,18 +1,4 @@
 <dataset>
-    <contestsettings id="1" jsonscoreboardurl="http://localhost/scoreboard" eventfeedusername="myicpc" eventfeedpassword="myicpc" eventfeedurl="http://localhost/events" generatemessages="false" scoreboardstrategytype="NATIVE" showcountry="true" showregion="false" showuniversity="false" year="2015"/>
-    <mapconfiguration id="1" zoomablemap="false"/>
-    <moduleconfiguration id="1" codeinsightmodule="true" gallerymodule="true" mapmodule="true" pollmodule="true" questmodule="true" rssmodule="true" schedulemodule="true" techtrekmodule="true"/>
-    <questconfiguration id="1" hashtagprefix="Quest" instructionurl="http://localhost/instructions" pointsforvote="10" deadline="2015-06-08 00:00:00.0"/>
-    <webservicesettings id="1" instagramkey="instagramkey" instagramsecret="instagramsecret" showpicasaphotos="false" twitteraccesstoken="twitteraccesstoken" twitteraccesstokensecret="twitteraccesstokensecret" twitterconsumerkey="twitterconsumerkey" twitterconsumersecret="twitterconsumersecret" vineemail="vineemail" vinepassword="vinepassword" wscmtoken="wscmtoken"/>
-    <contest id="1" code="contest-1" hashtag="contest1" length="18000" name="Contest 1" penalty="20.0" shortname="C1" showteamnames="false" starttime="2013-07-13 10:15:02.0" timedifference="60" contestsettingsid="1" mapconfigurationid="1" moduleconfigurationid="1" questconfigurationid="1" webservicesettingsid="1"/>
-
-    <contestsettings id="2" jsonscoreboardurl="http://localhost/scoreboard" eventfeedusername="myicpc" eventfeedpassword="myicpc" eventfeedurl="http://localhost/events" generatemessages="false" scoreboardstrategytype="NATIVE" showcountry="true" showregion="false" showuniversity="false" year="2015"/>
-    <mapconfiguration id="2" zoomablemap="false"/>
-    <moduleconfiguration id="2" codeinsightmodule="true" gallerymodule="true" mapmodule="true" pollmodule="true" questmodule="true" rssmodule="true" schedulemodule="true" techtrekmodule="true"/>
-    <questconfiguration id="2" hashtagprefix="Quest" instructionurl="http://localhost/instructions" pointsforvote="10" deadline="2015-06-08 00:00:00.0"/>
-    <webservicesettings id="2" instagramkey="instagramkey" instagramsecret="instagramsecret" showpicasaphotos="false" twitteraccesstoken="twitteraccesstoken" twitteraccesstokensecret="twitteraccesstokensecret" twitterconsumerkey="twitterconsumerkey" twitterconsumersecret="twitterconsumersecret" vineemail="vineemail" vinepassword="vinepassword" wscmtoken="wscmtoken"/>
-    <contest id="2" code="contest-2" hashtag="contest2" length="18000" name="Contest 2" penalty="20.0" shortname="C2" showteamnames="true" starttime="2013-07-13 10:15:02.0" timedifference="60" contestsettingsid="2" mapconfigurationid="2" moduleconfigurationid="2" questconfigurationid="2" webservicesettingsid="2"/>
-
     <questchallenge id="1" published="true" startdate="2014-06-09 00:00:00.0" enddate="2015-06-15 00:00:00.0" defaultpoints="30" name="Quest 1" description="Description 1" hashtagsuffix="1" contestid="1" requiresphoto="false" requiresvideo="true"/>
     <questchallenge id="2" published="true" startdate="2014-06-08 00:00:00.0" enddate="2015-06-14 00:00:00.0" defaultpoints="20" name="Quest 2" description="Description 2" hashtagsuffix="2" contestid="1" requiresphoto="true" requiresvideo="false"/>
     <questchallenge id="3" published="true" startdate="2014-06-07 00:00:00.0" defaultpoints="10" name="Quest 3" description="Description 3" hashtagsuffix="3" contestid="1" requiresphoto="false" requiresvideo="false"/>

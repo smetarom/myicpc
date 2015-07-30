@@ -1,8 +1,10 @@
 package com.myicpc.service
 
 /**
- * Created by roman on 3/18/2015.
+ * Abstract parent of service layer unit tests
+ *
+ * @author Roman Smetana
  */
-public class AbstractServiceTest  extends groovy.util.GroovyTestCase {
+public abstract class AbstractServiceTest  extends groovy.util.GroovyTestCase {
 
 }

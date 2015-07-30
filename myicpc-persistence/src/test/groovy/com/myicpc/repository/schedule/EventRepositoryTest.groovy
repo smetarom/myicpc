@@ -1,6 +1,7 @@
 package com.myicpc.repository.schedule
 
 import com.github.springtestdbunit.annotation.DatabaseSetup
+import com.myicpc.commons.utils.TimeUtils
 import com.myicpc.model.contest.Contest
 import com.myicpc.model.schedule.Event
 import com.myicpc.model.schedule.EventRole
@@ -16,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional
  *
  * @author Roman Smetana
  */
-@DatabaseSetup("classpath:dbunit/schedule/EventRepositoryTest.xml")
+@DatabaseSetup(["classpath:dbunit/contest/ContestRepositoryTest.xml", "classpath:dbunit/schedule/EventRepositoryTest.xml"])
 class EventRepositoryTest extends AbstractRepositoryTest {
 
     @Autowired
@@ -55,7 +56,7 @@ class EventRepositoryTest extends AbstractRepositoryTest {
 
     @Test
     void testFindAllFutureEvents() {
-        def date = getDate(2014, 6, 22)
+        def date = TimeUtils.getDate(2014, 6, 22)
         def contest = new Contest(id: 1)
         def events = eventRepository.findAllFutureEvents(date, contest)
 
@@ -75,15 +76,15 @@ class EventRepositoryTest extends AbstractRepositoryTest {
 
     @Test
     void testFindAllFutureEventsNullContest() {
-        def date = getDate(2014, 6, 22)
+        def date = TimeUtils.getDate(2014, 6, 22)
         def events = eventRepository.findAllFutureEvents(date, null)
         Assert.assertTrue events.isEmpty()
     }
 
     @Test
     void testFindTimelineUpcomingEvents() {
-        def fromDate = getDateTime(2014, 6, 22, 9, 0)
-        def toDate = getDateTime(2014, 6, 22, 12, 0)
+        def fromDate = TimeUtils.getDateTime(2014, 6, 22, 9, 0)
+        def toDate = TimeUtils.getDateTime(2014, 6, 22, 12, 0)
         def events = eventRepository.findTimelineUpcomingEvents(fromDate, toDate, new Contest(id: 1L))
 
         Assert.assertEquals 1, events.size()
@@ -97,30 +98,30 @@ class EventRepositoryTest extends AbstractRepositoryTest {
 
     @Test
     void testFindTimelineUpcomingEventsNullFromDate() {
-        def toDate = getDateTime(2014, 6, 22, 12, 0)
+        def toDate = TimeUtils.getDateTime(2014, 6, 22, 12, 0)
         def events = eventRepository.findTimelineUpcomingEvents(null, toDate, new Contest(id: 1L))
         Assert.assertTrue events.isEmpty()
     }
 
     @Test
     void testFindTimelineUpcomingEventsNullToDate() {
-        def fromDate = getDateTime(2014, 6, 22, 9, 0)
+        def fromDate = TimeUtils.getDateTime(2014, 6, 22, 9, 0)
         def events = eventRepository.findTimelineUpcomingEvents(fromDate, null, new Contest(id: 1L))
         Assert.assertTrue events.isEmpty()
     }
 
     @Test
     void testFindTimelineUpcomingEventsNullContest() {
-        def fromDate = getDateTime(2014, 6, 22, 9, 0)
-        def toDate = getDateTime(2014, 6, 22, 12, 0)
+        def fromDate = TimeUtils.getDateTime(2014, 6, 22, 9, 0)
+        def toDate = TimeUtils.getDateTime(2014, 6, 22, 12, 0)
         def events = eventRepository.findTimelineUpcomingEvents(fromDate, toDate, null)
         Assert.assertTrue events.isEmpty()
     }
 
     @Test
     void testFindAllBetweenDates() {
-        def fromDate = getDateTime(2014, 6, 22, 7, 0)
-        def toDate = getDateTime(2014, 6, 22, 22, 0)
+        def fromDate = TimeUtils.getDateTime(2014, 6, 22, 7, 0)
+        def toDate = TimeUtils.getDateTime(2014, 6, 22, 22, 0)
         def events = eventRepository.findAllBetweenDates(fromDate, toDate, new Contest(id: 1))
 
         Assert.assertEquals 2, events.size()
@@ -133,22 +134,22 @@ class EventRepositoryTest extends AbstractRepositoryTest {
 
     @Test
     void testFindAllBetweenDatesNullStartDate() {
-        def toDate = getDateTime(2014, 6, 22, 22, 0)
+        def toDate = TimeUtils.getDateTime(2014, 6, 22, 22, 0)
         def events = eventRepository.findAllBetweenDates(null, toDate, new Contest(id: 1))
         Assert.assertTrue events.isEmpty()
     }
 
     @Test
     void testFindAllBetweenDatesNullEndDate() {
-        def fromDate = getDateTime(2014, 6, 22, 9, 0)
+        def fromDate = TimeUtils.getDateTime(2014, 6, 22, 9, 0)
         def events = eventRepository.findAllBetweenDates(fromDate, null, new Contest(id: 1))
         Assert.assertTrue events.isEmpty()
     }
 
     @Test
     void testFindAllBetweenDatesNullContest() {
-        def fromDate = getDateTime(2014, 6, 22, 9, 0)
-        def toDate = getDateTime(2014, 6, 22, 22, 0)
+        def fromDate = TimeUtils.getDateTime(2014, 6, 22, 9, 0)
+        def toDate = TimeUtils.getDateTime(2014, 6, 22, 22, 0)
         def events = eventRepository.findAllBetweenDates(fromDate, toDate, null)
         Assert.assertTrue events.isEmpty()
     }
@@ -168,7 +169,7 @@ class EventRepositoryTest extends AbstractRepositoryTest {
 
     @Test
     void testFindNonpublishedOpenEvents() {
-        def date = getDate(2014, 6, 23)
+        def date = TimeUtils.getDate(2014, 6, 23)
         def events = eventRepository.findNonpublishedOpenEvents(date, new Contest(id: 1L))
 
         Assert.assertEquals 3, events.size()
@@ -187,7 +188,7 @@ class EventRepositoryTest extends AbstractRepositoryTest {
 
     @Test
     void testFindNonpublishedOpenEventsNullContest() {
-        def date = getDate(2014, 6, 23)
+        def date = TimeUtils.getDate(2014, 6, 23)
         def events = eventRepository.findNonpublishedOpenEvents(date, null)
         Assert.assertTrue events.isEmpty()
     }
@@ -197,8 +198,8 @@ class EventRepositoryTest extends AbstractRepositoryTest {
     void testFindEventsForRolesNullRoles() {
         def contest = new Contest(id: 2L)
         def roleIds = null
-        def now = getDateTime(2014, 6, 21, 5, 0)
-        def limit = getDateTime(2014, 6, 23, 5, 0)
+        def now = TimeUtils.getDateTime(2014, 6, 21, 5, 0)
+        def limit = TimeUtils.getDateTime(2014, 6, 23, 5, 0)
         def sortedResult = true
         def events = eventRepository.findEventsForRoles(roleIds, now, limit, contest, sortedResult)
 
@@ -213,8 +214,8 @@ class EventRepositoryTest extends AbstractRepositoryTest {
     void testFindEventsForRolesEmptyRoles() {
         def contest = new Contest(id: 2L)
         def roleIds = new String[0]
-        def now = getDateTime(2014, 5, 21, 15, 0)
-        def limit = getDateTime(2014, 8, 23, 5, 0)
+        def now = TimeUtils.getDateTime(2014, 5, 21, 15, 0)
+        def limit = TimeUtils.getDateTime(2014, 8, 23, 5, 0)
         def sortedResult = true
         def events = eventRepository.findEventsForRoles(roleIds, now, limit, contest, sortedResult)
 
@@ -230,7 +231,7 @@ class EventRepositoryTest extends AbstractRepositoryTest {
         def contest = new Contest(id: 2L)
         String[] roleIds = ["10", "11"]
         def now = null
-        def limit = getDateTime(2014, 6, 22, 23, 0)
+        def limit = TimeUtils.getDateTime(2014, 6, 22, 23, 0)
         def sortedResult = true
         def events = eventRepository.findEventsForRoles(roleIds, now, limit, contest, sortedResult)
 
@@ -246,7 +247,7 @@ class EventRepositoryTest extends AbstractRepositoryTest {
     void testFindEventsForRolesNullLimit() {
         def contest = new Contest(id: 2L)
         String[] roleIds = ["10", "11"]
-        def now = getDateTime(2014, 6, 21, 22, 0)
+        def now = TimeUtils.getDateTime(2014, 6, 21, 22, 0)
         def limit = null
         def sortedResult = true
         def events = eventRepository.findEventsForRoles(roleIds, now, limit, contest, sortedResult)
@@ -262,8 +263,8 @@ class EventRepositoryTest extends AbstractRepositoryTest {
     void testFindEventsForRolesNullContest() {
         def contest = null
         String[] roleIds = ["10", "11"]
-        def now = getDateTime(2014, 6, 23, 5, 0)
-        def limit = getDateTime(2014, 6, 23, 5, 0)
+        def now = TimeUtils.getDateTime(2014, 6, 23, 5, 0)
+        def limit = TimeUtils.getDateTime(2014, 6, 23, 5, 0)
         def sortedResult = true
         def events = eventRepository.findEventsForRoles(roleIds, now, limit, contest, sortedResult)
 
@@ -282,7 +283,7 @@ class EventRepositoryTest extends AbstractRepositoryTest {
 
         Assert.assertEquals 6, events.size()
 
-        def tmpDate = getDate(2014, 1, 1)
+        def tmpDate = TimeUtils.getDate(2014, 1, 1)
         events.each {
             Assert.assertTrue it.roles.isEmpty() ||
                     it.roles.any {it.id == 10} ||

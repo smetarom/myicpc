@@ -1,6 +1,7 @@
 package com.myicpc.repository.poll
 
 import com.github.springtestdbunit.annotation.DatabaseSetup
+import com.myicpc.commons.utils.TimeUtils
 import com.myicpc.model.contest.Contest
 import com.myicpc.repository.AbstractRepositoryTest
 import org.junit.Assert
@@ -12,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
  *
  * @author Roman Smetana
  */
-@DatabaseSetup("classpath:dbunit/poll/PollRepositoryTest.xml")
+@DatabaseSetup(["classpath:dbunit/contest/ContestRepositoryTest.xml", "classpath:dbunit/poll/PollRepositoryTest.xml"])
 class PollRepositoryTest extends AbstractRepositoryTest {
     @Autowired
     private PollRepository pollRepository;
@@ -36,7 +37,7 @@ class PollRepositoryTest extends AbstractRepositoryTest {
 
     @Test
     void testFindOpenPolls() {
-        def date = getDate(2014, 12, 16)
+        def date = TimeUtils.getDate(2014, 12, 16)
         def contest = new Contest(id: 1L)
 
         def polls = pollRepository.findOpenPolls(contest, date)
@@ -60,7 +61,7 @@ class PollRepositoryTest extends AbstractRepositoryTest {
 
     @Test
     void testFindAllNonpublishedStartedPolls() {
-        def date = getDate(2014, 12, 16)
+        def date = TimeUtils.getDate(2014, 12, 16)
         def contest = new Contest(id: 2L)
         def polls = pollRepository.findAllNonpublishedStartedPolls(date, contest)
 

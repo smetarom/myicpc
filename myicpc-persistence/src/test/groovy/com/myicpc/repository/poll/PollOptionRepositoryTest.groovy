@@ -8,7 +8,7 @@ import com.myicpc.repository.AbstractRepositoryTest
  *
  * @author Roman Smetana
  */
-@DatabaseSetup("classpath:dbunit/poll/PollOptionRepositoryTest.xml")
+@DatabaseSetup(["classpath:dbunit/contest/ContestRepositoryTest.xml", "classpath:dbunit/poll/PollOptionRepositoryTest.xml"])
 class PollOptionRepositoryTest extends AbstractRepositoryTest {
 
 }

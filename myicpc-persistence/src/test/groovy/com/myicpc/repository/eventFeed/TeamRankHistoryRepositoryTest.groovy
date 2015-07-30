@@ -6,7 +6,6 @@ import com.myicpc.model.contest.Contest
 import com.myicpc.model.eventFeed.Team
 import com.myicpc.model.eventFeed.TeamRankHistory
 import com.myicpc.repository.AbstractRepositoryTest
-import com.myicpc.repository.contest.ContestRepository
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional

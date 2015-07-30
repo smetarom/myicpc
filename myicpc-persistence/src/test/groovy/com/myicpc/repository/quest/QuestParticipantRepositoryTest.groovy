@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional
  *
  * @author Roman Smetana
  */
-@DatabaseSetup("classpath:dbunit/quest/QuestParticipantRepositoryTest.xml")
+@DatabaseSetup(["classpath:dbunit/contest/ContestRepositoryTest.xml", "classpath:dbunit/quest/QuestParticipantRepositoryTest.xml"])
 class QuestParticipantRepositoryTest extends AbstractRepositoryTest {
     @Autowired
     private QuestParticipantRepository questParticipantRepository;

@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired
  *
  * @author Roman Smetana
  */
-@DatabaseSetup("classpath:dbunit/quest/QuestChallengeRepositoryTest.xml")
+@DatabaseSetup(["classpath:dbunit/contest/ContestRepositoryTest.xml", "classpath:dbunit/quest/QuestChallengeRepositoryTest.xml"])
 class QuestChallengeRepositoryTest extends AbstractRepositoryTest {
     @Autowired
     private QuestChallengeRepository questChallengeRepository;

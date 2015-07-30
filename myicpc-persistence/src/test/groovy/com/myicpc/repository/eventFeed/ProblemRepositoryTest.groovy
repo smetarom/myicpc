@@ -5,7 +5,6 @@ import com.github.springtestdbunit.annotation.DatabaseTearDown
 import com.myicpc.model.contest.Contest
 import com.myicpc.model.eventFeed.Problem
 import com.myicpc.repository.AbstractRepositoryTest
-import com.myicpc.repository.contest.ContestRepository
 import org.junit.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.DataIntegrityViolationException
