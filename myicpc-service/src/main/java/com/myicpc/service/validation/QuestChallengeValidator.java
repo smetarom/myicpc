@@ -17,7 +17,7 @@ public class QuestChallengeValidator extends BusinessEntityValidator<QuestChalle
 
     @Override
     public void validate(QuestChallenge challenge) throws BusinessValidationException {
-        QuestChallenge duplicated = challengeRepository.findByHashtagSuffix(challenge.getHashtagSuffix(), challenge.getContest());
+        QuestChallenge duplicated = challengeRepository.findByHashtagSuffixAndContest(challenge.getHashtagSuffix(), challenge.getContest());
 
         if (duplicated != null && !duplicated.getId().equals(challenge.getId())) {
             throw new BusinessValidationException("quest.error.duplicatedHashtag");

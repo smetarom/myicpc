@@ -87,11 +87,12 @@ class ScheduleMngmServiceTest extends GroovyTestCase {
     }
 
     void testDeleteEvent() {
-        def event = new Event(id: 1L)
+        def contest = new Contest(id: 1L)
+        def event = new Event(id: 1L, contest: contest)
 
         scheduleMngmService.deleteEvent(event)
 
-        Mockito.verify(notificationRepository).deleteByEntityIdAndNotificationType(event.id, NotificationType.SCHEDULE_EVENT_OPEN)
+        Mockito.verify(notificationRepository).deleteByEntityIdAndNotificationType(event.id, NotificationType.SCHEDULE_EVENT_OPEN, contest)
         Mockito.verify(eventRepository).delete(Mockito.any(Event.class))
     }
 

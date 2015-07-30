@@ -22,7 +22,7 @@ public interface QuestChallengeRepository extends JpaRepository<QuestChallenge, 
 
     List<QuestChallenge> findByContestOrderByNameAsc(Contest contest);
 
-    QuestChallenge findByHashtagSuffix(String hashtag, Contest contest);
+    QuestChallenge findByHashtagSuffixAndContest(String hashtag, Contest contest);
 
     /**
      * Finds quest challenges, which have started and are not yet over

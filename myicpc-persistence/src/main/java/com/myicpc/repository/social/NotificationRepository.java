@@ -235,8 +235,8 @@ public interface NotificationRepository extends PagingAndSortingRepository<Notif
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM Notification n WHERE n.entityId = ?1 AND n.notificationType = ?2")
-    void deleteByEntityIdAndNotificationType(Long entityId, NotificationType notificationType);
+    @Query("DELETE FROM Notification n WHERE n.entityId = ?1 AND n.notificationType = ?2 AND n.contest = ?3")
+    void deleteByEntityIdAndNotificationType(Long entityId, NotificationType notificationType, Contest contest);
 
     @Modifying
     @Transactional

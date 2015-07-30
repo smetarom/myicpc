@@ -6,6 +6,7 @@ import com.myicpc.commons.utils.CookieUtils;
 import com.myicpc.commons.utils.TimeUtils;
 import com.myicpc.commons.utils.WikiUtils;
 import com.myicpc.enums.NotificationType;
+import com.myicpc.model.IdGeneratedContestObject;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.AdminNotification;
 import com.myicpc.model.social.Notification;
@@ -24,7 +25,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -40,6 +40,13 @@ public class NotificationService {
             .addAdminNotification()
             .addQuestChallenge()
             .addPollOpen();
+
+    /**
+     * Modifies a given {@link Notification}
+     */
+    public interface NotificationModifier {
+        void modify(Notification notification);
+    }
 
     @Autowired
     private NotificationRepository notificationRepository;
@@ -106,12 +113,16 @@ public class NotificationService {
 //        deleteNoficicationsForEntity(adminNotification.getId(), NotificationType.ADMIN_NOTIFICATION);
     }
 
-    @Transactional(readOnly = true)
-    public List<Notification> getFeaturedQuestNotifications(final List<Long> ignoredFeatured) {
-        List<Notification> notifications = new ArrayList<>();
-        notifications.addAll(notificationRepository.findCurrentQuestChallengeNotifications(new Date(), ignoredFeatured));
+    public void modifyExistingNotifications(final IdGeneratedContestObject entity, final NotificationType notificationType, final NotificationModifier modifier) {
+        List<Notification> notifications = notificationRepository.findByContestAndEntityIdAndNotificationType(entity.getContest(), entity.getId(), notificationType);
+        for (Notification notification : notifications) {
+            modifier.modify(notification);
+        }
+        notificationRepository.save(notifications);
+    }
 
-        return notifications;
+    public void deleteExistingNotifications(final IdGeneratedContestObject entity, final NotificationType notificationType) {
+        notificationRepository.deleteByEntityIdAndNotificationType(entity.getId(), notificationType, entity.getContest());
     }
 
     public TimelineFeaturedNotificationsDTO getTimelineFeaturedNotifications(final List<Long> ignoredFeatured, final Contest contest) {
@@ -216,18 +227,5 @@ public class NotificationService {
             }
         }
         return ignoredFeatured;
-    }
-
-    private static class FeaturedNotificationComparator implements Comparator<Notification> {
-        @Override
-        public int compare(final Notification n1, final Notification n2) {
-            if (n1.getTimestamp() == null) {
-                return -1;
-            }
-            if (n2.getTimestamp() == null) {
-                return 1;
-            }
-            return -1 * n1.getTimestamp().compareTo(n2.getTimestamp());
-        }
     }
 }

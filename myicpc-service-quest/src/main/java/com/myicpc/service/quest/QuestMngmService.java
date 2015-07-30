@@ -14,6 +14,7 @@ import com.myicpc.repository.quest.QuestSubmissionRepository;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.service.exception.BusinessValidationException;
 import com.myicpc.service.notification.NotificationBuilder;
+import com.myicpc.service.notification.NotificationService;
 import com.myicpc.service.publish.PublishService;
 import com.myicpc.service.validation.QuestChallengeValidator;
 import org.apache.commons.lang3.StringUtils;
@@ -32,6 +33,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Management CRUD service for Quest entities
+ *
  * @author Roman Smetana
  */
 @Service
@@ -57,23 +60,29 @@ public class QuestMngmService {
     @Autowired
     private PublishService publishService;
 
+    @Autowired
+    private NotificationService notificationService;
+
+    /**
+     * Saves quest challenge updates
+     *
+     * @param challenge quest challenge to be updated
+     * @return updated quest challenge
+     * @throws BusinessValidationException quest challenge validation failed
+     */
     public QuestChallenge updateQuestChallenge(final QuestChallenge challenge) throws BusinessValidationException {
         challengeValidator.validate(challenge);
         QuestChallenge updatedChallenge = challengeRepository.save(challenge);
 
-        // TODO generate schedule notification
-//        List<Notification> notifications = notificationRepository.findByEntityIdAndNotificationType(challenge.getId(),
-//                NotificationType.QUEST_CHALLENGE);
-//        for (Notification notification : notifications) {
-//            notification.setTitle(challenge.getName());
-//            notification.setBody(challenge.getNotificationDescription());
-//            notification.setUrl(challenge.getImageUrl());
-//            notification.setCode("{\"hashtag\":\"" + challenge.getHashtag() + "\"}");
-//        }
-//        notificationRepository.save(notifications);
-//        if (challenge.isPublished()) {
-//            PublishService.broadcastNotification(notificationService.notificationForQuestChallenge(challenge));
-//        }
+        notificationService.modifyExistingNotifications(challenge, NotificationType.QUEST_CHALLENGE, new NotificationService.NotificationModifier() {
+            @Override
+            public void modify(Notification notification) {
+                notification.setTitle(challenge.getName());
+                notification.setBody(challenge.getNotificationDescription());
+                notification.setImageUrl(challenge.getImageURL());
+                notification.setHashtags(challenge.getHashtag());
+            }
+        });
 
         return updatedChallenge;
     }
@@ -81,8 +90,7 @@ public class QuestMngmService {
     /**
      * Delete Quest challenge and recalculate Quest participants points
      *
-     * @param questChallenge
-     *            challenge to delete
+     * @param questChallenge challenge to delete
      */
     public void deleteQuestChallenge(final QuestChallenge questChallenge) {
         if (questChallenge == null) {
@@ -97,9 +105,9 @@ public class QuestMngmService {
         }
         participantRepository.save(participants);
 
-        // TODO send notification
-//        notificationService.deleteNoficicationsForEntity(questChallenge.getId(), NotificationType.QUEST_CHALLENGE);
+        notificationService.deleteExistingNotifications(questChallenge, NotificationType.QUEST_CHALLENGE);
     }
+
 
     public void bulkParticipantUpdate(final Map<String, String[]> params, final Contest contest) {
         Iterable<QuestParticipant> list = participantRepository.findByContest(contest);
@@ -130,10 +138,10 @@ public class QuestMngmService {
 
     /**
      * Accept a Quest submission
-     *  @param submission
-     *            submission
-     * @param questPoints
-     * @param contest
+     *
+     * @param submission  submission
+     * @param questPoints points awarded the submission
+     * @param contest     contest
      */
     public void acceptQuestSubmission(final QuestSubmission submission, final Integer questPoints, Contest contest) {
         QuestSubmission submissionDB = submissionRepository.findOne(submission.getId());
@@ -150,10 +158,10 @@ public class QuestMngmService {
 
     /**
      * Reject a Quest submission
-     *  @param submission
-     *            submission
-     * @param reasonToReject
-     * @param contest
+     *
+     * @param submission     submission
+     * @param reasonToReject text explaining why the submission was rejected
+     * @param contest        contest
      */
     public void rejectQuestSubmission(final QuestSubmission submission, final String reasonToReject, Contest contest) {
         QuestSubmission submissionDB = submissionRepository.findOne(submission.getId());
@@ -181,11 +189,20 @@ public class QuestMngmService {
         return map;
     }
 
+    /**
+     * Finds all existing {@link ContestParticipantRole}s and converts them to {@link List}
+     *
+     * @return all {@link ContestParticipantRole}s list
+     */
     public List<ContestParticipantRole> getAllContestParticipantRoles() {
         return Arrays.asList(ContestParticipantRole.values());
     }
 
-
+    /**
+     * Finds all open quest challenges, which have not been published yet, and publish them
+     *
+     * @param contest contest
+     */
     @Transactional
     public void createNotificationsForNewQuestChallenges(Contest contest) {
         List<QuestChallenge> challenges = challengeRepository.findAllNonpublishedStartedChallenges(new Date(), contest);

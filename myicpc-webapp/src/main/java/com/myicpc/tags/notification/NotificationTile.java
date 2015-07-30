@@ -87,7 +87,11 @@ public abstract class NotificationTile {
     }
 
     protected String getBody() {
-        return isTemplate ? "{{{body}}}" : notification.getBody();
+        if (isTemplate) {
+            return "{{{body}}}";
+        } else {
+            return StringUtils.isNotEmpty(notification.getBody()) ? notification.getBody() : "";
+        }
     }
 
     protected String getTimestamp() {

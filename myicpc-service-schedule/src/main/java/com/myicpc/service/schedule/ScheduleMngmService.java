@@ -19,6 +19,7 @@ import com.myicpc.repository.schedule.ScheduleDayRepository;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.service.exception.BusinessValidationException;
 import com.myicpc.service.notification.NotificationBuilder;
+import com.myicpc.service.notification.NotificationService;
 import com.myicpc.service.publish.PublishService;
 import com.myicpc.service.validation.EventRoleValidator;
 import com.myicpc.service.validation.LocationValidator;
@@ -83,6 +84,9 @@ public class ScheduleMngmService {
     @Autowired
     private PublishService publishService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     /**
      * Saves the updates of {@code event}
      * <p/>
@@ -94,12 +98,13 @@ public class ScheduleMngmService {
     public Event saveEvent(final Event event) {
         Event updatedEvent = eventRepository.save(event);
 
-        List<Notification> notifications = notificationRepository.findByContestAndEntityIdAndNotificationType(event.getContest(), event.getId(), NotificationType.SCHEDULE_EVENT_OPEN);
-        for (Notification notification : notifications) {
-            notification.setTitle(event.getName());
-            notification.setBody(ScheduleMngmService.createEventNotificationBody(event).toString());
-        }
-        notificationRepository.save(notifications);
+        notificationService.modifyExistingNotifications(updatedEvent, NotificationType.SCHEDULE_EVENT_OPEN, new NotificationService.NotificationModifier() {
+            @Override
+            public void modify(Notification notification) {
+                notification.setTitle(event.getName());
+                notification.setBody(ScheduleMngmService.createEventNotificationBody(event).toString());
+            }
+        });
         return updatedEvent;
     }
 
@@ -111,7 +116,7 @@ public class ScheduleMngmService {
      * @param event event to be deleted
      */
     public void deleteEvent(final Event event) {
-        notificationRepository.deleteByEntityIdAndNotificationType(event.getId(), NotificationType.SCHEDULE_EVENT_OPEN);
+        notificationRepository.deleteByEntityIdAndNotificationType(event.getId(), NotificationType.SCHEDULE_EVENT_OPEN, event.getContest());
         eventRepository.delete(event);
     }
 

@@ -237,7 +237,7 @@ public class QuestController extends GeneralController {
             challenge = challengeRepository.findOne(id);
         } catch (Exception ex) {
             String code = challengeId.substring(contest.getQuestConfiguration().getHashtagPrefix().length());
-            challenge = challengeRepository.findByHashtagSuffix(code, contest);
+            challenge = challengeRepository.findByHashtagSuffixAndContest(code, contest);
         }
         if (challenge == null) {
             throw new EntityNotFoundException();
