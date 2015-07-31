@@ -60,7 +60,6 @@ Timeline = {
     };
     return this.handlerMapping["eventOpen"] = function(notification) {
       notification.body = $.parseJSON(notification.body);
-      console.log(notification.body);
       return timelineEventOpenNotificationTemplate(notification);
     };
   },

@@ -6,6 +6,10 @@ kioskApp.controller('kioskFeedCtrl', ($scope, $sce) ->
   $scope.init = (notifications) ->
     $scope.$apply(() ->
       $scope.notifications = notifications
+      for i in [0..$scope.notifications.length-1] by 1
+        if $scope.notifications[i].type == 'eventOpen'
+          $scope.notifications[i].body = JSON.parse($scope.notifications[i].body)
+        console.log($scope.notifications[i])
     )
 
   $scope.addTile = (data) ->

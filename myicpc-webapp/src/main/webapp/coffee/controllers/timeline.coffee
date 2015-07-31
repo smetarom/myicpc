@@ -41,7 +41,6 @@ Timeline = {
     this.handlerMapping["adminNotification"] = (notification) -> timelineAdminNotificationTemplate(notification)
     this.handlerMapping["eventOpen"] = (notification) ->
       notification.body = $.parseJSON(notification.body)
-      console.log(notification.body)
       timelineEventOpenNotificationTemplate(notification)
 
   acceptFunction: (data) ->

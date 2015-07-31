@@ -7,7 +7,16 @@ kioskApp.controller('kioskFeedCtrl', function($scope, $sce) {
   $scope.notifications = {};
   $scope.init = function(notifications) {
     return $scope.$apply(function() {
-      return $scope.notifications = notifications;
+      var i, _i, _ref, _results;
+      $scope.notifications = notifications;
+      _results = [];
+      for (i = _i = 0, _ref = $scope.notifications.length - 1; _i <= _ref; i = _i += 1) {
+        if ($scope.notifications[i].type === 'eventOpen') {
+          $scope.notifications[i].body = JSON.parse($scope.notifications[i].body);
+        }
+        _results.push(console.log($scope.notifications[i]));
+      }
+      return _results;
     });
   };
   $scope.addTile = function(data) {
