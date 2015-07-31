@@ -98,6 +98,28 @@ officialGalleryApp.factory('officialGalleryService', function($http, $interval) 
   return officialGalleryAppService;
 });
 
+officialGalleryApp.controller('eventGalleryCtrl', function($scope, $http, $location, officialGalleryService) {
+  var appendResultToPhotos;
+  $scope.photos = [];
+  $scope.config = {
+    year: 2013,
+    maxResult: 5,
+    thumbsize: 288,
+    imgmax: 512,
+    picasaUser: 'hq.icpc',
+    albumPrefix: 'Album'
+  };
+  $scope.init = function(eventTag) {
+    if (eventTag !== '') {
+      return $http.get(officialGalleryService.buildSearchUrl($scope.config, eventTag, 1)).success(appendResultToPhotos);
+    }
+  };
+  return appendResultToPhotos = function(data) {
+    $scope.photos = officialGalleryService.transformToGalleryEntities(data);
+    return console.log($scope.photos);
+  };
+});
+
 officialGalleryApp.controller('officialGalleryCtrl', function($scope, $http, $location, officialGalleryService) {
   var appendResultToPhotos, getInitPhotos, getPhotos, processHashtag;
   $scope.photos = [];
@@ -156,7 +178,6 @@ officialGalleryApp.controller('officialGalleryCtrl', function($scope, $http, $lo
     }
   };
   $scope.loadMore = function(onSuccess) {
-    console.log($scope.currentTag);
     if ($scope.photos.length < $scope.maxResult) {
       getPhotos($scope.currentTag, $scope.photos.length + 1, onSuccess);
     } else {
@@ -234,7 +255,6 @@ officialGalleryApp.controller('officialGalleryCtrl', function($scope, $http, $lo
       } else {
         tag = hash;
       }
-      console.log(tag);
       if (tag != null) {
         if (tagType === OfficialGalleryConstants.eventPrefix) {
           $scope.currentEvent = $scope.currentTag = tag;

@@ -10,11 +10,14 @@
     </jsp:attribute>
 
     <jsp:attribute name="javascript">
+		<script src="<c:url value='/js/myicpc/controllers/officialGallery.js'/>"></script>
         <script type="text/javascript">
             function loadEventContent(eventId) {
                 $("#eventContainer").html('<div class="inline-spinner"></div>');
                 $.get( '<spring:url value="${contestURL}/schedule/ajax/event/" />'+eventId, function( data ) {
-                    $("#eventContainer").html(data);
+                    var $eventContainer = $("#eventContainer")
+                    $eventContainer.html(data);
+                    angular.bootstrap($('#eventPhotoGallery'), ['officialGallery']);
                 });
                 setFixedSubmenuHeight();
             };

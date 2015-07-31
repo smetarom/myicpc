@@ -2,6 +2,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="util" uri="http://myicpc.baylor.edu/functions"%>
+<%@ taglib prefix="t" uri="http://myicpc.baylor.edu/tags" %>
 
 <c:if test="${not hideTitle}">
 	<h2>${event.name}</h2>
@@ -58,16 +59,16 @@
 
 		<%--TODO--%>
 		<%--<%@ include file="/WEB-INF/views/fragment/social/tweets.jsp"%>--%>
-		
-        <%--TODO--%>
-		<%--<jsp:include page="/WEB-INF/views/fragment/team/photos.jsp">--%>
-			<%--<jsp:param name="picasaUrl"--%>
-				<%--value="https://picasaweb.google.com/data/feed/api/user/hq.icpc?kind=photo&q=Album${contestYear}%20${event.fullPicasaTag}&start-index=1&max-results=5&imgmax=512&access=public&alt=json"--%>
-			<%--/>--%>
-			<%--<jsp:param name="picasaTag" value="${event.picasaTag}" />--%>
-			<%--<jsp:param name="picasaKind" value="event" />--%>
-			<%--<jsp:param name="picasaUsername" value="${picasaUsername}" />--%>
-		<%--</jsp:include>--%>
+
+		<div id="eventPhotoGallery" ng-controller="eventGalleryCtrl" ng-init="init('${event.picasaTag}')" ng-cloak>
+            <h3 ng-if="photos.length"><spring:message code="officialGallery" /></h3>
+            <div ng-if="photos.length">
+                <t:button href="${contestURL}/gallery/official#${event.fullPicasaTag}" context="info" styleClass="btn-block"><spring:message code="officialGallery.viewAll" /></t:button>
+            </div>
+			<div ng-repeat="photo in photos" class="thumbnail">
+                <img ng-src="{{photo.imageUrl}}" alt="" style="max-height: 350px" />
+            </div>
+		</div>
 	</div>
 </div>
 

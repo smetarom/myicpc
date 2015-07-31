@@ -78,6 +78,28 @@ officialGalleryApp.factory('officialGalleryService', ($http, $interval) ->
   return officialGalleryAppService;
 )
 
+officialGalleryApp.controller('eventGalleryCtrl', ($scope, $http, $location, officialGalleryService) ->
+  $scope.photos = []
+  $scope.config = {
+    year: 2013,
+    maxResult: 5,
+    thumbsize: 288,
+    imgmax: 512,
+    picasaUser: 'hq.icpc',
+    albumPrefix: 'Album'
+  }
+
+  $scope.init = (eventTag) ->
+    if (eventTag != '')
+      $http.get(officialGalleryService.buildSearchUrl($scope.config, eventTag, 1))
+        .success(appendResultToPhotos)
+
+  appendResultToPhotos = (data) ->
+    $scope.photos = officialGalleryService.transformToGalleryEntities(data)
+    console.log $scope.photos
+
+)
+
 officialGalleryApp.controller('officialGalleryCtrl', ($scope, $http, $location, officialGalleryService) ->
   $scope.photos = []
   $scope.currentPhoto = {}
@@ -130,7 +152,6 @@ officialGalleryApp.controller('officialGalleryCtrl', ($scope, $http, $location, 
       getInitPhotos(tag)
 
   $scope.loadMore = (onSuccess) ->
-    console.log($scope.currentTag)
     if $scope.photos.length < $scope.maxResult
       getPhotos($scope.currentTag, $scope.photos.length + 1, onSuccess)
     else
@@ -198,7 +219,6 @@ officialGalleryApp.controller('officialGalleryCtrl', ($scope, $http, $location, 
         tag = hash.substr(tagType.length + 1)
       else
         tag = hash
-      console.log(tag)
       if tag?
         if (tagType == OfficialGalleryConstants.eventPrefix)
           $scope.currentEvent = $scope.currentTag = tag
