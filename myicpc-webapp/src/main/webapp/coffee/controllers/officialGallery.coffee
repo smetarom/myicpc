@@ -7,6 +7,15 @@ OfficialGalleryConstants = {
   personPrefix: "person",
 }
 
+CommonConfig = {
+  year: 2013,
+  maxResult: 30,
+  thumbsize: 288,
+  imgmax: 512,
+  picasaUser: 'hq.icpc',
+  albumPrefix: 'Album'
+}
+
 officialGalleryApp.factory('officialGalleryService', ($http, $interval) ->
   officialGalleryAppService = {};
 
@@ -80,14 +89,8 @@ officialGalleryApp.factory('officialGalleryService', ($http, $interval) ->
 
 officialGalleryApp.controller('eventGalleryCtrl', ($scope, $http, $location, officialGalleryService) ->
   $scope.photos = []
-  $scope.config = {
-    year: 2013,
-    maxResult: 5,
-    thumbsize: 288,
-    imgmax: 512,
-    picasaUser: 'hq.icpc',
-    albumPrefix: 'Album'
-  }
+  $scope.config = CommonConfig
+  $scope.config.maxResult = 5
 
   $scope.init = (eventTag) ->
     if (eventTag != '')
@@ -96,7 +99,21 @@ officialGalleryApp.controller('eventGalleryCtrl', ($scope, $http, $location, off
 
   appendResultToPhotos = (data) ->
     $scope.photos = officialGalleryService.transformToGalleryEntities(data)
-    console.log $scope.photos
+
+)
+
+officialGalleryApp.controller('teamGalleryCtrl', ($scope, $http, $location, officialGalleryService) ->
+  $scope.photos = []
+  $scope.config = CommonConfig
+  $scope.config.maxResult = 5
+
+  $scope.init = (teamTag) ->
+    if (teamTag != '')
+      $http.get(officialGalleryService.buildSearchUrl($scope.config, teamTag, 1))
+      .success(appendResultToPhotos)
+
+  appendResultToPhotos = (data) ->
+    $scope.photos = officialGalleryService.transformToGalleryEntities(data)
 
 )
 
@@ -109,14 +126,7 @@ officialGalleryApp.controller('officialGalleryCtrl', ($scope, $http, $location, 
   $scope.currentEvent = "Photo Tour"
   $scope.currentTeam = ""
   $scope.currentPerson = ""
-  $scope.config = {
-    year: 2013,
-    maxResult: 30,
-    thumbsize: 288,
-    imgmax: 512,
-    picasaUser: 'hq.icpc',
-    albumPrefix: 'Album'
-  }
+  $scope.config = CommonConfig
 
   $scope.eventFilterChanged = () ->
     $scope.searchEvent($scope.currentEvent)

@@ -3,7 +3,16 @@ package com.myicpc.model.teamInfo;
 import com.myicpc.model.IdGeneratedContestObject;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
 import java.util.List;
 
 /**
@@ -175,5 +184,10 @@ public class TeamInfo extends IdGeneratedContestObject {
         } else {
             return name;
         }
+    }
+
+    @Transient
+    public String getFullPicasaTag() {
+        return "team$" + getContestTeamName();
     }
 }

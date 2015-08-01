@@ -7,7 +7,7 @@
   </jsp:attribute>
   
   <jsp:attribute name="headline">
-      <span id="team_${team.id}_rank" class="label label-info">${team.rank }</span> ${teamInfo.contestTeamName}
+      ${teamInfo.contestTeamName}
   </jsp:attribute>
 
   <jsp:body>

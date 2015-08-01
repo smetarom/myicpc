@@ -99,6 +99,10 @@
         <path>/WEB-INF/tags/components/googleAnalytics.tag</path>
     </tag-file>
     <tag-file>
+        <name>hashtagPanel</name>
+        <path>/WEB-INF/tags/components/hashtagPanel.tag</path>
+    </tag-file>
+    <tag-file>
         <name>faIcon</name>
         <path>/WEB-INF/tags/components/faIcon.tag</path>
     </tag-file>

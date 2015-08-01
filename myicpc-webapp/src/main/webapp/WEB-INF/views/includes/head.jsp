@@ -15,3 +15,5 @@
 <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" type="text/css">
 <%-- MyICPC internal resources --%>
 <link rel="stylesheet" href="<c:url value='/css/myicpc/style.css'/>" type="text/css">
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>

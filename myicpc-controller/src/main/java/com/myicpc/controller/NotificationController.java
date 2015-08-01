@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,5 +61,22 @@ public class NotificationController extends GeneralController {
 
         model.addAttribute("featuredNotifications", featuredNotifications);
         return "notification/notificationPanel";
+    }
+
+    @RequestMapping(value = "/{contestCode}/notification/hashtag-panel", method = RequestMethod.GET)
+    public String hashtagPanel(Model model, @PathVariable String contestCode,
+                               @RequestParam String hashtag1,
+                               @RequestParam(required = false) String hashtag2) {
+        Contest contest = getContest(contestCode, model);
+
+        if (hashtag2 == null) {
+            hashtag2 = StringUtils.EMPTY;
+        }
+        List<Notification> notifications = notificationRepository.findByHashTagsAndContest(hashtag1, hashtag2, contest);
+
+        model.addAttribute("notifications", notifications);
+        model.addAttribute("hashtag1", hashtag1.substring(1, hashtag1.length()-1));
+        model.addAttribute("hashtag2", hashtag2.substring(1, hashtag2.length()-1));
+        return "notification/hashtagPanel";
     }
 }

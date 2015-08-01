@@ -53,14 +53,14 @@
 	</div>
 	<div class="col-md-6">
 		<h3>
-			<spring:message code="twitter.for" />
-			${hashTags}
+			<spring:message code="schedule.posts" />
 		</h3>
 
 		<%--TODO--%>
 		<%--<%@ include file="/WEB-INF/views/fragment/social/tweets.jsp"%>--%>
+		<t:hashtagPanel id="eventDetail" contestURL="${contestURL}" hashtag1="${event.hashtag}" hashtag2="${contest.hashtag}" />
 
-		<div id="eventPhotoGallery" ng-controller="eventGalleryCtrl" ng-init="init('${event.picasaTag}')" ng-cloak>
+		<div id="eventPhotoGallery" ng-controller="eventGalleryCtrl" ng-init="init('${event.fullPicasaTag}')" ng-cloak>
             <h3 ng-if="photos.length"><spring:message code="officialGallery" /></h3>
             <div ng-if="photos.length">
                 <t:button href="${contestURL}/gallery/official#${event.fullPicasaTag}" context="info" styleClass="btn-block"><spring:message code="officialGallery.viewAll" /></t:button>

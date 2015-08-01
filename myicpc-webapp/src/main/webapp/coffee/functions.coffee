@@ -177,3 +177,7 @@ previewWikiSyntax = (url, source, target) ->
   $.post(url, { 'text': value }, (data) ->
     $(target).html(data)
   )
+
+appendInputValueToLinkHref = (link, input) ->
+  $link = $(link)
+  $link.attr('href', $link.attr('href') + $(input).val())
