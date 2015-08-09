@@ -1,5 +1,6 @@
 package com.myicpc.tags.notification;
 
+import com.myicpc.commons.utils.MessageUtils;
 import com.myicpc.model.social.Notification;
 import com.myicpc.tags.utils.HandlebarsUtils;
 import com.myicpc.tags.utils.JSPUtils;
@@ -60,6 +61,7 @@ public abstract class NotificationTile {
         out.print("<div class=\"footer\">");
         renderFooterTitle(out);
         renderFooterTimestamp(out);
+        renderFooterShare(out);
         renderFooterAppendix(out);
         out.print("</div>");
     }
@@ -72,6 +74,15 @@ public abstract class NotificationTile {
 
     protected void renderFooterAppendix(JspWriter out) throws IOException {
         // do nothing by default
+    }
+
+    protected void renderFooterShare(JspWriter out) throws IOException {
+        String notificationId = isTemplate ? "{{id}}" : notification.getId().toString();
+        out.print("&middot; ");
+        out.print(String.format("<a href=\"javascript:showShareDialog(%s)\">", notificationId));
+        out.print("<span class=\"glyphicon glyphicon-share-alt\"></span>");
+        out.print(MessageUtils.getMessage("share", locale));
+        out.print("</a>");
     }
 
     protected void renderAvatarImage(JspWriter out, String src, String title) throws IOException, JspException {

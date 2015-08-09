@@ -178,6 +178,14 @@ previewWikiSyntax = (url, source, target) ->
     $(target).html(data)
   )
 
+###
+# Appends a value of {@code input} to the href of {@code link}
+#
+# @param link link HTML element
+# @param input input HTML element
+###
 appendInputValueToLinkHref = (link, input) ->
   $link = $(link)
   $link.attr('href', $link.attr('href') + $(input).val())
+
+

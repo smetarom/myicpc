@@ -38,6 +38,42 @@
     </tag>
 
     <tag>
+        <name>facebookShare</name>
+        <tag-class>com.myicpc.tags.share.FacebookTag</tag-class>
+        <body-content>scriptless</body-content>
+        <attribute>
+            <name>notification</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.myicpc.model.social.Notification</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>twitterShare</name>
+        <tag-class>com.myicpc.tags.share.TwitterTag</tag-class>
+        <body-content>scriptless</body-content>
+        <attribute>
+            <name>notification</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.myicpc.model.social.Notification</type>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>googleShare</name>
+        <tag-class>com.myicpc.tags.share.GoogleTag</tag-class>
+        <body-content>scriptless</body-content>
+        <attribute>
+            <name>notification</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.myicpc.model.social.Notification</type>
+        </attribute>
+    </tag>
+
+    <tag>
         <name>questSubmission</name>
         <tag-class>com.myicpc.tags.quest.QuestSubmissionTag</tag-class>
         <body-content>scriptless</body-content>

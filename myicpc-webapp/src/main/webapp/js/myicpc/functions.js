@@ -236,6 +236,14 @@ previewWikiSyntax = function(url, source, target) {
   });
 };
 
+
+/*
+ * Appends a value of {@code input} to the href of {@code link}
+ *
+ * @param link link HTML element
+ * @param input input HTML element
+ */
+
 appendInputValueToLinkHref = function(link, input) {
   var $link;
   $link = $(link);

@@ -56,8 +56,6 @@
 			<spring:message code="schedule.posts" />
 		</h3>
 
-		<%--TODO--%>
-		<%--<%@ include file="/WEB-INF/views/fragment/social/tweets.jsp"%>--%>
 		<t:hashtagPanel id="eventDetail" contestURL="${contestURL}" hashtag1="${event.hashtag}" hashtag2="${contest.hashtag}" />
 
 		<div id="eventPhotoGallery" ng-controller="eventGalleryCtrl" ng-init="init('${event.fullPicasaTag}')" ng-cloak>

@@ -139,7 +139,6 @@
         <div id="timeline" class="clearfix">
             <%@ include file="/WEB-INF/views/timeline/timelineNewNotifications.jsp"%>
             <%@ include file="/WEB-INF/views/timeline/timelineNotificationTemplates.jsp"%>
-
             <div class="col-sm-0 col-md-2"></div>
             <div class="media col-sm-8 col-md-6 col-lg-5">
                 <div id="timeline-body">

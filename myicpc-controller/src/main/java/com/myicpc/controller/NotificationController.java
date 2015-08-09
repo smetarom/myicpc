@@ -79,4 +79,12 @@ public class NotificationController extends GeneralController {
         model.addAttribute("hashtag2", hashtag2.substring(1, hashtag2.length()-1));
         return "notification/hashtagPanel";
     }
+
+    @RequestMapping(value = "/{contestCode}/notification/{notificationId}/share", method = RequestMethod.GET)
+    public String hashtagPanel(Model model, @PathVariable String contestCode,
+                               @PathVariable Long notificationId) {
+        Contest contest = getContest(contestCode, model);
+        model.addAttribute("notification", notificationRepository.findOne(notificationId));
+        return "notification/shareDialog";
+    }
 }

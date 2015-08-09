@@ -11,6 +11,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.3.0/handlebars.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.4/jquery.touchSwipe.min.js" defer></script>
+<script src="https://apis.google.com/js/platform.js" async defer></script>
 
 <%-- MyICPC internal resources --%>
 <script src="<c:url value='/js/myicpc/functions.js'/>"></script>
@@ -39,3 +40,14 @@
         }
     });
 </script>
+
+<%-- Container for share noticifation dialog --%>
+<script type="application/javascript">
+    showShareDialog = function(notificationId) {
+        $.get('<c:url value="${contestURL}/notification/" />' +notificationId + '/share', function(data) {
+            $('#shareNotificationDialogContainer').html(data);
+            $('#shareNotificationDialog').modal('show');
+        })
+    }
+</script>
+<div id="shareNotificationDialogContainer"></div>
