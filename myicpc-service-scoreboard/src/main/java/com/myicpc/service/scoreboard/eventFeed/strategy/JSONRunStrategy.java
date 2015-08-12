@@ -28,27 +28,19 @@ import java.util.Map;
 public class JSONRunStrategy extends FeedRunStrategy {
     private static final Logger logger = LoggerFactory.getLogger(JSONRunStrategy.class);
 
+    /**
+     * Uses scoreboard JSON snapshot
+     * <p/>
+     * Gets the full snapshot of the current scoreboard and updates the changes
+     * to get the current state
+     *
+     * @param teamProblem team submission
+     * @param contest     contest
+     * @return list of changed teams
+     * @throws EventFeedException error in getting snapshot or JSON parsing error
+     */
     @Override
-    protected List<Team> processScoreboardChanges(TeamProblem teamProblemFromDB, Contest contest) throws EventFeedException {
-        return synchronizeWithJSON(teamProblemFromDB, contest);
-    }
-
-    protected String getJSONContent(final Contest contest) throws EventFeedException {
-        String jsonScoreboardURL = contest.getContestSettings().getJSONScoreboardURL();
-        if (StringUtils.isEmpty(jsonScoreboardURL)) {
-            throw new EventFeedException("Empty JSON scoreboard URL");
-        }
-        String username = contest.getContestSettings().getEventFeedUsername();
-        String password = contest.getContestSettings().getEventFeedPassword();
-
-        try {
-            return IOUtils.toString(WebServiceUtils.connectCDS(jsonScoreboardURL, username, password), FormatUtils.DEFAULT_ENCODING);
-        } catch (IOException e) {
-            throw new EventFeedException(e.getMessage(), e);
-        }
-    }
-
-    protected List<Team> synchronizeWithJSON(final TeamProblem teamProblemFromDB, final Contest contest) throws EventFeedException {
+    protected List<Team> processScoreboardChanges(TeamProblem teamProblem, Contest contest) throws EventFeedException {
         try {
             // Get all teams
             Iterable<Team> teams = teamRepository.findByContest(contest);
@@ -75,7 +67,7 @@ public class JSONRunStrategy extends FeedRunStrategy {
                     throw new EventFeedException("JSON event feed file contains a team, which is not in database.");
                 }
 
-                processTeamSubmission(team, teamProblemFromDB, jsonAdapter, teamsToBroadcast);
+                processTeamSubmission(team, teamProblem, jsonAdapter, teamsToBroadcast);
             }
             teamRepository.save(teams);
             return teamsToBroadcast;
@@ -85,7 +77,22 @@ public class JSONRunStrategy extends FeedRunStrategy {
         }
     }
 
-    protected void processTeamSubmission(final Team team, final TeamProblem teamProblemFromDB, final JSONAdapter teamAdapter,
+    private String getJSONContent(final Contest contest) throws EventFeedException {
+        String jsonScoreboardURL = contest.getContestSettings().getJSONScoreboardURL();
+        if (StringUtils.isEmpty(jsonScoreboardURL)) {
+            throw new EventFeedException("Empty JSON scoreboard URL");
+        }
+        String username = contest.getContestSettings().getEventFeedUsername();
+        String password = contest.getContestSettings().getEventFeedPassword();
+
+        try {
+            return IOUtils.toString(WebServiceUtils.connectCDS(jsonScoreboardURL, username, password), FormatUtils.DEFAULT_ENCODING);
+        } catch (IOException e) {
+            throw new EventFeedException(e.getMessage(), e);
+        }
+    }
+
+    private void processTeamSubmission(final Team team, final TeamProblem teamProblemFromDB, final JSONAdapter teamAdapter,
                                          final List<Team> teamsToBroadcast) throws EventFeedException {
         int oldRank = team.getRank();
         team.setRank(teamAdapter.getInteger("rank"));

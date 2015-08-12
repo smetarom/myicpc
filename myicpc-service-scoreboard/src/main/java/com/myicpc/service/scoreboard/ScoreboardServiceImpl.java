@@ -66,7 +66,6 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
      * submissions
      */
     @Override
-//    @Transactional(readOnly = true)
     public JsonArray getTeamsFullTemplate(final Contest contest) {
         List<TeamDTO> teams = teamRepository.findTeamDTOByContest(contest);
         List<LastTeamSubmissionDTO> submissions = lastTeamProblemRepository.findLastTeamSubmissionDTOByContest(contest);

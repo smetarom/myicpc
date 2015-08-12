@@ -17,6 +17,15 @@ import java.util.Map;
 
 @Component
 public class NativeRunStrategy extends FeedRunStrategy {
+    /**
+     * Calculates the current scoreboard state
+     *
+     * It uses {@link TeamProblem}s to calculate the scoreboard updates
+     *
+     * @param teamProblem solved team submission
+     * @param contest     contest
+     * @return list of changed teams
+     */
     @Override
     protected List<Team> processScoreboardChanges(TeamProblem teamProblem, Contest contest) {
         markIfFirstProblemSolution(teamProblem);
@@ -28,7 +37,7 @@ public class NativeRunStrategy extends FeedRunStrategy {
      *
      * @param teamProblem received team submission
      */
-    protected void markIfFirstProblemSolution(final TeamProblem teamProblem) {
+    private void markIfFirstProblemSolution(final TeamProblem teamProblem) {
         List<TeamProblem> firstSubmissions = teamProblemRepository.findByProblemAndFirstSolved(teamProblem.getProblem(), true);
         if (firstSubmissions.isEmpty()) {
             // if there is no solved problem for a problem, mark this submission
@@ -100,8 +109,6 @@ public class NativeRunStrategy extends FeedRunStrategy {
      * Rank comparator based on ICPC rules
      *
      * @author Roman Smetana
-     * @see <a
-     * href="http://icpc.baylor.edu/worldfinals/rules#HScoringoftheFinals">http://icpc.baylor.edu/worldfinals/rules#HScoringoftheFinals</a>
      */
     public static class ScoreboardComparator implements Comparator<Team>, Serializable {
         private static final long serialVersionUID = -3436155626630004031L;
