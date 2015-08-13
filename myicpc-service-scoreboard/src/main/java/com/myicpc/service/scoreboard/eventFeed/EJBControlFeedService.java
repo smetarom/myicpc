@@ -6,8 +6,6 @@ import com.myicpc.service.scoreboard.exception.EventFeedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.destination.DestinationResolver;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +24,9 @@ public class EJBControlFeedService {
     @Autowired
     private DestinationResolver destinationResolver;
 
-    @Autowired
-    @Qualifier("eventFeedControlTopic")
-    private JmsTemplate jmsTemplate;
+//    @Autowired
+//    @Qualifier("eventFeedControlTopic")
+//    private JmsTemplate jmsTemplate;
 
 
     public void stopEventFeed(final Contest contest) throws EventFeedException {
@@ -53,7 +51,7 @@ public class EJBControlFeedService {
 
     private void sendControlCommand(final EventFeedCommand command) {
 
-        jmsTemplate.convertAndSend(command);
+//        jmsTemplate.convertAndSend(command);
 
 //        jmsTemplate.send(new MessageCreator() {
 //            @Override

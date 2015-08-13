@@ -32,12 +32,28 @@ public class JMSConfig {
         return factory;
     }
 
-    @Bean(name = "eventFeedControlTopic")
-    public JmsTemplate eventFeedControlTopic() {
+    @Bean
+    public DefaultJmsListenerContainerFactory jmsTopicListenerContainerFactory() {
+        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+        factory.setConnectionFactory(connectionFactory());
+        factory.setDestinationResolver(destinationResolver());
+        factory.setConcurrency("3-10");
+        factory.setPubSubDomain(true);
+        return factory;
+    }
+
+    @Bean(name = "jmsTopicTemplate")
+    public JmsTemplate jmsTopicTemplate() {
         JmsTemplate template = new JmsTemplate(connectionFactory());
         template.setDestinationResolver(destinationResolver());
-        template.setDefaultDestinationName("java:/jms/topic/EventFeedControlTopic");
         template.setPubSubDomain(true);
+        return template;
+    }
+
+    @Bean(name = "jmsQueueTemplate")
+    public JmsTemplate jmsQueueTemplate() {
+        JmsTemplate template = new JmsTemplate(connectionFactory());
+        template.setDestinationResolver(destinationResolver());
         return template;
     }
 

@@ -1,7 +1,6 @@
 package com.myicpc.service.scoreboard.eventFeed;
 
 import com.google.common.collect.Maps;
-import com.myicpc.commons.utils.MessageUtils;
 import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.repository.codeInsight.CodeInsightActivityRepository;
@@ -13,15 +12,28 @@ import com.myicpc.repository.eventFeed.TeamProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRankHistoryRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.repository.social.NotificationRepository;
+import com.myicpc.service.scoreboard.dto.eventFeed.EventFeedControlDTO;
+import com.myicpc.service.scoreboard.dto.eventFeed.EventFeedControlDTO.EventFeedControlType;
+import com.myicpc.service.scoreboard.dto.eventFeed.EventFeedControlResponseDTO;
 import com.myicpc.service.scoreboard.exception.EventFeedException;
 import com.myicpc.service.utils.lists.NotificationList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jms.annotation.JmsListener;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Queue;
+import javax.jms.Session;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
@@ -35,8 +47,13 @@ import java.util.concurrent.Future;
 @Service
 public class ControlFeedService {
     private static final Logger logger = LoggerFactory.getLogger(ControlFeedService.class);
+    private static final String EVENT_FEED_CONTROL_TOPIC = "java:/jms/topic/EventFeedControlTopic";
+    public static final int DEFAULT_EVENT_FEED_TIMEOUT = 5 * 1000; // 5 seconds to milliseconds
 
-    private final Map<String, Future<Void>> runningFeedProcessors = Maps.newConcurrentMap();
+    /**
+     * Map between {@link Contest#id} and its {@link RunningFeedProcessDTO}
+     */
+    private static final Map<Long, RunningFeedProcessDTO> runningFeedProcesses = Maps.newConcurrentMap();
 
     @Autowired
     private EventFeedProcessor eventFeedProcessor;
@@ -68,8 +85,16 @@ public class ControlFeedService {
     @Autowired
     private EventFeedControlRepository eventFeedControlRepository;
 
+    @Autowired
+    @Qualifier("jmsTopicTemplate")
+    private JmsTemplate jmsTopicTemplate;
+
+    @Autowired
+    @Qualifier("jmsQueueTemplate")
+    private JmsTemplate jmsQueueTemplate;
+
     @Transactional
-    public void truncateDatabase(Contest contest) throws EventFeedException {
+    private void truncateDatabase(Contest contest) throws EventFeedException {
         try {
             lastTeamProblemRepository.deleteByContest(contest);
             teamProblemRepository.deleteByContest(contest);
@@ -91,35 +116,87 @@ public class ControlFeedService {
     /**
      * Starts execution of feed event processing
      */
-    public void startEventFeed(Contest contest) throws EventFeedException {
-        Future<Void> running = runningFeedProcessors.get(contest.getCode());
-        if (running != null && !running.isDone()) {
-            throw new EventFeedException(MessageUtils.getMessage("admin.panel.feed.reset.runningThread"));
-        }
-        Future<Void> newFeedProcessor;
+    public void startEventFeed(Contest contest) {
+        Future<Void> newFeedProcess;
         if (hasContestPollingStrategy(contest)) {
-            newFeedProcessor = eventFeedProcessor.pollingEventFeed(contest, 20000);
+            // TODO hard coded value!
+            newFeedProcess = eventFeedProcessor.pollingEventFeed(contest, 20000);
         } else {
-            newFeedProcessor = eventFeedProcessor.runEventFeed(contest);
+            newFeedProcess = eventFeedProcessor.runEventFeed(contest);
         }
-        runningFeedProcessors.put(contest.getCode(), newFeedProcessor);
+        runningFeedProcesses.put(contest.getId(), new RunningFeedProcessDTO(newFeedProcess, new Date()));
+    }
+
+    private static RunningFeedProcessDTO getRunningFeedProccesor(Long contestId, Date untilDate) {
+        RunningFeedProcessDTO runningFeedProcess = runningFeedProcesses.get(contestId);
+        if (runningFeedProcess != null && runningFeedProcess.getCreated().before(untilDate)) {
+            return runningFeedProcess;
+        }
+        return null;
     }
 
     /**
-     * Stop event feed
+     * Stops the event feed processing
      * <p/>
-     * Stops all threads executing event feed, clear database and starts a new
-     * thread
+     * It sends command to all instances subscribing to {@link #EVENT_FEED_CONTROL_TOPIC}
+     * and ask them to cancel the event feed processing
+     * <p/>
+     * It waits till the instance, which runs the event feed, terminates the event feed or timeout
      *
-     * @throws IOException
-     * @throws InterruptedException
+     * @param contest contest
      */
-    public void stopEventFeed(Contest contest) throws EventFeedException {
-        Future<Void> running = runningFeedProcessors.get(contest.getCode());
-        if (running != null && !running.isDone()) {
-            boolean cancelled = running.cancel(true);
-            if (!cancelled) {
-                throw new EventFeedException(MessageUtils.getMessage("admin.panel.feed.reset.failed"));
+    public void stopEventFeed(final Contest contest) {
+        final EventFeedControlDTO eventFeedControl =
+                new EventFeedControlDTO(EventFeedControlType.STOP, new Date(), contest.getId());
+        jmsTopicTemplate.setReceiveTimeout(DEFAULT_EVENT_FEED_TIMEOUT);
+        // block until the running event feed terminates and responds or till timeout
+        jmsTopicTemplate.sendAndReceive(EVENT_FEED_CONTROL_TOPIC, new MessageCreator() {
+            @Override
+            public Message createMessage(Session session) throws JMSException {
+                return session.createObjectMessage(eventFeedControl);
+            }
+        });
+    }
+
+    /**
+     * Listen on {@link #EVENT_FEED_CONTROL_TOPIC} and executes incoming commands
+     * <p/>
+     * It processes the event stop action, where it looks up if it has a event feed process running for contest,
+     * which started before the STOP command was created. And if so, it cancels the running job and sends
+     * action response about termination
+     * <p/>
+     * It processes the event feed status command. It looks up if it has a event feed process running for contest.
+     * And if so, it sends action response about the process state.
+     *
+     * @param eventFeedControl event feed command
+     * @param responseQueue    temporary response {@link Queue}
+     */
+    @JmsListener(destination = EVENT_FEED_CONTROL_TOPIC, containerFactory = "jmsTopicListenerContainerFactory")
+    public void processEventFeedControl(EventFeedControlDTO eventFeedControl, @Header(value = "jms_replyTo", required = false) Queue responseQueue) {
+        if (eventFeedControl == null) {
+            return;
+        }
+        RunningFeedProcessDTO runningFeedProccesor = getRunningFeedProccesor(eventFeedControl.getContestId(), eventFeedControl.getSubmittedDate());
+        if (runningFeedProccesor != null && runningFeedProccesor.isRunning()) {
+            final EventFeedControlResponseDTO response;
+            if (eventFeedControl.getEventFeedControlType() == EventFeedControlType.STOP) {
+                boolean cancelled = runningFeedProccesor.getJob().cancel(true);
+                if (!cancelled) {
+                    logger.error("Stopping event feed for contest {} failed.", eventFeedControl.getContestId());
+                }
+                response = new EventFeedControlResponseDTO(EventFeedControlType.STOP);
+            } else if (eventFeedControl.getEventFeedControlType() == EventFeedControlType.STATUS) {
+                response = new EventFeedControlResponseDTO(EventFeedControlType.STATUS);
+            } else {
+                response = null;
+            }
+            if (responseQueue != null && response != null) {
+                jmsQueueTemplate.send(responseQueue, new MessageCreator() {
+                    @Override
+                    public Message createMessage(Session session) throws JMSException {
+                        return session.createObjectMessage(response);
+                    }
+                });
             }
         }
     }
@@ -130,8 +207,7 @@ public class ControlFeedService {
      * Stops all threads executing event feed, clear database and starts a new
      * thread
      *
-     * @throws IOException
-     * @throws InterruptedException
+     * @throws EventFeedException database clear failed
      */
     public void restartEventFeed(Contest contest) throws EventFeedException {
         stopEventFeed(contest);
@@ -148,22 +224,64 @@ public class ControlFeedService {
      * @throws InterruptedException
      * @throws IOException
      */
-    public void resumeEventFeed(Contest contest)throws EventFeedException {
+    public void resumeEventFeed(Contest contest) throws EventFeedException {
         stopEventFeed(contest);
         startEventFeed(contest);
     }
 
+    /**
+     * It gets if the event feed is running on any instance, which subscribes
+     * {@link #EVENT_FEED_CONTROL_TOPIC}
+     *
+     * @param contest contest
+     * @return is event feed process running at the moment
+     */
     public boolean isEventFeedProcessorRunning(Contest contest) {
-        Future<Void> running = runningFeedProcessors.get(contest.getCode());
-        return running == null ? false : !running.isDone();
+        final EventFeedControlDTO eventFeedControl =
+                new EventFeedControlDTO(EventFeedControlType.STATUS, new Date(), contest.getId());
+        jmsTopicTemplate.setReceiveTimeout(DEFAULT_EVENT_FEED_TIMEOUT);
+        // block until gets the event feed status or till timeout
+        Message message = jmsTopicTemplate.sendAndReceive(EVENT_FEED_CONTROL_TOPIC, new MessageCreator() {
+            @Override
+            public Message createMessage(Session session) throws JMSException {
+                return session.createObjectMessage(eventFeedControl);
+            }
+        });
+        return message != null;
     }
 
-    private boolean hasContestPollingStrategy(final Contest contest) {
-        if (contest != null && contest.getContestSettings() != null
-                && contest.getContestSettings().getScoreboardStrategyType() != null) {
-            return contest.getContestSettings().getScoreboardStrategyType().isPolling();
+    private static boolean hasContestPollingStrategy(final Contest contest) {
+        return contest != null &&
+                contest.getContestSettings() != null &&
+                contest.getContestSettings().getScoreboardStrategyType() != null &&
+                contest.getContestSettings().getScoreboardStrategyType().isPolling();
+    }
+
+    /**
+     * Job data holder
+     * <p/>
+     * It holds the link to running event feed process and the date, when the job has started
+     */
+    private static class RunningFeedProcessDTO {
+        private final Future<Void> job;
+        private final Date created;
+
+        public RunningFeedProcessDTO(Future<Void> job, Date created) {
+            this.job = job;
+            this.created = created;
         }
-        return false;
+
+        public Future<Void> getJob() {
+            return job;
+        }
+
+        public Date getCreated() {
+            return created;
+        }
+
+        public boolean isRunning() {
+            return job != null && !job.isDone();
+        }
     }
 
 
