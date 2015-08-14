@@ -2,8 +2,8 @@ package com.myicpc.controller.scoreboard.admin;
 
 import com.myicpc.controller.GeneralAdminController;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.service.scoreboard.eventFeed.EJBControlFeedService;
 import com.myicpc.service.scoreboard.eventFeed.ControlFeedService;
+import com.myicpc.service.scoreboard.eventFeed.EJBControlFeedService;
 import com.myicpc.service.scoreboard.exception.EventFeedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -68,12 +68,8 @@ public class EventFeedController extends GeneralAdminController {
     public String stopFeed(@PathVariable final String contestCode, final RedirectAttributes redirectAttributes) {
         Contest contest = getContest(contestCode, null);
 
-        try {
-            oldControlFeedService.stopEventFeed(contest);
-            successMessage(redirectAttributes, "admin.panel.feed.stop.success");
-        } catch (EventFeedException ex) {
-            errorMessage(redirectAttributes, ex);
-        }
+        oldControlFeedService.stopEventFeed(contest);
+        successMessage(redirectAttributes, "admin.panel.feed.stop.success");
 
         return "redirect:/private"+ getContestURL(contestCode) + "/home";
     }

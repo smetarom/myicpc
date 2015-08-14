@@ -120,7 +120,7 @@ public class ControlFeedService {
         Future<Void> newFeedProcess;
         if (hasContestPollingStrategy(contest)) {
             // TODO hard coded value!
-            newFeedProcess = eventFeedProcessor.pollingEventFeed(contest, 20000);
+            newFeedProcess = eventFeedProcessor.pollingEventFeed(contest, 10000);
         } else {
             newFeedProcess = eventFeedProcessor.runEventFeed(contest);
         }
