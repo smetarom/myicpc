@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <td class="pin">
-    <a href="#" ng-click="pinTeam(team);" onclick=" return false;">
+    <a href="#" ng-click="toggleFollowTeam(team, '${pageContext['request'].contextPath}');" onclick=" return false;">
         <span class="glyphicon" ng-class="{true:'glyphicon-star', 'undefined':'glyphicon-star-empty', false:'glyphicon-star-empty'}[team.followed]"></span>
     </a>
 </td>

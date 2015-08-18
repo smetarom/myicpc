@@ -2,7 +2,7 @@
 
 <tr class="scoreboardRow" ng-click="toogleTeamProblems(team)">
     <td class="pin">
-        <a href="#" ng-click="pinTeam(team);" onclick=" return false;">
+        <a href="javascript:void(0)" ng-click="toggleFollowTeam(team, '${pageContext['request'].contextPath}');" onclick="return false;">
             <span class="glyphicon" ng-class="{true:'glyphicon-star', 'undefined':'glyphicon-star-empty', false:'glyphicon-star-empty'}[team.followed]"></span>
         </a>
     </td>

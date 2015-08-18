@@ -3,7 +3,6 @@ package com.myicpc.controller.scoreboard.admin;
 import com.myicpc.controller.GeneralAdminController;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.service.scoreboard.eventFeed.ControlFeedService;
-import com.myicpc.service.scoreboard.eventFeed.EJBControlFeedService;
 import com.myicpc.service.scoreboard.exception.EventFeedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,17 +19,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class EventFeedController extends GeneralAdminController {
 
     @Autowired
-    private ControlFeedService oldControlFeedService;
-
-    @Autowired
-    @Deprecated
-    private EJBControlFeedService controlFeedService;
+    private ControlFeedService controlFeedService;
 
     @RequestMapping(value = "/private/{contestCode}/feed/status", method = RequestMethod.GET)
     public String feedStatus(@PathVariable final String contestCode, Model model) {
         Contest contest = getContest(contestCode, model);
 
-        boolean isFeedRunning = oldControlFeedService.isEventFeedProcessorRunning(contest);
+        boolean isFeedRunning = controlFeedService.isEventFeedProcessorRunning(contest);
 
         model.addAttribute("isFeedRunning", isFeedRunning);
         return "private/contest/fragment/eventFeedControlPanel";
@@ -41,7 +36,7 @@ public class EventFeedController extends GeneralAdminController {
         Contest contest = getContest(contestCode, null);
 
         try {
-            oldControlFeedService.restartEventFeed(contest);
+            controlFeedService.restartEventFeed(contest);
             successMessage(redirectAttributes, "admin.panel.feed.reset.success");
         } catch (EventFeedException ex) {
             errorMessage(redirectAttributes, ex);
@@ -55,7 +50,7 @@ public class EventFeedController extends GeneralAdminController {
         Contest contest = getContest(contestCode, null);
 
         try {
-            oldControlFeedService.resumeEventFeed(contest);
+            controlFeedService.resumeEventFeed(contest);
             successMessage(redirectAttributes, "admin.panel.feed.resume.success");
         } catch (EventFeedException ex) {
             errorMessage(redirectAttributes, ex);
@@ -68,7 +63,7 @@ public class EventFeedController extends GeneralAdminController {
     public String stopFeed(@PathVariable final String contestCode, final RedirectAttributes redirectAttributes) {
         Contest contest = getContest(contestCode, null);
 
-        oldControlFeedService.stopEventFeed(contest);
+        controlFeedService.stopEventFeed(contest);
         successMessage(redirectAttributes, "admin.panel.feed.stop.success");
 
         return "redirect:/private"+ getContestURL(contestCode) + "/home";

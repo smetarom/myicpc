@@ -70,6 +70,14 @@
                             <th class="text-center"><spring:message code="scoreboard.totalTime" /></th>
                         </tr>
                     </thead>
+                    <tbody class="team_{{team.teamId}}" ng-repeat="team in teams | filter: {followed: true} | orderBy:['teamRank','teamName'] as pinnedTeams">
+                    <%@ include file="/WEB-INF/views/scoreboard/fragment/scoreboardRow_mobile.jsp"%>
+                    </tbody>
+                    <tbody ng-if="pinnedTeams.length > 0">
+                        <tr class="followed-divider">
+                            <td colspan="20"></td>
+                        </tr>
+                    </tbody>
                     <tbody class="team_{{team.teamId}}" ng-repeat="team in teams | filter: filterTeam | orderBy:['teamRank','teamName']">
                         <%@ include file="/WEB-INF/views/scoreboard/fragment/scoreboardRow_mobile.jsp"%>
                     </tbody>

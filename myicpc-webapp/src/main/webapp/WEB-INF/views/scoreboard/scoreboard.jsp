@@ -80,10 +80,10 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr class="team_{{team.teamId}}" ng-repeat="team in teams | filter: filterTeam | filter: {followed: true} | orderBy:['teamRank','teamName']">
+                    <tr class="team_{{team.teamId}}" ng-repeat="team in teams | filter: {followed: true} | orderBy:['teamRank','teamName'] as pinnedTeams">
                         <%@ include file="/WEB-INF/views/scoreboard/fragment/scoreboardRow.jsp"%>
                     </tr>
-                    <tr style="background-color: black;" ng-if="pinnedTeams.length > 0">
+                    <tr class="followed-divider" ng-if="pinnedTeams.length > 0">
                         <td colspan="20"></td>
                     </tr>
                     <tr class="team_{{team.teamId}}" ng-repeat="team in teams | filter: filterTeam | orderBy:['teamRank','teamName']">

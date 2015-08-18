@@ -1,12 +1,15 @@
 scoreboard = angular.module('scoreboard', []);
 
 scoreboard.controller('scoreboardCtrl', ($scope) ->
-  $scope.teams = {}
+  $scope.teams = []
   $scope.filterBy = null
   $scope.filterValue = null
+  $scope.followedTeamIds = getCookieAsIntArray('followedTeams')
 
   $scope.init = (teams) ->
     $scope.$apply(() ->
+      for i in [0..teams.length-1] by 1
+        teams[i].followed = teams[i].teamId in $scope.followedTeamIds
       $scope.teams = teams
     )
 
@@ -82,6 +85,20 @@ scoreboard.controller('scoreboardCtrl', ($scope) ->
 
   $scope.formatTime = (time) ->
     convertSecondsToMinutes(time)
+
+  $scope.toggleFollowTeam = (team, cookiePath) ->
+    teamId = team.teamId
+    if teamId in $scope.followedTeamIds
+      removeIdFromCookieArray('followedTeams', teamId, cookiePath)
+      $scope.followedTeamIds = _.filter($scope.followedTeamIds, (id) ->
+        return id != teamId
+      )
+      team.followed = false
+    else
+      appendIdToCookieArray('followedTeams', teamId, cookiePath)
+      $scope.followedTeamIds.push(teamId)
+      team.followed = true
+    return false
 )
 
 updateScoreboard = (data, ngController = null) ->

@@ -144,7 +144,17 @@ getCookie = (c_name) ->
     c_value = unescape(c_value.substring(c_start, c_end))
   if c_value != null
     c_value = c_value.replace(/"/g, '')
-  c_value
+  return c_value
+
+getCookieAsIntArray = (c_name) ->
+  value = getCookie(c_name)
+  if value?
+    arr = value.split(',')
+    if ($.isArray(arr))
+      for i in [0..arr.length-1] by 1
+        arr[i] = parseInt(arr[i])
+      return arr
+  return []
 
 ###
 # Append a value to the cookie
@@ -159,6 +169,19 @@ appendIdToCookieArray = (c_name, id, path) ->
   else
     value = escape(id)
   setCookie(c_name, value, 7, path)
+
+removeIdFromCookieArray = (c_name, id, path) ->
+  value = ''
+  arr = getCookieAsIntArray(c_name)
+  for i in [0..arr.length-1] by 1
+    if arr[i] != id
+      value += arr[i] + ','
+  value = value.substring(0, value.length - 1)
+  if value == ''
+    setCookie c_name, value, -1, path
+  else
+    setCookie c_name, value, 7, path
+  return
 
 dismissNotification = (notificationId, path) ->
   appendIdToCookieArray('ignoreFeaturedNotifications', notificationId, path)
