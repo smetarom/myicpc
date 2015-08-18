@@ -9,14 +9,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><spring:message code="app.name" /> Kiosk</title>
+    <title><spring:message code="app.name" /></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <jsp:include page="/WEB-INF/views/includes/head.jsp"/>
     <jsp:invoke fragment="head" />
 </head>
-<body>
-    <div class="page-header text-center">
-        <img src="http://myicpc.icpcnews.com/static/images/2015-Slide-Header2.png" style="padding: 5px 0;" />
-    </div>
+<body class="home-page">
     <jsp:doBody/>
     <jsp:include page="/WEB-INF/views/includes/foot.jsp"/>
     <jsp:invoke fragment="javascript" />

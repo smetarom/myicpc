@@ -1,0 +1,28 @@
+body.home-page {
+  background-color: #e9eaed;
+  padding-top: 0;
+}
+
+.page-header.home-page-header {
+  background-color: #222;
+  color: #999;
+
+  h1 {
+    padding-top: 5px;
+    margin-top: 0;
+  }
+}
+
+.contest-container {
+  a.display-block {
+    text-decoration: none;
+  }
+
+  .contest-panel {
+    color: #333;
+
+    .fa {
+      font-size: 5em;
+    }
+  }
+}

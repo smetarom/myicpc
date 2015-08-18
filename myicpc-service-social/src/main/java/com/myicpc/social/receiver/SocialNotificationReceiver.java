@@ -48,15 +48,15 @@ public class SocialNotificationReceiver {
             return;
         }
         switch (jmsEvent.getEventType()) {
-//            case VINE:
-//                processVineUpdates(contest);
-//                break;
-//            case INSTAGRAM:
-//                processInstagramUpdates(contest);
-//                break;
-//            case TWITTER:
-//                processTwitterStart(contest);
-//                break;
+            case VINE:
+                processVineUpdates(contest);
+                break;
+            case INSTAGRAM:
+                processInstagramUpdates(contest);
+                break;
+            case TWITTER:
+                processTwitterStart(contest);
+                break;
             case POLL_OPEN:
                 processPollUpdates(contest);
                 break;

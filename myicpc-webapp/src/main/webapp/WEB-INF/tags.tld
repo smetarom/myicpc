@@ -275,8 +275,8 @@
         <path>/WEB-INF/tags/template/template.tag</path>
     </tag-file>
     <tag-file>
-        <name>templateEmpty</name>
-        <path>/WEB-INF/tags/template/templateEmpty.tag</path>
+        <name>templateHomepage</name>
+        <path>/WEB-INF/tags/template/templateHomepage.tag</path>
     </tag-file>
     <tag-file>
         <name>templateWithFixedSubmenu</name>
