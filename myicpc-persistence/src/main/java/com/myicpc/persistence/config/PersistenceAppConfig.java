@@ -63,7 +63,7 @@ public class PersistenceAppConfig {
         prop.setProperty("hibernate.connection.characterEncoding", "UTF-8");
         prop.setProperty("hibernate.connection.useUnicode", "true");
 
-        prop.setProperty("hibernate.cache.use_second_level_cache", "true");
+//        prop.setProperty("hibernate.cache.use_second_level_cache", "true");
 //        prop.setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.infinispan.JndiInfinispanRegionFactory");
 //        prop.setProperty("hibernate.cache.infinispan.cachemanager", "java:CacheManager");
 //        prop.setProperty("hibernate.cache.use_query_cache", "true");

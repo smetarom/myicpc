@@ -2,13 +2,16 @@ package com.myicpc.social.service;
 
 import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
+import com.myicpc.model.contest.WebServiceSettings;
 import com.myicpc.model.social.BlacklistedUser;
 import com.myicpc.model.social.Notification;
 import com.myicpc.service.notification.NotificationBuilder;
+import com.myicpc.social.dto.TwitterStreamDTO;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import twitter4j.ExtendedMediaEntity;
@@ -29,35 +32,54 @@ import java.util.regex.Pattern;
  * @author Roman Smetana
  */
 @Service
-@Transactional
 public class TwitterService extends ASocialService {
     private static final Logger logger = LoggerFactory.getLogger(TwitterService.class);
     private static final String VIDEO_FORMAT = "video/mp4";
+    private static final String LINK_TO_TWEET = "https://twitter.com/statuses/%s";
 
-    private static final ConcurrentMap<Long, TwitterStream> streamMapping = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<Long, TwitterStreamDTO> streamMapping = new ConcurrentHashMap<>();
+
+    public void startTwitterStreaming(Long contestId) {
+        Contest contest = contestRepository.findOne(contestId);
+        startTwitterStreaming(contest);
+    }
 
     public void startTwitterStreaming(Contest contest) {
-        System.err.println("START TWITTER !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
+        TwitterStream twitterStream = null;
         ConfigurationBuilder cb = createTwitterConfiguration(contest);
-        TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
+        twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
         twitterStream.addListener(new TwitterStatusListener(contest));
         twitterStream.filter(new FilterQuery(0, null, new String[]{"#" + contest.getHashtag()}));
 
-        streamMapping.put(contest.getId(), twitterStream);
+        WebServiceSettings webServiceSettings = contest.getWebServiceSettings();
+        TwitterStreamDTO twitterStreamDTO = new TwitterStreamDTO(twitterStream, contest.getHashtag(),
+                webServiceSettings.getTwitterConsumerKey(), webServiceSettings.getTwitterConsumerSecret(),
+                webServiceSettings.getTwitterAccessToken(), webServiceSettings.getTwitterAccessTokenSecret());
+        streamMapping.put(contest.getId(), twitterStreamDTO);
     }
 
-    public void stopTwitterStreaming(Contest contest) {
-        TwitterStream twitterStream = streamMapping.get(contest.getId());
-        if (twitterStream != null) {
-            twitterStream.shutdown();
-            streamMapping.remove(contest.getId());
+    public void stopTwitterStreaming(Long contestId) {
+        TwitterStreamDTO twitterStreamDTO = streamMapping.get(contestId);
+        if (twitterStreamDTO != null) {
+            TwitterStream twitterStream = twitterStreamDTO.getTwitterStream();
+            if (twitterStream != null) {
+                twitterStream.shutdown();
+                streamMapping.remove(contestId);
+            }
         }
     }
 
-    public void stopAllTwitterStreams() {
-        for (Map.Entry<Long, TwitterStream> entry : streamMapping.entrySet()) {
-            entry.getValue().shutdown();
-            streamMapping.remove(entry.getKey());
+    @Scheduled(cron = "0 */1 * * * *")
+    @Transactional(readOnly = true)
+    public void detectTwitterConfigurationChanges() {
+        for (Map.Entry<Long, TwitterStreamDTO> entry : streamMapping.entrySet()) {
+            Contest contest = contestRepository.findOne(entry.getKey());
+            // TODO stop stream if the contest is over
+            TwitterStreamDTO twitterStreamDTO = entry.getValue();
+            if (twitterStreamDTO.hasConfigChanged(contest.getHashtag(), contest.getWebServiceSettings())) {
+                stopTwitterStreaming(contest.getId());
+                startTwitterStreaming(contest);
+            }
         }
     }
 
@@ -84,22 +106,6 @@ public class TwitterService extends ASocialService {
         publishService.broadcastNotification(notification, notification.getContest());
     }
 
-    private String extractVideoUrlFromTweet(Status twitterStatus) {
-        if (ArrayUtils.isNotEmpty(twitterStatus.getExtendedMediaEntities())) {
-            for (ExtendedMediaEntity mediaEntity : twitterStatus.getExtendedMediaEntities()) {
-                if ("video".equalsIgnoreCase(mediaEntity.getType())) {
-                    for (ExtendedMediaEntity.Variant variant : mediaEntity.getVideoVariants()) {
-                        if (VIDEO_FORMAT.equalsIgnoreCase(variant.getContentType())) {
-                            return variant.getUrl();
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-        return null;
-    }
-
     private ConfigurationBuilder createTwitterConfiguration(final Contest contest) {
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setOAuthConsumerKey(contest.getWebServiceSettings().getTwitterConsumerKey())
@@ -109,7 +115,7 @@ public class TwitterService extends ASocialService {
         return cb;
     }
 
-    class TwitterStatusListener extends StatusAdapter {
+    private class TwitterStatusListener extends StatusAdapter {
         private Contest contest;
 
         public TwitterStatusListener(Contest contest) {
@@ -118,7 +124,7 @@ public class TwitterService extends ASocialService {
 
         @Override
         public void onException(final Exception ex) {
-            logger.error(ex.getMessage(), ex);
+            logger.error("Twitter stream error. Followed hashtag: " + contest.getHashtag(), ex);
         }
 
         @Override
@@ -135,6 +141,7 @@ public class TwitterService extends ASocialService {
             builder.setAuthorName(twitterStatus.getUser().getName());
             builder.setProfilePictureUrl(twitterStatus.getUser().getProfileImageURL());
             builder.setTimestamp(twitterStatus.getCreatedAt());
+            builder.setUrl(String.format(LINK_TO_TWEET, twitterStatus.getId()));
             builder.setContest(contest);
 
             if (!twitterStatus.isRetweet()) {
@@ -164,7 +171,7 @@ public class TwitterService extends ASocialService {
          *            Twitter tweet
          * @return tweet message enhanced by HTML tags
          */
-        protected String parseTweetText(final Status status) {
+        private String parseTweetText(final Status status) {
             String text = null;
             if (status.isRetweet() && status.getRetweetedStatus() != null) {
                 text = "RT @" + status.getRetweetedStatus().getUser().getScreenName() + ": " + status.getRetweetedStatus().getText();
@@ -185,7 +192,7 @@ public class TwitterService extends ASocialService {
          *            tweet body
          * @return hashtags separated by |
          */
-        protected String getHashtagsFromTweet(final String tweet) {
+        private String getHashtagsFromTweet(final String tweet) {
             Pattern pattern = Pattern.compile("(#[\\p{L}+0-9-_]+)");
             Matcher matcher = pattern.matcher(tweet);
             StringBuilder hashtags = new StringBuilder("|");
@@ -193,6 +200,22 @@ public class TwitterService extends ASocialService {
                 hashtags.append(matcher.group().substring(1)).append("|");
             }
             return hashtags.toString();
+        }
+
+        private String extractVideoUrlFromTweet(Status twitterStatus) {
+            if (ArrayUtils.isNotEmpty(twitterStatus.getExtendedMediaEntities())) {
+                for (ExtendedMediaEntity mediaEntity : twitterStatus.getExtendedMediaEntities()) {
+                    if ("video".equalsIgnoreCase(mediaEntity.getType())) {
+                        for (ExtendedMediaEntity.Variant variant : mediaEntity.getVideoVariants()) {
+                            if (VIDEO_FORMAT.equalsIgnoreCase(variant.getContentType())) {
+                                return variant.getUrl();
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            return null;
         }
     }
 }

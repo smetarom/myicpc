@@ -50,18 +50,22 @@ public class Notification extends IdGeneratedContestObject {
     /**
      * URL related to notification
      */
+    @Column(length = 1024)
     private String url;
     /**
      * Source URL of the image
      */
+    @Column(length = 1024)
     private String imageUrl;
     /**
      * Source URL of the video
      */
+    @Column(length = 1024)
     private String videoUrl;
     /**
      * URL to the thumbnail
      */
+    @Column(length = 1024)
     private String thumbnailUrl;
     /**
      * Author username
@@ -74,10 +78,12 @@ public class Notification extends IdGeneratedContestObject {
     /**
      * Profile picture of the author
      */
+    @Column(length = 1024)
     private String profilePictureUrl;
     /**
      * Hashtags separated by |
      */
+    @Column(length = 2048)
     private String hashtags;
     /**
      * Any extra information needed for notification
