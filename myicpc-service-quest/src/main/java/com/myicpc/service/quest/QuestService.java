@@ -126,7 +126,7 @@ public class QuestService {
         List<QuestParticipant> participants;
         // if no roles specified or all roles chosen, then search by contest, else by roles
         if (roles.isEmpty() || roles.size() == maxContestParticipantRoles) {
-            participants = questParticipantRepository.findByContest(contest);
+            participants = questParticipantRepository.findByContestOrderByPointsDescContestParticipantFirstnameAsc(contest);
         } else {
             participants = questParticipantRepository.findByRoles(roles, contest);
         }

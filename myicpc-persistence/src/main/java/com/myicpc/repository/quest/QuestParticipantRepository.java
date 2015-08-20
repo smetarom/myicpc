@@ -20,6 +20,8 @@ public interface QuestParticipantRepository extends PagingAndSortingRepository<Q
 
     List<QuestParticipant> findByContestOrderByContestParticipantLastnameAsc(Contest contest);
 
+    List<QuestParticipant> findByContestOrderByPointsDescContestParticipantFirstnameAsc(Contest contest);
+
     QuestParticipant findByContestAndContestParticipantTwitterUsernameIgnoreCase(Contest contest, String twitterUsername);
 
     QuestParticipant findByContestAndContestParticipantVineUsernameIgnoreCase(Contest contest, String vineUsername);
