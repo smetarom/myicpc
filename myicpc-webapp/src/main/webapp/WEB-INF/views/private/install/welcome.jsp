@@ -14,7 +14,7 @@
           <jsp:attribute name="heading"><spring:message code="installAdmin.welcome.globalSettings.title"/></jsp:attribute>
           <jsp:body>
             <p><spring:message code="installAdmin.welcome.globalSettings.text"/></p>
-            <div class="text-center"><a href="/private/contest/create" class="btn btn-primary"><spring:message code="installAdmin.welcome.globalSettings.btn"/> </a></div>
+            <div class="text-center"><a href="<spring:url value="/private/settings" />" class="btn btn-primary"><spring:message code="installAdmin.welcome.globalSettings.btn"/> </a></div>
           </jsp:body>
       </t:panelWithHeading>
     </div>
@@ -23,7 +23,7 @@
           <jsp:attribute name="heading"><spring:message code="installAdmin.welcome.users.title"/></jsp:attribute>
           <jsp:body>
             <p><spring:message code="installAdmin.welcome.users.text"/></p>
-            <div class="text-center"><a href="/private/contest/create" class="btn btn-primary"><spring:message code="installAdmin.welcome.users.btn"/> </a></div>
+            <div class="text-center"><a href="<spring:url value="/private/users/create" />" class="btn btn-primary"><spring:message code="installAdmin.welcome.users.btn"/> </a></div>
           </jsp:body>
       </t:panelWithHeading>
     </div>
@@ -32,7 +32,7 @@
           <jsp:attribute name="heading"><spring:message code="installAdmin.welcome.contests.title"/></jsp:attribute>
           <jsp:body>
             <p><spring:message code="installAdmin.welcome.contests.text"/></p>
-            <div class="text-center"><a href="/private/contest/create" class="btn btn-primary"><spring:message code="installAdmin.welcome.contests.btn"/> </a></div>
+            <div class="text-center"><a href="<spring:url value="/private/contest/create" />" class="btn btn-primary"><spring:message code="installAdmin.welcome.contests.btn"/> </a></div>
           </jsp:body>
       </t:panelWithHeading>
     </div>

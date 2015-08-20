@@ -40,7 +40,10 @@ public class InstallAdminController extends GeneralAdminController {
         }
         List<ImmutablePair<String, String>> steps = getWizardMenuItems();
         SystemUser adminUser = new SystemUser();
-        GlobalSettings globalSettings = new GlobalSettings();
+        GlobalSettings globalSettings = globalSettingsService.getGlobalSettings();
+        if (globalSettings == null) {
+            globalSettings = new GlobalSettings();
+        }
 
         model.addAttribute("entity", "adminUser");
         model.addAttribute("adminUser", adminUser);
