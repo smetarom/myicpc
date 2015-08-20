@@ -83,7 +83,7 @@
             <h3>
                 <a href="<spring:url value="${contestURL}/quest/challenge/QuestGuide.pdf" />" class="pull-right">
                     <spring:message var="exportMsg" code="quest.challenge.export.title" />
-                    <t:glyphIcon icon="floppy-disk" title="${exportMsg}" />
+                    <t:faIcon icon="print" title="${exportMsg}" />
                 </a>
                 <spring:message code="quest.challenge.title" />
             </h3>
