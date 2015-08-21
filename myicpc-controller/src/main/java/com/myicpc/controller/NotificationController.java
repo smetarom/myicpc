@@ -87,4 +87,10 @@ public class NotificationController extends GeneralController {
         model.addAttribute("notification", notificationRepository.findOne(notificationId));
         return "notification/shareDialog";
     }
+
+    @RequestMapping(value = "/{contestCode}/notification/count", method = RequestMethod.GET)
+    public String notificationCount(Model model, @PathVariable String contestCode) {
+        getContest(contestCode, model);
+        return "notification/notificationCount";
+    }
 }

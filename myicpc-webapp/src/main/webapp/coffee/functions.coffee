@@ -163,13 +163,20 @@ getCookieAsIntArray = (c_name) ->
 # @param path cookie path
 ###
 appendIdToCookieArray = (c_name, id, path) ->
-  value = getCookie(c_name)
-  if value?
-    value += ',' + escape(id)
-  else
+  arr = getCookieAsIntArray(c_name)
+  if arr.length == 0
     value = escape(id)
+  else
+    value = arr.join()
+    value += ',' + escape(id)
   setCookie(c_name, value, 7, path)
 
+###
+# Delete a number value from the cookie
+# @param c_name cookie path
+# @param id appended value
+# @param path cookie path
+###
 removeIdFromCookieArray = (c_name, id, path) ->
   value = ''
   arr = getCookieAsIntArray(c_name)
@@ -183,6 +190,9 @@ removeIdFromCookieArray = (c_name, id, path) ->
     setCookie c_name, value, 7, path
   return
 
+###
+# Dismiss a notification and updates notification counter
+###
 dismissNotification = (notificationId, path) ->
   appendIdToCookieArray('ignoreFeaturedNotifications', notificationId, path)
   $notificationCounter = $("#notification-counter")
@@ -210,5 +220,19 @@ previewWikiSyntax = (url, source, target) ->
 appendInputValueToLinkHref = (link, input) ->
   $link = $(link)
   $link.attr('href', $link.attr('href') + $(input).val())
+
+###
+# Starts polling the notification counter
+#
+# @param ctx application contest path
+# @param contestURL contest URL
+###
+notificationCountPolling = (ctx, contestURL) ->
+  setTimeout(() ->
+    $.get("#{ctx}#{contestURL}/notification/count", (data) ->
+      $('#notification-counter').replaceWith(data);
+      notificationCountPolling(ctx, contestURL)
+    )
+  , 60000)
 
 

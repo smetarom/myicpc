@@ -37,7 +37,7 @@
                 <div ng-view></div>
             </div>
             <div class="col-sm-3">
-                // TODO add twitter feed
+                <t:hashtagPanel id="problemSocial" contestURL="${contestURL}" hashtag1="Problem${problem.code}" hashtag2="${contest.hashtag}" />
             </div>
         </div>
     </jsp:body>

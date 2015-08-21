@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<c:set var="ctx" value="${pageContext['request'].contextPath}"/>
 
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular-sanitize.min.js"></script>
@@ -16,8 +17,11 @@
 <%-- MyICPC internal resources --%>
 <script src="<c:url value='/js/myicpc/functions.js'/>"></script>
 
-<%-- Feedback modal window --%>
 <script type="application/javascript">
+    <%-- Notification count polling --%>
+    notificationCountPolling('${ctx}', '${contestURL}');
+
+    <%-- Feedback modal window --%>
     $(function() {
         $("#feedbackLink").click(function() {
             $.get("<spring:url value="${contestURL}/feedback-form" />", function(data) {
@@ -27,7 +31,7 @@
         });
     });
 
-    $("#notification-counter").click(function() {
+    $("#notification-counter-link").click(function() {
         var $featuredNotificationContainer = $("#featured-notification-container");
         if (!$featuredNotificationContainer.is(":visible")) {
             $.get("<spring:url value="${contestURL}/notification/featured-panel" />", function(data) {
@@ -39,10 +43,8 @@
             $featuredNotificationContainer.slideUp();
         }
     });
-</script>
 
-<%-- Container for share noticifation dialog --%>
-<script type="application/javascript">
+    <%-- Container for share noticifation dialog --%>
     showShareDialog = function(notificationId) {
         $.get('<c:url value="${contestURL}/notification/" />' +notificationId + '/share', function(data) {
             $('#shareNotificationDialogContainer').html(data);

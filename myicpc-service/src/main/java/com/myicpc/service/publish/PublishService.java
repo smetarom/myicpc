@@ -134,7 +134,6 @@ public class PublishService {
             Broadcaster broadcaster = broadcasterFactory.lookup(channel);
             if (broadcaster != null) {
                 broadcaster.broadcast(message);
-                System.out.println(message);
                 return;
             }
         }

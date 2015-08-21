@@ -36,6 +36,12 @@
                 </div>
             </c:forEach>
 
+            <c:if test="${empty notifications}">
+                <div class="no-items-available">
+                    <spring:message code="notification.allCaughtUp" />
+                </div>
+            </c:if>
+
         </div>
 
     </jsp:body>

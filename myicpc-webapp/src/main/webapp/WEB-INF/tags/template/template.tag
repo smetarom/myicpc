@@ -22,7 +22,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <jsp:invoke fragment="head" />
 </head>
-<body class="${sitePreference.mobile ? 'mobile' : ''}">
+<body class="${sitePreference.mobile ? 'mobile' : 'desktop'}">
 <div id="bodyContainer">
     <c:if test="${not sitePreference.mobile}">
         <%@ include file="/WEB-INF/views/includes/header.jsp" %>

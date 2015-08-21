@@ -63,13 +63,14 @@ public abstract class GeneralController extends GeneralAbstractController {
         List<Long> ignoredFeatured = new ArrayList<>();
         ignoredFeatured.add(-1L);
         if (!StringUtils.isEmpty(ignoreFeaturedNotifications)) {
-            try {
                 String[] ss = ignoreFeaturedNotifications.split(",");
                 for (String s : ss) {
-                    ignoredFeatured.add(Long.parseLong(s));
+                    try {
+                        ignoredFeatured.add(Long.parseLong(s));
+                    } catch (NumberFormatException e) {
+                        //ignore non numeric word
+                    }
                 }
-            } catch (Throwable ex) {
-            }
         }
         return notificationService.countFeaturedNotifications(ignoredFeatured, contest);
     }
