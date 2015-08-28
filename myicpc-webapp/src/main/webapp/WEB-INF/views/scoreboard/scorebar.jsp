@@ -41,8 +41,6 @@
                     d3.select("#passed-bar" + s).attr("class", "barhover");
                     d3.select("#failed-bar" + s).attr("class", "barhover");
                     d3.select("#neutrl-bar" + s).attr("class", "barhover");
-                    d3.select("#workon-bar" + s).attr("class", "barhover");
-                    d3.select("#bar-Ntitle" + s).style("fill", "blue");
                     var $scorebarPopup = $("#scorebar-popup");
                     formatProblemArray = function(problems) {
                         var letters = [];
@@ -78,8 +76,6 @@
                     d3.select("#passed-bar" + s).attr("class", "passed");
                     d3.select("#failed-bar" + s).attr("class", "failed");
                     d3.select("#neutrl-bar" + s).attr("class", "neutral");
-                    d3.select("#workon-bar" + s).attr("class", "workon");
-                    d3.select("#bar-Ntitle" + s).style("fill", "black");
                     var $scorebarPopup = $("#scorebar-popup");
                     $scorebarPopup.css('visibility', 'hidden');
                 }

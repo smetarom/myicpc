@@ -180,7 +180,7 @@ scorebar.controller('scorebarCtrl', function($scope) {
       return d["solvedNum"] * $scope.config.problemBarSize;
     }).attr("x", $scope.config.zeroBar + $scope.config.space).attr("height", getHeight).attr("class", "passed").attr("id", function(d, i) {
       return "passed-bar" + d["teamId"];
-    }).attr("onmouseover", "scorebarDisplayText(this);").attr("onmouseout", "scorebarHideText(this);");
+    }).attr("ontouchstart", "scorebarDisplayText(this);").attr("ontouchend", "scorebarHideText(this);").attr("ontouchmove", "scorebarHideText(this);").attr("onmouseover", "scorebarDisplayText(this);").attr("onmouseout", "scorebarHideText(this);");
     failedSpace = 2 * $scope.config.space;
     fshorter = 0;
     if (team.solvedNum === 0) {
@@ -214,7 +214,7 @@ scorebar.controller('scorebarCtrl', function($scope) {
       return d["failedNum"] * $scope.config.problemBarSize - fshorter;
     }).attr("height", getHeight).attr("id", function(d, i) {
       return "failed-bar" + d["teamId"];
-    }).attr("class", "failed").on("mouseover", function(team) {}).attr("onmouseout", "scorebarHideText(this);");
+    }).attr("class", "failed").attr("ontouchstart", "scorebarDisplayText(this);").attr("ontouchend", "scorebarHideText(this);").attr("ontouchmove", "scorebarHideText(this);").attr("onmouseover", "scorebarDisplayText(this);").attr("onmouseout", "scorebarHideText(this);");
     getTextClass = function(team, i) {
       if (team.rank <= $scope.config.bigBarCount) {
         return "bar-title-Visible";

@@ -229,6 +229,9 @@ scorebar.controller('scorebarCtrl', ($scope) ->
     .attr("height", getHeight).attr("class", "passed").attr("id", (d, i) ->
       return "passed-bar" + d["teamId"];
     )
+    .attr("ontouchstart", "scorebarDisplayText(this);")
+    .attr("ontouchend", "scorebarHideText(this);")
+    .attr("ontouchmove", "scorebarHideText(this);")
     .attr("onmouseover", "scorebarDisplayText(this);")
     .attr("onmouseout", "scorebarHideText(this);")
 
@@ -269,9 +272,10 @@ scorebar.controller('scorebarCtrl', ($scope) ->
     ).attr("height", getHeight).attr("id", (d, i) ->
       return "failed-bar" + d["teamId"]
     ).attr("class", "failed")
-    .on("mouseover", (team) ->
-      #chart.selectAll("#bar-Ntitle" + team["teamId"]).attr("class", "bar-title-Visible")
-    )
+    .attr("ontouchstart", "scorebarDisplayText(this);")
+    .attr("ontouchend", "scorebarHideText(this);")
+    .attr("ontouchmove", "scorebarHideText(this);")
+    .attr("onmouseover", "scorebarDisplayText(this);")
     .attr("onmouseout", "scorebarHideText(this);")
 
     # Draw team text on the left
