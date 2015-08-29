@@ -56,12 +56,6 @@
             loadMapConfig();
         }
 
-        $("#webServiceTeamCoords").click(function () {
-            $.get("<spring:url value="/private/contest/map/team-coordinates" />", function (data) {
-                $("#teamCoordinates").val(data);
-            });
-        });
-
         $("#showTeamNamesFalse").change(function () {
             $("#mapConfigContainer").show();
             loadMapConfig();

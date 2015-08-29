@@ -1,14 +1,11 @@
 package com.myicpc.controller.admin;
 
 import com.google.common.collect.Lists;
-import com.google.gson.JsonParser;
-import com.myicpc.commons.utils.WebServiceUtils;
 import com.myicpc.controller.GeneralAdminController;
 import com.myicpc.dto.TranslationDto;
 import com.myicpc.enums.FeedRunStrategyType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.repository.contest.ContestRepository;
-import com.myicpc.service.contest.CMService;
 import com.myicpc.service.contest.ContestService;
 import com.myicpc.service.settings.GlobalSettingsService;
 import com.myicpc.service.webSevice.ContestWSService;
@@ -19,7 +16,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -33,9 +37,6 @@ import java.util.List;
 public class ContestAdminController extends GeneralAdminController {
     @Autowired
     private GlobalSettingsService globalSettingsService;
-
-    @Autowired
-    private CMService cmService;
 
     @Autowired
     private ContestService contestService;
@@ -143,12 +144,6 @@ public class ContestAdminController extends GeneralAdminController {
         model.addAttribute("widths", widths);
         model.addAttribute("mapConfig", config);
         return "private/map/config";
-    }
-
-    @RequestMapping(value = "/private/contest/map/team-coordinates", method = RequestMethod.GET)
-    @ResponseBody
-    public String teamMapCoordinates(@ModelAttribute Contest contest, final Model model) throws IOException {
-        return cmService.getTeamCoordinatesCM(contest);
     }
 
     @RequestMapping(value = "/private/{contestCode}/edit", method = RequestMethod.GET)

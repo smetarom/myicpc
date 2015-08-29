@@ -9,17 +9,18 @@ import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.SSLContexts;
+import org.apache.http.conn.ssl.SSLContextBuilder;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.net.ssl.SSLContext;
 import java.io.IOException;
 import java.security.KeyManagementException;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 
 /**
@@ -54,22 +55,32 @@ public abstract class AbstractWSService {
     private String connectCM(final String server, final String url, final Contest contest) throws IOException {
         HttpGet httpGet = null;
         try {
-            SSLContext sslcontext = SSLContexts.custom().build();
+//            SSLContext sslcontext = SSLContexts.custom().build();
             // Allow TLSv1.2 protocol only
-            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, new String[] { "TLSv1.2" }, null, SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
+//            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, new String[] { "TLSv1.2" }, null, SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
+
+            SSLContextBuilder builder = new SSLContextBuilder();
+            builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
+            builder.useProtocol("TLSv1.2");
+            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(builder.build(), SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
 
             CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
             credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(contest.getWebServiceSettings()
                     .getWsCMToken(), ""));
-            HttpClient httpclient = HttpClientBuilder.create().setDefaultCredentialsProvider(credentialsProvider).setSSLSocketFactory(sslsf).build();
 
-            httpGet = new HttpGet("https://" + server + url);
+            HttpClientBuilder httpClientBuilder = HttpClientBuilder.create()
+                    .setDefaultCredentialsProvider(credentialsProvider)
+                    .setSSLSocketFactory(sslsf);
 
-            HttpResponse response = httpclient.execute(httpGet);
-            HttpEntity entity = response.getEntity();
+            try (CloseableHttpClient httpclient = httpClientBuilder.build()) {
+                httpGet = new HttpGet("https://" + server + url);
 
-            return IOUtils.toString(entity.getContent(), FormatUtils.DEFAULT_ENCODING);
-        } catch (KeyManagementException | NoSuchAlgorithmException ex) {
+                HttpResponse response = httpclient.execute(httpGet);
+                HttpEntity entity = response.getEntity();
+
+                return IOUtils.toString(entity.getContent(), FormatUtils.DEFAULT_ENCODING);
+            }
+        } catch (KeyManagementException | NoSuchAlgorithmException | KeyStoreException ex) {
             throw new IOException(ex);
         } finally {
             releaseConnection(httpGet);
