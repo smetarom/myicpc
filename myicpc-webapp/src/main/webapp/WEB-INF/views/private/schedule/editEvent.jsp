@@ -40,10 +40,16 @@
 		</form:form>
 		
 		<script type="text/javascript">
-			$(function() {				
-				$('#startDate').datetimepicker(datePickerOptions);
+			$(function() {
+				var startDate = $('#startDate');
+				var endDate = $('#endDate');
 
-				$('#endDate').datetimepicker(datePickerOptions);
+                startDate.datetimepicker(createDateTimePickerOption(function() {
+                    if (!endDate.val()) {
+                        endDate.val(startDate.val());
+                    }
+                }));
+                endDate.datetimepicker(datePickerOptions);
 			});
 		</script>
     </jsp:body>

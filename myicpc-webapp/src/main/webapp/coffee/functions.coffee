@@ -46,6 +46,11 @@ datePickerOptions = {
   clockType: 24
 }
 
+createDateTimePickerOption = (onClose) ->
+  merged = {'onClose': onClose}
+  $.extend(merged, datePickerOptions);
+  return merged
+
 convertSecondsToMinutes = (seconds) ->
   seconds // 60
 
