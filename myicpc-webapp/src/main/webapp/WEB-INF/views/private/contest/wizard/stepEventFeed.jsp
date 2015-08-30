@@ -14,7 +14,6 @@
 </div>
 <t:springCheckbox path="contestSettings.generateMessages" labelCode="contest.generateMessages" styleClass="checkboxSwitch" hintCode="contest.generateMessages.hint" />
 <t:springCheckbox path="contestSettings.showRegion" labelCode="contest.showRegion" styleClass="checkboxSwitch" hintCode="contest.showRegion.hint" />
-<t:springCheckbox path="contestSettings.showRegion" labelCode="contest.showRegion" styleClass="checkboxSwitch" hintCode="contest.showRegion.hint" />
 <t:springCheckbox path="contestSettings.showUniversity" labelCode="contest.showUniversity" styleClass="checkboxSwitch" hintCode="contest.showUniversity.hint" />
 <t:springCheckbox path="contestSettings.showCountry" labelCode="contest.showCountry" styleClass="checkboxSwitch" hintCode="contest.showCountry.hint" />
 
