@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/views/includes/taglibs.jsp" %>
 
-<t:springInput labelCode="contest.eventFeedURL" path="contestSettings.eventFeedURL" required="true"
+<t:springInput type="url" labelCode="contest.eventFeedURL" path="contestSettings.eventFeedURL" required="true"
                hintCode="contest.eventFeedURL.hint"/>
 <t:springInput labelCode="contest.eventFeedUsername" path="contestSettings.eventFeedUsername"
                hintCode="contest.eventFeedUsername.hint"/>
@@ -9,7 +9,7 @@
 <t:springSelect labelCode="contest.scoreboardStrategy" path="contestSettings.scoreboardStrategyType"
                 options="${scoreboardStrategies}" itemValue="name" itemLabel="label" required="true"/>
 <div id="JSONUrlField">
-    <t:springInput labelCode="contest.JSONScoreboardURL" path="contestSettings.JSONScoreboardURL"
+    <t:springInput type="url" labelCode="contest.JSONScoreboardURL" path="contestSettings.JSONScoreboardURL"
                    hintCode="contest.JSONScoreboardURL.hint"/>
 </div>
 <t:springCheckbox path="contestSettings.generateMessages" labelCode="contest.generateMessages" styleClass="checkboxSwitch" hintCode="contest.generateMessages.hint" />
