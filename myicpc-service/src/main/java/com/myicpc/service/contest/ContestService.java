@@ -1,5 +1,6 @@
 package com.myicpc.service.contest;
 
+import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.repository.contest.ContestRepository;
 import com.myicpc.service.exception.ContestNotFoundException;
@@ -62,6 +63,8 @@ public class ContestService {
 
     @Transactional
     public void saveContest(final Contest contest) {
+        // remove # from hashtag
+        contest.setHashtag(FormatUtils.removeHashFromHashtag(contest.getHashtag()));
         contestRepository.save(contest);
     }
 
@@ -71,5 +74,4 @@ public class ContestService {
 
         contestRepository.delete(contest);
     }
-
 }

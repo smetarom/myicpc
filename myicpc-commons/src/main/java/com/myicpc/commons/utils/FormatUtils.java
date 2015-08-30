@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.charset.Charset;
-import java.text.DateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,6 +52,16 @@ public class FormatUtils {
         regionMapping.put("Latin", "Lat.");
         regionMapping.put("North", "N.");
         regionMapping.put("South", "S.");
+    }
+
+    public static String removeHashFromHashtag(String hashtag) {
+        if (StringUtils.isEmpty(hashtag)) {
+            return hashtag;
+        }
+        if (hashtag.charAt(0) == '#') {
+            return hashtag.substring(1);
+        }
+        return hashtag;
     }
 
     /**
