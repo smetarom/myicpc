@@ -7,6 +7,7 @@ import com.myicpc.enums.FeedRunStrategyType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.repository.contest.ContestRepository;
 import com.myicpc.service.contest.ContestService;
+import com.myicpc.service.exception.WebServiceException;
 import com.myicpc.service.settings.GlobalSettingsService;
 import com.myicpc.service.webSevice.ContestWSService;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -76,6 +77,7 @@ public class ContestAdminController extends GeneralAdminController {
         contest.getContestSettings().setYear(Calendar.getInstance().get(Calendar.YEAR));
         contest.setShowTeamNames(true);
         contest.getQuestConfiguration().setHashtagPrefix(getMessage("quest.hashtag.default"));
+        contest.getQuestConfiguration().setContest(contest);
 
         return createContest(1, contest, model);
     }
@@ -122,7 +124,7 @@ public class ContestAdminController extends GeneralAdminController {
 
     @RequestMapping(value = "/private/contest/cm-contest-details", method = RequestMethod.GET)
     @ResponseBody
-    public String getContestDetails(@ModelAttribute Contest contest) throws IOException {
+    public String getContestDetails(@ModelAttribute Contest contest) throws IOException, WebServiceException {
         return contestWSService.getContestDetailFromCM(contest);
     }
 
