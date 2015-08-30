@@ -14,7 +14,8 @@
 	</jsp:attribute>
 
     <jsp:attribute name="controls">
-        <a href='<spring:url value="/private${contestURL}/kiosk/content/create" />' class="btn btn-default btn-hover"><t:glyphIcon icon="plus"/> <spring:message code="kioskContentAdmin.create" /></a>
+        <t:button href="/private${contestURL}/kiosk/content/create" styleClass="btn-hover"><t:glyphIcon icon="plus"/> <spring:message code="kioskContentAdmin.create" /></t:button>
+        <t:button href="${contestURL}/kiosk/custom" styleClass="btn-hover"><t:faIcon icon="eye"/> <spring:message code="kioskContentAdmin.seePage" /></t:button>
     </jsp:attribute>
 
   <jsp:body>
