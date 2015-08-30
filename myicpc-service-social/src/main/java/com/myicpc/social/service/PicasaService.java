@@ -22,10 +22,12 @@ import com.google.gson.JsonPrimitive;
 import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
+import com.myicpc.model.contest.WebServiceSettings;
 import com.myicpc.model.social.GalleryAlbum;
 import com.myicpc.model.social.Notification;
 import com.myicpc.repository.social.GalleryAlbumRepository;
 import com.myicpc.repository.social.NotificationRepository;
+import com.myicpc.service.exception.BusinessValidationException;
 import com.myicpc.service.exception.WebServiceException;
 import com.myicpc.service.notification.NotificationBuilder;
 import com.myicpc.service.publish.PublishService;
@@ -75,14 +77,20 @@ public class PicasaService {
     @Autowired
     private PublishService publishService;
 
-    public List<PicasaPhoto> getPrivatePhotos(final Contest contest) throws WebServiceException {
+    public List<PicasaPhoto> getPrivatePhotos(final Contest contest) throws WebServiceException, BusinessValidationException {
+        WebServiceSettings webServiceSettings = contest.getWebServiceSettings();
+        if (StringUtils.isAnyEmpty(webServiceSettings.getPicasaUsername(),
+                webServiceSettings.getPicasaPassword(),
+                webServiceSettings.getPicasaPrivateAlbumId())) {
+            throw new BusinessValidationException("galleryAdmin.picasa.photos.config.missing");
+        }
         try {
             List<PicasaPhoto> photos = new ArrayList<>();
-            URL searchURL = new URL(String.format(PICASA_PHOTOS_URL, contest.getWebServiceSettings().getPicasaUsername(), contest.getWebServiceSettings().getPicasaPrivateAlbumId()) + "?kind=photo&imgmax=800&thumbsize=160");
+            URL searchURL = new URL(String.format(PICASA_PHOTOS_URL, webServiceSettings.getPicasaUsername(), webServiceSettings.getPicasaPrivateAlbumId()) + "?kind=photo&imgmax=800&thumbsize=160");
 
             // call Picasa web service
             // TODO add appName
-            PicasawebService picasawebService = createPicasaService(null, contest.getWebServiceSettings().getPicasaUsername(), contest.getWebServiceSettings().getPicasaPassword());
+            PicasawebService picasawebService = createPicasaService(null, webServiceSettings.getPicasaUsername(), webServiceSettings.getPicasaPassword());
             GDataRequest request = picasawebService.createRequest(RequestType.QUERY, searchURL, ContentType.APPLICATION_XML);
             request.execute();
 

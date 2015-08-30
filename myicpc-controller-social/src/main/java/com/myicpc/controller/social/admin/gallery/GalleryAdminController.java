@@ -5,6 +5,7 @@ import com.myicpc.controller.GeneralAdminController;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.GalleryAlbum;
 import com.myicpc.repository.social.GalleryAlbumRepository;
+import com.myicpc.service.exception.BusinessValidationException;
 import com.myicpc.service.exception.WebServiceException;
 import com.myicpc.social.dto.PicasaPhoto;
 import com.myicpc.social.service.PicasaService;
@@ -139,6 +140,8 @@ public class GalleryAdminController extends GeneralAdminController {
         } catch (WebServiceException e) {
             logger.error("Error when receiving photos from Picasa", e);
             model.addAttribute("errorMsg", getMessage("galleryAdmin.picasa.photos.error"));
+        } catch (BusinessValidationException e) {
+            model.addAttribute("errorMsg", getMessage(e.getMessageCode()));
         }
 
         model.addAttribute("newPhotos", newPhotos);
