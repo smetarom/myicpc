@@ -23,6 +23,7 @@ import com.myicpc.service.notification.NotificationService;
 import com.myicpc.service.publish.PublishService;
 import com.myicpc.service.schedule.dto.EditScheduleDTO;
 import com.myicpc.service.validation.EventRoleValidator;
+import com.myicpc.service.validation.EventValidator;
 import com.myicpc.service.validation.LocationValidator;
 import com.myicpc.service.validation.ScheduleDayValidator;
 import org.apache.commons.collections4.CollectionUtils;
@@ -63,6 +64,9 @@ public class ScheduleMngmService {
     private EventRepository eventRepository;
 
     @Autowired
+    private EventValidator eventValidator;
+
+    @Autowired
     private LocationRepository locationRepository;
 
     @Autowired
@@ -97,7 +101,8 @@ public class ScheduleMngmService {
      * @param event event to be updated
      * @return updated event
      */
-    public Event saveEvent(final Event event) {
+    public Event saveEvent(final Event event) throws BusinessValidationException {
+        eventValidator.validate(event);
         Event updatedEvent = eventRepository.save(event);
 
         notificationService.modifyExistingNotifications(updatedEvent, NotificationType.SCHEDULE_EVENT_OPEN, new NotificationService.NotificationModifier() {
@@ -145,7 +150,7 @@ public class ScheduleMngmService {
      * @param editScheduleDTO holder with updated events
      */
     @Transactional
-    public void saveBulkEdit(final EditScheduleDTO editScheduleDTO) {
+    public void saveBulkEdit(final EditScheduleDTO editScheduleDTO) throws BusinessValidationException {
         if (editScheduleDTO == null || CollectionUtils.isEmpty(editScheduleDTO.getEvents())) {
             return;
         }

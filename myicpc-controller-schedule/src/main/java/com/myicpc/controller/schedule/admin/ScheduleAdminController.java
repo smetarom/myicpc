@@ -87,9 +87,20 @@ public class ScheduleAdminController extends GeneralAdminController {
 
     @RequestMapping(value = "/private/{contestCode}/schedule/edit", method = RequestMethod.POST)
     public String updateSchedule(@PathVariable final String contestCode, @Valid @ModelAttribute("eventsWrapper") final EditScheduleDTO scheduleDTO,
-                              final RedirectAttributes redirectAttributes) {
-        scheduleMngmService.saveBulkEdit(scheduleDTO);
-        successMessage(redirectAttributes, "save.success");
+                                 final BindingResult result, final Model model, final RedirectAttributes redirectAttributes) {
+        Contest contest = getContest(contestCode, model);
+        model.addAttribute("locations", locationRepository.findByContestOrderByNameAsc(contest));
+        model.addAttribute("scheduleDays", scheduleDayRepository.findByContestOrderByDateAsc(contest));
+        model.addAttribute("eventRoles", eventRoleRepository.findByContestOrderByNameAsc(contest));
+        if (result.hasErrors()) {
+            return "private/schedule/scheduleEdit";
+        }
+        try {
+            scheduleMngmService.saveBulkEdit(scheduleDTO);
+            successMessage(redirectAttributes, "save.success");
+        } catch (BusinessValidationException e) {
+            errorMessage(redirectAttributes, e.getMessageCode());
+        }
 
         return "redirect:/private/" + contestCode + "/schedule";
     }
@@ -153,6 +164,7 @@ public class ScheduleAdminController extends GeneralAdminController {
     @RequestMapping(value = "/private/{contestCode}/schedule/updateEvent", method = RequestMethod.POST)
     public String updateEvent(@PathVariable final String contestCode, @Valid @ModelAttribute("event") final Event event, final BindingResult result,
                               final Model model) {
+        getContest(contestCode, model);
         model.addAttribute("scheduleDays", scheduleDayRepository.findByContestOrderByDateAsc(event.getContest()));
         model.addAttribute("locations", locationRepository.findByContestOrderByNameAsc(event.getContest()));
         model.addAttribute("headlineTitle", getMessage("scheduleAdmin.edit"));
@@ -160,7 +172,12 @@ public class ScheduleAdminController extends GeneralAdminController {
             return "private/schedule/editEvent";
         }
 
-        scheduleMngmService.saveEvent(event);
+        try {
+            scheduleMngmService.saveEvent(event);
+        } catch (BusinessValidationException ex) {
+            result.rejectValue("code", ex.getMessageCode());
+            return "private/schedule/editEvent";
+        }
 
         return "redirect:/private/" + contestCode + "/schedule";
     }
