@@ -1,14 +1,19 @@
 package com.myicpc.service.webSevice;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.myicpc.commons.adapters.JSONAdapter;
 import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.dto.TranslationDto;
 import com.myicpc.model.contest.Contest;
+import com.myicpc.service.exception.WebServiceException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 /**
@@ -30,18 +35,25 @@ public class ContestWSService extends AbstractWSService {
         return new TranslationDto("contestAdmin.wsCheck." + jsonAdapter.getString("code"), jsonAdapter.getString("message"));
     }
 
-    public String getContestDetailFromCM(final Contest contest) throws IOException {
+    public String getContestDetailFromCM(final Contest contest) throws IOException, WebServiceException {
         String json = (String) connectCM("/ws/myicpc/contest/" + contest.getCode() + "/details", contest);
-        JsonObject response = new JsonParser().parse(json).getAsJsonObject();
-        JSONAdapter jsonAdapter = new JSONAdapter(response);
-        response.addProperty("hashtag", FormatUtils.clearHashtag(jsonAdapter.getString("hashtag")));
+        JsonObject responseParent = new JsonParser().parse(json).getAsJsonObject();
+        Set<Map.Entry<String, JsonElement>> children = responseParent.entrySet();
+        if (children.size() == 1) {
+            JsonObject response = children.iterator().next().getValue().getAsJsonObject();
+            JSONAdapter jsonAdapter = new JSONAdapter(response);
+            response.addProperty("hashtag", FormatUtils.clearHashtag(jsonAdapter.getString("hashtag")));
 
-        TimeZone timeZone = TimeZone.getTimeZone(jsonAdapter.getString("timeZone"));
-        response.addProperty("offset", timeZone.getRawOffset() / 60000);
-
-        response.addProperty("startDate", jsonAdapter.getString("start") + " 00:00:00");
-        response.addProperty("isWorldFinals", jsonAdapter.getString("key", "").contains("World-Finals"));
-        return response.toString();
+            String timeZoneName = jsonAdapter.getString("timeZone");
+            if (StringUtils.isNotEmpty(timeZoneName)) {
+                TimeZone timeZone = TimeZone.getTimeZone(timeZoneName);
+                response.addProperty("offset", timeZone.getRawOffset() / 60000);
+            }
+            response.addProperty("startDate", jsonAdapter.getString("start") + " 00:00:00");
+            response.addProperty("isWorldFinals", jsonAdapter.getString("key", "").contains("World-Finals"));
+            return response.toString();
+        }
+        throw new WebServiceException("No valid response on CM WD contest detail.");
     }
 
 }
