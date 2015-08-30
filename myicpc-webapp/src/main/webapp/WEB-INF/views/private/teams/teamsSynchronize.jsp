@@ -80,28 +80,5 @@
                 </t:plainForm>
             </div>
         </div>
-
-        <hr />
-        // TODO Remove this form and get rid of ID mapping
-        <form method="post" action='<spring:url value="/private${contestURL}/teams/contestteamidmapping" />' class="form-horizontal col-sm-10" enctype="multipart/form-data">
-            <fieldset>
-                <legend>
-                    <spring:message code="teamAdmin.teamContestIds" />
-                </legend>
-                <div class="form-group">
-                    <label for="teamContestJSON" class="col-sm-3 control-label"><spring:message code="teamAdmin.teamContestIds.file" />:* </label>
-                    <div class="col-sm-9">
-                        <input type="file" class="form-control" name="teamContestJSON" id="teamContestJSON" accept=".json" required="required">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-3 col-sm-9">
-                        <button type="submit" class="btn btn-primary">
-                            <spring:message code="teamAdmin.teamContestIds.btn" />
-                        </button>
-                    </div>
-                </div>
-            </fieldset>
-        </form>
     </jsp:body>
 </t:templateAdmin>
