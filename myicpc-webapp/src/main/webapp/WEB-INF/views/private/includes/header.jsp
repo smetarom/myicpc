@@ -71,11 +71,14 @@
                     </ul>
                 </li>
             </c:if>
-                <li><a href='<spring:url value="/private${contestURL}/kiosk" />'><spring:message code="nav.admin.kiosk" /></a></li>
+            <li><a href='<spring:url value="/private${contestURL}/kiosk" />'><spring:message code="nav.admin.kiosk" /></a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li>
                 <a href="<spring:url value="/private${contestURL}/edit" />"><t:tooltip titleCode="contestAdmin.edit"><t:glyphIcon icon="pencil" /></t:tooltip></a>
+            </li>
+            <li>
+                <a href='<spring:url value="/private${contestURL}/access" />'><t:tooltip titleCode="nav.admin.contestAccess"><t:faIcon icon="lock" /></t:tooltip></a>
             </li>
             <%@ include file="/WEB-INF/views/private/includes/header_right_appendix.jsp"%>
         </ul>

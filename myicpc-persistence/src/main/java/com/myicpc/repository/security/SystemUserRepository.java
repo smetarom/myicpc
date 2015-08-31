@@ -1,9 +1,10 @@
 package com.myicpc.repository.security;
 
+import com.myicpc.model.contest.Contest;
 import com.myicpc.model.security.SystemUser;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
@@ -22,4 +23,10 @@ public interface SystemUserRepository extends JpaRepository<SystemUser, Long> {
 
     @Query("SELECT DISTINCT u FROM SystemUser u LEFT JOIN FETCH u.roles ORDER BY u.username")
     List<SystemUser> findAllWithRolesOrderByUsername();
+
+    @Query("SELECT DISTINCT u " +
+            "FROM SystemUser u " +
+            "WHERE u NOT IN (SELECT uca.systemUser FROM UserContestAccess uca WHERE uca.contest = ?1) " +
+            "   AND u.enabled = TRUE")
+    List<SystemUser> findAvailableContestManagers(Contest contest, Sort sort);
 }
