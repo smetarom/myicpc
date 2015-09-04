@@ -2,14 +2,20 @@ package com.myicpc.service.contest;
 
 import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.model.contest.Contest;
+import com.myicpc.model.security.SystemUser;
+import com.myicpc.model.security.UserContestAccess;
 import com.myicpc.repository.contest.ContestRepository;
+import com.myicpc.repository.security.SystemUserRepository;
+import com.myicpc.repository.security.UserContestAccessRepository;
 import com.myicpc.security.config.SecurityConstants;
+import com.myicpc.security.dto.LoggedUser;
 import com.myicpc.service.exception.ContestNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +29,15 @@ import java.util.List;
 public class ContestService {
     @Autowired
     private ContestRepository contestRepository;
+
+    @Autowired
+    private ContestAccessService contestAccessService;
+
+    @Autowired
+    private SystemUserRepository systemUserRepository;
+
+    @Autowired
+    private UserContestAccessRepository userContestAccessRepository;
 
     public List<Contest> getActiveContests() {
         Sort sort = new Sort(Sort.Direction.DESC, "startTime");
@@ -80,15 +95,29 @@ public class ContestService {
     }
 
     @Transactional
-    public void saveContest(final Contest contest) {
+    public void createContest(final Contest contest) {
+        Contest persistedContest = saveContest(contest);
+        LoggedUser loggedUser = (LoggedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (loggedUser != null) {
+            SystemUser systemUser = systemUserRepository.findByUsername(loggedUser.getUsername());
+            UserContestAccess contestAccess = contestAccessService.addContestAccess(systemUser, persistedContest);
+            if (contestAccess != null) {
+                loggedUser.addContest(contest);
+            }
+        }
+    }
+
+    @Transactional
+    public Contest saveContest(final Contest contest) {
         // remove # from hashtag
         contest.setHashtag(FormatUtils.removeHashFromHashtag(contest.getHashtag()));
-        contestRepository.save(contest);
+        return contestRepository.save(contest);
     }
 
     @Transactional
     public void deleteContest(final Contest contest) {
         // TODO remove all objects related to the contest
+        userContestAccessRepository.deleteByContest(contest);
 
         contestRepository.delete(contest);
     }

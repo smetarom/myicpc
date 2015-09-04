@@ -19,6 +19,10 @@ public class LoggedUser extends User {
         this.contests = contests;
     }
 
+    public void addContest(final Contest contest) {
+        contests.add(contest);
+    }
+
     public Set<Contest> getContests() {
         return contests;
     }

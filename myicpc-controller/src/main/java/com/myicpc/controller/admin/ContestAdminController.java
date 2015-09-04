@@ -108,7 +108,7 @@ public class ContestAdminController extends GeneralAdminController {
             return "private/contest/editContest";
         }
 
-        contestService.saveContest(contest);
+        contestService.createContest(contest);
         getMessage("contestAdmin.create.success", contest.getName());
         return "redirect:/private/home";
     }
