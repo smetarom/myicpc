@@ -17,5 +17,5 @@ public interface KioskContentRepository extends JpaRepository<KioskContent, Long
 
     List<KioskContent> findByContest(Contest contest, Sort sort);
 
-    List<KioskContent> findByActive(boolean active);
+    List<KioskContent> findByActiveAndContest(boolean active, Contest contest);
 }

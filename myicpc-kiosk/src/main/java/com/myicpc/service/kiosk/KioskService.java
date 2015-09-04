@@ -91,7 +91,7 @@ public class KioskService {
      */
     @Transactional(readOnly = true)
     public KioskContent getActiveKioskContent(Contest contest) {
-        List<KioskContent> activeList = kioskContentRepository.findByActive(true);
+        List<KioskContent> activeList = kioskContentRepository.findByActiveAndContest(true, contest);
         if (CollectionUtils.isEmpty(activeList)) {
             return null;
         }

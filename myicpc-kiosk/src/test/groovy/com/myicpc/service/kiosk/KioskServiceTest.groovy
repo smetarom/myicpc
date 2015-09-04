@@ -79,26 +79,29 @@ class KioskServiceTest extends GroovyTestCase {
     }
 
     void testGetActiveKioskContent() {
+        Contest contest = mock(Contest.class)
         List<KioskContent> list = [mock(KioskContent.class)]
-        when(kioskContentRepository.findByActive(true)).thenReturn(list)
+        when(kioskContentRepository.findByActiveAndContest(true, contest)).thenReturn(list)
 
-        def kioskContent = kioskService.getActiveKioskContent(mock(Contest.class))
+        def kioskContent = kioskService.getActiveKioskContent(contest)
         Assert.assertEquals list[0], kioskContent
     }
 
     void testGetActiveKioskContentNoActive() {
+        Contest contest = mock(Contest.class)
         List<KioskContent> list = []
-        when(kioskContentRepository.findByActive(true)).thenReturn(list)
+        when(kioskContentRepository.findByActiveAndContest(true, contest)).thenReturn(list)
 
-        def kioskContent = kioskService.getActiveKioskContent(mock(Contest.class))
+        def kioskContent = kioskService.getActiveKioskContent(contest)
         Assert.assertNull kioskContent
     }
 
     void testGetActiveKioskContentTwoKioskContents() {
+        Contest contest = mock(Contest.class)
         List<KioskContent> list = [mock(KioskContent.class), mock(KioskContent.class)]
-        when(kioskContentRepository.findByActive(true)).thenReturn(list)
+        when(kioskContentRepository.findByActiveAndContest(true, contest)).thenReturn(list)
 
-        def kioskContent = kioskService.getActiveKioskContent(mock(Contest.class))
+        def kioskContent = kioskService.getActiveKioskContent(contest)
         Assert.assertEquals list[0], kioskContent
     }
 
