@@ -14,4 +14,6 @@ public interface UserContestAccessRepository extends JpaRepository<UserContestAc
     List<UserContestAccess> findByContest(Contest contest);
 
     List<UserContestAccess> findByContest(Contest contest, Sort sort);
+
+    List<UserContestAccess> findBySystemUser(SystemUser systemUser);
 }

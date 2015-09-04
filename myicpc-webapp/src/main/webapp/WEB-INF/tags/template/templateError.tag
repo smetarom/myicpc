@@ -1,28 +1,21 @@
 <%@tag description="Overall Page template" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" uri="http://myicpc.baylor.edu/tags" %>
-<%@ taglib uri="http://htmlcompressor.googlecode.com/taglib/compressor" prefix="compress" %>
-<compress:html compressCss="true" compressJavaScript="true" jsCompressor="closure" closureOptLevel="whitespace">
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>MyICPC</title>
-        <jsp:include page="/WEB-INF/views/includes/head.jsp"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <style type="text/css">
-            body {
-                padding-top: 0;
-            }
+<%@attribute name="head" fragment="true" %>
 
-            p {
-                font-size: 1.3em;
-            }
-        </style>
-    </head>
-    <body>
-    <div id="body">
-        <jsp:doBody/>
-    </div>
-    </body>
-    </html>
-</compress:html>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MyICPC</title>
+    <jsp:include page="/WEB-INF/views/includes/head.jsp"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="<c:url value='/css/myicpc/error.css'/>" type="text/css">
+    <jsp:invoke fragment="head" />
+</head>
+<body>
+<div id="body">
+    <jsp:doBody/>
+</div>
+</body>
+</html>

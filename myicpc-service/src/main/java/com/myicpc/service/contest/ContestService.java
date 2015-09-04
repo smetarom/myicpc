@@ -3,10 +3,13 @@ package com.myicpc.service.contest;
 import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.repository.contest.ContestRepository;
+import com.myicpc.security.config.SecurityConstants;
 import com.myicpc.service.exception.ContestNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,16 @@ public class ContestService {
         return contestRepository.findAll(sort);
     }
 
+    @PostFilter(SecurityConstants.FILTER_CONTEST_READ_ACCESS_OR_ADMIN)
+    public List<Contest> getActiveContestsSecured() {
+        return getActiveContests();
+    }
+
+    @PostFilter(SecurityConstants.FILTER_CONTEST_READ_ACCESS_OR_ADMIN)
+    public List<Contest> getContestsSecured(Sort sort) {
+        return contestRepository.findAll(sort);
+    }
+
     @Cacheable(value = "contestByCode")
     public Contest getContest(String contestCode) throws ContestNotFoundException {
         Contest contest = contestRepository.findFullByCode(contestCode);
@@ -33,6 +46,11 @@ public class ContestService {
             throw new ContestNotFoundException("Contest with code " + contestCode + " not found.");
         }
         return contest;
+    }
+
+    @PostAuthorize(SecurityConstants.RETURN_CONTEST_READ_ACCESS_OR_ADMIN)
+    public Contest getContestSecured(String contestCode) throws ContestNotFoundException {
+        return getContest(contestCode);
     }
 
     /**

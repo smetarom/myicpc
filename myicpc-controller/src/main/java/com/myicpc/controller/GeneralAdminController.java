@@ -11,7 +11,6 @@ import org.springframework.orm.jpa.JpaOptimisticLockingFailureException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.persistence.OptimisticLockException;
@@ -39,6 +38,11 @@ public class GeneralAdminController extends GeneralAbstractController {
             model.addAttribute("adminContact", globalSettingsService.getGlobalSettings().getAdminEmail());
         }
         return contest;
+    }
+
+    @Override
+    protected Contest loadContest(String contestCode) {
+        return contestService.getContestSecured(contestCode);
     }
 
     /**

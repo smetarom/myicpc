@@ -21,6 +21,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.myicpc</groupId>
+            <artifactId>myicpc-persistence</artifactId>
+            <version>${myicpc-persistence.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
             <version>${spring-security.version}</version>

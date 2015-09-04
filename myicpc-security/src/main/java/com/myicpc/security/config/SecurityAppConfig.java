@@ -1,40 +1,63 @@
 package com.myicpc.security.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import javax.sql.DataSource;
 
 /**
  * @author Roman Smetana
  */
 @Configuration
-@EnableWebMvcSecurity
+@EnableWebSecurity
 public class SecurityAppConfig extends WebSecurityConfigurerAdapter {
+//    @Autowired
+//    private DataSource dataSource;
+
     @Autowired
-    private DataSource dataSource;
+    @Qualifier("userDetailsService")
+    private UserDetailsService userDetailsService;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication().dataSource(dataSource).usersByUsernameQuery(getUserQuery()).authoritiesByUsernameQuery(getAuthoritiesQuery())
-                .passwordEncoder(passwordEncoder());
+//        auth.jdbcAuthentication()
+//                .dataSource(dataSource)
+//                .usersByUsernameQuery(getUserQuery())
+//                .authoritiesByUsernameQuery(getAuthoritiesQuery())
+//                .passwordEncoder(passwordEncoder());
+
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                    .antMatchers("/private/install/**").permitAll()
-                    .anyRequest().authenticated().and()
-                .formLogin().loginPage("/private/login").loginProcessingUrl("/private/login").defaultSuccessUrl("/private/home").failureUrl("/private/loginfailed").permitAll().and()
-                .logout().logoutUrl("/private/logout").logoutSuccessUrl("/private/login");
+        http.authorizeRequests()
+                .antMatchers("/private/install/**").permitAll()
+                .antMatchers("/private/getting-started/**").hasRole("ADMIN")
+                .antMatchers("/private/settings/**").hasRole("ADMIN")
+                .antMatchers("/private/users/**").hasRole("ADMIN")
+                .anyRequest().authenticated();
 
+        // form logout
+        http.logout()
+                .logoutUrl("/private/logout")
+                .logoutSuccessUrl("/private/login");
+
+        // form login
+        http.formLogin()
+                .loginPage("/private/login")
+                .loginProcessingUrl("/private/login")
+                .defaultSuccessUrl("/private/home")
+                .failureUrl("/private/loginfailed")
+                .permitAll();
+
+        http.exceptionHandling().accessDeniedPage("/private/access-denied");
     }
 
     @Bean

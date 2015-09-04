@@ -6,7 +6,7 @@ import com.myicpc.commons.enums.GeneralEnum;
  * @author Roman Smetana
  */
 public enum UserRoleEnum implements GeneralEnum {
-    ROLE_ADMIN("user.role.admin", "ADMIN"), ROLE_USER("user.role.user", "USER");
+    ROLE_ADMIN("user.role.admin", "ADMIN"), ROLE_MANAGER("user.role.manager", "MANAGER"), ROLE_USER("user.role.user", "USER");
 
     private final String code;
     private final String label;

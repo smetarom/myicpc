@@ -17,13 +17,19 @@
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav">
             <li><a href='<spring:url value="/private/contests" />'><spring:message code="nav.admin.contests"/></a></li>
-            <li><a href='<spring:url value="/private/users" />'><t:faIcon icon="users" /> <spring:message code="nav.admin.users"/></a></li>
-            <li><a href='<spring:url value="/private/getting-started" />'><spring:message code="nav.admin.gettingStarted"/></a></li>
+            <sec:authorize url="/private/users">
+                <li><a href='<spring:url value="/private/users" />'><t:faIcon icon="users" /> <spring:message code="nav.admin.users"/></a></li>
+            </sec:authorize>
+            <sec:authorize url="/private/getting-started">
+                <li><a href='<spring:url value="/private/getting-started" />'><spring:message code="nav.admin.gettingStarted"/></a></li>
+            </sec:authorize>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a href="<spring:url value="/private/settings" />"><t:tooltip titleCode="settingsAdmin.title"><t:glyphIcon icon="cog" /></t:tooltip></a>
-            </li>
+            <sec:authorize url="/private/settings">
+                <li>
+                    <a href="<spring:url value="/private/settings" />"><t:tooltip titleCode="settingsAdmin.title"><t:glyphIcon icon="cog" /></t:tooltip></a>
+                </li>
+            </sec:authorize>
             <%@ include file="/WEB-INF/views/private/includes/header_right_appendix.jsp"%>
         </ul>
     </div>

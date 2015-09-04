@@ -1,10 +1,8 @@
 package com.myicpc.controller.admin;
 
 import com.myicpc.controller.GeneralAdminController;
-import com.myicpc.repository.contest.ContestRepository;
 import com.myicpc.service.contest.ContestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +22,7 @@ public class DashboardAdminController extends GeneralAdminController {
 
     @RequestMapping(value = {"/private", "/private/home"}, method = RequestMethod.GET)
     public String home(final Model model, final HttpServletRequest request) {
-        model.addAttribute("contests", contestService.getActiveContests());
+        model.addAttribute("contests", contestService.getActiveContestsSecured());
         return "private/home";
     }
 }

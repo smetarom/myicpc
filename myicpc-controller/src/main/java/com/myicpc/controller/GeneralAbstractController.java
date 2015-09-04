@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,15 +25,19 @@ public abstract class GeneralAbstractController {
     private static final Logger logger = LoggerFactory.getLogger(GeneralAbstractController.class);
 
     @Autowired
-    private ContestService contestService;
+    protected ContestService contestService;
 
     protected Contest getContest(String contestCode, Model model) {
-        Contest contest = contestService.getContest(contestCode);
+        Contest contest = loadContest(contestCode);
         if (model != null) {
             model.addAttribute("contest", contest);
             model.addAttribute("contestURL", StringUtils.isEmpty(contestCode) ? "" : "/" + contestCode);
         }
         return contest;
+    }
+
+    protected Contest loadContest(String contestCode) {
+        return contestService.getContest(contestCode);
     }
 
     protected String getContestURL(String contestCode) {
@@ -68,7 +73,7 @@ public abstract class GeneralAbstractController {
     }
 
     /**
-     * Handles {@link Exception}
+     * Handles {@link ContestNotFoundException}
      *
      * @param ex exception
      * @return model and view of exception
@@ -78,6 +83,20 @@ public abstract class GeneralAbstractController {
         logger.error("Error Contest Not Found", ex);
         ModelAndView modelAndView = new ModelAndView("error/contestNotFound");
         modelAndView.addObject("exception", ex);
+        extendExceptionHandling(modelAndView);
+        return modelAndView;
+    }
+
+    /**
+     * Handles {@link ContestNotFoundException}
+     *
+     * @param ex exception
+     * @return model and view of exception
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public ModelAndView handleAccessDeniedException(ContestNotFoundException ex) {
+        logger.warn("Access denied", ex);
+        ModelAndView modelAndView = new ModelAndView("error/accessDenied");
         extendExceptionHandling(modelAndView);
         return modelAndView;
     }

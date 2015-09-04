@@ -12,9 +12,11 @@
 <c:set var="showBody" value="${(empty showBody) ? true : showBody}" />
 
 <div class="panel panel-${panelStyle}">
-    <div class="panel-heading">
-        <h3 class="panel-title no-underline"><jsp:invoke fragment="heading"/></h3>
-    </div>
+    <c:if test="${not empty heading}">
+        <div class="panel-heading">
+            <h3 class="panel-title no-underline"><jsp:invoke fragment="heading"/></h3>
+        </div>
+    </c:if>
     <c:if test="${showBody}">
         <div class="panel-body">
             <jsp:doBody/>

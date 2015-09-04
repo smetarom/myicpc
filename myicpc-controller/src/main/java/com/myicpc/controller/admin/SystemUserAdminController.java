@@ -2,10 +2,10 @@ package com.myicpc.controller.admin;
 
 import com.myicpc.commons.utils.MessageUtils;
 import com.myicpc.controller.GeneralAdminController;
+import com.myicpc.enums.UserRoleEnum;
 import com.myicpc.model.security.SystemUser;
 import com.myicpc.model.security.SystemUserRole;
 import com.myicpc.repository.security.SystemUserRepository;
-import com.myicpc.enums.UserRoleEnum;
 import com.myicpc.service.exception.ReportException;
 import com.myicpc.service.report.SystemUserReportService;
 import com.myicpc.service.user.SystemUserService;
@@ -19,7 +19,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -105,7 +110,7 @@ public class SystemUserAdminController extends GeneralAdminController {
 			return "redirect:/private/users";
 		}
 
-		List<String> stringRoles = new ArrayList<String>();
+		List<String> stringRoles = new ArrayList<>();
 		for (SystemUserRole role : user.getRoles()) {
 			stringRoles.add(role.getAuthority());
 		}
@@ -210,7 +215,6 @@ public class SystemUserAdminController extends GeneralAdminController {
 	 * @return view
 	 */
 	@RequestMapping(value = "/private/users/create", method = RequestMethod.POST)
-	@Transactional
 	public String createUser(@Valid @ModelAttribute("systemUser") SystemUser user, BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 		model.addAttribute("roles", getAllRoles());
 		model.addAttribute("mode", "create");

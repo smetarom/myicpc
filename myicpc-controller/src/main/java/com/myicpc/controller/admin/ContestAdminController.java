@@ -10,9 +10,11 @@ import com.myicpc.service.contest.ContestService;
 import com.myicpc.service.exception.WebServiceException;
 import com.myicpc.service.settings.GlobalSettingsService;
 import com.myicpc.service.webSevice.ContestWSService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -51,7 +53,14 @@ public class ContestAdminController extends GeneralAdminController {
     @RequestMapping(value = "/private/contests", method = RequestMethod.GET)
     public String contests(Model model) {
         Sort sort = new Sort(Sort.Direction.DESC, "startTime");
-        List<Contest> contests = contestRepository.findAll(sort);
+        List<Contest> contests = contestService.getContestsSecured(sort);
+
+        String[] relationship = new String[] {
+                "ROLE_ADMIN > ROLE_MANAGER",
+                "ROLE_MANAGER > ROLE_USER"
+        };
+        RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
+        roleHierarchy.setHierarchy(StringUtils.join(relationship, " "));
 
         model.addAttribute("contests", contests);
         return "private/contest/contestList";

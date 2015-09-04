@@ -65,20 +65,21 @@ public class SystemUserService {
      * @param user
      *            user
      */
+    @Transactional
     public SystemUser mergeUser(SystemUser user) {
         List<String> stringRoles = user.getStringRoles();
         user = systemUserRepository.save(user);
 
-        if (stringRoles != null && !stringRoles.isEmpty()) {
-            if (user.getRoles() != null) {
-                for (SystemUserRole role : user.getRoles()) {
-                    userRoleRepository.delete(role);
-                }
-                user.getRoles().clear();
-                systemUserRepository.save(user);
-                systemUserRepository.flush();
-                user = systemUserRepository.findOne(user.getId());
+        if (user.getRoles() != null) {
+            for (SystemUserRole role : user.getRoles()) {
+                userRoleRepository.delete(role);
             }
+            user.getRoles().clear();
+            systemUserRepository.save(user);
+            systemUserRepository.flush();
+            user = systemUserRepository.findOne(user.getId());
+        }
+        if (stringRoles != null && !stringRoles.isEmpty()) {
             saveUserRoles(stringRoles, user);
         }
         return user;

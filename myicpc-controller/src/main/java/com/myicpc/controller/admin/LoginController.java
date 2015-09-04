@@ -53,8 +53,8 @@ public class LoginController extends GeneralAdminController {
      * @param model
      * @return view
      */
-    @RequestMapping(value = "/private/accessdenied", method = RequestMethod.GET)
+    @RequestMapping(value = "/private/access-denied", method = RequestMethod.GET)
     public String accessDenied(final Model model) {
-        return "errorAccessDenied";
+        return "error/accessDenied";
     }
 }

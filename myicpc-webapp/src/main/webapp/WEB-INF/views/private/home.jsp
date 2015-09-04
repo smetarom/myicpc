@@ -30,8 +30,11 @@
                     </c:if>
                 </jsp:attribute>
                 <jsp:attribute name="footer">
-                    <a href="<spring:url value="/private/contest/create"/>" class="btn btn-primary"><t:glyphIcon icon="plus"/> <spring:message
-                            code="homeAdmin.contest.create"/></a>
+                    <sec:authorize access="hasRole('ROLE_MANAGER')">
+                        <t:button href="/private/contest/create" context="primary">
+                            <t:glyphIcon icon="plus"/> <spring:message code="homeAdmin.contest.create"/>
+                        </t:button>
+                    </sec:authorize>
                 </jsp:attribute>
                 <jsp:body>
                     <c:if test="${empty contests}">
