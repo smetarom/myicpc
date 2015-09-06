@@ -22,7 +22,7 @@
             twitterAccessToken: $('#twitterAccessToken').val(),
             twitterAccessTokenSecret: $('#twitterAccessTokenSecret').val()
         };
-        $.post('<spring:url value="/check/twitter" />', data, function(data) {
+        $.post('<spring:url value="/social/check/twitter" />', data, function(data) {
             $('#twitterCheckResult').html(data);
         });
     });

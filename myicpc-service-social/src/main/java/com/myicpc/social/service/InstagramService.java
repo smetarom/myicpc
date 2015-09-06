@@ -53,10 +53,33 @@ import java.util.List;
 public class InstagramService extends ASocialService {
     private static final Logger logger = LoggerFactory.getLogger(InstagramService.class);
     private static final String INSTAGRAM_RECENT_TAG_URL = "https://api.instagram.com/v1/tags/%s/media/recent";
+    private static final String INSTAGRAM_CHECK_URL = "https://api.instagram.com/v1/tags/icpc";
     private static final Integer INSTAGRAM_MAX_PAGES = 3;
 
     @Autowired
     private NotificationRepository notificationRepository;
+
+    public boolean checkInstagramConfiguration(String instagramClientId) {
+        HttpGet httpGet = null;
+        try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+            List<NameValuePair> params = new ArrayList<>(2);
+            params.add(new BasicNameValuePair("client_id", instagramClientId));
+            String paramsString = URLEncodedUtils.format(params, FormatUtils.DEFAULT_ENCODING);
+            String url = INSTAGRAM_CHECK_URL + "?" + paramsString;
+            httpGet = new HttpGet(url);
+
+            HttpResponse httpResponse = httpclient.execute(httpGet);
+            HttpEntity entity = httpResponse.getEntity();
+            String response = IOUtils.toString(entity.getContent(), FormatUtils.DEFAULT_ENCODING);
+            JsonObject root = new JsonParser().parse(response).getAsJsonObject();
+            int code = root.getAsJsonObject("meta").getAsJsonPrimitive("code").getAsInt();
+            return code == 200;
+        } catch (IOException ex) {
+            return false;
+        } finally {
+            WebServiceUtils.releaseConnection(httpGet);
+        }
+    }
 
     /**
      * Starts publish subscribe Instagram service

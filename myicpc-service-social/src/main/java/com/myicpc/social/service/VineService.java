@@ -10,6 +10,7 @@ import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.commons.utils.WebServiceUtils;
 import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
+import com.myicpc.model.contest.WebServiceSettings;
 import com.myicpc.model.social.BlacklistedUser;
 import com.myicpc.model.social.Notification;
 import com.myicpc.service.exception.AuthenticationException;
@@ -57,22 +58,42 @@ public class VineService extends ASocialService {
     private final ConcurrentMap<Long, String> authenticationKeys = new ConcurrentHashMap<>();
 
     /**
+     * Checks if provided vine keys are valid
+     *
+     * @param vineUsername vine username (email)
+     * @param vinePassword vine password
+     * @return vine configuration is valid
+     */
+    public boolean checkVineConfiguration(String vineUsername,
+                                          String vinePassword) {
+        try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
+            WebServiceSettings webServiceSettings = new WebServiceSettings();
+            webServiceSettings.setVineEmail(vineUsername);
+            webServiceSettings.setVinePassword(vinePassword);
+            authenticate(httpclient, webServiceSettings);
+            return true;
+        } catch (IOException | AuthenticationException e) {
+            return false;
+        }
+    }
+
+    /**
      * Login a user into Vine
      *
-     * @param httpClient http client
-     * @param contest    contest
+     * @param httpClient         http client
+     * @param webServiceSettings web service settings
      * @return Vine authentication key
      * @throws IOException             communication error
      * @throws AuthenticationException Vine authentication failed
      */
-    private String authenticate(final HttpClient httpClient, final Contest contest) throws IOException, AuthenticationException {
+    private String authenticate(final HttpClient httpClient, final WebServiceSettings webServiceSettings) throws IOException, AuthenticationException {
         logger.info("Vine logging...");
         HttpPost httpPost = null;
         try {
             httpPost = new HttpPost(VINE_AUTHENTICATION_URL);
             List<NameValuePair> params = new ArrayList<>(2);
-            params.add(new BasicNameValuePair("username", contest.getWebServiceSettings().getVineEmail()));
-            params.add(new BasicNameValuePair("password", contest.getWebServiceSettings().getVinePassword()));
+            params.add(new BasicNameValuePair("username", webServiceSettings.getVineEmail()));
+            params.add(new BasicNameValuePair("password", webServiceSettings.getVinePassword()));
             httpPost.setEntity(new UrlEncodedFormEntity(params, FormatUtils.DEFAULT_ENCODING));
 
             HttpResponse response = httpClient.execute(httpPost);
@@ -104,7 +125,7 @@ public class VineService extends ASocialService {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             String authenticationKey = authenticationKeys.get(contest.getId());
             if (StringUtils.isEmpty(authenticationKey)) {
-                authenticationKey = authenticate(httpclient, contest);
+                authenticationKey = authenticate(httpclient, contest.getWebServiceSettings());
                 authenticationKeys.put(contest.getId(), authenticationKey);
             }
             if (authenticationKey == null) {
