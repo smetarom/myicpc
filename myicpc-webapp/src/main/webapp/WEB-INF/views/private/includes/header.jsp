@@ -38,7 +38,7 @@
             <c:if test="${util:scheduleModuleEnabled(contest)}">
                 <li><a href='<spring:url value="/private${contestURL}/schedule" />'><spring:message code="nav.admin.schedule" /></a></li>
             </c:if>
-            <c:if test="${util:questModuleEnabled(contest) or util:techtrekModuleEnabled(contest)}">
+            <c:if test="${util:questModuleEnabled(contest)}">
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="nav.admin.quest" /> <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <c:if test="${util:questModuleEnabled(contest)}">
@@ -47,12 +47,6 @@
                             <li><a href='<spring:url value="/private${contestURL}/quest/participants" />'><spring:message code="nav.admin.quest.participants" /></a></li>
                             <li><a href='<spring:url value="/private${contestURL}/quest/submissions" />'><spring:message code="nav.admin.quest.submissions" /></a></li>
                             <li><a href='<spring:url value="/private${contestURL}/quest/votes" />'><spring:message code="nav.admin.quest.votes" /></a></li>
-                        </c:if>
-                        <c:if test="${util:questModuleEnabled(contest) and util:techtrekModuleEnabled(contest)}">
-                            <li class="divider"></li>
-                        </c:if>
-                        <c:if test="${util:techtrekModuleEnabled(contest)}">
-                            <li><a href='<spring:url value="/private${contestURL}/techtrek" />'><spring:message code="nav.admin.techtrek" /></a></li>
                         </c:if>
                     </ul>
                 </li>

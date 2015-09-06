@@ -5,8 +5,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.myicpc.commons.MyICPCConstants;
 import com.myicpc.commons.adapters.JSONAdapter;
-import com.myicpc.commons.utils.MessageUtils;
 import com.myicpc.commons.utils.FormatUtils;
+import com.myicpc.commons.utils.MessageUtils;
 import com.myicpc.model.contest.Contest;
 import info.bliki.wiki.model.WikiModel;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -176,13 +176,6 @@ public class JSPCustomFunctions {
     public static boolean isQuestModuleEnabled(Contest contest) {
         if (contest != null && contest.getModuleConfiguration() != null) {
             return contest.getModuleConfiguration().isQuestModule();
-        }
-        return false;
-    }
-
-    public static boolean isTechTrekModuleEnabled(Contest contest) {
-        if (contest != null && contest.getModuleConfiguration() != null) {
-            return contest.getModuleConfiguration().isTechtrekModule();
         }
         return false;
     }

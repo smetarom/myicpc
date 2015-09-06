@@ -7,9 +7,4 @@
 </tr>
 <tr>
     <td><t:topSubmenuLink labelCode="nav.quest.leaderboard" url="${contestURL}/quest/leaderboard" icon="glyphicon glyphicon-list"/></td>
-    <%--<td>--%>
-        <%--<a href="<spring:url value="${contestURL}/techtrek" />">--%>
-            <%--<span class="fa fa-text-width"></span><br/> <spring:message code="nav.techtrek"/>--%>
-        <%--</a>--%>
-    <%--</td>--%>
 </tr>

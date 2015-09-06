@@ -20,7 +20,6 @@ public class ModuleConfiguration extends IdGeneratedObject {
     private boolean pollModule;
     private boolean galleryModule;
     private boolean questModule;
-    private boolean techtrekModule;
 
     public boolean isMapModule() {
         return mapModule;
@@ -76,13 +75,5 @@ public class ModuleConfiguration extends IdGeneratedObject {
 
     public void setQuestModule(boolean questModule) {
         this.questModule = questModule;
-    }
-
-    public boolean isTechtrekModule() {
-        return techtrekModule;
-    }
-
-    public void setTechtrekModule(boolean techtrekModule) {
-        this.techtrekModule = techtrekModule;
     }
 }

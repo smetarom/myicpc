@@ -90,11 +90,6 @@
         <function-signature>boolean isQuestModuleEnabled(com.myicpc.model.contest.Contest)</function-signature>
     </function>
     <function>
-        <name>techtrekModuleEnabled</name>
-        <function-class>com.myicpc.controller.functions.JSPCustomFunctions</function-class>
-        <function-signature>boolean isTechTrekModuleEnabled(com.myicpc.model.contest.Contest)</function-signature>
-    </function>
-    <function>
         <name>rssModuleEnabled</name>
         <function-class>com.myicpc.controller.functions.JSPCustomFunctions</function-class>
         <function-signature>boolean isRssModuleEnabled(com.myicpc.model.contest.Contest)</function-signature>
