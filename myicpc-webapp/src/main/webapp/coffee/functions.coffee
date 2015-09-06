@@ -196,6 +196,20 @@ removeIdFromCookieArray = (c_name, id, path) ->
   return
 
 ###
+# Is cookie value string of integers separated by comma
+# @param c_name cookie name
+# @returns {Boolean} is cookie value string of integers separated by comma
+###
+isCookieValid = (c_name) ->
+  try
+    c = getCookie(c_name)
+    if /^"?(\d+,)*\d+"?$/.test(c)
+      return true
+  catch e
+
+  return false
+
+###
 # Dismiss a notification and updates notification counter
 ###
 dismissNotification = (notificationId, path) ->

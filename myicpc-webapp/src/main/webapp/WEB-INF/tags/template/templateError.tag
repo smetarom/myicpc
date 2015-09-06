@@ -16,6 +16,7 @@
 <body>
 <div id="body">
     <jsp:doBody/>
+    <jsp:include page="/WEB-INF/views/includes/foot.jsp"/>
 </div>
 </body>
 </html>

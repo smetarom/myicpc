@@ -53,7 +53,7 @@ public abstract class GeneralAbstractController {
     @ExceptionHandler(Exception.class)
     public ModelAndView handleException(Exception ex) {
         logger.error("Error occured", ex);
-        ModelAndView modelAndView = new ModelAndView("errorException");
+        ModelAndView modelAndView = new ModelAndView("error/exception");
         modelAndView.addObject("exception", ex);
         extendExceptionHandling(modelAndView);
         return modelAndView;

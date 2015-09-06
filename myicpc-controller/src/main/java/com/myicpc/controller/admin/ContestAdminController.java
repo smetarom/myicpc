@@ -18,7 +18,9 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.HttpSessionRequiredException;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -257,5 +260,12 @@ public class ContestAdminController extends GeneralAdminController {
     @InitBinder("contest")
     protected void initEventBinder(WebDataBinder binder) {
         bindDateTimeFormatAllowEmpty(binder);
+    }
+
+    @ExceptionHandler(HttpSessionRequiredException.class)
+    public ModelAndView handleException(Exception ex) {
+        ModelAndView modelAndView = new ModelAndView("redirect:/private/contest/create");
+        modelAndView.addObject("sessionExpired", true);
+        return modelAndView;
     }
 }

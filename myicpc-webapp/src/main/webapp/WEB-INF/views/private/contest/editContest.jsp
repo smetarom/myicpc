@@ -54,6 +54,12 @@
             })
         </script>
 
+        <c:if test="${param.sessionExpired}">
+            <t:alert context="danger" dismissible="true">
+                <spring:message code="contestAdmin.create.error.sessionExpired" />
+            </t:alert>
+        </c:if>
+
         <t:form action="${formAction}" entity="contest" cancelFormURL="${cancelAction}">
             <jsp:attribute name="controls">
                 <c:choose>
