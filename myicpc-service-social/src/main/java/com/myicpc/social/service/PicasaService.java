@@ -55,6 +55,8 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
+ * This class provides services for managing Picasa
+ *
  * @author Roman Smetana
  */
 @Service
@@ -77,6 +79,14 @@ public class PicasaService {
     @Autowired
     private PublishService publishService;
 
+    /**
+     * Gets uploaded photos to the private album
+     *
+     * @param contest contest
+     * @return list of photos in the private album
+     * @throws WebServiceException receiving photos from Picasa failed
+     * @throws BusinessValidationException Picasa configuration in not complete
+     */
     public List<PicasaPhoto> getPrivatePhotos(final Contest contest) throws WebServiceException, BusinessValidationException {
         WebServiceSettings webServiceSettings = contest.getWebServiceSettings();
         if (StringUtils.isAnyEmpty(webServiceSettings.getPicasaUsername(),
@@ -137,6 +147,15 @@ public class PicasaService {
         }
     }
 
+    /**
+     * Creates a private username
+     *
+     * @param appName google application name
+     * @param username picasa username
+     * @param password picasa password
+     * @return created album ID
+     * @throws WebServiceException album creation failed
+     */
     public String createPrivateAlbum(String appName, String username, String password) throws WebServiceException {
         try {
             PicasawebService picasaService = createPicasaService(appName, username, password);
@@ -146,6 +165,15 @@ public class PicasaService {
         }
     }
 
+    /**
+     * Creates a public username
+     *
+     * @param appName google application name
+     * @param username picasa username
+     * @param password picasa password
+     * @return created album ID
+     * @throws WebServiceException album creation failed
+     */
     public String createCrowdAlbum(String appName, String username, String password) throws WebServiceException {
         try {
             PicasawebService picasaService = createPicasaService(appName, username, password);
@@ -155,7 +183,7 @@ public class PicasaService {
         }
     }
 
-    protected String createAlbum(final PicasawebService picasaService, final String albumName, String picasaUsername) throws WebServiceException {
+    private String createAlbum(final PicasawebService picasaService, final String albumName, String picasaUsername) throws WebServiceException {
         try {
             URL feedUrl = new URL(String.format(PICASA_ALBUMS_URL, "default"));
             UserFeed myUserFeed = picasaService.getFeed(feedUrl, UserFeed.class);
@@ -177,10 +205,25 @@ public class PicasaService {
         }
     }
 
-    public void uploadPrivatePicasaEntry(String caption, MultipartFile file, Contest contest) throws WebServiceException, IOException {
+    /**
+     * Uploads a photo to the private album
+     *
+     * @param caption photo caption
+     * @param file uploaded photo
+     * @param contest contest
+     * @throws WebServiceException Picasa service error
+     * @throws BusinessValidationException Picasa configuration is not complete
+     */
+    public void uploadPrivatePicasaEntry(String caption, MultipartFile file, Contest contest) throws WebServiceException, BusinessValidationException {
+        WebServiceSettings webServiceSettings = contest.getWebServiceSettings();
+        if (StringUtils.isAnyEmpty(webServiceSettings.getPicasaUsername(),
+                webServiceSettings.getPicasaPassword(),
+                webServiceSettings.getPicasaPrivateAlbumId())) {
+            throw new BusinessValidationException("gallery.picasa.photos.config.missing");
+        }
         try (InputStream fileInputStream = file.getInputStream()) {
-            URL albumPostUrl = new URL(String.format(PICASA_PHOTOS_URL, contest.getWebServiceSettings().getPicasaUsername(), contest.getWebServiceSettings().getPicasaPrivateAlbumId()));
-            PicasawebService picasawebService = createPicasaService(null, contest.getWebServiceSettings().getPicasaUsername(), contest.getWebServiceSettings().getPicasaPassword());
+            URL albumPostUrl = new URL(String.format(PICASA_PHOTOS_URL, webServiceSettings.getPicasaUsername(), webServiceSettings.getPicasaPrivateAlbumId()));
+            PicasawebService picasawebService = createPicasaService(null, webServiceSettings.getPicasaUsername(), webServiceSettings.getPicasaPassword());
             PhotoEntry photo = new PhotoEntry();
             photo.setTitle(new PlainTextConstruct(MYICPC_AUTHOR));
             photo.setDescription(new PlainTextConstruct(caption));
@@ -189,7 +232,7 @@ public class PicasaService {
             photo.setMediaSource(media);
 
             PhotoEntry returnedPhoto = picasawebService.insert(albumPostUrl, photo);
-        } catch (ServiceException e) {
+        } catch (ServiceException | IOException e) {
             throw new WebServiceException(e);
         }
     }
@@ -262,7 +305,7 @@ public class PicasaService {
         }
     }
 
-    protected PicasawebService createPicasaService(String appName, String username, String password) throws AuthenticationException {
+    private PicasawebService createPicasaService(String appName, String username, String password) throws AuthenticationException {
         // TODO replace "myicpc-baylor" with appName
         PicasawebService picasaService = new PicasawebService("myicpc-baylor");
         picasaService.setUserCredentials(username, password);
@@ -276,12 +319,19 @@ public class PicasaService {
      *            list of thumbnails
      * @return URL of thumbnail of size 300x300 px
      */
-    protected static String getBestPicasaThumbnail(List<MediaThumbnail> thumbnails) {
+    private static String getBestPicasaThumbnail(List<MediaThumbnail> thumbnails) {
         String thumbnail = thumbnails.get(0).getUrl();
         thumbnail = thumbnail.replaceAll("/s[0-9]{2,3}/", "/s300-c/");
         return thumbnail;
     }
 
+    /**
+     * Saves changes in {@code galleryAlbum}
+     *
+     * If the album is published, it publishes the notification about this album
+     *
+     * @param galleryAlbum updated album
+     */
     @Transactional
     public void saveGalleryAlbum(final GalleryAlbum galleryAlbum) {
         galleryAlbumRepository.save(galleryAlbum);
@@ -300,7 +350,7 @@ public class PicasaService {
         }
     }
 
-    public JsonObject buildGalleryAlbumNotificationBody(final GalleryAlbum galleryAlbum) throws IOException, ServiceException {
+    private JsonObject buildGalleryAlbumNotificationBody(final GalleryAlbum galleryAlbum) throws IOException, ServiceException {
         JsonObject body = new JsonObject();
         String tag = galleryAlbum.getName();
         try {
@@ -337,6 +387,14 @@ public class PicasaService {
         return body;
     }
 
+    /**
+     * Import albums from CVS file
+     *
+     * The CVS file format is a new album name per line
+     *
+     * @param galleriesFile CVS file with new albums
+     * @param contest contest
+     */
     @Transactional
     public void importGalleryAlbums(MultipartFile galleriesFile, Contest contest) {
         try (InputStream in = galleriesFile.getInputStream();

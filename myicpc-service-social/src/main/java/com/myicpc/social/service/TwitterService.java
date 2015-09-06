@@ -29,6 +29,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * Service responsible for Twitter social resources
+ * <p/>
+ * It manages the streaming from Twitter to application, and parsing it into
+ * application representation
+ *
  * @author Roman Smetana
  */
 @Service
@@ -37,17 +42,29 @@ public class TwitterService extends ASocialService {
     private static final String VIDEO_FORMAT = "video/mp4";
     private static final String LINK_TO_TWEET = "https://twitter.com/statuses/%s";
 
+    /**
+     * Map between contest ID and {@link TwitterStreamDTO}
+     */
     private static final ConcurrentMap<Long, TwitterStreamDTO> streamMapping = new ConcurrentHashMap<>();
 
+    /**
+     * Starts streaming from Twitter to application by contest hashtag
+     *
+     * @param contestId contest ID
+     */
     public void startTwitterStreaming(Long contestId) {
         Contest contest = contestRepository.findOne(contestId);
         startTwitterStreaming(contest);
     }
 
+    /**
+     * Starts streaming from Twitter to application by contest hashtag
+     *
+     * @param contest contest
+     */
     public void startTwitterStreaming(Contest contest) {
-        TwitterStream twitterStream = null;
         ConfigurationBuilder cb = createTwitterConfiguration(contest);
-        twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
+        TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
         twitterStream.addListener(new TwitterStatusListener(contest));
         twitterStream.filter(new FilterQuery(0, null, new String[]{"#" + contest.getHashtag()}));
 
@@ -58,6 +75,11 @@ public class TwitterService extends ASocialService {
         streamMapping.put(contest.getId(), twitterStreamDTO);
     }
 
+    /**
+     * Terminates the twitter streaming for a contest
+     *
+     * @param contestId contest ID
+     */
     public void stopTwitterStreaming(Long contestId) {
         TwitterStreamDTO twitterStreamDTO = streamMapping.get(contestId);
         if (twitterStreamDTO != null) {
@@ -69,6 +91,9 @@ public class TwitterService extends ASocialService {
         }
     }
 
+    /**
+     * Checks the streams and updates them if necessary
+     */
     @Scheduled(cron = "0 */1 * * * *")
     @Transactional(readOnly = true)
     public void detectTwitterConfigurationChanges() {
@@ -83,6 +108,15 @@ public class TwitterService extends ASocialService {
         }
     }
 
+    /**
+     * Saves the tweet and publishes it
+     *
+     * It checks, if the tweet is not already in database or if the author is not blacklisted.
+     * If so, it skips the tweet
+     *
+     * @param notification tweet notification
+     * @param twitterStatus twitter status
+     */
     @Transactional
     private void saveTwitterNotification(Notification notification, Status twitterStatus) {
         if (notificationRepository.countByContestAndExternalIdAndNotificationType(notification.getContest(), notification.getExternalId(), NotificationType.TWITTER) > 0) {
@@ -167,12 +201,11 @@ public class TwitterService extends ASocialService {
         /**
          * Finds Twitter hashtags, usernames, and URLs in the tweet
          *
-         * @param status
-         *            Twitter tweet
+         * @param status Twitter tweet
          * @return tweet message enhanced by HTML tags
          */
         private String parseTweetText(final Status status) {
-            String text = null;
+            String text;
             if (status.isRetweet() && status.getRetweetedStatus() != null) {
                 text = "RT @" + status.getRetweetedStatus().getUser().getScreenName() + ": " + status.getRetweetedStatus().getText();
             } else {
@@ -188,8 +221,7 @@ public class TwitterService extends ASocialService {
         /**
          * Gets all hashtags from the tweet body separated by |
          *
-         * @param tweet
-         *            tweet body
+         * @param tweet tweet body
          * @return hashtags separated by |
          */
         private String getHashtagsFromTweet(final String tweet) {
@@ -202,6 +234,11 @@ public class TwitterService extends ASocialService {
             return hashtags.toString();
         }
 
+        /**
+         * It parses out the video URL, which has {@link #VIDEO_FORMAT} format
+         * @param twitterStatus twitter status
+         * @return video URL
+         */
         private String extractVideoUrlFromTweet(Status twitterStatus) {
             if (ArrayUtils.isNotEmpty(twitterStatus.getExtendedMediaEntities())) {
                 for (ExtendedMediaEntity mediaEntity : twitterStatus.getExtendedMediaEntities()) {

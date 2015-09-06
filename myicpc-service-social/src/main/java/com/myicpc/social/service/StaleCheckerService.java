@@ -16,15 +16,25 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 
 /**
+ * Service, which checks if resources are up to date and alive
+ *
  * @author Roman Smetana
  */
 @Service
-@Transactional
 public class StaleCheckerService {
 
     @Autowired
     private NotificationRepository notificationRepository;
 
+    /**
+     * Checks for old photos and videos, which were deleted by user on the
+     * hosting side. If it detects, that the photo/video was deleted, it deletes
+     * the record from the system
+     *
+     * @param notificationId checked notification
+     * @throws IOException communication with media source failed
+     */
+    @Transactional(readOnly = true)
     public void checkNotification(Long notificationId) throws IOException {
         Notification notification = notificationRepository.findOne(notificationId);
         if (notification == null) {
@@ -32,10 +42,8 @@ public class StaleCheckerService {
         }
         boolean stale = false;
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
-            if (!stale) {
-                if (!StringUtils.isEmpty(notification.getImageUrl())) {
-                    stale = checkURL(httpclient, notification.getImageUrl());
-                }
+            if (!StringUtils.isEmpty(notification.getImageUrl())) {
+                stale = checkURL(httpclient, notification.getImageUrl());
             }
             if (!stale) {
                 if (!StringUtils.isEmpty(notification.getVideoUrl())) {

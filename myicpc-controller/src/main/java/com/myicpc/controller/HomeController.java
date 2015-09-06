@@ -1,9 +1,6 @@
 package com.myicpc.controller;
 
-import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.model.social.Notification;
-import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.service.contest.ContestService;
 import com.myicpc.service.email.EmailService;
 import org.apache.commons.lang3.StringUtils;
@@ -14,9 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * @author Roman Smetana
@@ -31,6 +25,7 @@ public class HomeController extends GeneralController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home(Model model) {
+        contestService.pokus(null);
 
         model.addAttribute("contests", contestService.getActiveContests());
         return "home";

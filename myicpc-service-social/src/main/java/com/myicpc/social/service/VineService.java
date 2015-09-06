@@ -42,6 +42,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
+ * This class provides services for managing Vine
+ *
  * @author Roman Smetana
  */
 @Service
@@ -54,7 +56,16 @@ public class VineService extends ASocialService {
 
     private final ConcurrentMap<Long, String> authenticationKeys = new ConcurrentHashMap<>();
 
-    private String authenticate(final HttpClient httpClient,final Contest contest) throws IOException, AuthenticationException {
+    /**
+     * Login a user into Vine
+     *
+     * @param httpClient http client
+     * @param contest    contest
+     * @return Vine authentication key
+     * @throws IOException             communication error
+     * @throws AuthenticationException Vine authentication failed
+     */
+    private String authenticate(final HttpClient httpClient, final Contest contest) throws IOException, AuthenticationException {
         logger.info("Vine logging...");
         HttpPost httpPost = null;
         try {
@@ -78,6 +89,13 @@ public class VineService extends ASocialService {
         }
     }
 
+    /**
+     * Receives new Vine posts for given contest
+     *
+     * @param contest contest
+     * @throws WebServiceException     communication with Vine failed
+     * @throws AuthenticationException Vine authentication failed
+     */
     public void getNewPosts(final Contest contest) throws WebServiceException, AuthenticationException {
         if (StringUtils.isEmpty(contest.getWebServiceSettings().getVineEmail()) || StringUtils.isEmpty(contest.getWebServiceSettings().getVinePassword())) {
             return;
@@ -102,7 +120,7 @@ public class VineService extends ASocialService {
         }
     }
 
-    protected List<Notification> getByHashTag(final HttpClient httpClient, final Contest contest, String vineApiKey, int page) throws WebServiceException {
+    private List<Notification> getByHashTag(final HttpClient httpClient, final Contest contest, String vineApiKey, int page) throws WebServiceException {
         if (page > VINE_MAX_PAGES) {
             return new ArrayList<>();
         }
@@ -127,7 +145,7 @@ public class VineService extends ASocialService {
         }
     }
 
-    protected List<Notification> parseNewVineVideos(final HttpClient httpClient, final Contest contest, String vineApiKey, String json) throws WebServiceException {
+    private List<Notification> parseNewVineVideos(final HttpClient httpClient, final Contest contest, String vineApiKey, String json) throws WebServiceException {
         List<Notification> list = new ArrayList<>();
 
         try {

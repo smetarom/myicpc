@@ -24,8 +24,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
@@ -33,9 +31,6 @@ import java.util.List;
  */
 @Service
 public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements ScoreboardService {
-
-    @PersistenceContext(name = "MyICPC")
-    protected EntityManager em;
 
     @Autowired
     private PublishService publishService;

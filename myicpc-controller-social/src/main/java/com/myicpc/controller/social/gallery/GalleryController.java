@@ -6,6 +6,7 @@ import com.myicpc.controller.GeneralController;
 import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.Notification;
+import com.myicpc.service.exception.BusinessValidationException;
 import com.myicpc.service.exception.WebServiceException;
 import com.myicpc.social.service.GalleryService;
 import com.myicpc.social.service.PicasaService;
@@ -137,9 +138,11 @@ public class GalleryController extends GeneralController {
         try {
             picasaService.uploadPrivatePicasaEntry(caption, file, contest);
             successMessage(redirectAttributes, "crowdGallery.successMessage");
-        } catch (WebServiceException | IOException e) {
+        } catch (WebServiceException e) {
             logger.error("User photo upload to Picasa failed.", e);
             errorMessage(redirectAttributes, "crowdGallery.errorMessage");
+        } catch (BusinessValidationException e) {
+            errorMessage(redirectAttributes, e.getMessageCode());
         }
 
         return "redirect:" + getContestURL(contestCode) + "/gallery";

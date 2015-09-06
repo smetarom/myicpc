@@ -10,7 +10,9 @@ import com.myicpc.repository.security.UserContestAccessRepository;
 import com.myicpc.security.config.SecurityConstants;
 import com.myicpc.security.dto.LoggedUser;
 import com.myicpc.service.exception.ContestNotFoundException;
+import com.myicpc.service.listener.ContestListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -19,14 +21,20 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Roman Smetana
  */
 @Service
 public class ContestService {
+    private final Set<ContestListener> scoreboardListeners = Collections.synchronizedSet(new HashSet<ContestListener>());
+
     @Autowired
     private ContestRepository contestRepository;
 
@@ -38,6 +46,17 @@ public class ContestService {
 
     @Autowired
     private UserContestAccessRepository userContestAccessRepository;
+
+    @Autowired(required = false)
+    @Qualifier("contestSocialService")
+    private ContestListener contestSocialService;
+
+    @PostConstruct
+    private void init() {
+        if (contestSocialService != null) {
+            scoreboardListeners.add(contestSocialService);
+        }
+    }
 
     public List<Contest> getActiveContests() {
         Sort sort = new Sort(Sort.Direction.DESC, "startTime");
@@ -97,6 +116,8 @@ public class ContestService {
     @Transactional
     public void createContest(final Contest contest) {
         Contest persistedContest = saveContest(contest);
+
+        // add contest access to logged user
         LoggedUser loggedUser = (LoggedUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (loggedUser != null) {
             SystemUser systemUser = systemUserRepository.findByUsername(loggedUser.getUsername());
@@ -104,6 +125,11 @@ public class ContestService {
             if (contestAccess != null) {
                 loggedUser.addContest(contest);
             }
+        }
+
+        // call contest created callbacks
+        for (ContestListener scoreboardListener : scoreboardListeners) {
+            scoreboardListener.onContestCreated(persistedContest);
         }
     }
 

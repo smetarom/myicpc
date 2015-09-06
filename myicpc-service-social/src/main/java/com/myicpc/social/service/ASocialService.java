@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Parent service for all services working with social networks
+ *
  * @author Roman Smetana
  */
 public abstract class ASocialService {
@@ -38,10 +40,9 @@ public abstract class ASocialService {
     /**
      * Persists search results from social networks
      *
-     * @param notifications
-     *            list of results
-     * @param blacklist
-     *            list of blacklisted usernames
+     * @param notifications       list of results
+     * @param blacklistedUserType type of blacklist service
+     * @param contest             contest
      */
     protected void saveSearchList(List<Notification> notifications, BlacklistedUser.BlacklistedUserType blacklistedUserType, Contest contest) {
         if (CollectionUtils.isEmpty(notifications)) {
@@ -59,17 +60,25 @@ public abstract class ASocialService {
         }
     }
 
-    protected String createHashtags(String[] tags, String contestHashtag, String questHashtag) {
+    /**
+     * Encodes post hashtags into application representation
+     *
+     * @param tags list of hashtags
+     * @param contestHashtag contest hashtag
+     * @param questHashtagPrefix Quest hashtag prefix
+     * @return
+     */
+    protected String createHashtags(String[] tags, String contestHashtag, String questHashtagPrefix) {
         StringBuffer tagString = new StringBuffer("|");
         for (String tag : tags) {
             tagString.append(tag).append('|');
         }
-        if (tagString.length() > 255) {
+        if (tagString.length() > 2048) {
             tagString = new StringBuffer("|");
             tagString.append(contestHashtag).append("|");
-            if (!StringUtils.isEmpty(questHashtag)) {
+            if (!StringUtils.isEmpty(questHashtagPrefix)) {
                 for (String tag : tags) {
-                    if (tag.startsWith(questHashtag)) {
+                    if (tag.startsWith(questHashtagPrefix)) {
                         tagString.append(tag).append('|');
                     }
                 }

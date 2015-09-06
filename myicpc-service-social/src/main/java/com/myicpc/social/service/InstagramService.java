@@ -44,6 +44,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * This class provides services for managing Instagram
+ *
  * @author Roman Smetana
  */
 @Service
@@ -56,6 +58,17 @@ public class InstagramService extends ASocialService {
     @Autowired
     private NotificationRepository notificationRepository;
 
+    /**
+     * Starts publish subscribe Instagram service
+     *
+     * It registers {@code callbackUrl} on Instagram and receives notifications
+     * about new posts on that URL
+     *
+     * @param contest contest
+     * @param callbackUrl notification receive URL
+     * @throws URISyntaxException wrong URL format
+     * @throws IOException Instagram communication error
+     */
     public void startSubscription(final Contest contest, String callbackUrl) throws URISyntaxException, IOException {
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             URI uri = new URIBuilder().setScheme("https")
@@ -84,6 +97,12 @@ public class InstagramService extends ASocialService {
         }
     }
 
+    /**
+     * Receives new Instagram posts for contest
+     *
+     * @param contest contest
+     * @throws WebServiceException communication with Instagram failed
+     */
     public void getNewPosts(final Contest contest) throws WebServiceException {
         if (StringUtils.isEmpty(contest.getWebServiceSettings().getInstagramKey())) {
             return;
@@ -94,11 +113,11 @@ public class InstagramService extends ASocialService {
         String paramsString = URLEncodedUtils.format(params, FormatUtils.DEFAULT_ENCODING);
         String url = String.format(INSTAGRAM_RECENT_TAG_URL, contest.getHashtag()) + "?" + paramsString;
         List<Notification> notifications = getByHashTag(contest, url, 1);
-        
+
         saveSearchList(notifications, BlacklistedUser.BlacklistedUserType.INSTAGRAM, contest);
     }
 
-    protected List<Notification> getByHashTag(final Contest contest, String url, int page) throws WebServiceException {
+    private List<Notification> getByHashTag(final Contest contest, String url, int page) throws WebServiceException {
         HttpGet httpGet = null;
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
             httpGet = new HttpGet(url);
@@ -114,7 +133,7 @@ public class InstagramService extends ASocialService {
         }
     }
 
-    protected List<Notification> parseInstagramResponse(final Contest contest, String json, int page) throws WebServiceException {
+    private List<Notification> parseInstagramResponse(final Contest contest, String json, int page) throws WebServiceException {
         if (page > INSTAGRAM_MAX_PAGES) {
             return new ArrayList<>();
         }

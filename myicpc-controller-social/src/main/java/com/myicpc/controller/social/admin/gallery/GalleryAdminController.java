@@ -1,6 +1,5 @@
 package com.myicpc.controller.social.admin.gallery;
 
-import com.google.gdata.util.ServiceException;
 import com.myicpc.controller.GeneralAdminController;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.GalleryAlbum;
@@ -27,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -70,14 +68,6 @@ public class GalleryAdminController extends GeneralAdminController {
                            RedirectAttributes redirectAttributes) {
         getContest(contestCode, model);
         GalleryAlbum galleryAlbum = galleryAlbumRepository.findOne(galleryAlbumId);
-
-        try {
-            System.out.println(picasaService.buildGalleryAlbumNotificationBody(galleryAlbum));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ServiceException e) {
-            e.printStackTrace();
-        }
 
         if (galleryAlbum == null) {
             errorMessage(redirectAttributes, "officialGalleryAdmin.notFound");
