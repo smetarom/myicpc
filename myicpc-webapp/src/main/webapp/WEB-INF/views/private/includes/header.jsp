@@ -51,12 +51,6 @@
                     </ul>
                 </li>
             </c:if>
-            <c:if test="${util:rssModuleEnabled(contest)}">
-                <li><a href='<spring:url value="/private${contestURL}/rss" />'><spring:message code="nav.admin.rssFeed" /></a></li>
-            </c:if>
-            <c:if test="${util:pollModuleEnabled(contest)}">
-                <li><a href='<spring:url value="/private${contestURL}/polls" />'><spring:message code="nav.admin.polls" /></a></li>
-            </c:if>
             <c:if test="${util:galleryModuleEnabled(contest)}">
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="nav.admin.gallery" /> <b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -65,7 +59,18 @@
                     </ul>
                 </li>
             </c:if>
-            <li><a href='<spring:url value="/private${contestURL}/kiosk" />'><spring:message code="nav.admin.kiosk" /></a></li>
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="nav.admin.social" /> <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <c:if test="${util:rssModuleEnabled(contest)}">
+                        <li><a href='<spring:url value="/private${contestURL}/rss" />'><spring:message code="nav.admin.rssFeed" /></a></li>
+                    </c:if>
+                    <c:if test="${util:pollModuleEnabled(contest)}">
+                        <li><a href='<spring:url value="/private${contestURL}/polls" />'><spring:message code="nav.admin.polls" /></a></li>
+                    </c:if>
+                    <li><a href='<spring:url value="/private${contestURL}/twitter" />'><spring:message code="nav.admin.twitter" /></a></li>
+                    <li><a href='<spring:url value="/private${contestURL}/kiosk" />'><spring:message code="nav.admin.kiosk" /></a></li>
+                </ul>
+            </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li>
