@@ -16,8 +16,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import twitter4j.ExtendedMediaEntity;
 import twitter4j.FilterQuery;
+import twitter4j.Paging;
 import twitter4j.Status;
 import twitter4j.StatusAdapter;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
 import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 import twitter4j.conf.ConfigurationBuilder;
@@ -48,6 +52,38 @@ public class TwitterService extends ASocialService {
     private static final ConcurrentMap<Long, TwitterStreamDTO> streamMapping = new ConcurrentHashMap<>();
 
     /**
+     * Checks if provided twitter keys are valid
+     *
+     * @param twitterConsumerKey       twitter consumer key
+     * @param twitterConsumerSecret    twitter consumer secret
+     * @param twitterAccessToken       twitter access token
+     * @param twitterAccessTokenSecret twitter access token secret
+     * @return twitter configuration is valid
+     */
+    public boolean checkTwitterConfiguration(String twitterConsumerKey,
+                                             String twitterConsumerSecret,
+                                             String twitterAccessToken,
+                                             String twitterAccessTokenSecret) {
+        WebServiceSettings webServiceSettings = new WebServiceSettings();
+        webServiceSettings.setTwitterAccessToken(twitterAccessToken);
+        webServiceSettings.setTwitterAccessTokenSecret(twitterAccessTokenSecret);
+        webServiceSettings.setTwitterConsumerKey(twitterConsumerKey);
+        webServiceSettings.setTwitterConsumerSecret(twitterConsumerSecret);
+
+        ConfigurationBuilder cb = createTwitterConfiguration(webServiceSettings);
+
+        TwitterFactory tf = new TwitterFactory(cb.build());
+        Twitter twitter = tf.getInstance();
+
+        try {
+            twitter.getHomeTimeline(new Paging(1, 1));
+            return true;
+        } catch (TwitterException e) {
+            return false;
+        }
+    }
+
+    /**
      * Starts streaming from Twitter to application by contest hashtag
      *
      * @param contestId contest ID
@@ -63,7 +99,7 @@ public class TwitterService extends ASocialService {
      * @param contest contest
      */
     public void startTwitterStreaming(Contest contest) {
-        ConfigurationBuilder cb = createTwitterConfiguration(contest);
+        ConfigurationBuilder cb = createTwitterConfiguration(contest.getWebServiceSettings());
         TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
         twitterStream.addListener(new TwitterStatusListener(contest));
         twitterStream.filter(new FilterQuery(0, null, new String[]{"#" + contest.getHashtag()}));
@@ -110,11 +146,11 @@ public class TwitterService extends ASocialService {
 
     /**
      * Saves the tweet and publishes it
-     *
+     * <p/>
      * It checks, if the tweet is not already in database or if the author is not blacklisted.
      * If so, it skips the tweet
      *
-     * @param notification tweet notification
+     * @param notification  tweet notification
      * @param twitterStatus twitter status
      */
     @Transactional
@@ -140,12 +176,12 @@ public class TwitterService extends ASocialService {
         publishService.broadcastNotification(notification, notification.getContest());
     }
 
-    private ConfigurationBuilder createTwitterConfiguration(final Contest contest) {
+    private ConfigurationBuilder createTwitterConfiguration(final WebServiceSettings webServiceSettings) {
         ConfigurationBuilder cb = new ConfigurationBuilder();
-        cb.setOAuthConsumerKey(contest.getWebServiceSettings().getTwitterConsumerKey())
-                .setOAuthConsumerSecret(contest.getWebServiceSettings().getTwitterConsumerSecret())
-                .setOAuthAccessToken(contest.getWebServiceSettings().getTwitterAccessToken())
-                .setOAuthAccessTokenSecret(contest.getWebServiceSettings().getTwitterAccessTokenSecret());
+        cb.setOAuthConsumerKey(webServiceSettings.getTwitterConsumerKey())
+                .setOAuthConsumerSecret(webServiceSettings.getTwitterConsumerSecret())
+                .setOAuthAccessToken(webServiceSettings.getTwitterAccessToken())
+                .setOAuthAccessTokenSecret(webServiceSettings.getTwitterAccessTokenSecret());
         return cb;
     }
 
@@ -236,6 +272,7 @@ public class TwitterService extends ASocialService {
 
         /**
          * It parses out the video URL, which has {@link #VIDEO_FORMAT} format
+         *
          * @param twitterStatus twitter status
          * @return video URL
          */

@@ -25,8 +25,6 @@ public class HomeController extends GeneralController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home(Model model) {
-        contestService.pokus(null);
-
         model.addAttribute("contests", contestService.getActiveContests());
         return "home";
     }
