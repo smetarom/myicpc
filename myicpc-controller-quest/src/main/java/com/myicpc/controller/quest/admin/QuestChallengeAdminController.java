@@ -61,6 +61,7 @@ public class QuestChallengeAdminController extends GeneralAdminController {
         Contest contest = getContest(contestCode, model);
         QuestChallenge challenge = new QuestChallenge();
         challenge.setContest(contest);
+        challenge.setEndDate(contest.getQuestConfiguration().getDeadline());
 
         model.addAttribute("challenge", challenge);
         model.addAttribute("questHashtagPrefix", contest.getQuestConfiguration().getHashtagPrefix());
