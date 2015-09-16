@@ -30,7 +30,7 @@
                     </c:if>
                 </jsp:attribute>
                 <jsp:attribute name="footer">
-                    <sec:authorize access="hasRole('ROLE_MANAGER')">
+                    <sec:authorize access="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">
                         <t:button href="/private/contest/create" context="primary">
                             <t:glyphIcon icon="plus"/> <spring:message code="homeAdmin.contest.create"/>
                         </t:button>

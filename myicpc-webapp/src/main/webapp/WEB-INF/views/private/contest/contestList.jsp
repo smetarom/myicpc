@@ -15,31 +15,12 @@
 	</jsp:attribute>
 
 	<jsp:attribute name="controls">
-      <sec:authorize access="hasRole('ROLE_MANAGER')">
+      <sec:authorize access="hasAnyRole('ROLE_MANAGER', 'ROLE_ADMIN')">
         <a href="<spring:url value="/private/contest/create"/>" class="btn btn-hover btn-default"><t:glyphIcon icon="plus"/> <spring:message code="homeAdmin.contest.create"/></a>
       </sec:authorize>
 	</jsp:attribute>
 
   <jsp:body>
-    <sec:authorize access="hasAnyRole('ROLE_ADMIN')">
-      ROLE_ADMIN
-    </sec:authorize>
-    <sec:authorize access="hasAnyRole('ADMIN')">
-      ADMIN
-    </sec:authorize>
-    <sec:authorize access="hasRole('ROLE_ADMIN')">
-      ROLE_ADMIN
-    </sec:authorize>
-    <sec:authorize access="hasRole('ADMIN')">
-      ADMIN
-    </sec:authorize>
-    <sec:authorize access="hasRole('ROLE_MANAGER')">
-      ROLE_MANAGER
-    </sec:authorize>
-    <sec:authorize access="hasRole('MANAGER')">
-      MANAGER
-    </sec:authorize>
-
     <c:if test="${empty contests}">
         <div class="no-items-available">
           <spring:message code="contestAdmin.list.noResult" />
