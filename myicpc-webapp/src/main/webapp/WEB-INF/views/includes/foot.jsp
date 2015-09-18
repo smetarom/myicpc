@@ -26,7 +26,7 @@
         $("#feedbackLink").click(function() {
             $.get("<spring:url value="${contestURL}/feedback-form" />", function(data) {
                 $("#feedbackWrapper").html(data);
-
+                $("#feedbackModal").modal('show');
             });
         });
     });

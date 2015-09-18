@@ -8,7 +8,8 @@
 </c:if>
 
 <t:springInput id="contestName" labelCode="contest.name" path="name" required="true"/>
-<t:springInput id="contestShortName" labelCode="contest.shortName" path="shortName" required="true"/>
+<t:springInput type="email" id="contestShortName" labelCode="contest.email" path="contestSettings.email" required="true" hintCode="contest.email.hint"/>
+<t:springInput labelCode="contest.shortName" path="shortName" required="true"/>
 <t:springInput labelCode="contest.startTime" path="startTime" id="startTime" required="true"
                hintCode="contest.startTime.hint"/>
 <t:springInput type="number" labelCode="contest.timeDifference" path="timeDifference" id="contestTimeDifference"
