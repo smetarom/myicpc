@@ -11,6 +11,8 @@ import com.myicpc.security.config.SecurityConstants;
 import com.myicpc.security.dto.LoggedUser;
 import com.myicpc.service.exception.ContestNotFoundException;
 import com.myicpc.service.listener.ContestListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
@@ -33,6 +35,7 @@ import java.util.Set;
  */
 @Service
 public class ContestService {
+    private static final Logger logger = LoggerFactory.getLogger(ContestService.class);
     private final Set<ContestListener> scoreboardListeners = Collections.synchronizedSet(new HashSet<ContestListener>());
 
     @Autowired
@@ -129,7 +132,11 @@ public class ContestService {
 
         // call contest created callbacks
         for (ContestListener scoreboardListener : scoreboardListeners) {
-            scoreboardListener.onContestCreated(persistedContest);
+            try {
+                scoreboardListener.onContestCreated(persistedContest);
+            } catch (Throwable e) {
+                logger.error(e.getMessage(), e);
+            }
         }
     }
 
