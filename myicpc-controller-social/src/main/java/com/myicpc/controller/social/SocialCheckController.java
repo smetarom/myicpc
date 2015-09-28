@@ -32,7 +32,12 @@ public class SocialCheckController extends GeneralController {
             @RequestParam String twitterConsumerSecret,
             @RequestParam String twitterAccessToken,
             @RequestParam String twitterAccessTokenSecret) {
-        boolean success = twitterService.checkTwitterConfiguration(twitterConsumerKey, twitterConsumerSecret, twitterAccessToken, twitterAccessTokenSecret);
+        boolean success;
+        try {
+            success = twitterService.checkTwitterConfiguration(twitterConsumerKey, twitterConsumerSecret, twitterAccessToken, twitterAccessTokenSecret);
+        } catch (Exception e) {
+            success = false;
+        }
         String key = success ? "contest.twitter.checkWS.success" : "contest.twitter.checkWS.failed";
 
         return MessageUtils.getMessage(key);

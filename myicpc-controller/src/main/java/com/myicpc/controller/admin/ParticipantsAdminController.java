@@ -9,7 +9,6 @@ import com.myicpc.repository.teamInfo.ContestParticipantRepository;
 import com.myicpc.repository.teamInfo.TeamInfoRepository;
 import com.myicpc.service.dto.filter.ParticipantFilterDTO;
 import com.myicpc.service.participant.ParticipantService;
-import com.myicpc.service.settings.GlobalSettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
