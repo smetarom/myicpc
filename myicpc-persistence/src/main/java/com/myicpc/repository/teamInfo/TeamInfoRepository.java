@@ -5,7 +5,6 @@ import com.myicpc.model.teamInfo.RegionalResult;
 import com.myicpc.model.teamInfo.TeamInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
@@ -13,7 +12,7 @@ public interface TeamInfoRepository extends JpaRepository<TeamInfo, Long> {
 
     TeamInfo findByExternalIdAndContest(Long externalId, Contest contest);
 
-    @Query("FROM TeamInfo ti JOIN FETCH ti.regionalResults WHERE ti.externalId = ?1 AND ti.contest = ?2")
+    @Query("FROM TeamInfo ti LEFT JOIN FETCH ti.regionalResults WHERE ti.externalId = ?1 AND ti.contest = ?2")
     TeamInfo findByExternalIdAndContestWithRegionalResult(Long externalId, Contest contest);
 
     List<TeamInfo> findByContest(Contest contest);
