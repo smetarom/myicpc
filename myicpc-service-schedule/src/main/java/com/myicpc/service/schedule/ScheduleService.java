@@ -177,7 +177,11 @@ public class ScheduleService {
         if (!StringUtils.isEmpty(scheduleRoles)) {
             String[] ss = scheduleRoles.split(",");
             for (int i = 0; i < ss.length; i++) {
-                activeRoles.put(Long.parseLong(ss[i]), true);
+                try {
+                    activeRoles.put(Long.parseLong(ss[i]), true);
+                } catch (NumberFormatException e) {
+                    // ignore non number values
+                }
             }
         }
 

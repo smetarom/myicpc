@@ -52,8 +52,10 @@ public class ScheduleController extends GeneralController {
 
         if (StringUtils.isEmpty(scheduleRoles)) {
             String cookieParam = scheduleService.getAllScheduleRoles(contest);
-            CookieUtils.setCookie(request, response, "scheduleRoles", cookieParam);
-            model.addAttribute("showRoleDialog", true);
+            if (StringUtils.isNotEmpty(cookieParam)) {
+                CookieUtils.setCookie(request, response, "scheduleRoles", cookieParam);
+                model.addAttribute("showRoleDialog", true);
+            }
         }
 
         model.addAttribute("schedule", scheduleService.getEntireContestSchedule(contest));
