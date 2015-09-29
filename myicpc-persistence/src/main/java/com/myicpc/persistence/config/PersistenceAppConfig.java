@@ -1,5 +1,6 @@
 package com.myicpc.persistence.config;
 
+import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -47,6 +48,14 @@ public class PersistenceAppConfig {
     }
 
     @Bean
+    public SpringLiquibase liquibase() {
+        SpringLiquibase bean = new SpringLiquibase();
+        bean.setDataSource(dataSource());
+        bean.setChangeLog("classpath:db/changelog.xml");
+        return bean;
+    }
+
+    @Bean
     public PlatformTransactionManager transactionManager() {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
@@ -59,7 +68,7 @@ public class PersistenceAppConfig {
         prop.setProperty("hibernate.show_sql", "false");
 //        prop.setProperty("hibernate.show_sql", "true");
 //        prop.setProperty("hibernate.generate_statistics", "true");
-        prop.setProperty("hibernate.hbm2ddl.auto", "update");
+//        prop.setProperty("hibernate.hbm2ddl.auto", "validate");
         prop.setProperty("hibernate.connection.characterEncoding", "UTF-8");
         prop.setProperty("hibernate.connection.useUnicode", "true");
 
