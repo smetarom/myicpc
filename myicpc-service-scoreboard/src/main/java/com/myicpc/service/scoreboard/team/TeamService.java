@@ -387,6 +387,7 @@ public class TeamService {
             if (association == null) {
                 association = new ContestParticipantAssociation();
                 association.setTeamInfo(teamInfo);
+                association.setContest(teamInfo.getContest());
                 association.setContestParticipant(member);
             }
             association.setContestParticipantRole(ContestParticipantRole.getTeamRoleByCode(personAdapter.getString("role")));
@@ -448,10 +449,11 @@ public class TeamService {
 
                 ContestParticipant contestParticipant = parsePerson(personAdapter);
 
-                if (!contestParticipant.isStaffMember()) {
+                if (!contestParticipant.isStaffMember(contest)) {
                     ContestParticipantAssociation association = new ContestParticipantAssociation();
                     association.setContestParticipant(contestParticipant);
                     association.setContestParticipantRole(ContestParticipantRole.STAFF);
+                    association.setContest(contest);
                     contestParticipantAssociationRepository.save(association);
                 }
             }

@@ -66,10 +66,10 @@ public class ParticipantsAdminController extends GeneralAdminController {
             model.addAttribute("teams", teamInfoRepository.findAllOrderByUniversityName());
         }
         model.addAttribute("allPeople", contestParticipantRepository.findAllOrderByName());
-        model.addAttribute("contestants", contestParticipantRepository.findByContestParticipantRoleOrderByName(ContestParticipantRole.CONTESTANT));
-        model.addAttribute("coaches", contestParticipantRepository.findByContestParticipantRoleOrderByName(ContestParticipantRole.COACH));
-        model.addAttribute("attendees", contestParticipantRepository.findByContestParticipantRoleOrderByName(ContestParticipantRole.ATTENDEE));
-        model.addAttribute("staff", contestParticipantRepository.findByContestParticipantRoleOrderByName(ContestParticipantRole.STAFF));
+        model.addAttribute("contestants", contestParticipantRepository.findByContestParticipantRoleAndContestOrderByName(ContestParticipantRole.CONTESTANT, contest));
+        model.addAttribute("coaches", contestParticipantRepository.findByContestParticipantRoleAndContestOrderByName(ContestParticipantRole.COACH, contest));
+        model.addAttribute("attendees", contestParticipantRepository.findByContestParticipantRoleAndContestOrderByName(ContestParticipantRole.ATTENDEE, contest));
+        model.addAttribute("staff", contestParticipantRepository.findByContestParticipantRoleAndContestOrderByName(ContestParticipantRole.STAFF, contest));
 
         return "private/participants/participantList";
     }

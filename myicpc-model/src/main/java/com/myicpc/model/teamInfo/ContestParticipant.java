@@ -1,9 +1,15 @@
 package com.myicpc.model.teamInfo;
 
 import com.myicpc.model.IdGeneratedObject;
+import com.myicpc.model.contest.Contest;
 import org.apache.commons.lang3.StringUtils;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Transient;
 import java.util.List;
 
 /**
@@ -165,31 +171,31 @@ public class ContestParticipant extends IdGeneratedObject {
     }
 
     @Transient
-    public boolean isStaffMember() {
+    public boolean isStaffMember(final Contest contest) {
         return isTeamRole(new ContestParticipantRoleCommand() {
             @Override
             public boolean hasContestParticipantRole(ContestParticipantAssociation association) {
-                return association.isStaffMember();
+                return association.isStaffMember(contest);
             }
         });
     }
 
     @Transient
-    public boolean isContestant() {
+    public boolean isContestant(final Contest contest) {
         return isTeamRole(new ContestParticipantRoleCommand() {
             @Override
             public boolean hasContestParticipantRole(ContestParticipantAssociation association) {
-                return association.isContestant();
+                return association.isContestant(contest);
             }
         });
     }
 
     @Transient
-    public boolean isContestParticipant() {
+    public boolean isContestParticipant(final Contest contest) {
         return isTeamRole(new ContestParticipantRoleCommand() {
             @Override
             public boolean hasContestParticipantRole(ContestParticipantAssociation association) {
-                return association.isContestParticipant();
+                return association.isContestParticipant(contest);
             }
         });
     }

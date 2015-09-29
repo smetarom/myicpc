@@ -15,4 +15,15 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="2" author="smetana">
+        <addColumn tableName="contestparticipantassociation">
+            <column name="contestid" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="contestparticipantassociation" baseColumnNames="contestid"
+                                 referencedTableName="contest" referencedColumnNames="id"
+                                 constraintName="fk_contestparticipantassociation_contest" />
+    </changeSet>
+
 </databaseChangeLog>
