@@ -123,7 +123,7 @@ public class TeamService {
     public void synchronizeTeamsWithCM(Contest contest) throws ValidationException {
         try {
             synchronizeUniversities(teamWSService.getUniversitiesFromCM(contest));
-//            synchronizeRegions(teamWSService.getRegionsFromCM(contest));
+            synchronizeRegions(teamWSService.getRegionsFromCM(contest));
             synchronizeTeams(teamWSService.getTeamsFromCM(contest), contest);
             logger.info("Team & university synchronization finished.");
             initTeamHashtagsAndAbbreviations(contest);
@@ -177,14 +177,15 @@ public class TeamService {
                     // Tries to find an university by externalId in the database and
                     // if the university is not found, it returns a new university
                     JSONAdapter universityAdapter = new JSONAdapter(jsonElement);
-                    Long externalId = universityAdapter.getLong("institutionId");
-                    University university = universityRepository.findByExternalId(externalId);
+                    Long externalUnitId = universityAdapter.getLong("institutionUnitAliasId");
+                    University university = universityRepository.findByExternalUnitId(externalUnitId);
                     if (university == null) {
                         university = new University();
                     }
                     // Get data from JSON and set them to university object. and
                     // save the university after that
-                    university.setExternalId(externalId);
+                    university.setExternalId(universityAdapter.getLong("institutionId"));
+                    university.setExternalUnitId(externalUnitId);
                     university.setName(universityAdapter.getString("name"));
                     university.setShortName(universityAdapter.getString("shortName"));
                     university.setTwitterHash(universityAdapter.getString("twitterhash", university.getTwitterHash()));
@@ -265,7 +266,7 @@ public class TeamService {
                     if (teamInfo == null) {
                         teamInfo = new TeamInfo();
                     }
-                    University university = universityRepository.findByExternalId(teamAdapter.getLong("institutionId"));
+                    University university = universityRepository.findByExternalUnitId(teamAdapter.getLong("institutionUnitAliasId"));
                     teamInfo.setContest(contest);
                     teamInfo.setUniversity(university);
                     Region region = regionRepository.findByExternalId(teamAdapter.getLong("siteId"));

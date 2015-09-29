@@ -5,8 +5,6 @@ import com.myicpc.model.IdGeneratedObject;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 /**
  * Represents university which team(s) participate in contest
@@ -23,8 +21,14 @@ public class University extends IdGeneratedObject {
     /**
      * Institution alias id from CM
      */
-    @Column(unique = true)
     private Long externalId;
+
+    /**
+     * Institution alias id from CM
+     */
+    @Column(unique = true)
+    private Long externalUnitId;
+
     /**
      * University name
      */
@@ -64,6 +68,14 @@ public class University extends IdGeneratedObject {
 
     public void setExternalId(final Long externalId) {
         this.externalId = externalId;
+    }
+
+    public Long getExternalUnitId() {
+        return externalUnitId;
+    }
+
+    public void setExternalUnitId(Long externalUnitId) {
+        this.externalUnitId = externalUnitId;
     }
 
     public String getName() {
