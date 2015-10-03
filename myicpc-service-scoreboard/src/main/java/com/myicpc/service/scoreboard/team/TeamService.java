@@ -248,7 +248,8 @@ public class TeamService {
 
             if (teamArray != null) {
                 List<Team> teamsToSync = teamRepository.findByContest(contest);
-                Set<TeamInfo> currentTeamInfos = new HashSet<>(teamInfoRepository.findByContest(contest));
+
+                Set<TeamInfo> staleTeamInfos = new HashSet<>(teamInfoRepository.findByContest(contest));
                 Map<Long, Team> externalIdTeamMap = new HashMap<>();
                 for (Team team : teamsToSync) {
                     externalIdTeamMap.put(team.getExternalId(), team);
@@ -259,7 +260,6 @@ public class TeamService {
                 for (JsonElement teamJE : teamArray) {
                     // Tries to find a team by externalReservationId in the database
                     // and if the team is not found, it returns a new team
-                    JsonObject root = teamJE.getAsJsonObject();
                     JSONAdapter teamAdapter = new JSONAdapter(teamJE);
                     Long externalId = teamAdapter.getLong("externalReservationId");
                     TeamInfo teamInfo = teamInfoRepository.findByExternalIdAndContest(externalId, contest);
@@ -272,19 +272,19 @@ public class TeamService {
                     Region region = regionRepository.findByExternalId(teamAdapter.getLong("siteId"));
                     teamInfo.setRegion(region);
                     teamInfo.setExternalId(externalId);
-                    teamInfo.setName(root.get("name").getAsString());
+                    teamInfo.setName(teamAdapter.getString("name"));
 
                     // set team results of the team
                     teamInfo.setRegionalResults(parseRegionalContests(teamInfo, teamAdapter));
 
                     teamInfo = teamInfoRepository.save(teamInfo);
+                    staleTeamInfos.remove(teamInfo);
 
                     if (externalIdTeamMap.containsKey(externalId)) {
                         Team team = externalIdTeamMap.get(externalId);
                         team.setTeamInfo(teamInfo);
                         teamRepository.save(team);
                     }
-                    currentTeamInfos.remove(teamInfo);
 
                     // process team members and assign them to the team
                     parsePeople(teamInfo, teamAdapter);
@@ -298,9 +298,11 @@ public class TeamService {
                     logger.info("CM import: team " + teamInfo.getExternalId());
                 }
 
-                // in currentTeamInfos are teamInfos, which are in MyICPC but not in CM
-                // TODO test this
-                //teamInfoRepository.delete(currentTeamInfos);
+                // in staleTeamInfos are teamInfos, which are in MyICPC but not in CM
+                for (TeamInfo staleTeamInfo : staleTeamInfos) {
+                    deleteTeamInfo(staleTeamInfo);
+                }
+                logger.info("CM import: delete " + staleTeamInfos.size() + " staled teams");
             }
         } catch (JsonParseException | IllegalStateException ex) {
             logger.error(ex.getMessage(), ex);
@@ -562,4 +564,8 @@ public class TeamService {
         return wrapper;
     }
 
+    private void deleteTeamInfo(TeamInfo teamInfo) {
+        contestParticipantAssociationRepository.deleteByTeamInfo(teamInfo);
+        teamInfoRepository.delete(teamInfo);
+    }
 }
