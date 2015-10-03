@@ -234,6 +234,7 @@ public class TwitterService extends ASocialService {
             builder.setParentId(twitterStatus.getRetweetedStatus().getId());
         }
         builder.setAuthorName(twitterStatus.getUser().getName());
+        builder.setAuthorUsername(twitterStatus.getUser().getScreenName());
         builder.setProfilePictureUrl(twitterStatus.getUser().getProfileImageURL());
         builder.setTimestamp(twitterStatus.getCreatedAt());
         builder.setUrl(String.format(LINK_TO_TWEET, twitterStatus.getId()));

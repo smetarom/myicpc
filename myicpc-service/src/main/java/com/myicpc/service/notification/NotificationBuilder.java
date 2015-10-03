@@ -87,6 +87,10 @@ public class NotificationBuilder {
         notification.setAuthorName(authorName);
     }
 
+    public void setAuthorUsername(String authorUsername) {
+        notification.setAuthorUsername(authorUsername);
+    }
+
     public void setProfilePictureUrl(String profilePictureUrl) {
         notification.setProfilePictureUrl(profilePictureUrl);
     }

@@ -186,6 +186,7 @@ public class InstagramService extends ASocialService {
                     String fullname = userAdapter.getString("full_name");
                     String username = userAdapter.getString("username");
                     builder.setAuthorName(StringUtils.isEmpty(fullname) ? username : fullname);
+                    builder.setAuthorUsername(username);
                     builder.setProfilePictureUrl(userAdapter.getString("profile_picture"));
                     builder.setTimestamp(new Date(mediaAdapter.getLong("created_time") * 1000));
                     builder.setTitle(username);

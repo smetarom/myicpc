@@ -191,6 +191,7 @@ public class VineService extends ASocialService {
                 notification.setTitle(mediaAdapter.getString("userId"));
                 notification.setBody(mediaAdapter.getString("description"));
                 notification.setAuthorName(mediaAdapter.getString("username"));
+                notification.setAuthorUsername(mediaAdapter.getString("userId"));
                 notification.setProfilePictureUrl(mediaAdapter.getString("avatarUrl"));
                 notification.setUrl(mediaAdapter.getString("permalinkUrl"));
                 notification.setVideoUrl(mediaAdapter.getString("videoUrl"));
