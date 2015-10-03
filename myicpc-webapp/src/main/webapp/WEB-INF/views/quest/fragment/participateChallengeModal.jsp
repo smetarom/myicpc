@@ -7,13 +7,14 @@
     <jsp:body>
         <t:alert>
             <spring:message code="quest.challenge.participate.hint1" />
-            <strong>#ICPC2014</strong>
+            <strong>#${contest.hashtag}</strong>
+            <strong id="challengeModalHashtag"></strong>
             <spring:message code="quest.challenge.participate.hint2" />
         </t:alert>
 
-        <div class="clearfix">
+        <div class="clearfix text-center">
             <div class="col-sm-6 quest-participate">
-                <a href="#" class="block thumbnail twitter-color">
+                <a id="twitterParticipateInChallenge" href="#" class="block thumbnail twitter-color">
                     <t:faIcon icon="twitter" />
                     <span><spring:message code="twitter" /></span>
                 </a>
@@ -37,14 +38,14 @@
 
 <script type="text/javascript">
 	function showParticipateChallenge(hashtag, title) {
-		<%--$("#participateInChallengeLabel").html('<spring:message code="quest.participate" /> ' + title);--%>
-		<%--<c:if test="${currentDevice.normal}">--%>
-			<%--$("#twitterParticipateInChallenge").prop("href", 'http://twitter.com/intent/tweet?hashtags='+hashtag+',${contest.hashtag}');--%>
-		<%--</c:if>--%>
-		<%--<c:if test="${not currentDevice.normal}">--%>
-		 	<%--$("#twitterParticipateInChallenge").prop("href", 'twitter://post?message=%23'+hashtag+' %23${contest.hashtag}');--%>
-		<%--</c:if>--%>
-		<%--$(".hashtagsParticipateInChallenge").html('#' + hashtag + ' #${defaultHashtag}');--%>
+		$("#participateInChallengeLabel").html('<spring:message code="quest.participate" /> ' + title);
+		<c:if test="${currentDevice.normal}">
+			$("#twitterParticipateInChallenge").prop("href", 'http://twitter.com/intent/tweet?hashtags='+hashtag+',${contest.hashtag}');
+		</c:if>
+		<c:if test="${not currentDevice.normal}">
+		 	$("#twitterParticipateInChallenge").prop("href", 'twitter://post?message=%23'+hashtag+' %23${contest.hashtag}');
+		</c:if>
+		$("#challengeModalHashtag").html('#' + hashtag);
 
 		$("#participateInChallenge").modal('show');
 	}

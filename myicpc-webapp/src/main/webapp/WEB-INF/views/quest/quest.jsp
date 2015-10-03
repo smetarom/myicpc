@@ -18,7 +18,6 @@
                     return false;
                 }
                 var questHashtag = '${not empty questHashtag ? questHashtag : '#Quest'}';
-                console.log(post.body.search(new RegExp(questHashtag, "i")));
                 return post.body.search(new RegExp(questHashtag, "i")) != -1;
             }
 
@@ -127,7 +126,7 @@
                 </a>
                 </div>
 
-                <%--<%@ include file="/WEB-INF/views/fragment/quest/participateChallengeModal.jsp"%>--%>
+                <%@ include file="/WEB-INF/views/quest/fragment/participateChallengeModal.jsp"%>
             </c:if>
             <c:if test="${empty challenges}">
                 <div class="no-items-available">

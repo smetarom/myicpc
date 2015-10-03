@@ -68,6 +68,7 @@ public class QuestController extends GeneralController {
         }
 
         List<QuestChallenge> challenges = challengeRepository.findByContestAvailableChallenges(new Date(), contest);
+        QuestService.applyHashtagPrefix(contest.getQuestConfiguration().getHashtagPrefix(), challenges);
         model.addAttribute("challenges", challenges);
 
         List<Notification> questNotifications = questService.getQuestNotifications(contest);

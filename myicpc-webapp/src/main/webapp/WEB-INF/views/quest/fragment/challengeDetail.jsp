@@ -14,7 +14,7 @@
     </div>
     <div class="text-center">
         <c:if test="${not challenge.closed}">
-            <t:button context="primary" modalOpenId="participateInChallenge" onclick="showParticipateChallenge('${challenge.hashtag}', '${challenge.name}')">
+            <t:button context="primary" onclick="showParticipateChallenge('${challenge.hashtag}', '${challenge.name}')">
                 <spring:message code="quest.participate.btn.withPoints" arguments="${challenge.defaultPoints}" />
             </t:button>
         </c:if>
