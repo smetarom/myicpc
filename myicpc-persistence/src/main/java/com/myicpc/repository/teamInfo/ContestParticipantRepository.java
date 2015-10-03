@@ -22,6 +22,9 @@ public interface ContestParticipantRepository extends CrudRepository<ContestPart
     @Query(value = "SELECT DISTINCT tm FROM ContestParticipant tm LEFT JOIN FETCH tm.teamAssociations ta ORDER BY tm.lastname, tm.firstname")
     List<ContestParticipant> findAllOrderByName();
 
+    @Query(value = "SELECT DISTINCT tm FROM ContestParticipant tm LEFT JOIN FETCH tm.teamAssociations ta WHERE ta.contest = ?1 ORDER BY tm.lastname, tm.firstname")
+    List<ContestParticipant> findByContestOrderByName(Contest contest);
+
     @Query(value = "SELECT DISTINCT tm FROM ContestParticipant tm LEFT JOIN FETCH tm.teamAssociations ta WHERE ta.teamInfo=?1 AND ta.contestParticipantRole = ?2")
     List<ContestParticipant> findByTeamInfoAndContestParticipantRole(TeamInfo teamInfo, ContestParticipantRole role);
 
