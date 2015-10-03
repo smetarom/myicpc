@@ -18,7 +18,7 @@
       <c:forEach var="questParticipant" items="${participants}" varStatus="status">
         <tr style="position: relative">
           <td class="col-rank">${status.index + 1}</td>
-          <td class="col-participant-name"><a href="<spring:url value="${contestURL}/person/${questParticipant.contestParticipant.id}" />">${questParticipant.contestParticipant.fullname}</a></td>
+          <td class="col-participant-name">${questParticipant.contestParticipant.fullname}</td>
           <td class="col-role">
             <c:forEach var="role" items="${questParticipant.contestParticipantRoles}">
               <spring:message code="${role.code}" text="${role.label}" /><br/>
@@ -48,7 +48,7 @@
     </table>
   </div>
   <div class="scroller">
-    <table class="fixed-offset table table-striped table-condensed" style="width: auto">
+    <table class="fixed-offset table table-striped table-condensed">
       <thead>
       <th colspan="${challenges.size() + 3}" class="leaderboard-header-row"></th>
       </thead>

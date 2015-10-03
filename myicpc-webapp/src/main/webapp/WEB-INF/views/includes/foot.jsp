@@ -51,5 +51,13 @@
             $('#shareNotificationDialog').modal('show');
         })
     }
+
+    function profilePictureError(image) {
+        image.onerror = "";
+        image.src = "<c:url value="/images/default-profile-small.png" />";
+        return true;
+    }
+
+    profilePictureError
 </script>
 <div id="shareNotificationDialogContainer"></div>

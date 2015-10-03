@@ -3,7 +3,11 @@
     <tbody>
     <c:forEach var="submission" items="${submissions}" varStatus="status">
         <tr class="${status.index gt 4 ? 'additionalRow' : ''}" style="${status.index gt 4 ? 'display: none' : ''}">
-            <td><img src="${submission.participant.contestParticipant.profilePictureUrl}" alt="${submission.participant.contestParticipant.fullname}" width="50" height="50"></td>
+            <td>
+                <img src="${submission.participant.contestParticipant.profilePictureUrl}"
+                     alt="${submission.participant.contestParticipant.fullname}" width="50" height="50"
+                     onerror="profilePictureError(this)">
+            </td>
             <td>
                 <strong>${submission.participant.contestParticipant.fullname}</strong>
                 <br/>
