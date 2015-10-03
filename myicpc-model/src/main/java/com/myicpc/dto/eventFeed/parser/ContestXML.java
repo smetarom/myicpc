@@ -27,7 +27,6 @@ public class ContestXML extends XMLEntity<Contest> {
 
     @Override
     public void mergeTo(final Contest contest) {
-        contest.setName(getTitle());
         contest.setPenalty(getPenalty());
         contest.setStartTime(getStartTime());
         contest.setLength(getLength());

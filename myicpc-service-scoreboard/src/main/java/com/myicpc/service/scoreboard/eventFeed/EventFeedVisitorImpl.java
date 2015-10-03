@@ -39,7 +39,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -90,7 +89,7 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
         contest = contestRepository.findOne(contest.getId());
         xmlContest.mergeTo(contest);
         // TODO remove timestamp, it is here for testing purposes
-        contest.setStartTime(new Date());
+//        contest.setStartTime(new Date());
         contestRepository.saveAndFlush(contest);
     }
 
