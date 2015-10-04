@@ -461,11 +461,19 @@ public class TeamService {
             String json = teamWSService.getStaffMembersFromCM(contest);
             JsonObject root = new JsonParser().parse(json).getAsJsonObject();
             JSONAdapter peopleAdapter = new JSONAdapter(root);
+
+            List<ContestParticipantAssociation> existingAssociations = contestParticipantAssociationRepository.findByContestParticipantRoleAndContest(ContestParticipantRole.STAFF, contest);
+            Map<ContestParticipant, ContestParticipantAssociation> associationMap = new HashMap<>();
+            for (ContestParticipantAssociation existingAssociation : existingAssociations) {
+                associationMap.put(existingAssociation.getContestParticipant(), existingAssociation);
+            }
+
             // Iterate through all JSON representations of staff members
             for (JsonElement e : peopleAdapter.getJsonArray("persons")) {
                 JSONAdapter personAdapter = new JSONAdapter(e);
 
                 ContestParticipant contestParticipant = parsePerson(personAdapter);
+                associationMap.remove(contestParticipant);
 
                 if (!contestParticipant.isStaffMember(contest)) {
                     ContestParticipantAssociation association = new ContestParticipantAssociation();
@@ -474,6 +482,10 @@ public class TeamService {
                     association.setContest(contest);
                     contestParticipantAssociationRepository.save(association);
                 }
+            }
+
+            for (ContestParticipantAssociation staleParticipantAssociation : associationMap.values()) {
+                contestParticipantAssociationRepository.delete(staleParticipantAssociation);
             }
         } catch (IOException ex) {
             logger.error(ex.getMessage(), ex);

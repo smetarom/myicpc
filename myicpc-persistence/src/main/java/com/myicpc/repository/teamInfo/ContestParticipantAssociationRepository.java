@@ -1,5 +1,7 @@
 package com.myicpc.repository.teamInfo;
 
+import com.myicpc.enums.ContestParticipantRole;
+import com.myicpc.model.contest.Contest;
 import com.myicpc.model.teamInfo.ContestParticipant;
 import com.myicpc.model.teamInfo.ContestParticipantAssociation;
 import com.myicpc.model.teamInfo.TeamInfo;
@@ -17,6 +19,8 @@ public interface ContestParticipantAssociationRepository extends CrudRepository<
     List<ContestParticipantAssociation> findByContestParticipant(ContestParticipant contestParticipant);
 
     List<ContestParticipantAssociation> findByTeamInfo(TeamInfo teamInfo);
+
+    List<ContestParticipantAssociation> findByContestParticipantRoleAndContest(ContestParticipantRole contestParticipantRole, Contest contest);
 
     @Query(value = "FROM ContestParticipantAssociation cpa JOIN FETCH cpa.contestParticipant c WHERE c IN ?1")
     List<ContestParticipantAssociation> findByContestParticipantIn(Collection<ContestParticipant> contestParticipant);
