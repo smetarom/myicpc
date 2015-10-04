@@ -376,6 +376,14 @@ public class TeamService {
      */
     private void parsePeople(TeamInfo teamInfo, JSONAdapter teamAdapter) {
         JsonArray persons = teamAdapter.getJsonArray("persons");
+
+        List<ContestParticipantAssociation> existingAssociations = contestParticipantAssociationRepository.findByTeamInfo(teamInfo);
+        Map<ContestParticipantWithRoleKey, ContestParticipantAssociation> associationMap = new HashMap<>();
+        for (ContestParticipantAssociation existingAssociation : existingAssociations) {
+            ContestParticipantWithRoleKey key = new ContestParticipantWithRoleKey(existingAssociation.getContestParticipant(), existingAssociation.getContestParticipantRole());
+            associationMap.put(key, existingAssociation);
+        }
+
         // Iterate through all JSON representations of team members
         for (JsonElement jsonElement : persons) {
             // JsonObject personObject = jsonElement.getAsJsonObject();
@@ -383,16 +391,20 @@ public class TeamService {
 
             Long externalId = personAdapter.getLong("personId");
             ContestParticipant member = parsePerson(personAdapter);
+            ContestParticipantRole contestParticipantRole = ContestParticipantRole.getTeamRoleByCode(personAdapter.getString("role"));
 
             // create team role
-            ContestParticipantAssociation association = contestParticipantAssociationRepository.findByTeamInfoAndContestParticipant(teamInfo, member);
+            ContestParticipantWithRoleKey key = new ContestParticipantWithRoleKey(member, contestParticipantRole);
+            ContestParticipantAssociation association = associationMap.get(key);
+            associationMap.remove(key);
+//                    contestParticipantAssociationRepository.findByTeamInfoAndContestParticipant(teamInfo, member);
             if (association == null) {
                 association = new ContestParticipantAssociation();
                 association.setTeamInfo(teamInfo);
                 association.setContest(teamInfo.getContest());
                 association.setContestParticipant(member);
             }
-            association.setContestParticipantRole(ContestParticipantRole.getTeamRoleByCode(personAdapter.getString("role")));
+            association.setContestParticipantRole(contestParticipantRole);
             contestParticipantAssociationRepository.save(association);
 
             JsonArray contests = personAdapter.getJsonArray("contests");
@@ -413,7 +425,11 @@ public class TeamService {
                 contest.setContestParticipantRole(ContestParticipantRole.getTeamRoleByCode(contestAdapter.getString("role")));
                 attendedContestRepository.save(contest);
             }
+        }
 
+        // remove stale participant associations, which are in MyICPC but not in CM
+        for (ContestParticipantAssociation staleParticipantAssociation : associationMap.values()) {
+            contestParticipantAssociationRepository.delete(staleParticipantAssociation);
         }
     }
 
@@ -567,5 +583,42 @@ public class TeamService {
     private void deleteTeamInfo(TeamInfo teamInfo) {
         contestParticipantAssociationRepository.deleteByTeamInfo(teamInfo);
         teamInfoRepository.delete(teamInfo);
+    }
+
+    private static class ContestParticipantWithRoleKey {
+        private ContestParticipant contestParticipant;
+        private ContestParticipantRole contestParticipantRole;
+
+        public ContestParticipantWithRoleKey(ContestParticipant contestParticipant, ContestParticipantRole contestParticipantRole) {
+            this.contestParticipant = contestParticipant;
+            this.contestParticipantRole = contestParticipantRole;
+        }
+
+        public ContestParticipant getContestParticipant() {
+            return contestParticipant;
+        }
+
+        public ContestParticipantRole getContestParticipantRole() {
+            return contestParticipantRole;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            ContestParticipantWithRoleKey that = (ContestParticipantWithRoleKey) o;
+
+            if (!getContestParticipant().equals(that.getContestParticipant())) return false;
+            return getContestParticipantRole() == that.getContestParticipantRole();
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = getContestParticipant().hashCode();
+            result = 31 * result + getContestParticipantRole().hashCode();
+            return result;
+        }
     }
 }

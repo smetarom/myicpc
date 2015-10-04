@@ -16,6 +16,8 @@ public interface ContestParticipantAssociationRepository extends CrudRepository<
 
     List<ContestParticipantAssociation> findByContestParticipant(ContestParticipant contestParticipant);
 
+    List<ContestParticipantAssociation> findByTeamInfo(TeamInfo teamInfo);
+
     @Query(value = "FROM ContestParticipantAssociation cpa JOIN FETCH cpa.contestParticipant c WHERE c IN ?1")
     List<ContestParticipantAssociation> findByContestParticipantIn(Collection<ContestParticipant> contestParticipant);
 
