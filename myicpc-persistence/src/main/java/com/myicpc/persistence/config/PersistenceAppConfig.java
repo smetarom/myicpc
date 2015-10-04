@@ -1,5 +1,6 @@
 package com.myicpc.persistence.config;
 
+import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -46,13 +47,13 @@ public class PersistenceAppConfig {
         return dataSource;
     }
 
-//    @Bean
-//    public SpringLiquibase liquibase() {
-//        SpringLiquibase bean = new SpringLiquibase();
-//        bean.setDataSource(dataSource());
-//        bean.setChangeLog("classpath:db/changelog.xml");
-//        return bean;
-//    }
+    @Bean
+    public SpringLiquibase liquibase() {
+        SpringLiquibase bean = new SpringLiquibase();
+        bean.setDataSource(dataSource());
+        bean.setChangeLog("classpath:db/changelog.xml");
+        return bean;
+    }
 
     @Bean
     public PlatformTransactionManager transactionManager() {
