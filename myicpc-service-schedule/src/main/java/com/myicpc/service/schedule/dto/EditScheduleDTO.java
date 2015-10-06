@@ -18,6 +18,11 @@ public class EditScheduleDTO implements Serializable {
      */
     private List<Event> events;
 
+    /**
+     * Constructor
+     *
+     * @param events events in the bulk update
+     */
     public EditScheduleDTO(List<Event> events) {
         this.events = events;
     }

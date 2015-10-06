@@ -197,7 +197,8 @@ public class ScheduleService {
      */
     public List<Event> getUpcomingEvents(int hours, final Contest contest) {
         // TODO replace with new Date()
-        Date now = new GregorianCalendar(2014, 5, 22, 12, 0, 0).getTime();
+//        Date now = new GregorianCalendar(2014, 5, 22, 12, 0, 0).getTime();
+        Date now = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(now);
         cal.add(Calendar.HOUR_OF_DAY, hours);
