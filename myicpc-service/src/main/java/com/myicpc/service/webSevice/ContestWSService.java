@@ -17,6 +17,8 @@ import java.util.Set;
 import java.util.TimeZone;
 
 /**
+ * Service communicating with CM web services related to contest
+ *
  * @author Roman Smetana
  */
 @Service
@@ -35,6 +37,14 @@ public class ContestWSService extends AbstractWSService {
         return new TranslationDto("contestAdmin.wsCheck." + jsonAdapter.getString("code"), jsonAdapter.getString("message"));
     }
 
+    /**
+     * Gets the contest details from CM
+     *
+     * @param contest contest to get details
+     * @return JSON representation of contest detail
+     * @throws IOException communication error
+     * @throws WebServiceException response is not valid
+     */
     public String getContestDetailFromCM(final Contest contest) throws IOException, WebServiceException {
         String json = (String) connectCM("/ws/myicpc/contest/" + contest.getCode() + "/details", contest);
         JsonObject responseParent = new JsonParser().parse(json).getAsJsonObject();

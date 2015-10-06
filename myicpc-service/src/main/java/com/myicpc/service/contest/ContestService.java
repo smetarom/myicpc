@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Service responsible for {@link Contest} management
+ *
  * @author Roman Smetana
  */
 @Service
@@ -54,6 +56,11 @@ public class ContestService {
     @Qualifier("contestSocialService")
     private ContestListener contestSocialService;
 
+    /**
+     * Adds contest event listeners
+     *
+     * @see ContestListener
+     */
     @PostConstruct
     private void init() {
         if (contestSocialService != null) {
@@ -61,21 +68,46 @@ public class ContestService {
         }
     }
 
+    /**
+     * Returns all active contests at the moment
+     *
+     * @return active contests
+     */
     public List<Contest> getActiveContests() {
         Sort sort = new Sort(Sort.Direction.DESC, "startTime");
         return contestRepository.findAll(sort);
     }
 
+    /**
+     * Returns all active contests at the moment, where the logged user has access
+     *
+     * @return logged user active contests
+     */
     @PostFilter(SecurityConstants.FILTER_CONTEST_READ_ACCESS_OR_ADMIN)
     public List<Contest> getActiveContestsSecured() {
         return getActiveContests();
     }
 
+    /**
+     * Returns sorted contests by {@code sort}, where the logged user has access
+     *
+     * @param sort contest sort preferences
+     * @return logged user sorted contests
+     */
     @PostFilter(SecurityConstants.FILTER_CONTEST_READ_ACCESS_OR_ADMIN)
     public List<Contest> getContestsSecured(Sort sort) {
         return contestRepository.findAll(sort);
     }
 
+    /**
+     * Returns a {@link Contest} by {@link Contest#code}
+     *
+     * The returned value is cached for performance reasons
+     *
+     * @param contestCode contest code
+     * @return contest
+     * @throws ContestNotFoundException contest with {@code contestCode} not found
+     */
     @Cacheable(value = "contestByCode")
     public Contest getContest(String contestCode) throws ContestNotFoundException {
         Contest contest = contestRepository.findFullByCode(contestCode);
@@ -85,7 +117,15 @@ public class ContestService {
         return contest;
     }
 
+    /**
+     * Returns a {@link Contest} by {@link Contest#code} if the logged user hac contest access
+     *
+     * @param contestCode contest code
+     * @return contest
+     * @throws ContestNotFoundException contest with {@code contestCode} not found
+     */
     @PostAuthorize(SecurityConstants.RETURN_CONTEST_READ_ACCESS_OR_ADMIN)
+    @Cacheable(value = "contestByCode")
     public Contest getContestSecured(String contestCode) throws ContestNotFoundException {
         return getContest(contestCode);
     }
@@ -116,6 +156,15 @@ public class ContestService {
         return diff;
     }
 
+    /**
+     * Creates a new {@link Contest}
+     *
+     * It adds current logged user, who created the contest as contest manager
+     *
+     * It calls {@link ContestListener#onContestCreated(Contest)} on all registered listeners
+     *
+     * @param contest contest to be created
+     */
     @Transactional
     public void createContest(final Contest contest) {
         Contest persistedContest = saveContest(contest);
@@ -140,6 +189,14 @@ public class ContestService {
         }
     }
 
+    /**
+     * Persists changes in the contest
+     *
+     * It does some small auto corrections in the contest
+     *
+     * @param contest contest to be persisted
+     * @return persisted contest
+     */
     @Transactional
     public Contest saveContest(final Contest contest) {
         // remove # from hashtag
@@ -147,6 +204,13 @@ public class ContestService {
         return contestRepository.save(contest);
     }
 
+    /**
+     * Deletes permanently {@code contest}
+     *
+     * It deletes all dependent entities to the contest as well
+     *
+     * @param contest contest to be deleted
+     */
     @Transactional
     public void deleteContest(final Contest contest) {
         // TODO remove all objects related to the contest

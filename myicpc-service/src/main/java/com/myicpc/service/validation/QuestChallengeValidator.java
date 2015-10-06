@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
+ * Business validator for {@link QuestChallenge}
+ *
  * @author Roman Smetana
  */
 @Component

@@ -15,6 +15,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * Service responsible for timeline
+ *
  * @author Roman Smetana
  */
 @Service
@@ -39,13 +41,26 @@ public class TimelineService {
     @Autowired
     private NotificationRepository notificationRepository;
 
+    /**
+     * Gets latest {@link #POSTS_PER_PAGE} notifications with type from {@link #TIMELINE_TYPES}
+     *
+     * @param contest contest
+     * @return latest notifications
+     */
     public List<Notification> getTimelineNotifications(Contest contest) {
         Pageable pageable = new PageRequest(0, POSTS_PER_PAGE);
         Page<Notification> timelineNotifications = notificationRepository.findByNotificationTypesOrderByIdDesc(TIMELINE_TYPES, contest, pageable);
         return timelineNotifications.getContent();
     }
 
-
+    /**
+     * Gets {@link #POSTS_PER_PAGE} notifications with type from {@link #TIMELINE_TYPES}
+     * created after {@code lastTimestamp}
+     *
+     * @param lastTimestamp deadline timestamp, when notifications are created
+     * @param contest contest
+     * @return latest notifications before {@code lastTimestamp}
+     */
     public List<Notification> getTimelineNotifications(Long lastTimestamp, Contest contest) {
         Pageable pageable = new PageRequest(0, POSTS_PER_PAGE);
         Date timestamp = new Date(lastTimestamp);

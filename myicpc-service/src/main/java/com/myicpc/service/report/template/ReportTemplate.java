@@ -22,16 +22,39 @@ import static net.sf.dynamicreports.report.builder.DynamicReports.report;
 import static net.sf.dynamicreports.report.builder.DynamicReports.stl;
 
 /**
+ * Report utility class, which offers default styles and report operations
+ *
  * @author Roman Smetana
  */
 public class ReportTemplate {
+    /**
+     * Default style
+     */
     public static final StyleBuilder rootStyle;
+    /**
+     * Report headline style
+     */
     public static final StyleBuilder headlineStyle;
+    /**
+     * Report level 1 headline style
+     */
     public static final StyleBuilder h1Style;
+    /**
+     * Bold text
+     */
     public static final StyleBuilder boldStyle;
+    /**
+     * Default report column style
+     */
     public static final StyleBuilder columnStyle;
+    /**
+     * Default report column header style
+     */
     public static final StyleBuilder columnTitleStyle;
 
+    /**
+     * Initialize styles
+     */
     static {
         rootStyle = stl.style().setPadding(2);
         headlineStyle = stl.style().setFontSize(24).setBottomPadding(20);
@@ -48,12 +71,22 @@ public class ReportTemplate {
                 .bold();
     }
 
+    /**
+     * Creates base report template
+     *
+     * @return base report template
+     */
     public static JasperReportBuilder baseReport() {
         JasperReportBuilder baseReport = baseSubreport()
                 .pageFooter(createFooter());
         return baseReport;
     }
 
+    /**
+     * Creates base sub-report template
+     *
+     * @return base sub-report template
+     */
     public static JasperReportBuilder baseSubreport() {
         ResourceBundle reportResourceBundle = ResourceBundle.getBundle("i18n/report", Locale.US);
         JasperReportBuilder baseReport = report()
@@ -64,6 +97,13 @@ public class ReportTemplate {
         return baseReport;
     }
 
+    /**
+     * Creates default report footer
+     *
+     * It contains the generation date and indicator page X of Y
+     *
+     * @return default report footer
+     */
     public static ComponentBuilder<?, ?> createFooter() {
         HorizontalListBuilder list = cmp.horizontalList();
         list.add(cmp.text(new ReportExpressions.DateExpression(new Date())));
@@ -73,26 +113,64 @@ public class ReportTemplate {
         return list;
     }
 
+    /**
+     * Translates {@code resourceKey}
+     *
+     * @param resourceKey translation key
+     * @return expression with translated message
+     */
     public static MessageExpression translateText(String resourceKey) {
         return new MessageExpression(resourceKey);
     }
 
+    /**
+     * Translates {@code resourceKey} with parameters {@code arguments}
+     *
+     * @param resourceKey translation key
+     * @param arguments translation parameters
+     * @return expression with translated message
+     */
     public static MessageExpression translateText(String resourceKey, Object... arguments) {
         return new MessageExpression(resourceKey, arguments);
     }
 
+    /**
+     * Creates a label-value expression
+     *
+     * @param key translation key
+     * @param value value
+     * @param <T> type of {@value}
+     * @return label-value expression
+     */
     public static <T> TextFieldBuilder<String> labeledText(String key, T value) {
         TextFieldBuilder<String> builder = cmp.text(new ReportExpressions.LabelExpression<>(translateText(key), value));
         builder.setStyle(stl.style().setMarkup(Markup.HTML));
         return builder;
     }
 
-    public static <T> TextFieldBuilder<String> labeledText(String key, T value, AbstractValueFormatter formatter) {
+    /**
+     * Creates a label-value expression
+     *
+     * @param key translation key
+     * @param value value
+     * @param formatter value formatter
+     * @param <T> type of {@value}
+     * @return label-value expression
+     */
+    public static <T> TextFieldBuilder<String> labeledText(String key, T value, AbstractValueFormatter<?, T> formatter) {
         TextFieldBuilder<String> builder = cmp.text(new ReportExpressions.LabelExpression<>(translateText(key), value, formatter));
         builder.setStyle(stl.style().setMarkup(Markup.HTML));
         return builder;
     }
 
+    /**
+     * Creates a label-value expression
+     *
+     * @param key translation key
+     * @param expression value expression
+     * @param <T> type of {@value}
+     * @return label-value expression
+     */
     public static <T> TextFieldBuilder<String> labeledText(String key, AbstractSimpleExpression<T> expression) {
         TextFieldBuilder<String> builder = cmp.text(new ReportExpressions.LabelExpression<>(translateText(key), expression));
         builder.setStyle(stl.style().setMarkup(Markup.HTML));

@@ -11,24 +11,61 @@ import com.myicpc.repository.social.NotificationRepository;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Builder for {@link Notification}
+ *
+ * @author Roman Smetana
+ */
 public class NotificationBuilder {
+    /**
+     * Created notification
+     */
     private final Notification notification;
 
+    /**
+     * Constructor
+     *
+     * It sets current timestamp to the notification
+     */
     public NotificationBuilder() {
         notification = new Notification();
         notification.setTimestamp(new Date());
+        setOffensive();
     }
 
+    /**
+     * Constructor
+     *
+     * It sets current timestamp and entity ID to the notification
+     *
+     * @param entityObject entity
+     */
     public NotificationBuilder(final EntityObject entityObject) {
         this();
         notification.setEntityId(entityObject.getId());
     }
 
+    /**
+     * Constructor
+     *
+     * It sets current timestamp, contest, and entity ID to the notification
+     *
+     * @param contestObject entity
+     */
     public NotificationBuilder(final IdGeneratedContestObject contestObject) {
         this((EntityObject) contestObject);
         notification.setContest(contestObject.getContest());
     }
 
+    /**
+     * Constructor
+     *
+     * It reuses the notification if it is already persisted, otherwise it creates
+     *
+     * @param contestObject entity
+     * @param notificationType notification type
+     * @param notificationRepository notification repository
+     */
     public NotificationBuilder(final IdGeneratedContestObject contestObject, final NotificationType notificationType,
                                final NotificationRepository notificationRepository) {
         List<Notification> notifications = notificationRepository.findByContestAndEntityIdAndNotificationType(contestObject.getContest(),
@@ -41,8 +78,14 @@ public class NotificationBuilder {
             notification.setEntityId(contestObject.getId());
             notification.setContest(contestObject.getContest());
         }
+        setOffensive();
     }
 
+    /**
+     * It returns the current state of notification
+     *
+     * @return created notification
+     */
     public Notification build() {
         return notification;
     }

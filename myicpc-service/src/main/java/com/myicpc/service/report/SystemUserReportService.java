@@ -27,10 +27,19 @@ import static com.myicpc.service.report.template.ReportTemplate.translateText;
 import static net.sf.dynamicreports.report.builder.DynamicReports.*;
 
 /**
+ * Service responsible for reports related to {@link SystemUser}s
+ *
  * @author Roman Smetana
  */
 @Service
 public class SystemUserReportService extends AbstractReportService {
+
+    /**
+     * Generates the report of all {@link SystemUser}s in the system
+     *
+     * @param content list of reported system users
+     * @param outputStream the stream with report output
+     */
     public void generateUserReport(List<SystemUser> content, OutputStream outputStream) {
         try {
             JRDataSource dataSource = new JRBeanCollectionDataSource(content);
@@ -53,7 +62,14 @@ public class SystemUserReportService extends AbstractReportService {
         }
     }
 
-    private class SystemUserRoleListExpression extends AbstractSimpleExpression<String> {
+    /**
+     * Translates user roles and prints them each role on a new line
+     *
+     * @author Roman Smetana
+     */
+    private static class SystemUserRoleListExpression extends AbstractSimpleExpression<String> {
+        private static final long serialVersionUID = 8703735847215133194L;
+
         @Override
         public String evaluate(ReportParameters reportParameters) {
             List<SystemUserRole> roles = reportParameters.getValue("roles");

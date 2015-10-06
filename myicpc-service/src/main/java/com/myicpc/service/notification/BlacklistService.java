@@ -39,6 +39,9 @@ public class BlacklistService {
     @Autowired
     private NotificationService notificationService;
 
+    /**
+     * Initialize the default mapping between notifications and blacklisted records
+     */
     static {
         fromNotificationToBlacklist = HashBiMap.create();
         fromNotificationToBlacklist.put(NotificationType.TWITTER, BlacklistedUserType.TWITTER);

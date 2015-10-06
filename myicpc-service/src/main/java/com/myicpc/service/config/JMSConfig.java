@@ -16,6 +16,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 /**
+ * JMS messaging configuration
+ *
  * @author Roman Smetana
  */
 @Configuration
@@ -23,6 +25,11 @@ import javax.naming.NamingException;
 public class JMSConfig {
     private static final Logger logger = LoggerFactory.getLogger(JMSConfig.class);
 
+    /**
+     * Creates JMS Queue listeners
+     *
+     * @return queue listener factory
+     */
     @Bean
     public DefaultJmsListenerContainerFactory jmsListenerContainerFactory() {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
@@ -32,6 +39,11 @@ public class JMSConfig {
         return factory;
     }
 
+    /**
+     * Creates JMS Topic listeners
+     *
+     * @return topic listener factory
+     */
     @Bean
     public DefaultJmsListenerContainerFactory jmsTopicListenerContainerFactory() {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
@@ -42,6 +54,11 @@ public class JMSConfig {
         return factory;
     }
 
+    /**
+     * Creates a template, which uses JMS Topic
+     *
+     * @return topic template
+     */
     @Bean(name = "jmsTopicTemplate")
     public JmsTemplate jmsTopicTemplate() {
         JmsTemplate template = new JmsTemplate(connectionFactory());
@@ -50,6 +67,11 @@ public class JMSConfig {
         return template;
     }
 
+    /**
+     * Creates a template, which uses JMS Queue
+     *
+     * @return queue topic
+     */
     @Bean(name = "jmsQueueTemplate")
     public JmsTemplate jmsQueueTemplate() {
         JmsTemplate template = new JmsTemplate(connectionFactory());
@@ -57,12 +79,24 @@ public class JMSConfig {
         return template;
     }
 
+    /**
+     * Creates JNDI destination resolver
+     *
+     * It resolves queues and topics destinations in Java context
+     *
+     * @return JNDI destination resolver
+     */
     @Bean
     public DestinationResolver destinationResolver() {
         JndiDestinationResolver destinationResolver = new JndiDestinationResolver();
         return destinationResolver;
     }
 
+    /**
+     * Gets the connection factory from context
+     *
+     * @return connection factory
+     */
     @Bean
     public ConnectionFactory connectionFactory() {
         try {

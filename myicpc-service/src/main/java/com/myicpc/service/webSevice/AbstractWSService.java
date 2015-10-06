@@ -24,6 +24,8 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 
 /**
+ * Parent class for services, which connect to web service endpoints and get response
+ *
  * @author Roman Smetana
  */
 public abstract class AbstractWSService {
@@ -55,10 +57,6 @@ public abstract class AbstractWSService {
     private String connectCM(final String server, final String url, final Contest contest) throws IOException {
         HttpGet httpGet = null;
         try {
-//            SSLContext sslcontext = SSLContexts.custom().build();
-            // Allow TLSv1.2 protocol only
-//            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, new String[] { "TLSv1.2" }, null, SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
-
             SSLContextBuilder builder = new SSLContextBuilder();
             builder.loadTrustMaterial(null, new TrustSelfSignedStrategy());
             builder.useProtocol("TLSv1.2");

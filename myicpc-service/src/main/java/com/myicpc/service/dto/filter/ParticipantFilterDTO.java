@@ -6,11 +6,24 @@ import com.myicpc.model.teamInfo.TeamInfo;
 import java.io.Serializable;
 
 /**
+ * Represents filter for contest participants
+ *
  * @author Roman Smetana
  */
 public class ParticipantFilterDTO implements Serializable {
+    private static final long serialVersionUID = -115332857581599810L;
+
+    /**
+     * Selected {@link ContestParticipantRole}
+     */
     private ContestParticipantRole contestParticipantRole;
+    /**
+     * Selected {@link TeamInfo}
+     */
     private TeamInfo teamInfo;
+    /**
+     * The fulltext search parameter
+     */
     private String searchText;
 
     public ContestParticipantRole getContestParticipantRole() {

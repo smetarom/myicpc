@@ -16,6 +16,8 @@ import javax.validation.ValidationException;
 import java.util.List;
 
 /**
+ * Service responsible for {@link ContestParticipant}s
+ *
  * @author Roman Smetana
  */
 @Service
@@ -65,6 +67,12 @@ public class ParticipantService {
         contestParticipantAssociationRepository.save(association);
     }
 
+    /**
+     * Returns sorted teams by team/university names based on {@link Contest#showTeamNames}
+     *
+     * @param contest contest
+     * @return sorted teams
+     */
     public List<TeamInfo> getTeamInfosSortedByName(Contest contest) {
         if (contest.isShowTeamNames()) {
             return teamInfoRepository.findByContestOrderByNameAsc(contest);

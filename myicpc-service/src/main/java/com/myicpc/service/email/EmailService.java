@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.Properties;
 
 /**
+ * Email service responsible for sending emails from MyICPC
+ *
  * @author Roman Smetana
  */
 @Service

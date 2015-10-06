@@ -17,6 +17,10 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
+ * Service responsible for global settings
+ *
+ * Global settings is MyICPC settings, which is shared between all contests
+ *
  * @author Roman Smetana
  */
 @Service
@@ -29,16 +33,35 @@ public class GlobalSettingsService {
     @Autowired
     private SystemUserRoleRepository systemUserRoleRepository;
 
+    /**
+     * Checks, if the install mode is available
+     *
+     * Install mode is available only if there is no admin account
+     *
+     * @return is the install mode available
+     */
     public boolean isInstallPhaseEnabled() {
         Long adminCount = systemUserRoleRepository.countAdminUsers();
 
         return adminCount == null || Long.valueOf(0).equals(adminCount);
     }
 
+    /**
+     * Loads global settings
+     *
+     * @return global settings
+     */
     public GlobalSettings getGlobalSettings() {
         return loadGlobalSettings();
     }
 
+    /**
+     * Merges {@code globalSettings} with default predefined values
+     *
+     * It uses default values for all unset values
+     *
+     * @param globalSettings global settings to be updated
+     */
     public void mergeDefaultGlobalSettings(final GlobalSettings globalSettings) {
         Properties conf = new Properties();
         try (InputStream settingsInputStream = GlobalSettingsService.class.getClassLoader().getResourceAsStream("defaultSettings.properties")) {
@@ -74,13 +97,18 @@ public class GlobalSettingsService {
         return globalSettings;
     }
 
+    /**
+     * Persists global settings
+     *
+     * @param globalSettings global settings to be persisted
+     */
     public void saveGlobalSettings(GlobalSettings globalSettings) {
         for (Map.Entry<Globals.GlobalsColumn, String> entry : globalSettings.getSettingsMap().entrySet()) {
             saveProperty(entry.getKey(), entry.getValue());
         }
     }
 
-    protected void saveProperty(Globals.GlobalsColumn name, String value) {
+    private void saveProperty(Globals.GlobalsColumn name, String value) {
         Globals globals = globalsRepository.findByName(name.toString());
         if (globals == null) {
             globals = new Globals(name);

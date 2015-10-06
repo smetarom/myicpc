@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import javax.servlet.ServletContext;
 
 /**
+ * Service responsible for broadcasting the events to SSE and WebSockets channels
+ *
  * @author Roman Smetana
  */
 @Service
@@ -95,6 +97,12 @@ public class PublishService {
                 teamSubmission.toString());
     }
 
+    /**
+     * Broadcast the quest submissions on a submission change
+     *
+     * @param questSubmission quest submission to be broadcasted
+     * @param contestCode contest code
+     */
     public void broadcastQuestSubmission(QuestSubmission questSubmission, String contestCode) {
         JsonObject submissionObject = new JsonObject();
         submissionObject.addProperty("type", "submission");
@@ -104,8 +112,8 @@ public class PublishService {
     /**
      * Broadcast the poll updates
      *
-     * @param poll
-     * @param option
+     * @param poll poll
+     * @param option selected poll option
      */
     public void broadcastPollAnswer(final Poll poll, final PollOption option) {
         JsonObject pollUpdate = new JsonObject();
@@ -116,6 +124,11 @@ public class PublishService {
         atmospherePublish(PREFIX + poll.getContest().getCode() + "/" + POLL, pollUpdate.toString());
     }
 
+    /**
+     * Broadcast the kiosk updates
+     *
+     * @param contestCode contest code
+     */
     public void broadcastKioskPage(String contestCode) {
         JsonObject kioskPageObject = new JsonObject();
         kioskPageObject.addProperty("type", "pageChange");

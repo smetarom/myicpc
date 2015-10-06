@@ -7,6 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Holder for global settings
+ *
+ * It contains all data shared between contest configurations
+ *
  * @author Roman Smetana
  */
 public class GlobalSettings implements Serializable {

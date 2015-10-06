@@ -22,6 +22,8 @@ import java.util.List;
 
 
 /**
+ * Service responsible for {@link SystemUser} management
+ *
  * @author Roman Smetana
  */
 @Service
@@ -38,8 +40,8 @@ public class SystemUserService {
 
     /**
      * Verifies if the password match the password check
-     * @param systemUser
-     * @return
+     * @param systemUser system user
+     * @return if passwords match
      */
     public boolean checkPasswordVerification(SystemUser systemUser) {
         if (systemUser == null || systemUser.getPassword() == null) {
@@ -124,7 +126,7 @@ public class SystemUserService {
         }
     }
 
-    protected void saveUserRoles(List<String> roles, SystemUser user) {
+    private void saveUserRoles(List<String> roles, SystemUser user) {
         for (String role : roles) {
             if (!StringUtils.isEmpty(role)) {
                 SystemUserRole systemUserRole = new SystemUserRole();

@@ -6,6 +6,11 @@ import com.myicpc.model.eventFeed.TeamProblem;
 import java.util.List;
 
 /**
+ * Adapter for {@link ScoreboardListener}
+ *
+ * It prevents from the implementing all methods in the {@link ScoreboardListener} implementation,
+ * the implementation overrides only methods it uses
+ *
  * @author Roman Smetana
  */
 public abstract class ScoreboardListenerAdapter implements ScoreboardListener {

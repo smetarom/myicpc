@@ -4,6 +4,8 @@ import com.myicpc.model.EntityObject;
 import com.myicpc.service.exception.BusinessValidationException;
 
 /**
+ * Parent class for entity validators
+ *
  * @author Roman Smetana
  */
 public abstract class BusinessEntityValidator<T extends EntityObject> {
