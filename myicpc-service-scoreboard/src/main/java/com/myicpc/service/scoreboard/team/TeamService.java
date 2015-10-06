@@ -59,6 +59,10 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * Service responsible for {@link Team} management
+ *
+ * It manages the synchronization of teams, universities and regions between CM and MyICPC
+ *
  * @author Roman Smetana
  */
 @Service
@@ -105,8 +109,8 @@ public class TeamService {
     /**
      * Get team infos ordered by contest preferences (by team name or university name)
      *
-     * @param contest
-     * @return
+     * @param contest contest
+     * @return sorted {@link TeamInfo}s by {@link Contest#showTeamNames}
      */
     public List<TeamInfo> getTeamInfosByContest(Contest contest) {
         if (contest.isShowTeamNames()) {
@@ -119,6 +123,8 @@ public class TeamService {
     /**
      * Synchronize team and university info via web services
      *
+     * @param contest contest
+     * @throws javax.validation.ValidationException the provided data from CM are not in valid format
      */
     public void synchronizeTeamsWithCM(Contest contest) throws ValidationException {
         try {
@@ -140,7 +146,9 @@ public class TeamService {
      * Synchronize team and university info via file upload
      *
      * @param universityJSON file with university info
+     * @param regionJSON file with region info
      * @param teamJSON       file with team info
+     * @param contest contest
      * @throws IOException parsing uploaded files failed
      */
     public void synchronizeTeamsFromFile(final MultipartFile universityJSON, final MultipartFile regionJSON, final MultipartFile teamJSON, final Contest contest) throws IOException,
@@ -240,6 +248,7 @@ public class TeamService {
      * Synchronize teams based on given JSON data
      *
      * @param teamJSON team JSON data
+     * @param contest contest
      */
     private void synchronizeTeams(String teamJSON, Contest contest) {
         try {
@@ -340,8 +349,8 @@ public class TeamService {
     /**
      * Parses regional contests where the team participates
      *
-     * @param teamInfo    team
-     * @param teamAdapter JSON representation
+     * @param teamInfo    team info
+     * @param teamAdapter JSON representation of team info
      * @return list of regional contests
      */
     private List<RegionalResult> parseRegionalContests(TeamInfo teamInfo, JSONAdapter teamAdapter) {
@@ -371,8 +380,8 @@ public class TeamService {
     /**
      * Parses people from JSON
      *
-     * @param teamInfo    team
-     * @param teamAdapter team JSON representation
+     * @param teamInfo    team info
+     * @param teamAdapter JSON representation of team info
      */
     private void parsePeople(TeamInfo teamInfo, JSONAdapter teamAdapter) {
         JsonArray persons = teamAdapter.getJsonArray("persons");
@@ -455,6 +464,8 @@ public class TeamService {
 
     /**
      * Synchronize staff info via web services
+     *
+     * @param contest contest
      */
     public void synchronizeStaffMembersWithCM(Contest contest) {
         try {
@@ -496,6 +507,7 @@ public class TeamService {
     /**
      * Synchronize social info (social accounts, etc.) info via web services
      *
+     * @param contest contest
      * @throws WebServiceException communication with WS failed
      */
     public void synchronizeSocialInfosWithCM(Contest contest) throws WebServiceException {
@@ -529,6 +541,12 @@ public class TeamService {
         }
     }
 
+    /**
+     * Returns the team submissions chronologically sorted from the newest to the oldest
+     *
+     * @param team team, which submissions are returned
+     * @return sorted {@link SubmissionDTO}s
+     */
     public List<SubmissionDTO> getTeamSubmissionDTOs(final Team team) {
         List<Long> teamProblemIds = new ArrayList<>();
         Map<Long, TeamProblem> map = new HashMap<>();
@@ -574,6 +592,7 @@ public class TeamService {
         return map;
     }
 
+    // TODO remove
     public JsonArray getRankHistoryChartData(final Team team) {
         List<TeamRankHistory> history = teamRankHistoryRepository.findByTeam(team);
         JsonArray historyArray = new JsonArray();

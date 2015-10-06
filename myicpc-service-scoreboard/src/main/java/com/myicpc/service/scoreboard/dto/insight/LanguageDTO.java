@@ -11,10 +11,16 @@ public class LanguageDTO {
 	 */
 	private String name;
 	/**
-	 * Count of runs with this language
+	 * Count of team submissions with this language
 	 */
 	private int count;
 
+    /**
+     * Constructor
+     *
+     * @param name language name
+     * @param count count of team submissions with this language
+     */
 	public LanguageDTO(final String name, final int count) {
 		super();
 		this.name = name;

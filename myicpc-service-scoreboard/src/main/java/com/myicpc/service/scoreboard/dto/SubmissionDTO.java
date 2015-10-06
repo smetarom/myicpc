@@ -10,6 +10,8 @@ import java.io.Serializable;
  */
 //TODO rename
 public class SubmissionDTO implements Serializable {
+    private static final long serialVersionUID = 9132784638908071165L;
+
     private TeamProblem teamProblem;
     private Notification notification;
     private int contestTime;

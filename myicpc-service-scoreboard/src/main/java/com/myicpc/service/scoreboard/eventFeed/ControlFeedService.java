@@ -115,24 +115,17 @@ public class ControlFeedService {
 
     /**
      * Starts execution of feed event processing
+     *
+     * @param contest contest
      */
     public void startEventFeed(Contest contest) {
         Future<Void> newFeedProcess;
         if (hasContestPollingStrategy(contest)) {
-            // TODO hard coded value!
-            newFeedProcess = eventFeedProcessor.pollingEventFeed(contest, 10000);
+            newFeedProcess = eventFeedProcessor.pollingEventFeed(contest, 60000);
         } else {
             newFeedProcess = eventFeedProcessor.runEventFeed(contest);
         }
         runningFeedProcesses.put(contest.getId(), new RunningFeedProcessDTO(newFeedProcess, new Date()));
-    }
-
-    private static RunningFeedProcessDTO getRunningFeedProccesor(Long contestId, Date untilDate) {
-        RunningFeedProcessDTO runningFeedProcess = runningFeedProcesses.get(contestId);
-        if (runningFeedProcess != null && runningFeedProcess.getCreated().before(untilDate)) {
-            return runningFeedProcess;
-        }
-        return null;
     }
 
     /**
@@ -257,6 +250,14 @@ public class ControlFeedService {
                 contest.getContestSettings().getScoreboardStrategyType().isPolling();
     }
 
+    private static RunningFeedProcessDTO getRunningFeedProccesor(Long contestId, Date untilDate) {
+        RunningFeedProcessDTO runningFeedProcess = runningFeedProcesses.get(contestId);
+        if (runningFeedProcess != null && runningFeedProcess.getCreated().before(untilDate)) {
+            return runningFeedProcess;
+        }
+        return null;
+    }
+
     /**
      * Job data holder
      * <p/>
@@ -266,7 +267,7 @@ public class ControlFeedService {
         private final Future<Void> job;
         private final Date created;
 
-        public RunningFeedProcessDTO(Future<Void> job, Date created) {
+        private RunningFeedProcessDTO(Future<Void> job, Date created) {
             this.job = job;
             this.created = created;
         }

@@ -2,7 +2,6 @@ package com.myicpc.controller.scoreboard.admin;
 
 import com.myicpc.controller.GeneralAdminController;
 import com.myicpc.model.contest.Contest;
-import com.myicpc.service.scoreboard.eventFeed.EJBControlFeedService;
 import com.myicpc.service.scoreboard.eventFeed.ControlFeedService;
 import com.myicpc.service.scoreboard.exception.EventFeedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +19,6 @@ public class ScoreboardAdminController extends GeneralAdminController {
     @Autowired
     private ControlFeedService oldControlFeedService;
 
-    @Autowired
-    private EJBControlFeedService controlFeedService;
-
     @RequestMapping(value = "/private/{contestCode}/scoreboard/feed/start", method = RequestMethod.GET)
     public String startFeed(@PathVariable String contestCode) throws EventFeedException {
         Contest contest = getContest(contestCode, null);
@@ -35,7 +31,5 @@ public class ScoreboardAdminController extends GeneralAdminController {
     @RequestMapping(value = "/private/{contestCode}/scoreboard/feed/test", method = RequestMethod.GET)
     public void testFeed(@PathVariable String contestCode) throws EventFeedException {
         Contest contest = getContest(contestCode, null);
-
-        controlFeedService.restartEventFeed(contest);
     }
 }

@@ -9,9 +9,12 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 /**
+ * Holds data for {@link Team} specific for Insight
+ *
  * @author Roman Smetana
  */
 public class CodeInsightTeam implements Serializable {
+    private static final long serialVersionUID = 6777848135258336886L;
     /**
      * Team
      */
@@ -25,12 +28,22 @@ public class CodeInsightTeam implements Serializable {
      */
     private int diffLineCount;
 
+    /**
+     * Constructor
+     *
+     * @param codeInsightActivity insight activity
+     */
     public CodeInsightTeam(CodeInsightActivity codeInsightActivity) {
         this.team = codeInsightActivity.getTeam();
         this.lineCount = codeInsightActivity.getLineCount();
         this.diffLineCount = codeInsightActivity.getDiffLineCount();
     }
 
+    /**
+     * Merges {@code codeInsightActivity} with already merged insight activities
+     *
+     * @param codeInsightActivity insight activity
+     */
     public void merge(CodeInsightActivity codeInsightActivity) {
         lineCount = Math.max(lineCount, codeInsightActivity.getLineCount());
         diffLineCount += codeInsightActivity.getDiffLineCount();
@@ -44,6 +57,12 @@ public class CodeInsightTeam implements Serializable {
         return team.getName();
     }
 
+    /**
+     * Returns data used in charts based on {@code insideCodeMode}
+     *
+     * @param insideCodeMode aspect you are interested in
+     * @return specified aspect of {@code this}
+     */
     public int getChartData(final InsideCodeMode insideCodeMode) {
         if (insideCodeMode == InsideCodeMode.DIFF) {
             return diffLineCount;

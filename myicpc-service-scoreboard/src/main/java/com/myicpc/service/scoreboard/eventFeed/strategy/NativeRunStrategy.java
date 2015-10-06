@@ -15,6 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Scoreboard strategy, which calculates the scoreboard state only from the data received from the Event feed
+ *
+ * @author Roman Smetana
+ */
 @Component
 public class NativeRunStrategy extends FeedRunStrategy {
     /**
@@ -33,7 +38,7 @@ public class NativeRunStrategy extends FeedRunStrategy {
     }
 
     /**
-     * decide, if the run is the first problem, which solves a problem or not
+     * Decides, if the run is the first problem, which solves a problem or not
      *
      * @param teamProblem received team submission
      */

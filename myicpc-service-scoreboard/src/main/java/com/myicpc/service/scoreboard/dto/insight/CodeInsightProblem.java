@@ -13,11 +13,24 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Holds data for a {@link Problem} in Insight view
+ *
+ * It holds all {@link CodeInsightTeam}s which belong to this problem
+ *
  * @author Roman Smetana
  */
 public class CodeInsightProblem implements Serializable {
+    private static final long serialVersionUID = -458122017645361481L;
+    /**
+     * Map between team ID and {@link CodeInsightTeam}
+     */
     private final Map<Long, CodeInsightTeam> teamMap = new HashMap<>();
 
+    /**
+     * Adds a {@code activity} to the team
+     *
+     * @param activity code insight activity
+     */
     public void addTeamActivity(CodeInsightActivity activity) {
         CodeInsightTeam team = teamMap.get(activity.getTeam().getId());
         if (team == null) {
@@ -28,10 +41,22 @@ public class CodeInsightProblem implements Serializable {
         teamMap.put(team.getTeam().getId(), team);
     }
 
+    /**
+     * Return a {@link CodeInsightTeam} by team ID
+     *
+     * @param id team ID
+     * @return {@link CodeInsightTeam} or {@code null}, if team with {@code id} does not exist
+     */
     public CodeInsightTeam getTeamById(Long id) {
         return teamMap.get(id);
     }
 
+    /**
+     * Returns sorted teams by {@code insideCodeMode}
+     *
+     * @param insideCodeMode mode, which decides by which field the teams are sorted
+     * @return sorted teams by {@code insideCodeMode}, or {@code null} if non-supported {@code insideCodeMode} is provided
+     */
     public List<CodeInsightTeam> getTeamsSorted(final CodeInsightService.InsideCodeMode insideCodeMode) {
         if (insideCodeMode == CodeInsightService.InsideCodeMode.DIFF) {
             return getTeamsSortedByDiffLines();

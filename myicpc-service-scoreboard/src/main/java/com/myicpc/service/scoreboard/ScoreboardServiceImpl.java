@@ -191,6 +191,16 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
         return root;
     }
 
+    /**
+     * Transfers {@link TeamProblem} instance into its JSON representation
+     *
+     * The JSON model contains effected teams by {@code teamProblem} such as teeams, where the rank was changed if
+     * {@code teamProblem} solved the problem
+     *
+     * @param teamProblem team submission
+     * @param effectedTeams teams effected by {@code teamProblem}
+     * @return team submission JSON model
+     */
     public static JsonObject getTeamSubmissionJSON(final TeamProblem teamProblem, Iterable<Team> effectedTeams) {
         JsonObject tpObject = new JsonObject();
         tpObject.addProperty("type", "submission");

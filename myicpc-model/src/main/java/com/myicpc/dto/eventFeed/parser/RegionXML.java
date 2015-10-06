@@ -8,7 +8,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 /**
  * @author Roman Smetana
  */
-@XStreamAlias("region")
+@XStreamAlias("language")
 public class RegionXML extends XMLEntity<Region> {
     @XStreamAlias("external-id")
     private Long externalId;

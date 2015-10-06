@@ -40,19 +40,47 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
+ * Code insight service
+ *
+ * This service is responsible for business logic related to insight into team source codes
+ *
  * @author Roman Smetana
  */
 @Service
 @Transactional
 public class CodeInsightService {
     private static final Logger logger = LoggerFactory.getLogger(CodeInsightService.class);
+    /**
+     * Map between contest time in minutes and {@code CodeInsightSnapshot}
+     */
     private static final ConcurrentMap<Integer, CodeInsightSnapshot> cachedSnapshots = new ConcurrentHashMap<>();
+    /**
+     * The size of time intervals in minutes
+     *
+     * All insight activities are grouped by problem
+     */
     private static final int INSIGHT_INTERVAL = 5;
+    /**
+     * Number of code insight intervals calculated and displayed in UI
+     */
     private static final int INSIGHT_HISTORY = 5;
-    private static final int INSIGHT_HISTORY_MINUTES = 5 * INSIGHT_INTERVAL;
+    /**
+     * Number of minutes, code insight calculation goes back
+     */
+    private static final int INSIGHT_HISTORY_MINUTES = INSIGHT_HISTORY * INSIGHT_INTERVAL;
 
+    /**
+     * The aspect, code insight service is interested
+     */
     public enum InsideCodeMode {
-        DIFF, COUNT
+        /**
+         * Number of changed line between two subsequent file versions
+         */
+        DIFF,
+        /**
+         * The total number of lines of the file
+         */
+        COUNT
     }
 
     @Autowired
@@ -70,8 +98,17 @@ public class CodeInsightService {
     @Autowired
     private CodeInsightActivityRepository codeInsightActivityRepository;
 
+    /**
+     * Processes the code insight update from remote web service
+     *
+     * It parses the response and creates {@link CodeInsightActivity}s, if the activity does not exist, or skips the activity,
+     * if it has been already seen.
+     *
+     * @param codeInsightResponse JSON web service response
+     * @param contest contest
+     * @throws CodeInsightException the received JSON response is not valid
+     */
     public void processCodeInsightResource(final String codeInsightResponse, final Contest contest) throws CodeInsightException {
-        System.out.println(codeInsightResponse);
         if (StringUtils.isEmpty(codeInsightResponse) || "[]".equals(codeInsightResponse)) {
             // skip if result is empty
             return;
@@ -110,15 +147,24 @@ public class CodeInsightService {
         }
     }
 
+    /**
+     * Calculates code insight report
+     *
+     * @param contest contest
+     * @param insideCodeMode aspect of code insight
+     * @return JSON representation of code insight report
+     */
     public JsonObject createCodeInsightReport(final Contest contest, final InsideCodeMode insideCodeMode) {
         int contestTime = (int) (contestService.getCurrentContestTime(contest) / 60);
         int historyTime = Math.max(contestTime - INSIGHT_HISTORY_MINUTES, 0);
 
         List<Problem> problems = problemRepository.findByContestOrderByCodeAsc(contest);
         JsonObject root = new JsonObject();
+        // creates code insight for each problem
         for (Problem problem : problems) {
             Set<CodeInsightTeam> activeTeams = new LinkedHashSet<>();
 
+            // retrieve all teams, which created activities in period between now and historyTime
             for (int time = contestTime; time >= historyTime; time -= INSIGHT_INTERVAL) {
                 CodeInsightProblem insightProblem = getProblemFromSnapshot(time, problem, problems);
                 activeTeams.addAll(insightProblem.getTeamsSorted(insideCodeMode));
@@ -128,6 +174,7 @@ public class CodeInsightService {
             }
             if (!activeTeams.isEmpty()) {
                 List<CodeInsightTeam> sortedTeams = new ArrayList<>(activeTeams);
+                // gets top INSIGHT_HISTORY teams
                 sortedTeams = sortedTeams.subList(0, Math.min(sortedTeams.size(), INSIGHT_HISTORY));
 
                 JsonArray problemArray = new JsonArray();

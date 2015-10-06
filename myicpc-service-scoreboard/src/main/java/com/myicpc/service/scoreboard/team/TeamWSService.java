@@ -8,6 +8,10 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 /**
+ * Service, which communicates with CM
+ *
+ * It calls web services of CM and returns the responses as string
+ *
  * @author Roman Smetana
  */
 @Service
@@ -62,6 +66,12 @@ public class TeamWSService extends AbstractWSService {
         return (String) connectCM("/ws/myicpc/contest/" + contest.getCode() + "/social-info", contest);
     }
 
+    /**
+     * Returns the URL of the profile picture from ICPCID identified by {@code publicURLKey}
+     *
+     * @param publicURLKey public key for ICPCID account
+     * @return profile picture URL or null, if the key is empty
+     */
     public String getContestParticipantProfileUrl(String publicURLKey) {
         if (StringUtils.isEmpty(publicURLKey)) {
             return null;

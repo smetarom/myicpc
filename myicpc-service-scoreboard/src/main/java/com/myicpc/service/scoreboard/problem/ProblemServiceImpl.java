@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Implementation of {@link ProblemService}
+ *
  * @author Roman Smetana
  */
 @Service
@@ -126,7 +128,7 @@ public class ProblemServiceImpl extends ScoreboardListenerAdapter implements Pro
         return arr;
     }
 
-    public static JsonObject getTeamSubmissionJSON(final TeamSubmissionDTO teamProblem) {
+    private static JsonObject getTeamSubmissionJSON(final TeamSubmissionDTO teamProblem) {
         JsonObject submissionJSON = new JsonObject();
         submissionJSON.addProperty("id", teamProblem.getTeamSubmissionId());
         submissionJSON.addProperty("time", teamProblem.getTime());

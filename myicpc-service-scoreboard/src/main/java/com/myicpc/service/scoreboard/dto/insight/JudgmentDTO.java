@@ -17,10 +17,17 @@ public class JudgmentDTO implements Serializable {
 	 */
 	private String name;
 	/**
-	 * Count of runs with this judgment
+	 * Count of team submissions with this judgment
 	 */
 	private int count;
 
+    /**
+     * Constructor
+     *
+     * @param code judgment code
+     * @param name judgment name
+     * @param count count of team submissions with this judgment
+     */
 	public JudgmentDTO(final String code, final String name, final int count) {
 		super();
 		this.code = code;

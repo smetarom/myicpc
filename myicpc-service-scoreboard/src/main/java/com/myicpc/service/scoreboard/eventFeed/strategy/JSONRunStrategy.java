@@ -24,6 +24,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Scoreboard strategy, which uses JSON scoreboard snapshot to get current state
+ * and update MyICPC scoreboard state based on this JSON
+ *
+ * @author Roman Smetana
+ */
 @Component
 public class JSONRunStrategy extends FeedRunStrategy {
     private static final Logger logger = LoggerFactory.getLogger(JSONRunStrategy.class);

@@ -42,6 +42,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Implementation of {@link EventFeedVisitor}
+ *
+ * @author Roman Smetana
+ */
 @Service
 public class EventFeedVisitorImpl implements EventFeedVisitor {
     private static final Logger logger = LoggerFactory.getLogger(EventFeedVisitorImpl.class);
@@ -254,7 +259,7 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
         // TODO do something useful with finalized information
     }
 
-    protected FeedRunStrategy selectStrategy(Contest contest) throws EventFeedException {
+    private FeedRunStrategy selectStrategy(Contest contest) throws EventFeedException {
         switch (contest.getContestSettings().getScoreboardStrategyType()) {
             case NATIVE:
                 return nativeRunStrategy;

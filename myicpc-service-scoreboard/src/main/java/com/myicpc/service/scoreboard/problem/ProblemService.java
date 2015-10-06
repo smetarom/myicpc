@@ -9,14 +9,43 @@ import com.myicpc.service.listener.ScoreboardListener;
 import java.util.List;
 
 /**
+ * Service responsible for {@link Problem} operations
+ *
  * @author Roman Smetana
  */
 public interface ProblemService extends ScoreboardListener {
+    /**
+     * Gets {@link Problem}s in {@code contest}
+     *
+     * @param contest contest
+     * @return list of problems in the contest
+     */
     List<Problem> findByContest(Contest contest);
 
+    /**
+     * Gets the report about teams and their submissions,
+     * which submitted solutions for {@code problem}
+     *
+     * @param problem problem
+     * @return JSON representation of team attempts
+     */
     JsonArray getSubmissionAttemptsJSON(Problem problem);
 
+    /**
+     * Gets all judgements in {@code contest}
+     *
+     * @param contest contest
+     * @return JSON representation of all judgements in the contest
+     */
     JsonObject getAllJudgementsJSON(Contest contest);
 
+    /**
+     * Gets the {@code problem} overview report
+     *
+     * Report contains the team and its last submissions on {@code problem}
+     *
+     * @param problem problem
+     * @return JSON overview report
+     */
     JsonArray getProblemOverviewJSON(Problem problem);
 }
