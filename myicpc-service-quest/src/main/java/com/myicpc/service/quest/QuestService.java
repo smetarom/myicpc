@@ -174,6 +174,14 @@ public class QuestService {
         return participants;
     }
 
+    /**
+     * Sets contest quest prefix to all challenges in {@code challenges}
+     * <p>
+     * This is workaround to lazy loading of a complicated join to improve performance
+     *
+     * @param hashtagPrefix contest quest prefix
+     * @param challenges challenges, where the prefix is applied
+     */
     public static void applyHashtagPrefix(String hashtagPrefix, final List<QuestChallenge> challenges) {
         if (challenges != null && StringUtils.isNotEmpty(hashtagPrefix)) {
             for (QuestChallenge challenge : challenges) {
@@ -182,6 +190,14 @@ public class QuestService {
         }
     }
 
+    /**
+     * Sets contest quest prefix to all challenges in {@code submissions}
+     * <p>
+     * This is workaround to lazy loading of a complicated join to improve performance
+     *
+     * @param hashtagPrefix contest quest prefix
+     * @param submissions submissions, to which challenges the prefix is applied
+     */
     public static void applyHashtagPrefixToSubmissions(String hashtagPrefix, final List<QuestSubmission> submissions) {
         if (submissions != null && StringUtils.isNotEmpty(hashtagPrefix)) {
             for (QuestSubmission submission : submissions) {

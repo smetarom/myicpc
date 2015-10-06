@@ -16,6 +16,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
+ * Receives JMS messages related to social media
+ * <p/>
+ * It invokes methods to process the incoming messages
+ *
  * @author Roman Smetana
  */
 @Service
@@ -40,6 +44,11 @@ public class SocialNotificationReceiver {
     @Autowired
     private NotificationService notificationService;
 
+    /**
+     * Listens to JMS queue {@code SocialNotificationQueue}
+     *
+     * @param jmsEvent incoming message
+     */
     @JmsListener(destination = "java:/jms/queue/SocialNotificationQueue")
     @Transactional
     public void processSocialNotification(JMSEvent jmsEvent) {

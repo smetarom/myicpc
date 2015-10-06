@@ -148,6 +148,18 @@ public class TwitterService extends ASocialService {
         }
     }
 
+    /**
+     * Queries Twitter search API and gets tweets satisfying the search criteria
+     *
+     * @param hashtags hashtags divided by comma
+     * @param count max number of results
+     * @param pages start on this result page
+     * @param sinceId find tweets newer than this tweet ID
+     * @param maxId find tweets older than this tweet ID
+     * @param contest contest
+     * @return created tweet {@link Notification}
+     * @throws TwitterException Twitter search failed and Twitter did not responded correctly
+     */
     @Transactional
     public List<Notification> processAdditionalTweets(String hashtags, Integer count, Integer pages,
                                                       Long sinceId, Long maxId, final Contest contest) throws TwitterException {

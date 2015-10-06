@@ -66,7 +66,7 @@ public abstract class ASocialService {
      * @param tags list of hashtags
      * @param contestHashtag contest hashtag
      * @param questHashtagPrefix Quest hashtag prefix
-     * @return
+     * @return encoded hashtags
      */
     protected String createHashtags(String[] tags, String contestHashtag, String questHashtagPrefix) {
         StringBuffer tagString = new StringBuffer("|");

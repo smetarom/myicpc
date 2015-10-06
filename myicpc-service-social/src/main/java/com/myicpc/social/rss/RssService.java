@@ -49,6 +49,13 @@ public class RssService {
         return rssFeeds;
     }
 
+    /**
+     * Creates RSS feed
+     *
+     * @param rssFeed RSS feed to be persisted
+     * @throws WebServiceException connecting the RSS feed failed
+     * @throws MalformedURLException RSS feed URL is not valid
+     */
     public void createRssFeed(RSSFeed rssFeed) throws WebServiceException, MalformedURLException {
         try {
             URL feedUrl = new URL(rssFeed.getUrl());
@@ -131,6 +138,11 @@ public class RssService {
         }
     }
 
+    /**
+     * Toggle the disable state of RSS feed
+     *
+     * @param rssFeed feed to have the disable state toggled
+     */
     public void toogleDisableRSSFeed(final RSSFeed rssFeed) {
         rssFeed.setDisabled(!rssFeed.isDisabled());
         rssFeedRepository.save(rssFeed);

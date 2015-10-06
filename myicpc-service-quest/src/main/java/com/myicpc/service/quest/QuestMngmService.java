@@ -108,7 +108,12 @@ public class QuestMngmService {
         notificationService.deleteExistingNotifications(questChallenge, NotificationType.QUEST_CHALLENGE);
     }
 
-
+    /**
+     * Bulk updates of {@link QuestParticipant}
+     *
+     * @param params map between {@link QuestParticipant#id} and adjustment points
+     * @param contest contest
+     */
     public void bulkParticipantUpdate(final Map<String, String[]> params, final Contest contest) {
         Iterable<QuestParticipant> list = participantRepository.findByContest(contest);
         Map<Long, QuestParticipant> participantCache = new HashMap<>();

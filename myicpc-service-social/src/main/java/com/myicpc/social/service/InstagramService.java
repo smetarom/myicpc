@@ -59,6 +59,12 @@ public class InstagramService extends ASocialService {
     @Autowired
     private NotificationRepository notificationRepository;
 
+    /**
+     * Checks that Instagram API keys are valid and MyICPC can use them
+     *
+     * @param instagramClientId Instagram client ID key
+     * @return are API keys valid
+     */
     public boolean checkInstagramConfiguration(String instagramClientId) {
         HttpGet httpGet = null;
         try (CloseableHttpClient httpclient = HttpClients.createDefault()) {
