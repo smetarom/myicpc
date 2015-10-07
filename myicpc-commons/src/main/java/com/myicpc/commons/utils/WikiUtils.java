@@ -4,6 +4,8 @@ import info.bliki.wiki.model.WikiModel;
 import org.apache.commons.lang3.StringUtils;
 
 /**
+ * Util class for wirking with wiki syntax
+ *
  * @author Roman Smetana
  */
 public class WikiUtils {

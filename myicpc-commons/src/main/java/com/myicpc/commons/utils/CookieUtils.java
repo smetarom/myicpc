@@ -5,12 +5,12 @@ import org.apache.commons.lang3.StringUtils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
+ * Util class for easy work with HTTP cookies
+ *
  * @author Roman Smetana
  */
 public class CookieUtils {
@@ -68,8 +68,8 @@ public class CookieUtils {
      * @param cookieValue cookie value
      * @param cookieName  cookie name
      * @param addedId     ID to append
-     * @param request
-     * @param response
+     * @param request http request
+     * @param response http response
      */
     public static void appendIdToCookie(final String cookieValue, final String cookieName, final String addedId, final HttpServletRequest request,
                                         final HttpServletResponse response) {
@@ -79,8 +79,8 @@ public class CookieUtils {
         } else {
             String[] ss = cookieValue.split(",");
             boolean contains = false;
-            for (int i = 0; i < ss.length; i++) {
-                if (ss[i].equals(addedId)) {
+            for (String s : ss) {
+                if (s.equals(addedId)) {
                     contains = true;
                 }
             }
@@ -92,6 +92,14 @@ public class CookieUtils {
         CookieUtils.setCookie(request, response, cookieName, cookie);
     }
 
+    /**
+     * Parses the number values separated by comma
+     *
+     * Ignores non-numeric values and continue parsing
+     *
+     * @param cookieValue cookie value
+     * @return set of numbers
+     */
     public static Set<Long> getCookieAsLongs(final String cookieValue) {
         Set<Long> list = new HashSet<>();
         if (StringUtils.isEmpty(cookieValue)) {
@@ -114,17 +122,17 @@ public class CookieUtils {
      * @param cookieValue cookie value
      * @param cookieName  cookie name
      * @param addedId     ID to append
-     * @param request
-     * @param response
+     * @param request http request
+     * @param response http response
      */
     public static void removeIdToCookie(final String cookieValue, final String cookieName, final String addedId, final HttpServletRequest request,
                                         final HttpServletResponse response) {
         if (!StringUtils.isEmpty(cookieValue)) {
             StringBuilder sb = new StringBuilder();
             String[] ss = cookieValue.split(",");
-            for (int i = 0; i < ss.length; i++) {
-                if (!ss[i].equals(addedId)) {
-                    sb.append(ss[i]).append(",");
+            for (String s : ss) {
+                if (!s.equals(addedId)) {
+                    sb.append(s).append(",");
                 }
             }
             String c = sb.toString();

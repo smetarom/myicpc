@@ -337,7 +337,7 @@ public class TeamService {
                 if (university != null) {
                     teamInfo.setShortName(university.getShortName());
                     teamInfo.setAbbreviation(university.getShortName());
-                    teamInfo.setHashtag(FormatUtils.clearHashtag(university.getTwitterHash()));
+                    teamInfo.setHashtag(FormatUtils.removeHashFromHashtag(university.getTwitterHash()));
                 }
             }
         }

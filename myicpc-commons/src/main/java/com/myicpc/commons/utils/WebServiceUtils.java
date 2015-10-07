@@ -38,6 +38,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 
 /**
+ * Web service util class
+ *
  * @author Roman Smetana
  */
 public class WebServiceUtils {
@@ -45,6 +47,9 @@ public class WebServiceUtils {
 
     /**
      * Connect to CDS server
+     * <p>
+     * It disables SSL checks to be able to connect to CDS, which uses self-signed certificate
+     * with a different host in certificate from the connected host
      *
      * @param url      url to connect
      * @param username username for BASIC authentication
@@ -88,6 +93,14 @@ public class WebServiceUtils {
         return entity.getContent();
     }
 
+    /**
+     * Connects to CDS and returns the response as text
+     *
+     * @param url CDS URL
+     * @param username CDS username
+     * @param password CDS password for username
+     * @return server text response or {@code null} if the server did not respond correctly
+     */
     public static String connectAndGetResponse(String url, String username, String password) {
         try {
             InputStream inputStream = connectCDS(url, username, password);
@@ -98,6 +111,11 @@ public class WebServiceUtils {
         return null;
     }
 
+    /**
+     * Releases the open connection from HTTP connection
+     *
+     * @param httpRequest opened HTTP request
+     */
     public static void releaseConnection(HttpRequestBase httpRequest) {
         if (httpRequest != null) {
             httpRequest.releaseConnection();

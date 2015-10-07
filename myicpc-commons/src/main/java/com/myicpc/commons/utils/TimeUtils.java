@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
+ * Utility class for working with time, dates, and timezones
+ *
  * @author Roman Smetana
  */
 public class TimeUtils {

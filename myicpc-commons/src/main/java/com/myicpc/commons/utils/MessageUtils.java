@@ -10,6 +10,8 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
+ * Translates the translation key into the localized text
+ *
  * @author Roman Smetana
  */
 public class MessageUtils {
@@ -27,6 +29,12 @@ public class MessageUtils {
         }
     }
 
+    /**
+     * Translates {@code enum} which implements {@link GeneralEnum}
+     *
+     * @param generalEnum enum to be translated
+     * @return translated enum label
+     */
     public static String translateEnum(GeneralEnum generalEnum) {
         String value;
         try {
@@ -37,10 +45,26 @@ public class MessageUtils {
         return value;
     }
 
+    /**
+     * Translates the translation key into the localized text
+     *
+     * @param key translation key
+     * @return localized text
+     * @throws MissingResourceException translation key not found
+     */
     public static String getMessage(final String key) {
         return messageBundle.getString(key);
     }
 
+    /**
+     * Translates the translation key into the localized text
+     *
+     * It uses {@code defaultText}, if the translation key is not found
+     *
+     * @param key translation key
+     * @param defaultText default text, if the translation key is not found
+     * @return localized text
+     */
     public static String getMessageWithDefault(final String key, final String defaultText) {
         try {
             return messageBundle.getString(key);
@@ -49,14 +73,39 @@ public class MessageUtils {
         }
     }
 
+    /**
+     * Translates the translation key into the localized text
+     *
+     * @param key translation key
+     * @param locale locale of the user
+     * @return localized text
+     * @throws MissingResourceException translation key not found
+     */
     public static String getMessage(final String key, final Locale locale) {
         return getMessage(key);
     }
 
+    /**
+     * Translates the translation key into the localized text
+     *
+     * @param key translation key
+     * @param params parameters for translation key
+     * @return localized text
+     * @throws MissingResourceException translation key not found
+     */
     public static String getMessage(final String key, final Object... params) {
         return MessageFormat.format(messageBundle.getString(key), params);
     }
 
+    /**
+     * Translates the translation key into the localized text
+     *
+     * @param key translation key
+     * @param locale locale of the user
+     * @param params parameters for translation key
+     * @return localized text
+     * @throws MissingResourceException translation key not found
+     */
     public static String getMessage(final String key, Locale locale, final Object... params) {
         return getMessage(key, params);
     }

@@ -52,7 +52,7 @@ public class ContestWSService extends AbstractWSService {
         if (children.size() == 1) {
             JsonObject response = children.iterator().next().getValue().getAsJsonObject();
             JSONAdapter jsonAdapter = new JSONAdapter(response);
-            response.addProperty("hashtag", FormatUtils.clearHashtag(jsonAdapter.getString("hashtag")));
+            response.addProperty("hashtag", FormatUtils.removeHashFromHashtag(jsonAdapter.getString("hashtag")));
 
             String timeZoneName = jsonAdapter.getString("timeZone");
             if (StringUtils.isNotEmpty(timeZoneName)) {

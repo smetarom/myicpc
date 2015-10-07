@@ -54,6 +54,12 @@ public class FormatUtils {
         regionMapping.put("South", "S.");
     }
 
+    /**
+     * Removes hash '#' from the beginning if present
+     *
+     * @param hashtag hashtag to be truncated
+     * @return hashtag without '#'
+     */
     public static String removeHashFromHashtag(String hashtag) {
         if (StringUtils.isEmpty(hashtag)) {
             return hashtag;
@@ -148,11 +154,6 @@ public class FormatUtils {
             return rank + "rd";
         }
         return rank + "th";
-    }
-
-    public static String clearHashtag(String hashtag) {
-        if (StringUtils.isEmpty(hashtag)) return null;
-        return hashtag.charAt(0) == '#' ? hashtag.substring(1) : hashtag;
     }
 
     /**
