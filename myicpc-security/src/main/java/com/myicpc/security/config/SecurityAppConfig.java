@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
+ * Security configuration and its integration with Spring MVC
+ *
  * @author Roman Smetana
  */
 @Configuration
@@ -24,17 +26,23 @@ public class SecurityAppConfig extends WebSecurityConfigurerAdapter {
     @Qualifier("userDetailsService")
     private UserDetailsService userDetailsService;
 
+    /**
+     * Defines the logic to handle user login
+     *
+     * @param auth authentication builder
+     * @throws Exception user login failed
+     */
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.jdbcAuthentication()
-//                .dataSource(dataSource)
-//                .usersByUsernameQuery(getUserQuery())
-//                .authoritiesByUsernameQuery(getAuthoritiesQuery())
-//                .passwordEncoder(passwordEncoder());
-
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
+    /**
+     * Defines security URLs and role based access
+     *
+     * @param http the {@link HttpSecurity} to modify
+     * @throws Exception if an error occurs
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -60,16 +68,14 @@ public class SecurityAppConfig extends WebSecurityConfigurerAdapter {
         http.exceptionHandling().accessDeniedPage("/private/access-denied");
     }
 
+    /**
+     * Defines the hash algorithm to protect user passwords
+     *
+     * @return hash encoder
+     * @throws Exception hash encoder creation failed
+     */
     @Bean
     public BCryptPasswordEncoder passwordEncoder() throws Exception {
         return new BCryptPasswordEncoder();
-    }
-
-    protected String getUserQuery() {
-        return "SELECT username, password, enabled FROM SystemUser WHERE username = ?";
-    }
-
-    protected String getAuthoritiesQuery() {
-        return "SELECT u.username, ur.authority FROM SystemUser u, SystemUserRole ur WHERE u.id = ur.userId and u.username = ?";
     }
 }

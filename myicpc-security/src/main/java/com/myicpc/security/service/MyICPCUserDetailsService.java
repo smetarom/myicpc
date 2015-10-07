@@ -22,6 +22,10 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Service responsible for user security
+ *
+ * It is responsible for logging in users and put them into Spring security context
+ *
  * @author Roman Smetana
  */
 @Service("userDetailsService")

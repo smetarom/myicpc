@@ -9,9 +9,21 @@ import org.springframework.security.core.Authentication;
 import java.io.Serializable;
 
 /**
+ * Evaluator of security permissions
+ *
+ * It defines the security restrictions on entities
+ *
  * @author Roman Smetana
  */
 public class MyICPCPermissionEvaluator implements PermissionEvaluator {
+    /**
+     * Handles the permission check on {@code targetDomainObject}
+     *
+     * @param authentication security context
+     * @param targetDomainObject object to be tested
+     * @param permission required permission
+     * @return true if the permission is granted, false otherwise
+     */
     @Override
     public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
         if (targetDomainObject instanceof Contest) {
@@ -20,6 +32,17 @@ public class MyICPCPermissionEvaluator implements PermissionEvaluator {
         return false;
     }
 
+    /**
+     * Not supported in MyICPC
+     *
+     * @param authentication represents the user in question. Should not be null.
+     * @param targetId the identifier for the object instance (usually a Long)
+     * @param targetType a String representing the target's type (usually a Java
+     * classname). Not null.
+     * @param permission a representation of the permission object as supplied by the
+     * expression system. Not null.
+     * @return true if the permission is granted, false otherwise
+     */
     @Override
     public boolean hasPermission(Authentication authentication, Serializable targetId,
                                  String targetType, Object permission) {

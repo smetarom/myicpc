@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
 
 /**
+ * Defines the method level security configuration
+ *
  * @author Roman Smetana
  */
 @Configuration
