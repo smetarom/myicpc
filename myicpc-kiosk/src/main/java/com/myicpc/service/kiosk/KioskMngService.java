@@ -1,5 +1,6 @@
 package com.myicpc.service.kiosk;
 
+import com.myicpc.model.contest.Contest;
 import com.myicpc.model.kiosk.KioskContent;
 import com.myicpc.repository.kiosk.KioskContentRepository;
 import com.myicpc.service.publish.PublishService;
@@ -16,6 +17,8 @@ import java.util.List;
  */
 @Service
 public class KioskMngService {
+    public static final String ACTION_UPDATE_PAGE = "pageChange";
+    public static final String ACTION_CHANGE_MODE = "modeChange";
 
     @Autowired
     private PublishService publishService;
@@ -49,7 +52,18 @@ public class KioskMngService {
         }
         kioskContentRepository.save(kioskContent);
         if (kioskContent.isActive()) {
-            publishService.broadcastKioskPage(kioskContent.getContest().getCode());
+            publishService.broadcastKioskPage(kioskContent.getContest().getCode(), ACTION_UPDATE_PAGE);
         }
+    }
+
+    /**
+     * Changes the current kiosk view to the next in the row
+     *
+     * The chain of views is: feed -> calendar -> custom -> feed
+     *
+     * @param contest contest
+     */
+    public void changeKioskMode(final Contest contest) {
+        publishService.broadcastKioskPage(contest.getCode(), ACTION_CHANGE_MODE);
     }
 }

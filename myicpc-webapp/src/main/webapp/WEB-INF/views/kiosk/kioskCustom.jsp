@@ -19,7 +19,11 @@
     <jsp:attribute name="javascript">
         <script type="application/javascript">
             updateKioskPage = function(data) {
-                location.reload();
+                if (data.type === 'pageChange') {
+                    location.reload();
+                } else if (data.type === 'modeChange') {
+                    window.location.href='<spring:url value="${contestURL}/kiosk/feed" />'
+                }
             };
 
             $(function() {

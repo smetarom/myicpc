@@ -41,7 +41,7 @@ class KioskMngServiceTest extends GroovyTestCase {
         verify(kioskContentRepository).findByContest(any(Contest.class))
         verify(kioskContentRepository).save(any(List.class))
         verify(kioskContentRepository).save(any(KioskContent.class))
-        verify(publishService).broadcastKioskPage(anyString())
+        verify(publishService).broadcastKioskPage(anyString(), anyString())
     }
 
     void testUpdateKioskContentNotActive() {

@@ -130,4 +130,11 @@ public class KioskAdminController extends GeneralAdminController {
         return "redirect:/private" + getContestURL(contestCode) + "/kiosk";
     }
 
+    @RequestMapping(value = "/private/{contestCode}/kiosk/change-mode", method = RequestMethod.GET)
+    public String kioskChangeMode(Model model, @PathVariable String contestCode) {
+        Contest contest = getContest(contestCode, model);
+        kioskMngService.changeKioskMode(contest);
+        return "redirect:/private" + getContestURL(contestCode) + "/kiosk";
+    }
+
 }

@@ -9,6 +9,12 @@
         <script src="<c:url value='/js/myicpc/controllers/kiosk.js'/>"></script>
 
         <script type="text/javascript">
+            updateKioskPage = function(data) {
+                if (data.type === 'modeChange') {
+                    window.location.href='<spring:url value="${contestURL}/kiosk/calendar" />'
+                }
+            };
+
             $(function() {
                 var ngController = angular.element($("#kiosk-content")).scope();
                 var notifications = ${not empty notificationsJSON ? notificationsJSON : '[]'};
@@ -22,6 +28,7 @@
                 }, 5000);
 
                 startSubscribe('${r.contextPath}', '${contest.code}', 'notification', updateKioskFeed, ngController);
+                startSubscribe('${r.contextPath}', '${contest.code}', 'kiosk', updateKioskPage, null);
             });
         </script>
     </jsp:attribute>

@@ -14,6 +14,7 @@
 	</jsp:attribute>
 
     <jsp:attribute name="controls">
+        <t:button href="/private${contestURL}/kiosk/change-mode" styleClass="btn-hover"><t:faIcon icon="exchange"/> <spring:message code="kioskContentAdmin.switchMode" /></t:button>
         <t:button href="/private${contestURL}/kiosk/content/create" styleClass="btn-hover"><t:glyphIcon icon="plus"/> <spring:message code="kioskContentAdmin.create" /></t:button>
         <t:button href="${contestURL}/kiosk/custom" styleClass="btn-hover"><t:faIcon icon="eye"/> <spring:message code="kioskContentAdmin.seePage" /></t:button>
     </jsp:attribute>

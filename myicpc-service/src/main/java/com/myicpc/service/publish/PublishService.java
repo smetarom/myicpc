@@ -128,10 +128,11 @@ public class PublishService {
      * Broadcast the kiosk updates
      *
      * @param contestCode contest code
+     * @param action
      */
-    public void broadcastKioskPage(String contestCode) {
+    public void broadcastKioskPage(String contestCode, String action) {
         JsonObject kioskPageObject = new JsonObject();
-        kioskPageObject.addProperty("type", "pageChange");
+        kioskPageObject.addProperty("type", action);
         atmospherePublish(PREFIX + contestCode + "/" + KIOSK, kioskPageObject.toString());
     }
 
