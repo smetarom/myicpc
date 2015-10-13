@@ -20,6 +20,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 
 /**
+ * Controller for {@link QuestLeaderboard} management
+ * <p/>
+ * It takes care about CRUD operations
+ *
  * @author Roman Smetana
  */
 @Controller
@@ -56,7 +60,7 @@ public class QuestLeaderboardAdminController extends GeneralAdminController {
 
     @RequestMapping(value = "/private/{contestCode}/quest/leaderboard/{leaderboardId}/edit", method = RequestMethod.GET)
     public String editLeaderboard(@PathVariable final String contestCode, @PathVariable final Long leaderboardId, final Model model,
-                                final RedirectAttributes redirectAttributes) {
+                                  final RedirectAttributes redirectAttributes) {
         Contest contest = getContest(contestCode, model);
         QuestLeaderboard leaderboard = leaderboardRepository.findOne(leaderboardId);
 
@@ -74,7 +78,7 @@ public class QuestLeaderboardAdminController extends GeneralAdminController {
 
     @RequestMapping(value = "/private/{contestCode}/quest/leaderboard/{leaderboardId}/delete", method = RequestMethod.GET)
     public String deleteLeaderboard(@PathVariable final String contestCode, @PathVariable final Long leaderboardId, final Model model,
-                                  final RedirectAttributes redirectAttributes) {
+                                    final RedirectAttributes redirectAttributes) {
         leaderboardRepository.delete(leaderboardId);
         successMessage(redirectAttributes, "questAdmin.leaderboards.deleted");
         return "redirect:/private" + getContestURL(contestCode) + "/quest/leaderboards";
@@ -83,7 +87,7 @@ public class QuestLeaderboardAdminController extends GeneralAdminController {
     @RequestMapping(value = "/private/{contestCode}/quest/leaderboard/update", method = RequestMethod.POST)
     public String updateLeaderboard(@Valid @ModelAttribute("leaderboard") final QuestLeaderboard leaderboard, @PathVariable final String contestCode,
                                     @RequestParam String[] roles,
-                                  final BindingResult result, final Model model, final RedirectAttributes redirectAttributes) {
+                                    final BindingResult result, final Model model, final RedirectAttributes redirectAttributes) {
         Contest contest = getContest(contestCode, model);
         model.addAttribute("headlineTitle", getMessage("questAdmin.leaderboards.edit"));
         if (result.hasErrors()) {

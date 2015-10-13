@@ -30,6 +30,10 @@ import java.io.IOException;
 import java.util.List;
 
 /**
+ * Controller for {@link QuestChallenge} management
+ * <p/>
+ * It takes care about CRUD operations
+ *
  * @author Roman Smetana
  */
 @Controller

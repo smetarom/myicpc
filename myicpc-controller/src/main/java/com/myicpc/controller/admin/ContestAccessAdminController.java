@@ -19,6 +19,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
+/**
+ * Controller for contest access management
+ * <p/>
+ * It lists the contest managers and allows the user to add/delete contest access
+ *
+ * @author Roman Smetana
+ */
 @Controller
 public class ContestAccessAdminController extends GeneralAdminController {
 

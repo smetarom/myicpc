@@ -21,6 +21,8 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
+ * Controller for timeline
+ *
  * @author Roman Smetana
  */
 @Controller

@@ -35,6 +35,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * Controller for quest public pages
+ *
  * @author Roman Smetana
  */
 @Controller

@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
+ * Controller for public landing page
+ * <p/>
+ * It shows the landing page and manages the feedback form
+ *
  * @author Roman Smetana
  */
 @Controller
@@ -44,7 +48,7 @@ public class HomeController extends GeneralController {
                                   @RequestParam(value = "exceptionMessage", required = false) String exceptionMessage) {
         if (!StringUtils.isEmpty(url)) {
             // Spam detected, users don't see URL filed in the form
-            return "redirect:"+getContestURL(contestCode);
+            return "redirect:" + getContestURL(contestCode);
         }
         Contest contest = getContest(contestCode, null);
         String subject = "Feedback for " + contest.getName();
@@ -60,6 +64,6 @@ public class HomeController extends GeneralController {
         }
         emailService.sendFeedbackEmail(contest, subject, msg);
 
-        return "redirect:"+getContestURL(contestCode);
+        return "redirect:" + getContestURL(contestCode);
     }
 }

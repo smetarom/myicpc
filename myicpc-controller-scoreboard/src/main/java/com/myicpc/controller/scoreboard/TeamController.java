@@ -31,6 +31,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 /**
+ * Controller for public team pages
+ *
  * @author Roman Smetana
  */
 @Controller

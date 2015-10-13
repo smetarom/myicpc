@@ -22,6 +22,13 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
+ * Controller for first time installation
+ * <p/>
+ * These pages are accessible only right after MyICPC setup. Once the administrator is created,
+ * these pages are disabled.
+ * <p/>
+ * They take the new user through the basic global configuration
+ *
  * @author Roman Smetana
  */
 @Controller

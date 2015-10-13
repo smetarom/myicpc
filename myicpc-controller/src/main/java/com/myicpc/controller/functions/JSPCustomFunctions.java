@@ -17,6 +17,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 /**
+ * Utility class with methods callable from JSP pages
+ *
  * @author Roman Smetana
  */
 public class JSPCustomFunctions {

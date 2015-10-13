@@ -38,6 +38,13 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * Controller for contest management
+ * <p/>
+ * Private for CRUD operations on the contest
+ *
+ * @author Roman Smetana
+ */
 @Controller
 @SessionAttributes("contest")
 public class ContestAdminController extends GeneralAdminController {
@@ -58,7 +65,7 @@ public class ContestAdminController extends GeneralAdminController {
         Sort sort = new Sort(Sort.Direction.DESC, "startTime");
         List<Contest> contests = contestService.getContestsSecured(sort);
 
-        String[] relationship = new String[] {
+        String[] relationship = new String[]{
                 "ROLE_ADMIN > ROLE_MANAGER",
                 "ROLE_MANAGER > ROLE_USER"
         };
@@ -69,7 +76,7 @@ public class ContestAdminController extends GeneralAdminController {
         return "private/contest/contestList";
     }
 
-    @RequestMapping(value = { "/private/{contestCode}", "/private/{contestCode}/home" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/private/{contestCode}", "/private/{contestCode}/home"}, method = RequestMethod.GET)
     public String contestHome(@PathVariable String contestCode, final Model model) {
         Contest contest = getContest(contestCode, model);
 
@@ -184,7 +191,7 @@ public class ContestAdminController extends GeneralAdminController {
         }
         contestService.saveContest(contest);
         successMessage(redirectAttributes, "save.success");
-        return "redirect:/private"+getContestURL(contest.getCode())+"/edit/" + currentStep;
+        return "redirect:/private" + getContestURL(contest.getCode()) + "/edit/" + currentStep;
     }
 
     @RequestMapping(value = "/private/{contestCode}/delete", method = RequestMethod.GET)
@@ -218,8 +225,8 @@ public class ContestAdminController extends GeneralAdminController {
     private void populateEditContestModel(Model model, Contest contest, int currentStep) {
         model.addAttribute("headline", getMessage("contestAdmin.edit.title", contest.getName()));
         model.addAttribute("formAction", "/private/contest/edit");
-        model.addAttribute("cancelAction", "/private"+getContestURL(contest.getCode()));
-        model.addAttribute("stepURL", "/private"+getContestURL(contest.getCode()) + "/edit/");
+        model.addAttribute("cancelAction", "/private" + getContestURL(contest.getCode()));
+        model.addAttribute("stepURL", "/private" + getContestURL(contest.getCode()) + "/edit/");
         populateContestModel(model, contest, true, currentStep);
     }
 

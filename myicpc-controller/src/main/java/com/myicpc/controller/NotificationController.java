@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Controller for public pages about notifications
+ *
  * @author Roman Smetana
  */
 @Controller

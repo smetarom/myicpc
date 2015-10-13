@@ -1,7 +1,6 @@
 package com.myicpc.controller.admin;
 
 import com.myicpc.controller.GeneralAdminController;
-import com.myicpc.model.security.SystemUser;
 import com.myicpc.service.dto.GlobalSettings;
 import com.myicpc.service.settings.GlobalSettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,10 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
+ * Controller for global configuration
+ * <p/>
+ * Global configuration is a part of configuration, which is shared to all contests in MyICPC
+ *
  * @author Roman Smetana
  */
 @Controller

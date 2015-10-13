@@ -13,7 +13,7 @@ import com.myicpc.dto.eventFeed.parser.RegionXML;
 import com.myicpc.dto.eventFeed.parser.TeamProblemXML;
 import com.myicpc.dto.eventFeed.parser.TeamXML;
 import com.myicpc.dto.eventFeed.parser.TestcaseXML;
-import com.myicpc.dto.eventFeed.visitor.EventFeedMessage;
+//import com.myicpc.dto.eventFeed.visitor.EventFeedMessage;
 import com.myicpc.master.dao.EventFeedDao;
 import com.myicpc.master.dao.NotificationDao;
 import com.myicpc.master.exception.EventFeedException;
@@ -234,8 +234,8 @@ public class EventFeedVisitorImpl implements EventFeedLocal {
 
         if (notification != null) {
             eventFeedDao.saveContestEntity(notification);
-            EventFeedMessage eventFeedMessage = new EventFeedMessage(notification);
-            sendEventFeedNotification(eventFeedMessage);
+//            EventFeedMessage eventFeedMessage = new EventFeedMessage(notification);
+//            sendEventFeedNotification(eventFeedMessage);
         }
     }
 

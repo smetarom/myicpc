@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.orm.jpa.JpaOptimisticLockingFailureException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -40,6 +41,13 @@ public class GeneralAdminController extends GeneralAbstractController {
         return contest;
     }
 
+    /**
+     * It loads and authorize the logged user
+     *
+     * @param contestCode contest code to be searched
+     * @return contest with the code or {@code null} if not found
+     * @throws AccessDeniedException the logged user does not have permissions
+     */
     @Override
     protected Contest loadContest(String contestCode) {
         return contestService.getContestSecured(contestCode);
@@ -108,6 +116,11 @@ public class GeneralAdminController extends GeneralAbstractController {
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, allowEmpty));
     }
 
+    /**
+     * Extends the model by private page variables
+     *
+     * @param modelAndView exception page model
+     */
     @Override
     protected void extendExceptionHandling(ModelAndView modelAndView) {
         super.extendExceptionHandling(modelAndView);

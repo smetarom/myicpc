@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
+ * Controller for security management
+ * <p/>
+ * It takes care about handling login, logout, and access without required permissions
+ *
  * @author Roman Smetana
  */
 @Controller

@@ -25,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
+ * Controller for insight pages
+ *
  * @author Roman Smetana
  */
 @Controller

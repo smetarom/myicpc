@@ -5,7 +5,6 @@ import com.myicpc.enums.NotificationType;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.BlacklistedUser;
 import com.myicpc.model.social.Notification;
-import com.myicpc.repository.social.AdminNotificationRepository;
 import com.myicpc.repository.social.BlacklistedUserRepository;
 import com.myicpc.repository.social.NotificationRepository;
 import com.myicpc.service.dto.filter.NotificationFilterDTO;
@@ -15,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -36,6 +34,11 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
+ * Controller for notification management
+ * <p/>
+ * It provides the basic CRUD operations on {@link Notification}s, which is
+ * concept for a way how to inform MyICPC user about ICPC related events and posts
+ *
  * @author Roman Smetana
  */
 @Controller
@@ -77,8 +80,7 @@ public class NotificationAdminController extends GeneralAdminController {
      *
      * @param model
      * @param pageable
-     * @param notificationFilter
-     *            notification filter
+     * @param notificationFilter notification filter
      * @return view
      */
     @RequestMapping(value = "/private/{contestCode}/notifications", method = RequestMethod.POST)
@@ -93,8 +95,7 @@ public class NotificationAdminController extends GeneralAdminController {
      *
      * @param model
      * @param pageable
-     * @param notificationFilter
-     *            notification filter
+     * @param notificationFilter notification filter
      * @return view
      */
     protected String filterSocialNotifications(Model model, Pageable pageable, NotificationFilterDTO notificationFilter, Contest contest) {
@@ -148,8 +149,7 @@ public class NotificationAdminController extends GeneralAdminController {
     /**
      * Processes a removal of notification from featured notifications
      *
-     * @param notificationId
-     *            notification ID
+     * @param notificationId notification ID
      * @return view
      */
     @RequestMapping(value = "/private/{contestCode}/notifications/featured/{notificationId}/remove", method = RequestMethod.GET)
@@ -180,8 +180,7 @@ public class NotificationAdminController extends GeneralAdminController {
     /**
      * Processes an ignore of suspicious flag
      *
-     * @param notificationId
-     *            notification ID
+     * @param notificationId notification ID
      * @return view
      */
     @RequestMapping(value = "/private/{contestCode}/notifications/suspicious/{notificationId}/ignore", method = RequestMethod.GET)
@@ -198,8 +197,7 @@ public class NotificationAdminController extends GeneralAdminController {
     /**
      * Processes ban of the notification author
      *
-     * @param notificationId
-     *            notification ID
+     * @param notificationId notification ID
      * @return view
      */
     @RequestMapping(value = "/private/{contestCode}/notifications/{notificationId}/ban", method = RequestMethod.GET)
@@ -215,8 +213,7 @@ public class NotificationAdminController extends GeneralAdminController {
     /**
      * Processes a delete of notification
      *
-     * @param notificationId
-     *            notification ID
+     * @param notificationId notification ID
      * @param model
      * @return view
      */

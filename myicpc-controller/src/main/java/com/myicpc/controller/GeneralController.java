@@ -14,7 +14,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,11 +74,28 @@ public abstract class GeneralController extends GeneralAbstractController {
         return notificationService.countFeaturedNotifications(ignoredFeatured, contest);
     }
 
-    protected String resolveView(@NotNull String desktopView, String mobileView, SitePreference sitePreference) {
+    /**
+     * Resolves the view based on {@code sitePreference}
+     *
+     * @param desktopView desktop and tablet view
+     * @param mobileView mobile view
+     * @param sitePreference user view preference
+     * @return view based on {@code sitePreference}
+     */
+    protected String resolveView(String desktopView, String mobileView, SitePreference sitePreference) {
         return resolveView(desktopView, mobileView, null, sitePreference);
     }
 
-    protected String resolveView(@NotNull String desktopView, String mobileView, String tabletView, SitePreference sitePreference) {
+    /**
+     * Resolves the view based on {@code sitePreference}
+     *
+     * @param desktopView desktop view
+     * @param tabletView tablet view
+     * @param mobileView mobile view
+     * @param sitePreference user view preference
+     * @return view based on {@code sitePreference}
+     */
+    protected String resolveView(String desktopView, String mobileView, String tabletView, SitePreference sitePreference) {
         if (sitePreference == null) {
             return desktopView;
         }

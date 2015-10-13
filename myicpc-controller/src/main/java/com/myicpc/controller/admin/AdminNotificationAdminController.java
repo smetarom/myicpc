@@ -4,7 +4,6 @@ import com.myicpc.controller.GeneralAdminController;
 import com.myicpc.controller.functions.JSPCustomFunctions;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.social.AdminNotification;
-import com.myicpc.model.social.Notification;
 import com.myicpc.repository.social.AdminNotificationRepository;
 import com.myicpc.service.notification.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +23,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.Date;
-import java.util.List;
 
 /**
+ * Controller for private admin notification management
+ * <p/>
+ * Admin notifications are messages created by MyICPC users and allows them
+ * to give quick information to MyICPC audience
+ *
  * @author Roman Smetana
  */
 @Controller
@@ -57,6 +60,7 @@ public class AdminNotificationAdminController extends GeneralAdminController {
         model.addAttribute("mode", "create");
         return "private/notification/editNotification";
     }
+
     @RequestMapping(value = "/private/{contestCode}/notifications/icpc/{notificationId}/edit", method = RequestMethod.GET)
     public String editNotification(@PathVariable String contestCode, @PathVariable Long notificationId, Model model, RedirectAttributes redirectAttributes) {
         AdminNotification notification = adminNotificationRepository.findOne(notificationId);
@@ -91,12 +95,11 @@ public class AdminNotificationAdminController extends GeneralAdminController {
     /**
      * Processes ICPC notification update
      *
-     * @param notification
-     *            admin notification
+     * @param notification admin notification
      * @param result
      * @param model
      * @return redirect to admin notification home page on success, otherwise
-     *         stay on admin notification edit page
+     * stay on admin notification edit page
      */
     @RequestMapping(value = "/private/{contestCode}/notifications/icpc/update", method = RequestMethod.POST)
     public String updatePoll(@PathVariable String contestCode, @Valid @ModelAttribute("notification") AdminNotification notification, BindingResult result, Model model) {
@@ -116,8 +119,7 @@ public class AdminNotificationAdminController extends GeneralAdminController {
     /**
      * Processes a preview of wiki text
      *
-     * @param text
-     *            text with wiki syntax
+     * @param text text with wiki syntax
      * @return formatted text
      */
     @RequestMapping(value = "/preview-wiki-text", method = RequestMethod.POST)

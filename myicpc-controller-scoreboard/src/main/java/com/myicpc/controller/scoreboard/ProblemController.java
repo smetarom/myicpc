@@ -3,7 +3,6 @@ package com.myicpc.controller.scoreboard;
 import com.myicpc.controller.GeneralController;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Problem;
-import com.myicpc.repository.eventFeed.JudgementRepository;
 import com.myicpc.repository.eventFeed.ProblemRepository;
 import com.myicpc.service.scoreboard.problem.ProblemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
+ * Controller for problem public pages
+ *
  * @author Roman Smetana
  */
 @Controller

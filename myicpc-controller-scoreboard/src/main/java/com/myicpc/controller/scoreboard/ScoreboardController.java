@@ -25,6 +25,8 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
+ * Controller for scoreboard and other scoreboard view pages
+ *
  * @author Roman Smetana
  */
 @Controller

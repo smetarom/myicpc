@@ -26,6 +26,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Controller for {@link QuestSubmission} management
+ * <p/>
+ * It takes care about CRUD operations
+ *
  * @author Roman Smetana
  */
 @Controller
@@ -63,8 +67,7 @@ public class QuestSubmissionAdminController extends GeneralAdminController {
      *
      * @param model
      * @param pageable
-     * @param submissionFilter
-     *            submission filer
+     * @param submissionFilter submission filer
      * @return view
      */
     @RequestMapping(value = "/private/{contestCode}/quest/submissions", method = RequestMethod.POST)
@@ -89,10 +92,8 @@ public class QuestSubmissionAdminController extends GeneralAdminController {
     /**
      * Processes submission rejection
      *
-     * @param submissionId
-     *            quest submission ID
-     * @param reasonToReject
-     *            reason, why the submission was rejected
+     * @param submissionId       quest submission ID
+     * @param reasonToReject     reason, why the submission was rejected
      * @param redirectAttributes
      * @return redirect to quest submission home page
      */
@@ -112,10 +113,8 @@ public class QuestSubmissionAdminController extends GeneralAdminController {
     /**
      * Processes submission approval
      *
-     * @param submissionId
-     *            quest submission ID
-     * @param questPoints
-     *            how many points was submission rewarded
+     * @param submissionId quest submission ID
+     * @param questPoints  how many points was submission rewarded
      * @return redirect to quest submission home page
      */
     @RequestMapping(value = "/private/{contestCode}/quest/submission/{submissionId}/accept", method = RequestMethod.POST)

@@ -24,11 +24,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.Date;
 import java.util.List;
 
 /**
+ * Controller for public schedule pages
+ *
  * @author Roman Smetana
  */
 @Controller
@@ -81,11 +82,8 @@ public class ScheduleController extends GeneralController {
             model.addAttribute("showRoleDialog", true);
         }
 
-        // TODO replace with new Date()
-        Calendar calendar = new GregorianCalendar(2014, 1, 1);
-
         String[] roleIds = scheduleRoles.split(",");
-        model.addAttribute("schedule", scheduleService.getMyCurrentSchedule(roleIds, calendar.getTime(), contest));
+        model.addAttribute("schedule", scheduleService.getMyCurrentSchedule(roleIds, new Date(), contest));
         model.addAttribute("pageHeadline", getMessage("myschedule.title"));
         model.addAttribute("pageTitle", getMessage("nav.myschedule"));
         model.addAttribute("sideMenuActive", "schedule");

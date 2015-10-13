@@ -21,6 +21,10 @@ import javax.validation.ValidationException;
 import java.io.IOException;
 
 /**
+ * Controller for team management
+ * <p/>
+ * It provides the import team support
+ *
  * @author Roman Smetana
  */
 @Controller

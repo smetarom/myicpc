@@ -25,6 +25,10 @@ import java.util.List;
 
 
 /**
+ * Controller for {@link ContestParticipant} management
+ *
+ * It provides the listing and CRUD features for {@link ContestParticipant}s
+ *
  * @author Roman Smetana
  */
 @Controller

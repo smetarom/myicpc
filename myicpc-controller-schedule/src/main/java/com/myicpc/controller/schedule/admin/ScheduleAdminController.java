@@ -39,10 +39,15 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * Controller for schedule management
+ * <p/>
+ * It provides CRUD operations for {@link Event},
+ * {@link Location}, {@link EventRole}, {@link ScheduleDay}
+ *
  * @author Roman Smetana
  */
 @Controller
-@SessionAttributes({ "event", "location", "scheduleDay", "eventRole", "eventsWrapper" })
+@SessionAttributes({"event", "location", "scheduleDay", "eventRole", "eventsWrapper"})
 public class ScheduleAdminController extends GeneralAdminController {
 
     @Autowired

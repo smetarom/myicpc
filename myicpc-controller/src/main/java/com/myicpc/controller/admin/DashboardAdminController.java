@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import javax.servlet.http.HttpServletRequest;
 
 /**
+ * Controller for private landing page
+ *
  * @author Roman Smetana
  */
 @Controller
