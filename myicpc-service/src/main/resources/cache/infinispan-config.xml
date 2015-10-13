@@ -5,7 +5,7 @@
 
     <cache-container default-cache="default">
         <local-cache name="contestByCode">
-
+            <expiration lifespan="300000" />
         </local-cache>
     </cache-container>
 
