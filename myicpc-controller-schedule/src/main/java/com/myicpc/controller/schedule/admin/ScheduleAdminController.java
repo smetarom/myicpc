@@ -30,6 +30,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
 import java.io.IOException;
@@ -396,8 +398,14 @@ public class ScheduleAdminController extends GeneralAdminController {
             scheduleMngmService.importSchedule(rolesCSV, daysCSV, locationsCSV, eventsCSV, contest);
 
             successMessage(redirectAttributes, "scheduleAdmin.import.success");
+        } catch (ConstraintViolationException ex) {
+            for (ConstraintViolation<?> constraintViolation : ex.getConstraintViolations()) {
+                redirectAttributes.addFlashAttribute("errorMsg", constraintViolation.getMessage());
+            }
         } catch (ValidationException ex) {
             errorMessage(redirectAttributes, ex);
+        } catch (BusinessValidationException ex) {
+            errorMessage(redirectAttributes, ex.getMessageCode());
         } catch (Exception ex) {
             errorMessage(redirectAttributes, "scheduleAdmin.import.failed");
         }

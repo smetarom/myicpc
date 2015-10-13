@@ -266,7 +266,7 @@ public class ScheduleMngmService {
      * @param daysFile      CSV with schedule days
      * @param locationsFile CSV with locations
      * @param eventFile     CSV with events
-     * @param contest
+     * @param contest       contest
      * @throws IOException                 IO file read exception
      * @throws ParseException              CSV parsing exception
      * @throws BusinessValidationException imported data is not valid
@@ -405,7 +405,7 @@ public class ScheduleMngmService {
      * @throws IOException                 error during reading the file
      * @throws BusinessValidationException event contains invalid data
      */
-    public void parseEventImportFile(final MultipartFile eventFile, final Contest contest) throws IOException {
+    public void parseEventImportFile(final MultipartFile eventFile, final Contest contest) throws IOException, BusinessValidationException {
         if (eventFile == null || contest == null) {
             logger.warn("Schedule roles export skipped. The file or contest is not defined.");
             return;
@@ -440,6 +440,9 @@ public class ScheduleMngmService {
                     // to the event
                     event.setStartDate(processImportedDate(time.parse(line[i++]), contest));
                     event.setEndDate(processImportedDate(time.parse(line[i++]), contest));
+                    if (event.getStartDate().after(event.getEndDate())) {
+                        throw new ValidationException("Start date must be before end date for '" + event.getName() + "' event");
+                    }
                 } catch (ParseException ex) {
                     throw new ValidationException("Wrong '" + event.getName() + "' event date '" + line[i - 1] + "' - required format M/dd/yy HH:mm");
                 }
@@ -484,9 +487,9 @@ public class ScheduleMngmService {
                 i++;
                 // Event things to bring if not empty
                 if (line.length > i && !StringUtils.isEmpty(line[i])) {
-                    event.setThingsToBring(line[i++]);
+                    event.setThingsToBring(line[i]);
                 }
-                i++;
+                eventValidator.validate(event);
                 eventRepository.save(event);
             }
         }
