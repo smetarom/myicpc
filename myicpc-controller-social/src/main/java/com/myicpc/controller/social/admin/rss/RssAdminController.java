@@ -1,6 +1,6 @@
 package com.myicpc.controller.social.admin.rss;
 
-import com.myicpc.controller.GeneralController;
+import com.myicpc.controller.GeneralAdminController;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.rss.RSSFeed;
 import com.myicpc.model.rss.RSSMessage;
@@ -27,7 +27,7 @@ import java.net.MalformedURLException;
  */
 @Controller
 @SessionAttributes({ "rssEvent" })
-public class RssAdminController extends GeneralController {
+public class RssAdminController extends GeneralAdminController {
     private static final Logger logger = LoggerFactory.getLogger(RssAdminController.class);
 
     @Autowired
