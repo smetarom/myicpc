@@ -40,9 +40,6 @@
                                           <spring:message code="${_association.contestParticipantRole.code}" text="${_association.contestParticipantRole.label}"/><br/>
                                       </c:forEach>
                                   </p>
-                                  <p>
-                                      <a href="<spring:url value="/person/${contestParticipant.id}" />"><spring:message code="person.viewProfile" /></a>
-                                  </p>
                               </div>
                           </div>
                       </c:forEach>
