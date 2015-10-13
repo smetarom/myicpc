@@ -25,5 +25,10 @@
                                  referencedTableName="contest" referencedColumnNames="id"
                                  constraintName="fk_contestparticipantassociation_contest" />
     </changeSet>
+    
+    <changeSet id="3" author="smetana">
+        <dropUniqueConstraint tableName="questparticipant" constraintName="uk_lpens92jo6x8jttnv4dauq7yq" />
+        <addUniqueConstraint tableName="questparticipant" columnNames="contestparticipantid, contestid" />
+    </changeSet>
 
 </databaseChangeLog>
