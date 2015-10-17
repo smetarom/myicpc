@@ -49,6 +49,11 @@ public class Contest extends IdGeneratedObject {
     private Integer timeDifference = 0;
 
     /**
+     * If the contest is hidden, it is not shown in the listing on the landing page
+     */
+    private boolean hidden;
+
+    /**
      * Start date time of the contest
      */
     @NotNull
@@ -173,6 +178,14 @@ public class Contest extends IdGeneratedObject {
 
     public void setTimeDifference(Integer timeDifference) {
         this.timeDifference = timeDifference;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
     }
 
     public ContestSettings getContestSettings() {

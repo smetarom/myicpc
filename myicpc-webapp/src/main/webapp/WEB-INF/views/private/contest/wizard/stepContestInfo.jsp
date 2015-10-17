@@ -14,6 +14,7 @@
                hintCode="contest.startTime.hint"/>
 <t:springInput type="number" labelCode="contest.timeDifference" path="timeDifference" id="contestTimeDifference"
                required="true" hintCode="contest.timeDifference.hint"/>
+<t:springCheckbox path="hidden" labelCode="contest.hidden" styleClass="checkboxSwitch" hintCode="contest.hidden.hint" />
 <div class="form-group">
     <label class="col-sm-3 control-label"><spring:message code="contest.showTeamNames"/>:* </label>
 

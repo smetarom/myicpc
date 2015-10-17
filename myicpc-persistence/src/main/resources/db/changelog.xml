@@ -31,4 +31,12 @@
         <addUniqueConstraint tableName="questparticipant" columnNames="contestparticipantid, contestid" />
     </changeSet>
 
+    <changeSet id="4" author="smetana">
+        <addColumn tableName="contest">
+            <column name="hidden" type="boolean" defaultValue="false">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

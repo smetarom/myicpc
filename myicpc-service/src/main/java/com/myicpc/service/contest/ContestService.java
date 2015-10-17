@@ -100,6 +100,16 @@ public class ContestService {
     }
 
     /**
+     * Returns all visible contests for public pages
+     *
+     * @return visible contests
+     */
+    public List<Contest> getVisibleContests() {
+        Sort sort = new Sort(Sort.Direction.DESC, "startTime");
+        return contestRepository.findByHidden(false, sort);
+    }
+
+    /**
      * Returns a {@link Contest} by {@link Contest#code}
      *
      * The returned value is cached for performance reasons

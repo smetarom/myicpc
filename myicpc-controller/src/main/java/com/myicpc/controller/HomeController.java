@@ -29,7 +29,7 @@ public class HomeController extends GeneralController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home(Model model) {
-        model.addAttribute("contests", contestService.getActiveContests());
+        model.addAttribute("contests", contestService.getVisibleContests());
         return "home";
     }
 
