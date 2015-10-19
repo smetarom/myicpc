@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Controller for public landing page
@@ -31,6 +32,17 @@ public class HomeController extends GeneralController {
     public String home(Model model) {
         model.addAttribute("contests", contestService.getVisibleContests());
         return "home";
+    }
+
+    /**
+     * Server the basic robots.txt for web crawlers
+     *
+     * @return contest on robots.txt
+     */
+    @RequestMapping(value = "/robots.txt", method = RequestMethod.GET)
+    @ResponseBody
+    public String robotsFile() {
+        return "User-agent: *";
     }
 
     @RequestMapping(value = "/{contestCode}/feedback-form", method = RequestMethod.GET)
