@@ -110,7 +110,7 @@ public abstract class GeneralAbstractController {
      */
     @ExceptionHandler(ContestNotFoundException.class)
     public ModelAndView handleException(ContestNotFoundException ex) {
-        logger.error("Error Contest Not Found", ex);
+        logger.error("Error Contest Not Found" + ex.getMessage());
         ModelAndView modelAndView = new ModelAndView("error/contestNotFound");
         modelAndView.addObject("exception", ex);
         extendExceptionHandling(modelAndView);
@@ -127,7 +127,7 @@ public abstract class GeneralAbstractController {
      * @return model and view of exception
      */
     @ExceptionHandler(AccessDeniedException.class)
-    public ModelAndView handleAccessDeniedException(ContestNotFoundException ex) {
+    public ModelAndView handleAccessDeniedException(AccessDeniedException ex) {
         logger.warn("Access denied", ex);
         ModelAndView modelAndView = new ModelAndView("error/accessDenied");
         extendExceptionHandling(modelAndView);
