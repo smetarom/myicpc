@@ -12,7 +12,7 @@ import org.atmosphere.plugin.redis.RedisBroadcaster;
  * @author Roman Smetana
  */
 @ManagedService(
-        path = "{contestCode}/scoreboard",
+        path = "pubsub/{contestCode}/scoreboard",
         broadcaster = RedisBroadcaster.class
 )
 public class ScoreboardResource {
