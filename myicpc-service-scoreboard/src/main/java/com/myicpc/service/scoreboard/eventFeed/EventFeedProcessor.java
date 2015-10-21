@@ -20,6 +20,7 @@ import com.myicpc.model.contest.ContestSettings;
 import com.myicpc.repository.contest.ContestRepository;
 import com.myicpc.service.scoreboard.exception.EventFeedException;
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -234,8 +235,8 @@ public class EventFeedProcessor {
                 try {
                     XMLEntity elem = (XMLEntity) in.readObject();
                     elem.accept(eventFeedVisitor, contest);
-                } catch (ClassNotFoundException e) {
-                    logger.warn("Non existing Java representation of the XML structure: " + e.getMessage(), e);
+                } catch (ClassNotFoundException | CannotResolveClassException e) {
+                    logger.warn("Non existing Java representation of the XML structure: " + e.getMessage());
                 }
             }
         } catch (EOFException ex) {
