@@ -10,6 +10,7 @@ import com.myicpc.dto.eventFeed.parser.JudgementXML;
 import com.myicpc.dto.eventFeed.parser.LanguageXML;
 import com.myicpc.dto.eventFeed.parser.ProblemXML;
 import com.myicpc.dto.eventFeed.parser.RegionXML;
+import com.myicpc.dto.eventFeed.parser.ResetXML;
 import com.myicpc.dto.eventFeed.parser.TeamProblemXML;
 import com.myicpc.dto.eventFeed.parser.TeamXML;
 import com.myicpc.dto.eventFeed.parser.TestcaseXML;
@@ -249,7 +250,8 @@ public class EventFeedProcessor {
         xStream.ignoreUnknownElements();
         xStream.processAnnotations(new Class[]{ContestXML.class, LanguageXML.class, RegionXML.class,
                 JudgementXML.class, ProblemXML.class, TeamXML.class, TeamProblemXML.class,
-                TestcaseXML.class, FinalizedXML.class, ClarificationXML.class});
+                TestcaseXML.class, FinalizedXML.class, ClarificationXML.class,
+                ResetXML.class});
         return xStream;
     }
 }
