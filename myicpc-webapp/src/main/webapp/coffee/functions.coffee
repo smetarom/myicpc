@@ -2,7 +2,7 @@ class AtmosphereRequest
   constructor: (@url, @onMessage) ->
     @contentType = "application/json"
     @logLevel = 'debug'
-    @transport = 'sse' #websocket or sse
+    @transport = if typeof(EventSource) != "undefined" then 'sse' else 'websocket' #websocket or sse
     @trackMessageLength = true
     @reconnectInterval = 5000
     @fallbackTransport = 'long-polling'
@@ -22,12 +22,12 @@ class AtmosphereRequest
 startSubscribe = (contextPath, contestCode, channel, processMethod, ngController) ->
   socket = $.atmosphere
   request = new AtmosphereRequest(getSubscribeAddress(contextPath) + contestCode + "/" + channel, (response) ->
-#    try
+    try
       result = $.parseJSON(response.responseBody);
       console.log result
       processMethod(result, ngController)
-#    catch error
-#      console.log("An error occurred while parsing the JSON Data: #{response.responseBody}; Error: #{error}");
+    catch error
+      console.log("An error occurred while parsing the JSON Data: #{response.responseBody}; Error: #{error}");
   )
   connectedSocket = socket.subscribe(request)
 
