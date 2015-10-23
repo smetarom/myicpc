@@ -54,6 +54,10 @@ public class EventFeedProcessor {
     private static final String EVENT_FEED_OPENING_TAG = "<contest>";
     private static final String EVENT_FEED_ENDING_TAG = "</contest>";
     /**
+     * Safe time buffer (in seconds), when the contest stops pulling the source
+     */
+    private static final int SAFE_TIME_BUFFER = 2 * 60 * 60;
+    /**
      * Default value of the backoff timer in ms
      */
     private static final long BASE_EXPONENTIAL_BACKOFF = 1000;
@@ -160,7 +164,11 @@ public class EventFeedProcessor {
     private boolean isContestOver(final Contest contest) {
         Contest persistedContest = contestRepository.findOne(contest.getId());
         if (persistedContest.getStartTime() != null) {
-            Date endDate = DateUtils.addSeconds(persistedContest.getStartTime(), persistedContest.getLength());
+            int timeModifier = SAFE_TIME_BUFFER;
+            if (persistedContest.getTimeDifference() != null) {
+                timeModifier += persistedContest.getTimeDifference() * 60;
+            }
+            Date endDate = DateUtils.addSeconds(persistedContest.getStartTime(), persistedContest.getLength() + timeModifier);
             return new Date().after(endDate);
         }
         return true;
