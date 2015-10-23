@@ -4,6 +4,7 @@ import com.myicpc.model.contest.Contest;
 import com.myicpc.model.schedule.Event;
 import com.myicpc.model.schedule.EventRole;
 import com.myicpc.repository.AbstractDao;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -66,7 +67,9 @@ public class EventRepositoryImpl extends AbstractDao implements EventDao {
         Predicate rolesPredicate = cb.isEmpty(c.<List>get("roles"));
         if (roleIds != null) {
             for (String roleId : roleIds) {
-                rolesPredicate = cb.or(rolesPredicate, cb.equal(eventRole.<Long>get("id"), roleId));
+                if (NumberUtils.isNumber(roleId)) {
+                    rolesPredicate = cb.or(rolesPredicate, cb.equal(eventRole.<Long>get("id"), roleId));
+                }
             }
         }
 
