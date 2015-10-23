@@ -96,6 +96,9 @@ public class QuestMngmService {
         if (questChallenge == null) {
             return;
         }
+        List<QuestSubmission> submissions = submissionRepository.findByChallenge(questChallenge);
+        submissionRepository.delete(submissions);
+
         challengeRepository.delete(questChallenge);
         challengeRepository.flush();
 

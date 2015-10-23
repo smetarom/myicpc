@@ -18,6 +18,8 @@ import java.util.List;
  * @author Roman Smetana
  */
 public interface QuestSubmissionRepository extends JpaRepository<QuestSubmission, Long>, QuestSubmissionDAO {
+    List<QuestSubmission> findByChallenge(QuestChallenge questChallenge);
+
     QuestSubmission findByChallengeAndParticipant(QuestChallenge challenge, QuestParticipant participant);
 
     List<QuestSubmission> findByChallengeAndSubmissionStateOrderByNotificationTimestampDesc(QuestChallenge challenge, QuestSubmission.QuestSubmissionState submissionState);
