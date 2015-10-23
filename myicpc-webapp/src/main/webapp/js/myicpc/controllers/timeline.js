@@ -146,7 +146,9 @@ Timeline = {
         }
         $('#timeline .timeline-loading').addClass('hidden');
         return setTimeout(function() {
-          return $('#loadMoreTimeline').removeClass('hidden');
+          if (data.length > 0) {
+            return $('#loadMoreTimeline').removeClass('hidden');
+          }
         }, 3000);
       }
     });

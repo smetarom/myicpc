@@ -107,7 +107,8 @@ Timeline = {
 
         $('#timeline .timeline-loading').addClass('hidden')
         setTimeout(() ->
-          $('#loadMoreTimeline').removeClass('hidden')
+          if data.length > 0
+            $('#loadMoreTimeline').removeClass('hidden')
         , 3000)
     )
 
