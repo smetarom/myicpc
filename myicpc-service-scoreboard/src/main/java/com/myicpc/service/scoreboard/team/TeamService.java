@@ -524,7 +524,7 @@ public class TeamService {
      *
      * @param socialInfosJson JSON data
      */
-    public void processSocialInfos(String socialInfosJson) {
+    private void processSocialInfos(String socialInfosJson) {
         JsonArray arr = new JsonParser().parse(socialInfosJson).getAsJsonArray();
         // Iterate through all JSON representations of social network usernames
         for (JsonElement e : arr) {
