@@ -121,7 +121,7 @@ public class ControlFeedService {
     public void startEventFeed(Contest contest) {
         Future<Void> newFeedProcess;
         if (hasContestPollingStrategy(contest)) {
-            newFeedProcess = eventFeedProcessor.pollingEventFeed(contest, 60000);
+            newFeedProcess = eventFeedProcessor.pollingEventFeed(contest, 10000);
         } else {
             newFeedProcess = eventFeedProcessor.runEventFeed(contest);
         }

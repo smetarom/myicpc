@@ -160,8 +160,7 @@ public class EventFeedProcessor {
     private boolean isContestOver(final Contest contest) {
         Contest persistedContest = contestRepository.findOne(contest.getId());
         if (persistedContest.getStartTime() != null) {
-            Date endDate = new Date(persistedContest.getStartTime().getTime());
-            DateUtils.addSeconds(endDate, persistedContest.getLength());
+            Date endDate = DateUtils.addSeconds(persistedContest.getStartTime(), persistedContest.getLength());
             return new Date().after(endDate);
         }
         return true;
