@@ -81,8 +81,9 @@ public class ParticipantsAdminController extends GeneralAdminController {
     @RequestMapping(value = "/private/{contestCode}/participants/create", method = RequestMethod.POST)
     public String createParticipant(@PathVariable String contestCode, @ModelAttribute("newParticipant") ContestParticipant newParticipant,
                                     @RequestParam String participantRole, @RequestParam(required = false) Long teamInfoId, RedirectAttributes redirectAttributes) {
+        Contest contest = getContest(contestCode, null);
         try {
-            participantService.createContestParticipant(newParticipant, participantRole, teamInfoId);
+            participantService.createContestParticipant(newParticipant, contest, participantRole, teamInfoId);
 
             successMessage(redirectAttributes, "participantAdmin.create.success", newParticipant.getOfficialFullname());
         } catch (ValidationException ex) {

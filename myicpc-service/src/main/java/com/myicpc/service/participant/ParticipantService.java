@@ -42,7 +42,7 @@ public class ParticipantService {
      * @param teamInfoId
      *            team of the contest participant
      */
-    public void createContestParticipant(final ContestParticipant contestParticipant, final String participantRole, final Long teamInfoId) {
+    public void createContestParticipant(final ContestParticipant contestParticipant, final Contest contest, final String participantRole, final Long teamInfoId) {
         if (contestParticipant == null || participantRole == null || teamInfoId == null && !"Staff".equalsIgnoreCase(participantRole)) {
             throw new ValidationException("Not all required fields filled in.");
         }
@@ -64,6 +64,7 @@ public class ParticipantService {
         association.setContestParticipant(persistedcContestParticipant);
         association.setContestParticipantRole(contestParticipantRole);
         association.setTeamInfo(teamInfo);
+        association.setContest(contest);
         contestParticipantAssociationRepository.save(association);
     }
 
