@@ -16,7 +16,7 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
 
     List<Team> findByContestOrderByNameAsc(Contest contest);
 
-    @Query("SELECT new com.myicpc.dto.eventFeed.TeamDTO(t.id, t.externalId, t.rank, t.name, t.nationality, t.problemsSolved, t.totalTime, u.externalId, u.name, r.externalId, r.name) " +
+    @Query("SELECT new com.myicpc.dto.eventFeed.TeamDTO(t.id, t.externalId, t.rank, t.name, t.nationality, t.problemsSolved, t.totalTime, u.externalId, u.name, u.shortName, r.externalId, r.name) " +
             "FROM Team t LEFT JOIN t.teamInfo ti LEFT JOIN ti.university u LEFT JOIN ti.region r " +
             "WHERE t.contest = ?1")
     List<TeamDTO> findTeamDTOByContest(Contest contest);

@@ -95,7 +95,7 @@ public class ScoreboardServiceImpl extends ScoreboardListenerAdapter implements 
                 teamObject.addProperty("nationality", team.getNationality());
             }
             if (contest.getContestSettings().isShowUniversity()) {
-                teamObject.addProperty("universityName", team.getUniversityName());
+                teamObject.addProperty("universityName", team.getUniversityShortName());
             }
             if (contest.getContestSettings().isShowRegion()) {
                 teamObject.addProperty("regionName", team.getRegionName());

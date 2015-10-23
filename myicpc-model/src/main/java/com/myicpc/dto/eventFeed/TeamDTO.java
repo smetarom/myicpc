@@ -17,10 +17,11 @@ public class TeamDTO implements Serializable {
     private Integer totalTime;
     private Long universityId;
     private String universityName;
+    private String universityShortName;
     private Long regionId;
     private String regionName;
 
-    public TeamDTO(Long id, Long externalId, Integer rank, String name, String nationality, Integer problemsSolved, Integer totalTime, Long universityId, String universityName, Long regionId, String regionName) {
+    public TeamDTO(Long id, Long externalId, Integer rank, String name, String nationality, Integer problemsSolved, Integer totalTime, Long universityId, String universityName, String universityShortName, Long regionId, String regionName) {
         this.id = id;
         this.externalId = externalId;
         this.rank = rank;
@@ -30,6 +31,7 @@ public class TeamDTO implements Serializable {
         this.totalTime = totalTime;
         this.universityId = universityId;
         this.universityName = universityName;
+        this.universityShortName = universityShortName;
         this.regionId = regionId;
         this.regionName = regionName;
     }
@@ -68,6 +70,10 @@ public class TeamDTO implements Serializable {
 
     public String getUniversityName() {
         return universityName;
+    }
+
+    public String getUniversityShortName() {
+        return universityShortName;
     }
 
     public Long getRegionId() {
