@@ -39,7 +39,7 @@ public interface NotificationRepository extends PagingAndSortingRepository<Notif
     @Query("SELECT n FROM Notification n WHERE n.contest = ?2 AND n.deleted = false AND n.offensive = false AND n.notificationType IN ?1 ORDER BY n.id DESC")
     Page<Notification> findByNotificationTypesOrderByIdDesc(List<NotificationType> notificationTypes, Contest contest, Pageable pageable);
 
-    @Query("SELECT n FROM Notification n WHERE n.timestamp < ?1 AND n.contest = ?3 AND n.offensive = false AND n.notificationType IN ?2 ORDER BY n.timestamp DESC")
+    @Query("SELECT n FROM Notification n WHERE n.timestamp < ?1 AND n.contest = ?3 AND n.deleted = false AND n.offensive = false AND n.notificationType IN ?2 ORDER BY n.timestamp DESC")
     Page<Notification> findByNotificationTypesOrderByIdDesc(Date timestamp, List<NotificationType> notificationTypes, Contest contest, Pageable pageable);
 
     @Query("SELECT n FROM Notification n WHERE n.notificationType IN ?2 AND n.contest = ?3 AND n.id < ?1 ORDER BY n.id DESC")
