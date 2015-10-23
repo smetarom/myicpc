@@ -37,7 +37,9 @@
                             </c:forEach>
                         </ul>
                     </li>
-                    <li><a href="#/code"><spring:message code="insight.nav.code" /></a></li>
+                    <c:if test="${util:codeInsightModuleEnabled(contest)}">
+                        <li><a href="#/code"><spring:message code="insight.nav.code" /></a></li>
+                    </c:if>
                 </t:secondLevelSubmenu>
 
                 <div class="clearfix">
