@@ -13,7 +13,9 @@ kioskApp.controller('kioskFeedCtrl', ($scope, $sce) ->
     )
 
   $scope.addTile = (data) ->
-    $scope.notifications.push(data)
+    $scope.$apply(() ->
+      $scope.notifications.push(data)
+    )
 
   $scope.refresh = ->
     $scope.$apply()

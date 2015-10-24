@@ -20,7 +20,9 @@ kioskApp.controller('kioskFeedCtrl', function($scope, $sce) {
     });
   };
   $scope.addTile = function(data) {
-    return $scope.notifications.push(data);
+    return $scope.$apply(function() {
+      return $scope.notifications.push(data);
+    });
   };
   $scope.refresh = function() {
     return $scope.$apply();
