@@ -147,7 +147,7 @@ public class QuestService {
             participantIds.add(participant.getId());
         }
         // add contest roles to quest participants
-        List<ContestParticipantAssociation> associations = contestParticipantAssociationRepository.findByContestParticipantIn(contestParticipants);
+        List<ContestParticipantAssociation> associations = contestParticipantAssociationRepository.findByContestParticipantInAndContest(contestParticipants, contest);
         for (ContestParticipantAssociation association : associations) {
             participantsMap.get(association.getContestParticipant().getId()).addContestParticipantRole(association.getContestParticipantRole());
         }
