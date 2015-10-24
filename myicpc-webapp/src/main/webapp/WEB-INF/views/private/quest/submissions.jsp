@@ -113,6 +113,6 @@
             </c:if>
 		</div>
 		
-		<%--<t:pager pager="${submissions}" />--%>
+		<t:pager pager="${submissions}" />
     </jsp:body>
 </t:templateAdmin>
