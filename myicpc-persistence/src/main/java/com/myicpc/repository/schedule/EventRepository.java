@@ -63,7 +63,8 @@ public interface EventRepository extends CrudRepository<Event, Long>, EventDao {
      */
     @Query("SELECT new com.myicpc.model.schedule.Event(e.id, e.name, e.startDate, e.endDate, e.contest) " +
             "FROM Event e " +
-            "WHERE e.endDate >= ?1 AND e.startDate <= ?2 AND e.contest = ?3")
+            "WHERE e.endDate >= ?1 AND e.startDate <= ?2 AND e.contest = ?3 " +
+            "ORDER BY e.startDate")
     List<Event> findTimelineUpcomingEvents(Date fromDate, Date toDate, Contest contest);
 
     /**
