@@ -23,6 +23,9 @@
                 <jsp:param name="module" value="gallery" />
             </jsp:include>
             <jsp:include page="/WEB-INF/views/private/contest/fragment/moduleControlRow.jsp">
+                <jsp:param name="module" value="officialGallery" />
+            </jsp:include>
+            <jsp:include page="/WEB-INF/views/private/contest/fragment/moduleControlRow.jsp">
                 <jsp:param name="module" value="quest" />
             </jsp:include>
             </tbody>

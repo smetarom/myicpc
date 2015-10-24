@@ -19,6 +19,7 @@ public class ModuleConfiguration extends IdGeneratedObject {
     private boolean rssModule;
     private boolean pollModule;
     private boolean galleryModule;
+    private boolean officialGalleryModule;
     private boolean questModule;
 
     public boolean isMapModule() {
@@ -67,6 +68,14 @@ public class ModuleConfiguration extends IdGeneratedObject {
 
     public void setGalleryModule(boolean galleryModule) {
         this.galleryModule = galleryModule;
+    }
+
+    public boolean isOfficialGalleryModule() {
+        return officialGalleryModule;
+    }
+
+    public void setOfficialGalleryModule(boolean officialGalleryModule) {
+        this.officialGalleryModule = officialGalleryModule;
     }
 
     public boolean isQuestModule() {

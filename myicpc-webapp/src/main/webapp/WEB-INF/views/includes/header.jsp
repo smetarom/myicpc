@@ -43,14 +43,23 @@
                 </li>
             </c:if>
             <c:if test="${util:galleryModuleEnabled(contest)}">
-                <li id="main-menu-gallery" class="${sideMenuActive eq 'gallery' ? 'active' : '' } dropdown">
-                    <t:emptyLink isDropdown="true" styleClass="dropdown-toggle">
-                        <t:glyphIcon icon="camera" /> <span class="hidden-xs hidden-sm"><spring:message code="nav.gallery"/></span> <b class="caret"></b>
-                    </t:emptyLink>
-                    <table class="dropdown-menu main-dropdown-submenu">
-                        <%@ include file="/WEB-INF/views/includes/topMenu/gallerySubmenu.jsp" %>
-                    </table>
-                </li>
+                <c:if test="${not util:officialGalleryModuleEnabled(contest)}">
+                    <li class="${sideMenuActive eq 'gallery' ? 'active' : '' }">
+                        <a href="<spring:url value="${contestURL}/gallery" />">
+                            <t:faIcon icon="camera" /> <span class="hidden-xs hidden-sm"><spring:message code="nav.gallery"/></span>
+                        </a>
+                    </li>
+                </c:if>
+                <c:if test="${util:officialGalleryModuleEnabled(contest)}">
+                    <li id="main-menu-gallery" class="${sideMenuActive eq 'gallery' ? 'active' : '' } dropdown">
+                        <t:emptyLink isDropdown="true" styleClass="dropdown-toggle">
+                            <t:glyphIcon icon="camera" /> <span class="hidden-xs hidden-sm"><spring:message code="nav.gallery"/></span> <b class="caret"></b>
+                        </t:emptyLink>
+                        <table class="dropdown-menu main-dropdown-submenu">
+                            <%@ include file="/WEB-INF/views/includes/topMenu/gallerySubmenu.jsp" %>
+                        </table>
+                    </li>
+                </c:if>
             </c:if>
             <c:if test="${util:pollModuleEnabled(contest)}">
                 <li class="${sideMenuActive eq 'poll' ? 'active' : '' }">

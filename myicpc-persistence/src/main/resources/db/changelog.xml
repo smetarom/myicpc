@@ -39,4 +39,12 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="5" author="smetana">
+        <addColumn tableName="moduleconfiguration">
+            <column name="officialgallerymodule" type="boolean" defaultValue="false">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

@@ -196,6 +196,13 @@ public class JSPCustomFunctions {
         return false;
     }
 
+    public static boolean isOfficialGalleryModuleEnabled(Contest contest) {
+        if (contest != null && contest.getModuleConfiguration() != null) {
+            return contest.getModuleConfiguration().isOfficialGalleryModule();
+        }
+        return false;
+    }
+
     public static boolean isPollModuleEnabled(Contest contest) {
         if (contest != null && contest.getModuleConfiguration() != null) {
             return contest.getModuleConfiguration().isPollModule();

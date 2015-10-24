@@ -100,6 +100,11 @@
         <function-signature>boolean isGalleryModuleEnabled(com.myicpc.model.contest.Contest)</function-signature>
     </function>
     <function>
+        <name>officialGalleryModuleEnabled</name>
+        <function-class>com.myicpc.controller.functions.JSPCustomFunctions</function-class>
+        <function-signature>boolean isOfficialGalleryModuleEnabled(com.myicpc.model.contest.Contest)</function-signature>
+    </function>
+    <function>
         <name>pollModuleEnabled</name>
         <function-class>com.myicpc.controller.functions.JSPCustomFunctions</function-class>
         <function-signature>boolean isPollModuleEnabled(com.myicpc.model.contest.Contest)</function-signature>

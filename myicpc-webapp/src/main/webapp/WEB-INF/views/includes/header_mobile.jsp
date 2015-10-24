@@ -46,9 +46,16 @@
             </c:if>
             <c:if test="${util:galleryModuleEnabled(contest)}">
                 <td class="${sideMenuActive eq 'gallery' ? 'active' : '' }">
-                    <t:emptyLink id="main-gallery-link">
-                        <span class="glyphicon glyphicon-camera"></span>
-                    </t:emptyLink>
+                    <c:if test="${not util:officialGalleryModuleEnabled(contest)}">
+                        <a href="<spring:url value="${contestURL}/gallery" />" class="side-menu-gallery">
+                            <span class="glyphicon glyphicon-camera"></span>
+                        </a>
+                    </c:if>
+                    <c:if test="${util:officialGalleryModuleEnabled(contest)}">
+                        <t:emptyLink id="main-gallery-link">
+                            <span class="glyphicon glyphicon-camera"></span>
+                        </t:emptyLink>
+                    </c:if>
                 </td>
             </c:if>
             <td><t:emptyLink id="main-misc-link"><span
