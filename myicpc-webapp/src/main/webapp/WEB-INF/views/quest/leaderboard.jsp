@@ -24,7 +24,7 @@
                 $("#leaderboard-notification a").click(function() {
                     var $leaderboardNotification = $("#leaderboard-notification");
                     $leaderboardNotification.append('<span class="fa fa-spinner fa-spin"></span>');
-                    $.get("<spring:url value="/${contestURL}/quest/leaderboard/${activeLeaderboard.urlCode}/update" />", function(data) {
+                    $.get("<spring:url value="${contestURL}/quest/leaderboard/${activeLeaderboard.urlCode}/update" />", function(data) {
                         $("#mainLeaderboard").html(data);
                         $leaderboardNotification.addClass('hidden');
                         $leaderboardNotification.find(':last-child').remove();
