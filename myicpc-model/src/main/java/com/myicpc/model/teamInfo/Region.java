@@ -4,6 +4,8 @@ import com.myicpc.model.IdGeneratedObject;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.SequenceGenerator;
 
 /**
@@ -15,6 +17,21 @@ import javax.persistence.SequenceGenerator;
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "Region_id_seq")
 public class Region extends IdGeneratedObject {
     private static final long serialVersionUID = 4894738108560406124L;
+
+    public enum RegionType {
+        NORMAL, UNOFFICIAL, ADMINISTRATIVE;
+
+        public static RegionType parseFromString(String s) {
+            if ("Normal".equalsIgnoreCase(s)) {
+                return NORMAL;
+            } else if ("Administrative".equalsIgnoreCase(s)) {
+                return UNOFFICIAL;
+            } else if ("Unofficial".equalsIgnoreCase(s)) {
+                return ADMINISTRATIVE;
+            }
+            return null;
+        }
+    }
 
     /**
      * Region id from CM
@@ -29,6 +46,12 @@ public class Region extends IdGeneratedObject {
      * Abbreviated region name
      */
     private String shortName;
+
+    /**
+     * Site type from CM
+     */
+    @Enumerated(EnumType.STRING)
+    private RegionType regionType;
 
     public Long getExternalId() {
         return externalId;
@@ -52,5 +75,13 @@ public class Region extends IdGeneratedObject {
 
     public void setShortName(final String shortName) {
         this.shortName = shortName;
+    }
+
+    public RegionType getRegionType() {
+        return regionType;
+    }
+
+    public void setRegionType(RegionType regionType) {
+        this.regionType = regionType;
     }
 }

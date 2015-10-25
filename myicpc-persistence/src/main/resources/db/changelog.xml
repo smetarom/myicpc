@@ -47,4 +47,10 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="6" author="smetana">
+        <addColumn tableName="region">
+            <column name="regiontype" type="varchar(20)" defaultValue="NORMAL" />
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

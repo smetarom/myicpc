@@ -234,6 +234,7 @@ public class TeamService {
                     region.setExternalId(externalId);
                     region.setName(regionAdapter.getString("name"));
                     region.setShortName(FormatUtils.getRegionShortName(region.getName()));
+                    region.setRegionType(Region.RegionType.parseFromString(regionAdapter.getString("type")));
                     regionRepository.save(region);
                     logger.info("CM import: region " + region.getExternalId());
                 }

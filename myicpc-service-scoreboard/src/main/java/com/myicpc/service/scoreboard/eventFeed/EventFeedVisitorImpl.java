@@ -18,6 +18,7 @@ import com.myicpc.model.eventFeed.Problem;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
 import com.myicpc.model.social.Notification;
+import com.myicpc.model.teamInfo.Region;
 import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.repository.contest.ContestRepository;
 import com.myicpc.repository.eventFeed.JudgementRepository;
@@ -155,10 +156,13 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
             team.setProblemsSolved(0);
             team.setTotalTime(0);
             team.setContest(contest);
-            TeamInfo teamInfo = teamInfoRepository.findByExternalIdAndContest(team.getExternalId(), contest);
+            TeamInfo teamInfo = teamInfoRepository.findByExternalIdAndContestWithRegion(team.getExternalId(), contest);
             team.setTeamInfo(teamInfo);
-            team = teamRepository.saveAndFlush(team);
-            logger.info("Team " + team.getSystemId() + " created");
+            Region region = teamInfo.getRegion();
+            if (region != null && region.getRegionType() != Region.RegionType.UNOFFICIAL) {
+                team = teamRepository.saveAndFlush(team);
+                logger.info("Team " + team.getSystemId() + " created");
+            }
         }
     }
 
@@ -190,6 +194,10 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
             }
             if (teamProblem.getProblem() == null) {
                 teamProblem.setProblem(problemRepository.findBySystemIdAndContest(xmlTeamProblem.getProblemId(), contest));
+            }
+            if (teamProblem.getTeam() == null || teamProblem.getProblem() == null) {
+                // team not found in the contest -> ignore the submission
+                return;
             }
             TestcaseXML testcaseXML = testcaseXMLMap.get(teamProblem.getSystemId());
             if (testcaseXML != null) {

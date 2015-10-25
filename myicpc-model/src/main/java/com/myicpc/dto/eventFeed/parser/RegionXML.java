@@ -15,6 +15,8 @@ public class RegionXML extends XMLEntity<Region> {
 
     private String name;
 
+    private String type;
+
     @Override
     public void mergeTo(final Region region) {
         region.setExternalId(getExternalId());
@@ -40,5 +42,13 @@ public class RegionXML extends XMLEntity<Region> {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

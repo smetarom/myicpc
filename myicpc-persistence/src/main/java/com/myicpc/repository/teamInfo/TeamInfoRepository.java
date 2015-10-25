@@ -12,6 +12,9 @@ public interface TeamInfoRepository extends JpaRepository<TeamInfo, Long> {
 
     TeamInfo findByExternalIdAndContest(Long externalId, Contest contest);
 
+    @Query("FROM TeamInfo ti LEFT JOIN FETCH ti.region WHERE ti.externalId = ?1 AND ti.contest = ?2")
+    TeamInfo findByExternalIdAndContestWithRegion(Long externalId, Contest contest);
+
     @Query("FROM TeamInfo ti LEFT JOIN FETCH ti.regionalResults WHERE ti.externalId = ?1 AND ti.contest = ?2")
     TeamInfo findByExternalIdAndContestWithRegionalResult(Long externalId, Contest contest);
 
