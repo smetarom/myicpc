@@ -17,14 +17,6 @@ import javax.persistence.UniqueConstraint;
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"contestId"})})
 public class EventFeedControl extends IdGeneratedContestObject {
     private int processedRunsCounter;
-    @Transient
-    private int runsToSkip;
-    @Transient
-    private int messagesToSkip;
-    @Transient
-    private int skippedRuns;
-    @Transient
-    private int skippedMessages;
 
     public EventFeedControl() {
     }
@@ -41,50 +33,8 @@ public class EventFeedControl extends IdGeneratedContestObject {
         this.processedRunsCounter = processedRunsCounter;
     }
 
-    public int getRunsToSkip() {
-        return runsToSkip;
-    }
-
-    public void setRunsToSkip(int runsToSkip) {
-        this.runsToSkip = runsToSkip;
-    }
-
-    public int getMessagesToSkip() {
-        return messagesToSkip;
-    }
-
-    public void setMessagesToSkip(int messagesToSkip) {
-        this.messagesToSkip = messagesToSkip;
-    }
-
-    public int getSkippedRuns() {
-        return skippedRuns;
-    }
-
-    public void setSkippedRuns(int skippedRuns) {
-        this.skippedRuns = skippedRuns;
-    }
-
-    public int getSkippedMessages() {
-        return skippedMessages;
-    }
-
-    public void setSkippedMessages(int skippedMessages) {
-        this.skippedMessages = skippedMessages;
-    }
-
-    @Transient
-    public void restartControl() {
-        runsToSkip = processedRunsCounter;
-    }
-
     @Transient
     public void increaseProcessedRunsCounter() {
         processedRunsCounter += 1;
-    }
-
-    @Transient
-    public void increaseSkippedRuns() {
-        skippedRuns += 1;
     }
 }

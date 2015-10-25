@@ -87,6 +87,59 @@ public class EventFeedProcessor {
     @Async
     public Future<Void> pollingEventFeed(final Contest contest, long pollPeriod) {
         ContestSettings contestSettings = contest.getContestSettings();
+        if (contestSettings != null && StringUtils.isNotEmpty(contestSettings.getEventFeedURL())) {
+            Reader reader = null;
+            InputStream in = null;
+            logger.info("Starting event feed polling for contest " + contest.getCode());
+            long startTime;
+            long spendTime;
+            while (true) {
+                if (Thread.interrupted()) {
+                    logger.info("Event feed reader for contest " + contest.getCode() + " was interrupted.");
+                    break;
+                }
+                startTime = System.currentTimeMillis();
+                try {
+                    in = WebServiceUtils.connectCDS(contestSettings.getEventFeedURL(), contestSettings.getEventFeedUsername(),
+                            contestSettings.getEventFeedPassword());
+                    if (in == null) {
+                        // skip this poll turn
+                        continue;
+                    }
+                    reader = new InputStreamReader(in);
+                    parseXML(reader, contest);
+                    // checks if the contest end date passed
+                    if (isContestOver(contest)) {
+                        break;
+                    }
+                } catch (Exception e) {
+                    logger.error(e.getMessage(), e);
+                } finally {
+                    IOUtils.closeQuietly(reader);
+                    IOUtils.closeQuietly(in);
+                    in = null;
+
+                    // wait till the next poll turn
+                    spendTime = System.currentTimeMillis() - startTime;
+                    if (pollPeriod - spendTime > 0) {
+                        try {
+                            Thread.sleep(pollPeriod - spendTime);
+                        } catch (InterruptedException e1) {
+                            // do nothing
+                        }
+                    }
+                }
+            }
+        } else {
+            logger.error("Event feed settings is not correct for contest " + contest.getName());
+        }
+        logger.info("Event feed polling for contest {} has stopped", contest.getCode());
+        return new AsyncResult<>(null);
+    }
+
+    @Async
+    public Future<Void> pollingEventFeedExperimental(final Contest contest, long pollPeriod) {
+        ContestSettings contestSettings = contest.getContestSettings();
         if (contestSettings != null && !StringUtils.isEmpty(contestSettings.getEventFeedURL())) {
             Reader reader = null;
             CountingInputStream in = null;
@@ -232,6 +285,7 @@ public class EventFeedProcessor {
 
     private void parseXML(final Reader reader, final Contest contest) throws IOException {
         final XStream xStream = createEventFeedParser();
+        int submissionOrder = 0;
         ObjectInputStream in = xStream.createObjectInputStream(reader);
         try {
             while (true) {
@@ -239,9 +293,11 @@ public class EventFeedProcessor {
                     logger.info("Event feed reader for contest " + contest.getCode() + " was interrupted.");
                     break;
                 }
-                // Ignore testcases
                 try {
                     XMLEntity elem = (XMLEntity) in.readObject();
+                    if (elem instanceof TeamProblemXML) {
+                        ((TeamProblemXML) elem).setSubmissionOrder(submissionOrder++);
+                    }
                     elem.accept(eventFeedVisitor, contest);
                 } catch (ClassNotFoundException | CannotResolveClassException e) {
                     logger.warn("Non existing Java representation of the XML structure: " + e.getMessage());

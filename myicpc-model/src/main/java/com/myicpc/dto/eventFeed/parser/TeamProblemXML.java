@@ -31,6 +31,11 @@ public class TeamProblemXML extends XMLEntity<TeamProblem> {
     @XStreamAlias("problem")
     private Long problemId;
 
+    /**
+     * Order number the submission is in the event feed
+     */
+    private int submissionOrder;
+
     @Override
     public void mergeTo(final TeamProblem teamProblem) {
         teamProblem.setSystemId(getSystemId());
@@ -144,5 +149,13 @@ public class TeamProblemXML extends XMLEntity<TeamProblem> {
 
     public void setProblemId(Long problemId) {
         this.problemId = problemId;
+    }
+
+    public int getSubmissionOrder() {
+        return submissionOrder;
+    }
+
+    public void setSubmissionOrder(int submissionOrder) {
+        this.submissionOrder = submissionOrder;
     }
 }

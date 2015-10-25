@@ -12,6 +12,7 @@ import com.myicpc.dto.eventFeed.parser.TeamXML;
 import com.myicpc.dto.eventFeed.parser.TestcaseXML;
 import com.myicpc.dto.eventFeed.visitor.EventFeedVisitor;
 import com.myicpc.model.contest.Contest;
+import com.myicpc.model.eventFeed.EventFeedControl;
 import com.myicpc.model.eventFeed.Judgement;
 import com.myicpc.model.eventFeed.Language;
 import com.myicpc.model.eventFeed.Problem;
@@ -21,6 +22,7 @@ import com.myicpc.model.social.Notification;
 import com.myicpc.model.teamInfo.Region;
 import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.repository.contest.ContestRepository;
+import com.myicpc.repository.eventFeed.EventFeedControlRepository;
 import com.myicpc.repository.eventFeed.JudgementRepository;
 import com.myicpc.repository.eventFeed.LanguageRepository;
 import com.myicpc.repository.eventFeed.ProblemRepository;
@@ -88,6 +90,9 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
 
     @Autowired
     private NotificationRepository notificationRepository;
+
+    @Autowired
+    private EventFeedControlRepository eventFeedControlRepository;
 
     @Override
     @Transactional
@@ -169,15 +174,27 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
     @Override
     @Transactional
     public void visit(TeamProblemXML xmlTeamProblem, Contest contest) {
+        EventFeedControl submissionFeedControl = null;
+        if (ControlFeedService.hasContestPollingStrategy(contest)) {
+            submissionFeedControl = eventFeedControlRepository.findByContest(contest);
+            if (submissionFeedControl == null) {
+                submissionFeedControl = new EventFeedControl();
+                submissionFeedControl.setContest(contest);
+            }
+            if (xmlTeamProblem.getSubmissionOrder() < submissionFeedControl.getProcessedRunsCounter()) {
+                logger.warn(contest.getCode() + ": Run " + xmlTeamProblem.getSystemId() + " for team " + xmlTeamProblem.getTeamId() + " was skipped.");
+                return;
+            }
+        }
         // TODO Consider remove JOIN team from query
         Boolean judged = teamProblemRepository.getJudgedBySystemIdAndTeamContest(xmlTeamProblem.getSystemId(), contest);
         if (judged != null) {
             if ("fresh".equalsIgnoreCase(xmlTeamProblem.getStatus())) {
-                logger.info("Skip 'fresh' submission {} from team {}", xmlTeamProblem.getSystemId(), xmlTeamProblem.getTeamId());
+                logger.info(contest.getCode() + ": Skip 'fresh' submission {} from team {}", xmlTeamProblem.getSystemId(), xmlTeamProblem.getTeamId());
                 return;
             }
             if ("done".equalsIgnoreCase(xmlTeamProblem.getStatus()) && judged) {
-                logger.info("Skip 'done' submission {} from team {}", xmlTeamProblem.getSystemId(), xmlTeamProblem.getTeamId());
+                logger.info(contest.getCode() + ": Skip 'done' submission {} from team {}", xmlTeamProblem.getSystemId(), xmlTeamProblem.getTeamId());
                 return;
             }
         }
@@ -207,7 +224,12 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
             }
             teamProblem = strategy.executeTeamProblem(teamProblem, contest);
 
-            logger.info("Run " + teamProblem.getSystemId() + " processed for team " + teamProblem.getTeam().getSystemId());
+            if (ControlFeedService.hasContestPollingStrategy(contest) && submissionFeedControl != null) {
+                submissionFeedControl.increaseProcessedRunsCounter();
+                eventFeedControlRepository.save(submissionFeedControl);
+            }
+
+            logger.info(contest.getCode() + ": Run " + teamProblem.getSystemId() + " processed for team " + teamProblem.getTeam().getSystemId());
         } catch (EventFeedException ex) {
             logger.error(ex.getMessage(), ex);
         }

@@ -169,7 +169,7 @@ public class ControlFeedService {
         if (eventFeedControl == null) {
             return;
         }
-        RunningFeedProcessDTO runningFeedProccesor = getRunningFeedProccesor(eventFeedControl.getContestId(), eventFeedControl.getSubmittedDate());
+        RunningFeedProcessDTO runningFeedProccesor = getRunningFeedProcessor(eventFeedControl.getContestId(), eventFeedControl.getSubmittedDate());
         if (runningFeedProccesor != null && runningFeedProccesor.isRunning()) {
             final EventFeedControlResponseDTO response;
             if (eventFeedControl.getEventFeedControlType() == EventFeedControlType.STOP) {
@@ -243,14 +243,20 @@ public class ControlFeedService {
         return message != null;
     }
 
-    private static boolean hasContestPollingStrategy(final Contest contest) {
+    /**
+     * Checks if the contest has a polling strategy for event feed selected
+     *
+     * @param contest contest
+     * @return true, if the contest has polling strategy, false for other strategies
+     */
+    public static boolean hasContestPollingStrategy(final Contest contest) {
         return contest != null &&
                 contest.getContestSettings() != null &&
                 contest.getContestSettings().getScoreboardStrategyType() != null &&
                 contest.getContestSettings().getScoreboardStrategyType().isPolling();
     }
 
-    private static RunningFeedProcessDTO getRunningFeedProccesor(Long contestId, Date untilDate) {
+    private static RunningFeedProcessDTO getRunningFeedProcessor(Long contestId, Date untilDate) {
         RunningFeedProcessDTO runningFeedProcess = runningFeedProcesses.get(contestId);
         if (runningFeedProcess != null && runningFeedProcess.getCreated().before(untilDate)) {
             return runningFeedProcess;
