@@ -283,6 +283,18 @@ public class EventFeedProcessor {
         return new AsyncResult<>(null);
     }
 
+    public void uploadEventFeed(InputStream eventFeedFile, Contest contest) throws EventFeedException {
+        Reader reader = null;
+        try {
+            reader = new InputStreamReader(eventFeedFile);
+            parseXML(reader, contest);
+        } catch (IOException e) {
+            throw new EventFeedException(e);
+        } finally {
+            IOUtils.closeQuietly(reader);
+        }
+    }
+
     private void parseXML(final Reader reader, final Contest contest) throws IOException {
         final XStream xStream = createEventFeedParser();
         int submissionOrder = 0;

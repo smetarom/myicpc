@@ -33,6 +33,7 @@ import javax.jms.Message;
 import javax.jms.Queue;
 import javax.jms.Session;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -223,6 +224,18 @@ public class ControlFeedService {
     }
 
     /**
+     * Clear data from event feed
+     * <p/>
+     * Stops all threads executing event feed and clear database
+     *
+     * @throws EventFeedException database clear failed
+     */
+    public void clearEventFeed(Contest contest) throws EventFeedException {
+        stopEventFeed(contest);
+        truncateDatabase(contest);
+    }
+
+    /**
      * It gets if the event feed is running on any instance, which subscribes
      * {@link #EVENT_FEED_CONTROL_TOPIC}
      *
@@ -241,6 +254,12 @@ public class ControlFeedService {
             }
         });
         return message != null;
+    }
+
+    public void uploadEventFeed(InputStream eventFeedStream, Contest contest) throws EventFeedException {
+        stopEventFeed(contest);
+        truncateDatabase(contest);
+        eventFeedProcessor.uploadEventFeed(eventFeedStream, contest);
     }
 
     /**

@@ -48,7 +48,7 @@
                 <jsp:body>
                     <div id="eventFeedControlPanel">
                     </div>
-                    <t:plainForm action="">
+                    <t:plainForm action="" styleClass="clearfix">
                         <div class="col-sm-12 text-center">
                             <spring:message var="confirmMsg" code="admin.panel.feed.reset.confirm" />
                             <t:submitButton formaction="/private${contestURL}/feed/restart" onclick="return confirm('${confirmMsg}');" context="danger"><spring:message code="admin.panel.feed.reset" /></t:submitButton>
@@ -63,7 +63,15 @@
                             <t:submitButton formaction="/private${contestURL}/feed/clear" onclick="return confirm('${confirmMsg}');"><spring:message code="admin.panel.feed.clear" /></t:submitButton>
                         </div>
                     </t:plainForm>
-                    </form>
+
+                    <hr />
+
+                    <p><spring:message code="admin.panel.feed.upload.hint" /></p>
+                    <t:plainForm action="/private${contestURL}/feed/upload" styleClass="form-inline" fileUpload="true">
+                        <input type="file" class="form-control" name="eventFeedFile" id="eventFeedFile" accept=".xml" required="required">
+                        <t:button context="primary" type="submit"><spring:message code="admin.panel.feed.upload.button" /></t:button>
+                    </t:plainForm>
+
                 </jsp:body>
             </t:panelWithHeading>
 

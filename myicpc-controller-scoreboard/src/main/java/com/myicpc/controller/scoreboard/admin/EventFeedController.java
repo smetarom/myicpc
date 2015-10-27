@@ -10,7 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.IOException;
 
 /**
  * Controller for event feed management
@@ -72,15 +76,27 @@ public class EventFeedController extends GeneralAdminController {
     }
 
     @RequestMapping(value = "/private/{contestCode}/feed/clear", method = RequestMethod.POST)
-    public String clearFeed(@PathVariable final String contestCode, final RedirectAttributes redirectAttributes) {
+    public String clearFeed( @PathVariable final String contestCode, final RedirectAttributes redirectAttributes) {
         Contest contest = getContest(contestCode, null);
 
-//        try {
-//            oldControlFeedService.clearEventFeed(contest);
-//            successMessage(redirectAttributes, "admin.panel.feed.clear.success");
-//        } catch (EventFeedException ex) {
-//            errorMessage(redirectAttributes, ex);
-//        }
+        try {
+            controlFeedService.clearEventFeed(contest);
+        } catch (EventFeedException ex) {
+            errorMessage(redirectAttributes, ex);
+        }
+
+        return "redirect:/private"+ getContestURL(contestCode) + "/home";
+    }
+
+    @RequestMapping(value = "/private/{contestCode}/feed/upload", method = RequestMethod.POST)
+    public String uploadFile(@RequestParam MultipartFile eventFeedFile, @PathVariable final String contestCode, final RedirectAttributes redirectAttributes) {
+        Contest contest = getContest(contestCode, null);
+
+        try {
+            controlFeedService.uploadEventFeed(eventFeedFile.getInputStream(), contest);
+        } catch (EventFeedException | IOException e) {
+            errorMessage(redirectAttributes, e);
+        }
 
         return "redirect:/private"+ getContestURL(contestCode) + "/home";
     }
