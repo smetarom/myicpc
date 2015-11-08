@@ -8,10 +8,12 @@ import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.repository.teamInfo.ContestParticipantRepository;
 import com.myicpc.repository.teamInfo.TeamInfoRepository;
 import com.myicpc.service.dto.filter.ParticipantFilterDTO;
+import com.myicpc.service.exception.BusinessValidationException;
 import com.myicpc.service.participant.ParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import javax.validation.ValidationException;
 import java.util.List;
 
@@ -32,7 +35,7 @@ import java.util.List;
  * @author Roman Smetana
  */
 @Controller
-@SessionAttributes("participantFilter")
+@SessionAttributes({"participantFilter", "participant"})
 public class ParticipantsAdminController extends GeneralAdminController {
     @Autowired
     private ParticipantService participantService;
@@ -65,9 +68,9 @@ public class ParticipantsAdminController extends GeneralAdminController {
         model.addAttribute("participantFilter", participantFilter);
         model.addAttribute("teamInfos", teamInfos);
         if (contest.isShowTeamNames()) {
-            model.addAttribute("teams", teamInfoRepository.findAllOrderByName());
+            model.addAttribute("teams", teamInfoRepository.findByContestOrderByNameAsc(contest));
         } else {
-            model.addAttribute("teams", teamInfoRepository.findAllOrderByUniversityName());
+            model.addAttribute("teams", teamInfoRepository.findByContestOrderByUniversityNameAsc(contest));
         }
         model.addAttribute("allPeople", contestParticipantRepository.findByContestOrderByName(contest));
         model.addAttribute("contestants", contestParticipantRepository.findByContestParticipantRoleAndContestOrderByName(ContestParticipantRole.CONTESTANT, contest));
@@ -88,6 +91,36 @@ public class ParticipantsAdminController extends GeneralAdminController {
             successMessage(redirectAttributes, "participantAdmin.create.success", newParticipant.getOfficialFullname());
         } catch (ValidationException ex) {
             errorMessage(redirectAttributes, ex);
+        }
+        return "redirect:/private/" + getContestURL(contestCode) + "/participants";
+    }
+
+    @RequestMapping(value = "/private/{contestCode}/participant/{participantId}/edit", method = RequestMethod.GET)
+    public String editParticipant(@PathVariable String contestCode, @PathVariable Long participantId, Model model) {
+        getContest(contestCode, model);
+
+        ContestParticipant participant = contestParticipantRepository.findOne(participantId);
+
+        model.addAttribute("participant", participant);
+
+        return "private/participants/editParticipant";
+    }
+
+    @RequestMapping(value = "/private/{contestCode}/participant/{participantId}/edit", method = RequestMethod.POST)
+    public String editParticipantPOST(@PathVariable String contestCode, @Valid @ModelAttribute("participant") ContestParticipant contestParticipant, final BindingResult result,
+                                      final Model model, final RedirectAttributes redirectAttributes) {
+        getContest(contestCode, model);
+
+        if (result.hasErrors()) {
+            return "private/participants/editParticipant";
+        }
+
+        try {
+            participantService.saveParticipant(contestParticipant);
+            successMessage(redirectAttributes, "save.success");
+        } catch (BusinessValidationException e) {
+            model.addAttribute("errorMsg", getMessage(e.getMessageCode()));
+            return "private/participants/editParticipant";
         }
         return "redirect:/private/" + getContestURL(contestCode) + "/participants";
     }

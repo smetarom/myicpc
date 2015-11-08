@@ -14,43 +14,6 @@
   </jsp:attribute>
 
   <jsp:body>
-
-    <div class="well well-sm">
-      <form:form cssClass="form-inline" role="form" commandName="participantFilter" method="get">
-        <div class="form-group">
-          <form:label path="contestParticipantRole" class="control-label">
-            <spring:message code="participantAdmin.filter.contestParticipantRole" />:
-          </form:label>
-          <form:select path="contestParticipantRole" class="form-control">
-            <form:option value="">
-              <spring:message code="participantAdmin.filter.contestParticipantRole.all" />
-            </form:option>
-            <c:forEach var="role" items="${participantRoles}">
-              <form:option value="${role.toString()}"><spring:message code="${role.code}" text="${role.label}" /></form:option>
-            </c:forEach>
-          </form:select>
-        </div>
-        <div class="form-group">
-          <form:label path="teamInfo" class="control-label">
-            <spring:message code="participantAdmin.filter.team" />:
-          </form:label>
-          <form:select path="teamInfo" class="form-control">
-            <form:option value="">
-              <spring:message code="participantAdmin.filter.team.all" />
-            </form:option>
-            <form:options items="${teamInfos}" itemLabel="contestTeamName" itemValue="id" />
-          </form:select>
-        </div>
-        <div class="form-group">
-          <form:label path="searchText" class="control-label">
-            <spring:message code="participantAdmin.filter.searchText" />:
-          </form:label>
-          <form:input path="searchText" class="form-control" />
-        </div>
-        <t:button type="submit" context="primary"><spring:message code="filter" /></t:button>
-      </form:form>
-    </div>
-
     <%@ include file="/WEB-INF/views/private/participants/fragment/participantsCreateModal.jsp"%>
     <t:button modalOpenId="createNewPerson" styleClass="btn-hover pull-right"><t:glyphIcon icon="plus" /> <spring:message code="participantAdmin.create" /></t:button>
     <!-- Nav tabs -->

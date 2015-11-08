@@ -8,6 +8,8 @@ import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.repository.teamInfo.ContestParticipantAssociationRepository;
 import com.myicpc.repository.teamInfo.ContestParticipantRepository;
 import com.myicpc.repository.teamInfo.TeamInfoRepository;
+import com.myicpc.service.exception.BusinessValidationException;
+import com.myicpc.service.validation.ContestParticipantValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +33,9 @@ public class ParticipantService {
 
     @Autowired
     private ContestParticipantAssociationRepository contestParticipantAssociationRepository;
+
+    @Autowired
+    private ContestParticipantValidator contestParticipantValidator;
 
     /**
      * Creates a contest participant
@@ -80,5 +85,10 @@ public class ParticipantService {
         } else {
             return teamInfoRepository.findByContestOrderByUniversityNameAsc(contest);
         }
+    }
+
+    public ContestParticipant saveParticipant(final ContestParticipant contestParticipant) throws BusinessValidationException {
+        contestParticipantValidator.validate(contestParticipant);
+        return contestParticipantRepository.save(contestParticipant);
     }
 }

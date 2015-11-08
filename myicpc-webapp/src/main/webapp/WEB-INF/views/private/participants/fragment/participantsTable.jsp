@@ -7,7 +7,7 @@
 		<thead>
 			<tr>
 				<th><spring:message code="participant.name" /></th>
-				<th></th>
+				<th><spring:message code="participant.roles" /></th>
 				<th><spring:message code="participant.twitter" /></th>
 				<th><spring:message code="participant.vine" /></th>
 				<th><spring:message code="participant.instagram" /></th>
@@ -23,10 +23,13 @@
 							<spring:message code="${association.contestParticipantRole.code}" text="${association.contestParticipantRole.label}" /> ${not empty association.teamInfo ? ' - ' : ''} <c:out value="${association.teamInfo.contestTeamName}" /><br />
 						</c:forEach>
 					</td>
-					<td width="300">${participant.twitterUsername}</td>
-					<td width="300">${participant.vineUsername}</td>
-					<td width="300">${participant.instagramUsername}</td>
-					<td><t:deleteButton url="/private/participants/${participant.id}/delete" confirmMessageCode="participantAdmin.delete.confirm" confirmMessageArgument="${teamMember.fullname}" /></td>
+					<td>${participant.twitterUsername}</td>
+					<td>${participant.vineUsername}</td>
+					<td>${participant.instagramUsername}</td>
+					<td class="text-right">
+						<t:editButton url="/private${contestURL}/participant/${participant.id}/edit" />
+                        <t:deleteButton url="/private/participants/${participant.id}/delete" confirmMessageCode="participantAdmin.delete.confirm" confirmMessageArgument="${teamMember.fullname}" />
+					</td>
 				</tr>
 			</c:forEach>
 		</tbody>
