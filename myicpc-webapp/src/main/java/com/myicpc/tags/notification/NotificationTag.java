@@ -16,6 +16,7 @@ import java.util.Locale;
 public class NotificationTag extends SimpleTagSupport {
     private Notification notification;
     private NotificationType type;
+    private boolean editable;
     private Locale locale;
 
     public NotificationTag() {
@@ -30,6 +31,10 @@ public class NotificationTag extends SimpleTagSupport {
 
     public void setType(String type) {
         this.type = NotificationType.valueOf(type);
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
     }
 
     @Override
@@ -62,25 +67,25 @@ public class NotificationTag extends SimpleTagSupport {
                 notificationType.isScoreboardSubmitted() ||
                 notificationType.isTeamAnalyticsMessage() ||
                 notificationType.isAnalyticsMessage()) {
-            tile = new SubmissionTile(notification, isTemplate, locale, pageContext);
+            tile = new SubmissionTile(notification, isTemplate, editable, locale, pageContext);
         } else if (notificationType.isTwitter()) {
-            tile = new TwitterTile(notification, isTemplate, locale, pageContext);
+            tile = new TwitterTile(notification, isTemplate, editable, locale, pageContext);
         } else if (notificationType.isInstagram()) {
-            tile = new InstagramTile(notification, isTemplate, locale, pageContext);
+            tile = new InstagramTile(notification, isTemplate, editable, locale, pageContext);
         } else if (notificationType.isVine()) {
-            tile = new VineTile(notification, isTemplate, locale, pageContext);
+            tile = new VineTile(notification, isTemplate, editable, locale, pageContext);
         } else if (notificationType.isPicasa()) {
-            tile = new PicasaTile(notification, isTemplate, locale, pageContext);
+            tile = new PicasaTile(notification, isTemplate, editable, locale, pageContext);
         } else if (notificationType.isOfficialGallery()) {
-            tile = new OfficialGalleryTile(notification, isTemplate, locale, pageContext);
+            tile = new OfficialGalleryTile(notification, isTemplate, editable, locale, pageContext);
         } else if (notificationType.isQuestChallenge()) {
-            tile = new QuestChallengeTile(notification, isTemplate, locale, pageContext);
+            tile = new QuestChallengeTile(notification, isTemplate, editable, locale, pageContext);
         } else if (notificationType.isAdminNotification()) {
-            tile = new AdminNotificationTile(notification, isTemplate, locale, pageContext);
+            tile = new AdminNotificationTile(notification, isTemplate, editable, locale, pageContext);
         } else if (notificationType.isPollOpen()) {
-            tile = new PollTile(notification, isTemplate, locale, pageContext);
+            tile = new PollTile(notification, isTemplate, editable, locale, pageContext);
         } else if (notificationType.isScheduleEventOpen()) {
-            tile = new EventOpenTile(notification, isTemplate, locale, pageContext);
+            tile = new EventOpenTile(notification, isTemplate, editable, locale, pageContext);
         }
         // TODO more notification types to come
         return tile;

@@ -1,5 +1,6 @@
 package com.myicpc.tags.notification;
 
+import com.myicpc.commons.utils.MessageUtils;
 import com.myicpc.model.social.Notification;
 
 import javax.servlet.jsp.JspException;
@@ -13,8 +14,8 @@ import java.util.Locale;
  */
 public abstract class SocialTile extends NotificationTile {
 
-    public SocialTile(Notification notification, boolean isTemplate, Locale locale, PageContext pageContext) {
-        super(notification, isTemplate, locale, pageContext);
+    public SocialTile(Notification notification, boolean isTemplate, boolean editable, Locale locale, PageContext pageContext) {
+        super(notification, isTemplate, editable, locale, pageContext);
     }
 
     @Override
@@ -49,4 +50,10 @@ public abstract class SocialTile extends NotificationTile {
         }
     }
 
+    @Override
+    protected String additionalControlButtons() throws IOException {
+        return String.format("<a href=\"javascript:void(0)\" onclick=\"banNotification(this, %s)\"><span class=\"glyphicon glyphicon-ban-circle\"></span> %s</a>",
+                getNotificationId(),
+                MessageUtils.getMessage("notificationAdmin.timeline.ban"));
+    }
 }

@@ -116,9 +116,9 @@ public class BlacklistService {
      *            inappropriate notification
      */
     public void banAuthor(final Notification notification) {
-        if (StringUtils.isNotEmpty(notification.getAuthorName()) && notification.getNotificationType() != null) {
+        if (StringUtils.isNotEmpty(notification.getAuthorUsername()) && notification.getNotificationType() != null) {
             BlacklistedUserType blacklistedUserType = fromNotificationToBlacklist.get(notification.getNotificationType());
-            addUsernameToBlacklist(notification.getAuthorName(), blacklistedUserType, notification.getContest());
+            addUsernameToBlacklist(notification.getAuthorUsername(), blacklistedUserType, notification.getContest());
         }
     }
 

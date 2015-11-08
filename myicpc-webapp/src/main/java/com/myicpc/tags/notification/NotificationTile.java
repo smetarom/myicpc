@@ -22,18 +22,23 @@ import static com.myicpc.tags.utils.TagConstants.VIDEO_FORMAT;
 public abstract class NotificationTile {
     protected final Notification notification;
     protected final boolean isTemplate;
+    protected final boolean editable;
     protected final Locale locale;
     protected final PageContext pageContext;
 
-    public NotificationTile(Notification notification, boolean isTemplate, Locale locale, PageContext pageContext) {
+    public NotificationTile(Notification notification, boolean isTemplate, boolean editable, Locale locale, PageContext pageContext) {
         this.notification = notification;
         this.isTemplate = isTemplate;
+        this.editable = editable;
         this.locale = locale != null ? locale : Locale.US;
         this.pageContext = pageContext;
     }
 
     public void render(JspWriter out) throws IOException, JspException {
         out.print("<div class=\"timelineTile clearfix\">");
+        if (editable) {
+            renderControl(out);
+        }
         renderAvatar(out);
         out.print("<div class=\"media-body\">");
         out.print("<h4 class=\"media-heading\">");
@@ -116,6 +121,14 @@ public abstract class NotificationTile {
         return format.format(notification.getLocalTimestamp());
     }
 
+    protected String getNotificationId() {
+        if (isTemplate) {
+            return "{{id}}";
+        } else {
+            return String.valueOf(notification.getId());
+        }
+    }
+
     protected String resolveUrl(String url) throws JspException {
         return JSPUtils.resolveUrl(url, pageContext);
     }
@@ -131,5 +144,22 @@ public abstract class NotificationTile {
                 out.print(String.format(IMAGE_FORMAT, notification.getImageUrl()));
             }
         }
+    }
+
+    protected void renderControl(JspWriter out) throws IOException {
+        out.write("<div class=\"text-right\">");
+        out.write(String.format("<a href=\"javascript:void(0)\" onclick=\"deleteNotification(this, %s)\"><span class=\"glyphicon glyphicon-remove\"></span> %s</a>",
+                getNotificationId(),
+                MessageUtils.getMessage("delete")));
+        String additionalControlButtons = additionalControlButtons();
+        if (StringUtils.isNotEmpty(additionalControlButtons)) {
+            out.write(" · ");
+            out.write(additionalControlButtons);
+        }
+        out.write("</div>");
+    }
+
+    protected String additionalControlButtons() throws IOException {
+        return null;
     }
 }

@@ -2,7 +2,6 @@ package com.myicpc.tags.notification;
 
 import com.myicpc.commons.utils.MessageUtils;
 import com.myicpc.model.social.Notification;
-import com.myicpc.tags.notification.SocialTile;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -15,8 +14,8 @@ import java.util.Locale;
  */
 public class TwitterTile extends SocialTile {
 
-    public TwitterTile(Notification notification, boolean isTemplate, Locale locale, PageContext pageContext) {
-        super(notification, isTemplate, locale, pageContext);
+    public TwitterTile(Notification notification, boolean isTemplate, boolean editable, Locale locale, PageContext pageContext) {
+        super(notification, isTemplate, editable, locale, pageContext);
     }
 
     @Override

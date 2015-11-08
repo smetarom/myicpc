@@ -14,8 +14,8 @@ import java.util.Locale;
  */
 public class PicasaTile extends SocialTile {
 
-    public PicasaTile(Notification notification, boolean isTemplate, Locale locale, PageContext pageContext) {
-        super(notification, isTemplate, locale, pageContext);
+    public PicasaTile(Notification notification, boolean isTemplate, boolean editable, Locale locale, PageContext pageContext) {
+        super(notification, isTemplate, editable, locale, pageContext);
     }
 
     @Override

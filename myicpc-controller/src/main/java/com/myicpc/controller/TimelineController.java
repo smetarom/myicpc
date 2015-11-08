@@ -51,7 +51,24 @@ public class TimelineController extends GeneralController {
         model.addAttribute("openQuests", NotificationService.getNotificationInJson(featuredNotifications.getQuestNotifications()));
         model.addAttribute("openPolls", NotificationService.getNotificationInJson(featuredNotifications.getPollNotifications()));
         model.addAttribute("openAdminNotifications", NotificationService.getNotificationInJson(featuredNotifications.getAdminNotifications()));
+        model.addAttribute("editable", false);
         return "timeline/timeline";
+    }
+
+    @RequestMapping(value = "/private/{contestCode}/timeline", method = RequestMethod.GET)
+    public String adminTimeline(Model model, @PathVariable String contestCode, HttpServletRequest request,
+                           HttpServletResponse response) {
+        Contest contest = getContest(contestCode, model);
+
+        List<Notification> timelineNotifications = timelineService.getTimelineNotifications(contest);
+        if (timelineNotifications != null && !timelineNotifications.isEmpty()) {
+            model.addAttribute("lastTimelineId", timelineNotifications.get(timelineNotifications.size() - 1).getTimestamp().getTime());
+        }
+
+        model.addAttribute("notifications", timelineNotifications);
+        model.addAttribute("availableNotificationTypes", TimelineService.TIMELINE_TYPES);
+        model.addAttribute("editable", true);
+        return "timeline/adminTimeline";
     }
 
     @RequestMapping(value = "/{contestCode}/timeline/loadMore", method = RequestMethod.GET)

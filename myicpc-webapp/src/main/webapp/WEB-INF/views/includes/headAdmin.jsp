@@ -21,6 +21,8 @@
 <script src="<c:url value='/js/bootstrap/bootstrap-switch.min.js'/>"></script>
 <script src="<c:url value='/js/bootstrap/bootstrap.min.js'/>"></script>
 
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+
 <script src="<c:url value='/js/underscore/underscore.min.js'/>"></script>
 <script src="<c:url value='/js/handlebars/handlebars.min.js'/>"></script>
 

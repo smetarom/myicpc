@@ -18,8 +18,8 @@ import java.util.Locale;
  */
 public class EventOpenTile extends NotificationTile {
 
-    public EventOpenTile(Notification notification, boolean isTemplate, Locale locale, PageContext pageContext) {
-        super(notification, isTemplate, locale, pageContext);
+    public EventOpenTile(Notification notification, boolean isTemplate, boolean editable, Locale locale, PageContext pageContext) {
+        super(notification, isTemplate, editable, locale, pageContext);
     }
 
     @Override

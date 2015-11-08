@@ -88,7 +88,7 @@
 		<script type="text/javascript">
 			function banNotification(elem, notificationId) {
 				if (confirm('<spring:message code="adminNotification.suspicious.ban.confirm" />')) {
-					$.get('<spring:url value="/private${contestURL}/notifications/suspicious/" />' + notificationId + '/ban', function (data) {
+					$.get('<spring:url value="/private${contestURL}/notifications/" />' + notificationId + '/ban', function (data) {
 						$(elem).parent().parent().hide();
 					});
 					return true;
