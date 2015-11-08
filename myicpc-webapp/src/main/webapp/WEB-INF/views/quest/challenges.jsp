@@ -56,6 +56,8 @@
                         <input name="twitterUsername" class="form-control" placeholder="<spring:message code="twitter" />">
                         <p class="text-center"><spring:message code="or" /></p>
                         <input name="vineUsername" class="form-control" placeholder="<spring:message code="vine" />">
+                        <p class="text-center"><spring:message code="or" /></p>
+                        <input name="instagramUsername" class="form-control" placeholder="<spring:message code="instagram" />">
                     </jsp:body>
                 </t:modalWindow>
             </t:plainForm>
