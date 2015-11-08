@@ -34,7 +34,7 @@
 
     </jsp:attribute>
     <jsp:body>
-        <div style="padding-top: 100px; height: 100%">
+        <div style="height: 100%">
             <iframe src="<spring:url value="${contestURL}/kiosk/custom/content" />" frameborder="0">
             </iframe>
         </div>

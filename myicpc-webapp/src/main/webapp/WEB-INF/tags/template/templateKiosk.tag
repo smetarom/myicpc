@@ -15,9 +15,6 @@
     <jsp:invoke fragment="head" />
 </head>
 <body id="kiosk">
-    <div class="page-header text-center">
-        <img src="http://myicpc.icpcnews.com/static/images/2015-Slide-Header2.png" style="padding: 5px 0; max-height: 100px" />
-    </div>
     <jsp:doBody/>
     <jsp:include page="/WEB-INF/views/includes/foot.jsp"/>
     <jsp:invoke fragment="javascript" />
