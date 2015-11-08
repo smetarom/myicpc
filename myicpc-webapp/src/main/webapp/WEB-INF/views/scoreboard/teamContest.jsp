@@ -60,7 +60,7 @@
                     <c:forEach var="problem" items="${problems}">
                         <tr>
                             <td>${problem.code}</td>
-                            <td><a href="<spring:url value="${contestURL}/problem/${problem.code}" />">${problem.name}</a></td>
+                            <td><a href="<spring:url value="${contestURL}/problem/${problem.code}/detail" />">${problem.name}</a></td>
                             <td class="text-center" id="problem_${problem.id}_for_team_${team.id}">
                                 <c:choose>
                                     <c:when test="${not empty team.currentProblems[problem.id] and team.currentProblems[problem.id].solved}">
