@@ -28,6 +28,7 @@
 
         </div>
         <div class="col-sm-6">
+            <c:if test="${util:officialGalleryModuleEnabled(contest)}">
             <div ng-app="officialGallery" ng-controller="teamGalleryCtrl" ng-init="init('${teamInfo.fullPicasaTag}')" ng-cloak>
                 <h3 ng-if="photos.length"><spring:message code="officialGallery" /></h3>
                 <div ng-if="photos.length">
@@ -37,6 +38,7 @@
                     <img ng-src="{{photo.imageUrl}}" alt="" style="max-height: 350px" />
                 </div>
             </div>
+            </c:if>
         </div>
     </jsp:body>
 </t:template>
