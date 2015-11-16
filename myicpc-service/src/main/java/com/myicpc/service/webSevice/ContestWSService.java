@@ -59,7 +59,10 @@ public class ContestWSService extends AbstractWSService {
                 TimeZone timeZone = TimeZone.getTimeZone(timeZoneName);
                 response.addProperty("offset", timeZone.getRawOffset() / 60000);
             }
-            response.addProperty("startDate", jsonAdapter.getString("start") + " 00:00:00");
+            String startTime = jsonAdapter.getString("start");
+            if (StringUtils.isNotEmpty(startTime)) {
+                response.addProperty("startDate", startTime + " 00:00:00");
+            }
             response.addProperty("isWorldFinals", jsonAdapter.getString("key", "").contains("World-Finals"));
             return response.toString();
         }
