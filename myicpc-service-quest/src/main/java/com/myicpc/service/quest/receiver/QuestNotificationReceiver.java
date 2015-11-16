@@ -48,8 +48,7 @@ public class QuestNotificationReceiver {
                 processQuestChallengeUpdates(contest);
                 break;
             case QUEST_SUBMISSIONS:
-//                processQuestSubmissionUpdates(contest);
-                processQuestSubmissionUpdatesFull(contest);
+                processQuestSubmissionUpdates(contest);
                 break;
             case QUEST_SUBMISSIONS_FULL:
                 processQuestSubmissionUpdatesFull(contest);
