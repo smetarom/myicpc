@@ -163,8 +163,13 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
             team.setContest(contest);
             TeamInfo teamInfo = teamInfoRepository.findByExternalIdAndContestWithRegion(team.getExternalId(), contest);
             team.setTeamInfo(teamInfo);
-            Region region = teamInfo.getRegion();
-            if (region != null && region.getRegionType() != Region.RegionType.UNOFFICIAL) {
+            if (teamInfo != null && teamInfo.getRegion() != null) {
+                Region region = teamInfo.getRegion();
+                if (region.getRegionType() != Region.RegionType.UNOFFICIAL) {
+                    team = teamRepository.saveAndFlush(team);
+                    logger.info("Team " + team.getSystemId() + " created");
+                }
+            } else {
                 team = teamRepository.saveAndFlush(team);
                 logger.info("Team " + team.getSystemId() + " created");
             }
