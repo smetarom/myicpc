@@ -68,7 +68,7 @@ public interface NotificationRepository extends PagingAndSortingRepository<Notif
     /**
      * Finds notifications, which contain {@code hashtag} and are in the @{code contest}
      */
-    @Query("FROM Notification n WHERE UPPER(n.hashtags) LIKE UPPER(?1) AND n.notificationType IN ?2 AND n.contest = ?3 ORDER BY n.id DESC")
+    @Query("FROM Notification n WHERE UPPER(n.hashtags) LIKE UPPER(?1) AND n.notificationType IN ?2 AND n.contest = ?3 AND n.deleted = false AND n.offensive = false ORDER BY n.id DESC")
     Page<Notification> findByHashtagAndNotificationTypes(String hashtag, List<NotificationType> notificationTypes, Contest contest, Pageable pageable);
 
     /**
