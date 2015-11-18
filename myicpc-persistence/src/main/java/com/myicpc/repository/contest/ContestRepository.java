@@ -5,12 +5,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ContestRepository extends JpaRepository<Contest, Long> {
     Contest findByName(String name);
 
     Contest findByCode(String code);
+
+    List<Contest> findByStartTimeGreaterThanEqual(Date date, Sort sort);
 
     @Query("FROM Contest c " +
             "JOIN FETCH c.contestSettings " +

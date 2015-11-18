@@ -11,6 +11,7 @@ import com.myicpc.security.config.SecurityConstants;
 import com.myicpc.security.dto.LoggedUser;
 import com.myicpc.service.exception.ContestNotFoundException;
 import com.myicpc.service.listener.ContestListener;
+import org.apache.commons.lang3.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,7 +76,9 @@ public class ContestService {
      */
     public List<Contest> getActiveContests() {
         Sort sort = new Sort(Sort.Direction.DESC, "startTime");
-        return contestRepository.findAll(sort);
+        Date date = new Date();
+        date = DateUtils.addDays(date, -7);
+        return contestRepository.findByStartTimeGreaterThanEqual(date, sort);
     }
 
     /**
