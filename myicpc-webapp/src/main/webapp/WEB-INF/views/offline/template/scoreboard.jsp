@@ -1,4 +1,4 @@
-<table class="table striped-rows scoreboard">
+<table ng-hide="scoreboard == null" class="table striped-rows scoreboard">
     <thead>
     <tr>
         <th><spring:message code="scoreboard.rankShort"/></th>
@@ -38,3 +38,22 @@
     </tr>
     </tbody>
 </table>
+
+<div ng-show="scoreboard == null" class="container">
+    <br />
+    <div class="jumbotron">
+        <h2 style="font-size: 1.9em;">
+            <spring:message code="offline.scoreboard.notLoaded"/>
+        </h2>
+
+        <p>
+            <spring:message code="offline.scoreboard.notLoaded.hint"/>
+        </p>
+
+        <p>
+            <a href="<c:url value="/" />{{currentContest}}" class="btn btn-primary" role="button">
+                <spring:message code="offline.goHome"/>
+            </a>
+        </p>
+    </div>
+</div>
