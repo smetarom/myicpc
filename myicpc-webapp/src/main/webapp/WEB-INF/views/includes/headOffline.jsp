@@ -16,4 +16,4 @@
 <script src="<c:url value="/js/angular/angular.min.js" />"></script>
 <script src="<c:url value="/js/modernizr/modernizr.min.js" />" defer></script>
 <script src="<c:url value="/js/handlebars/handlebars.min.js" />" defer></script>
-<script src="<c:url value='/js/myicpc/functions.js'/>" defer></script>
+<script src="<c:url value='/js/myicpc/functions.js'/>"></script>

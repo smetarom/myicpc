@@ -9,6 +9,7 @@ import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.service.dto.GlobalSettings;
 import com.myicpc.service.scoreboard.ScoreboardService;
 import com.myicpc.service.scoreboard.problem.ProblemService;
+import com.myicpc.service.scoreboard.problem.ProblemServiceImpl;
 import com.myicpc.service.scoreboard.team.TeamService;
 import com.myicpc.service.settings.GlobalSettingsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,7 @@ public class ScoreboardController extends GeneralController {
         List<Problem> problems = problemService.findByContest(contest);
         JsonArray teamsFullTemplate = scoreboardService.getTeamsFullTemplate(contest);
         model.addAttribute("teamJSON", teamsFullTemplate.toString());
+        model.addAttribute("problemJSON", ProblemServiceImpl.getProblemsJSON(problems));
         model.addAttribute("problems", problems);
         model.addAttribute("numProblems", problems.size());
         model.addAttribute("scoreboardAvailable", teamsFullTemplate.size() > 0);

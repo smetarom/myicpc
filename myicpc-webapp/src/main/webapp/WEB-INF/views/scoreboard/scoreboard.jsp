@@ -21,14 +21,11 @@
                 startSubscribe('${r.contextPath}', '${contest.code}', 'scoreboard', updateScoreboard, ngController);
 
                 if (Modernizr.localstorage) {
-                    <%-- TODO --%>
-                    <%--localStorage.setItem("scoreboard", JSON.stringify(teams));--%>
-                    <%--localStorage.setItem("scoreboardProblems", JSON.stringify(${problemJSON}));--%>
+                    localStorage.setItem("contestScoreboard", '${contest.code}');
+                    localStorage.setItem("scoreboard", JSON.stringify(teams));
+                    localStorage.setItem("scoreboardProblems", JSON.stringify(${not empty problemJSON ? problemJSON : '[]'}));
                 }
                 </c:if>
-
-
-                <%--<%@ include file="/WEB-INF/views/scoreboard/fragment/atmosphereHandler.jsp"%>--%>
 
                 $("#mainScoreboard").click(function() {
                     $("#scorebord-notification-bar").hide("slide", { direction: 'right'});

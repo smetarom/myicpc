@@ -57,7 +57,10 @@
         image.src = "<c:url value="/images/default-profile-small.png" />";
         return true;
     }
-
     profilePictureError
+
+    if (typeof localStorage !== "undefined") {
+        localStorage["currentContest"] = '${contest.code}';
+    }
 </script>
 <div id="shareNotificationDialogContainer"></div>

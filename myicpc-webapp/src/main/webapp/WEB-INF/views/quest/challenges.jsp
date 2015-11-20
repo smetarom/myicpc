@@ -33,6 +33,10 @@
                         $("#challengeContainer").html(data);
                     });
                 }
+                if (Modernizr.localstorage) {
+                    localStorage.setItem("contestQuest", '${contest.code}');
+                    localStorage.setItem("questChallenges", JSON.stringify(${not empty challengesJSON ? challengesJSON : '[]'}));
+                }
             });
         </script>
     </jsp:attribute>

@@ -142,4 +142,24 @@ public class ProblemServiceImpl extends ScoreboardListenerAdapter implements Pro
         submissionJSON.addProperty("teamName", teamProblem.getTeamName());
         return submissionJSON;
     }
+
+    /**
+     * Returns JSON representation of selected problems
+     *
+     * @param problems
+     *            selected problems
+     * @return JSON representation of selected problems
+     */
+    public static String getProblemsJSON(final Iterable<Problem> problems) {
+        JsonArray root = new JsonArray();
+        for (Problem problem : problems) {
+            JsonObject problemObject = new JsonObject();
+            problemObject.addProperty("id", problem.getId());
+            problemObject.addProperty("code", problem.getCode());
+            problemObject.addProperty("name", problem.getName());
+
+            root.add(problemObject);
+        }
+        return root.toString();
+    }
 }

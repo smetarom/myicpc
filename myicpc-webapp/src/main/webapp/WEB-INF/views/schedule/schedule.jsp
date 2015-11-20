@@ -27,6 +27,11 @@
                     loadEventContent(window.location.hash.substring(1));
                     $("#eventContainer").html('<div class="inline-spinner"></div>');
                 }
+
+                if (Modernizr.localstorage) {
+                    localStorage["scheduleContest"] = '${contest.code}';
+                    localStorage["schedule"] = '${not empty scheduleJSON ? util:escapeJavascript(scheduleJSON) : '[sasa]'}';
+                }
             });
 
         </script>

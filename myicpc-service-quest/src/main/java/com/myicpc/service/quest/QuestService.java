@@ -2,6 +2,8 @@ package com.myicpc.service.quest;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.myicpc.dto.quest.QuestSubmissionDTO;
 import com.myicpc.enums.ContestParticipantRole;
 import com.myicpc.enums.NotificationType;
@@ -26,6 +28,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -208,4 +211,26 @@ public class QuestService {
         }
     }
 
+    /**
+     * Download JSON model of all challenges
+     *
+     * @param challenges list of challenges
+     * @param contest contest
+     * @return JSON representation of challenges
+     */
+    public static String getChallengesJSON(List<QuestChallenge> challenges, Contest contest) {
+        JsonArray arr = new JsonArray();
+        for (QuestChallenge challenge : challenges) {
+            JsonObject o = new JsonObject();
+            o.addProperty("name", challenge.getName());
+            o.addProperty("description", challenge.getDescription());
+            o.addProperty("hashtags", "#" + challenge.getHashtag() + " #" + contest.getHashtag());
+            if (challenge.getEndDate() != null) {
+                DateFormat dateFormatter = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT);
+                o.addProperty("endDate", dateFormatter.format(challenge.getLocalEndDate()));
+            }
+            arr.add(o);
+        }
+        return arr.toString();
+    }
 }

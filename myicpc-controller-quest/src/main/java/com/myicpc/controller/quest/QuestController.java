@@ -77,6 +77,7 @@ public class QuestController extends GeneralController {
         model.addAttribute("notifications", questNotifications);
         model.addAttribute("availableNotificationTypes", QuestService.QUEST_TIMELINE_TYPES);
         model.addAttribute("questHashtag", "#" + contest.getQuestConfiguration().getHashtagPrefix());
+        model.addAttribute("challengesJSON", QuestService.getChallengesJSON(challenges, contest));
 
         return "quest/quest";
     }
@@ -88,6 +89,7 @@ public class QuestController extends GeneralController {
         List<QuestChallenge> challenges = challengeRepository.findOpenChallengesByContestOrderByName(new Date(), contest);
         QuestService.applyHashtagPrefix(contest.getQuestConfiguration().getHashtagPrefix(), challenges);
         model.addAttribute("challenges", challenges);
+        model.addAttribute("challengesJSON", QuestService.getChallengesJSON(challenges, contest));
 
         return resolveView("quest/challenges", "quest/challenges_mobile", sitePreference);
     }

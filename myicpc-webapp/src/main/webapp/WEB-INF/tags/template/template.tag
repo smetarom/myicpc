@@ -59,5 +59,6 @@
     <%@ include file="/WEB-INF/views/includes/foot_mobile.jsp" %>
 </c:if>
 <jsp:invoke fragment="javascript" />
+<iframe src="<c:url value="/loadCacheManifest" />" style="display: none;"></iframe>
 </body>
 </html>

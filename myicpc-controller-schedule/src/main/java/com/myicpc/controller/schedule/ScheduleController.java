@@ -62,6 +62,7 @@ public class ScheduleController extends GeneralController {
         model.addAttribute("schedule", scheduleService.getEntireContestSchedule(contest));
         model.addAttribute("pageHeadline", getMessage("schedule.title"));
         model.addAttribute("pageTitle", getMessage("nav.schedule"));
+        model.addAttribute("scheduleJSON", scheduleService.getEntireContestScheduleJSON(contest));
         model.addAttribute("sideMenuActive", "schedule");
         return resolveView("schedule/schedule", "schedule/schedule_mobile", sitePreference);
     }
@@ -86,6 +87,7 @@ public class ScheduleController extends GeneralController {
         model.addAttribute("schedule", scheduleService.getMyCurrentSchedule(roleIds, new Date(), contest));
         model.addAttribute("pageHeadline", getMessage("myschedule.title"));
         model.addAttribute("pageTitle", getMessage("nav.myschedule"));
+        model.addAttribute("scheduleJSON", scheduleService.getEntireContestScheduleJSON(contest));
         model.addAttribute("sideMenuActive", "schedule");
         return resolveView("schedule/schedule", "schedule/schedule_mobile", sitePreference);
     }

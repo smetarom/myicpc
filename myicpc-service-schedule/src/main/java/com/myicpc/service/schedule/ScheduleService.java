@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -264,5 +263,39 @@ public class ScheduleService {
         notificationObject.addProperty("code", event.getCode());
 
         return notificationObject;
+    }
+
+    /**
+     * Returns JSON representation of all events
+     *
+     * @return JSON representation of entire schedule
+     */
+    @Transactional(readOnly = true)
+    public String getEntireContestScheduleJSON(Contest contest) {
+        JsonArray arr = new JsonArray();
+        SimpleDateFormat dt = new SimpleDateFormat("EEEE MMMM dd");
+        SimpleDateFormat timeFormatter = new SimpleDateFormat("HH:mm");
+
+        Iterable<ScheduleDay> days = getEntireContestSchedule(contest);
+        for (ScheduleDay day : days) {
+            JsonObject dayObject = new JsonObject();
+            dayObject.addProperty("name", day.getName());
+            dayObject.addProperty("dateString", dt.format(day.getDate()));
+            JsonArray dayArr = new JsonArray();
+            for (Event event : day.getEventsChronologically()) {
+                JsonObject o = new JsonObject();
+                o.addProperty("name", event.getName());
+                o.addProperty("startTime", timeFormatter.format(event.getLocalStartDate()));
+                o.addProperty("endTime", timeFormatter.format(event.getLocalEndDate()));
+                if (event.getLocation() != null) {
+                    o.addProperty("locationName", event.getLocation().getName());
+                }
+                o.addProperty("roles", event.getRolesPrint());
+                dayArr.add(o);
+            }
+            dayObject.add("events", dayArr);
+            arr.add(dayObject);
+        }
+        return arr.toString();
     }
 }
