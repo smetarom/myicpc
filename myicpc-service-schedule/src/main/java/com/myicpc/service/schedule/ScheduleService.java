@@ -195,8 +195,6 @@ public class ScheduleService {
      * @return events active in time range
      */
     public List<Event> getUpcomingEvents(int hours, final Contest contest) {
-        // TODO replace with new Date()
-//        Date now = new GregorianCalendar(2014, 5, 22, 12, 0, 0).getTime();
         Date now = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(now);
@@ -215,6 +213,7 @@ public class ScheduleService {
      * @param contest contest
      * @return JSON schedule representation
      */
+    @Transactional(readOnly = true)
     public JsonArray getScheduleDaysJSON(Date now, Contest contest) {
         Iterable<ScheduleDay> iterable = getCurrentContestSchedule(now, contest);
         JsonArray arr = new JsonArray();
