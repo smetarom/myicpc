@@ -3,6 +3,7 @@ package com.myicpc.service.scoreboard.eventFeed;
 import com.google.common.io.CountingInputStream;
 import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.commons.utils.WebServiceUtils;
+import com.myicpc.dto.eventFeed.parser.AnalystMessageXML;
 import com.myicpc.dto.eventFeed.parser.ClarificationXML;
 import com.myicpc.dto.eventFeed.parser.ContestXML;
 import com.myicpc.dto.eventFeed.parser.FinalizedXML;
@@ -326,7 +327,7 @@ public class EventFeedProcessor {
         xStream.processAnnotations(new Class[]{ContestXML.class, LanguageXML.class, RegionXML.class,
                 JudgementXML.class, ProblemXML.class, TeamXML.class, TeamProblemXML.class,
                 TestcaseXML.class, FinalizedXML.class, ClarificationXML.class,
-                ResetXML.class});
+                ResetXML.class, AnalystMessageXML.class});
         return xStream;
     }
 }
