@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" uri="http://myicpc.baylor.edu/tags" %>
+<%@ taglib prefix="util" uri="http://myicpc.baylor.edu/functions" %>
 
 <tr>
     <td><t:topSubmenuLink labelCode="nav.scoreboard" url="${contestURL}/scoreboard"

@@ -1,3 +1,5 @@
+<%@ taglib prefix="util" uri="http://myicpc.baylor.edu/functions" %>
+
 <c:forEach var="teamInfo" items="${teamInfos}" varStatus="status">
     <div class="col-sm-6 col-md-4 vertical-top">
         <t:panelWithHeading>
