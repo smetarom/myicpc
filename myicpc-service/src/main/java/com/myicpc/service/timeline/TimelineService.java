@@ -55,16 +55,15 @@ public class TimelineService {
 
     /**
      * Gets {@link #POSTS_PER_PAGE} notifications with type from {@link #TIMELINE_TYPES}
-     * created after {@code lastTimestamp}
+     * created after {@code lastTimelineId}
      *
-     * @param lastTimestamp deadline timestamp, when notifications are created
+     * @param lastTimelineId deadline notification ID, when notifications are created
      * @param contest contest
-     * @return latest notifications before {@code lastTimestamp}
+     * @return latest notifications before {@code lastTimelineId}
      */
-    public List<Notification> getTimelineNotifications(Long lastTimestamp, Contest contest) {
+    public List<Notification> getTimelineNotifications(Long lastTimelineId, Contest contest) {
         Pageable pageable = new PageRequest(0, POSTS_PER_PAGE);
-        Date timestamp = new Date(lastTimestamp);
-        Page<Notification> timelineNotifications = notificationRepository.findByNotificationTypesOrderByIdDesc(timestamp, TIMELINE_TYPES, contest, pageable);
+        Page<Notification> timelineNotifications = notificationRepository.findByNotificationTypesOrderByIdDesc(lastTimelineId, TIMELINE_TYPES, contest, pageable);
         return timelineNotifications.getContent();
     }
 }

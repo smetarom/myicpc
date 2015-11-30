@@ -94,7 +94,7 @@ Timeline = {
           $(elem).appendTo($("#timeline-body"))
 
   loadMorePosts: (url) ->
-    $.getJSON(url, {lastTimestamp: Timeline.lastTimelineIdLoaded}, (object) ->
+    $.getJSON(url, {lastTimelineId: Timeline.lastTimelineIdLoaded}, (object) ->
       if $.isEmptyObject(object)
         $('#timeline .timeline-loading').addClass('hidden')
       else

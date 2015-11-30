@@ -128,7 +128,7 @@ Timeline = {
   },
   loadMorePosts: function(url) {
     return $.getJSON(url, {
-      lastTimestamp: Timeline.lastTimelineIdLoaded
+      lastTimelineId: Timeline.lastTimelineIdLoaded
     }, function(object) {
       var data, i, _i, _ref;
       if ($.isEmptyObject(object)) {

@@ -41,7 +41,7 @@ public class TimelineController extends GeneralController {
 
         List<Notification> timelineNotifications = timelineService.getTimelineNotifications(contest);
         if (timelineNotifications != null && !timelineNotifications.isEmpty()) {
-            model.addAttribute("lastTimelineId", timelineNotifications.get(timelineNotifications.size() - 1).getTimestamp().getTime());
+            model.addAttribute("lastTimelineId", timelineNotifications.get(timelineNotifications.size() - 1).getId());
         }
 
         TimelineFeaturedNotificationsDTO featuredNotifications = notificationService.getTimelineFeaturedNotifications(NotificationService.getFeaturedIdsFromCookie(request, response), contest);
@@ -62,7 +62,7 @@ public class TimelineController extends GeneralController {
 
         List<Notification> timelineNotifications = timelineService.getTimelineNotifications(contest);
         if (timelineNotifications != null && !timelineNotifications.isEmpty()) {
-            model.addAttribute("lastTimelineId", timelineNotifications.get(timelineNotifications.size() - 1).getTimestamp().getTime());
+            model.addAttribute("lastTimelineId", timelineNotifications.get(timelineNotifications.size() - 1).getId());
         }
 
         model.addAttribute("notifications", timelineNotifications);
@@ -73,13 +73,13 @@ public class TimelineController extends GeneralController {
 
     @RequestMapping(value = "/{contestCode}/timeline/loadMore", method = RequestMethod.GET)
     @ResponseBody
-    public String timelineLoadMore(@RequestParam Long lastTimestamp, @PathVariable String contestCode,Model model, HttpServletRequest request, HttpSession session) {
+    public String timelineLoadMore(@RequestParam Long lastTimelineId, @PathVariable String contestCode,Model model, HttpServletRequest request, HttpSession session) {
         Contest contest = getContest(contestCode, model);
-        if (lastTimestamp != null) {
+        if (lastTimelineId != null) {
             JsonObject o = new JsonObject();
-            List<Notification> notifications = timelineService.getTimelineNotifications(lastTimestamp, contest);
+            List<Notification> notifications = timelineService.getTimelineNotifications(lastTimelineId, contest);
             if (notifications != null && !notifications.isEmpty()) {
-                o.addProperty("lastTimelineId", notifications.get(notifications.size() - 1).getTimestamp().getTime());
+                o.addProperty("lastTimelineId", notifications.get(notifications.size() - 1).getId());
             }
             o.add("data", NotificationService.getNotificationsInJson(notifications));
             return o.toString();
