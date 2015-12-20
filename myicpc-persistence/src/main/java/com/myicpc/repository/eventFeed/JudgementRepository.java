@@ -22,8 +22,8 @@ public interface JudgementRepository extends JpaRepository<Judgement, Long> {
      * load all languages and number of submissions for judgment if there is at
      * least one submission per language
      */
-    @Query("SELECT NEW org.apache.commons.lang3.tuple.ImmutablePair(tp.language, COUNT(tp)) FROM TeamProblem tp WHERE tp.resultCode = ?1 AND tp.judged = true GROUP BY tp.language HAVING COUNT(tp) > 0")
-    List<ImmutablePair<String, Long>> getJudgmentReport(String resultCode);
+    @Query("SELECT NEW org.apache.commons.lang3.tuple.ImmutablePair(tp.language, COUNT(tp)) FROM TeamProblem tp JOIN tp.team t WHERE tp.resultCode = ?1 AND tp.judged = true AND t.contest = ?2 GROUP BY tp.language HAVING COUNT(tp) > 0")
+    List<ImmutablePair<String, Long>> getJudgmentReport(String resultCode, Contest contest);
 
     @Transactional
     @Modifying

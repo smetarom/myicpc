@@ -133,7 +133,7 @@ public class CodeInsightService {
                     codeInsightActivity.setLineCount(recordAdapter.getInteger("line_count"));
                     codeInsightActivity.setFileSize(recordAdapter.getInteger("file_size_bytes"));
                     codeInsightActivity.setModifyTime(recordAdapter.getInteger("time"));
-                    codeInsightActivity.setLanguage(languageRepository.findByNameIgnoreCase(recordAdapter.getString("language")));
+                    codeInsightActivity.setLanguage(languageRepository.findByNameIgnoreCaseAndContest(recordAdapter.getString("language"), contest));
                     codeInsightActivity.setTeam(teamRepository.findBySystemIdAndContest(recordAdapter.getLong("team_id"), contest));
                     codeInsightActivity.setProblem(problemRepository.findByCodeIgnoreCaseAndContest(recordAdapter.getString("problem_id"), contest));
 

@@ -107,10 +107,11 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
     @Override
     @Transactional
     public void visit(LanguageXML xmlLanguage, Contest contest) {
-        Language language = languageRepository.findByName(xmlLanguage.getName());
+        Language language = languageRepository.findByNameAndContest(xmlLanguage.getName(), contest);
         if (language == null) {
             language = new Language();
             xmlLanguage.mergeTo(language);
+            language.setContest(contest);
             language = languageRepository.saveAndFlush(language);
             logger.info("Language " + language.getName() + " created");
         }

@@ -69,14 +69,14 @@ public class LanguageInsightService extends AbstractInsightService<Language> {
         Iterable<Judgement> judgements = judgementRepository.findByContest(contest);
         List<ReportByJudgement> reports = new ArrayList<>();
 
-        Iterable<Language> languages = languageRepository.findAll();
+        Iterable<Language> languages = languageRepository.findByContest(contest);
         Map<String, Boolean> languageMap = new HashMap<>();
         for (Language language : languages) {
             languageMap.put(language.getName(), false);
         }
 
         for (Judgement judgement : judgements) {
-            List<ImmutablePair<String, Long>> results = judgementRepository.getJudgmentReport(judgement.getCode());
+            List<ImmutablePair<String, Long>> results = judgementRepository.getJudgmentReport(judgement.getCode(), contest);
             ReportByJudgement report = new ReportByJudgement(judgement);
             for (ImmutablePair<String, Long> result : results) {
                 report.addLanguage(new LanguageDTO(result.getKey(), result.getValue().intValue()));
@@ -151,7 +151,7 @@ public class LanguageInsightService extends AbstractInsightService<Language> {
         Map<Long, Boolean> teamMap = new HashMap<>();
         // load all judgments and number of submissions for judgment if there is
         // at least one submission per judgment
-        List<ImmutablePair<String, Long>> results = languageRepository.getLanguageReport(language.getName());
+        List<ImmutablePair<String, Long>> results = languageRepository.getLanguageReport(language.getName(), contest);
         for (ImmutablePair<String, Long> result : results) {
             report.addResult(new JudgmentDTO(result.getKey(), null, result.getValue().intValue()));
         }

@@ -64,7 +64,7 @@ public class InsightController extends GeneralController {
         Contest contest = getContest(contestCode, model);
 
         model.addAttribute("problems", problemRepository.findByContestOrderByCodeAsc(contest));
-        model.addAttribute("languages", languageRepository.findAllOrderByName());
+        model.addAttribute("languages", languageRepository.findByContestOrderByName(contest));
         model.addAttribute("submissionCount", teamProblemRepository.countByTeamContest(contest));
         return "scoreboard/insight/insight";
     }
@@ -164,7 +164,7 @@ public class InsightController extends GeneralController {
     @RequestMapping(value = "/{contestCode}/insight/ajax/language/{languageName}", method = RequestMethod.GET)
     public String insightLanguageDetailJSON(@PathVariable String contestCode, @PathVariable String languageName) {
         Contest contest = getContest(contestCode, null);
-        Language language = languageRepository.findByName(languageName);
+        Language language = languageRepository.findByNameAndContest(languageName, contest);
 
         JsonObject response = new JsonObject();
         response.add("data", languageInsightService.reportSingle(language, contest));

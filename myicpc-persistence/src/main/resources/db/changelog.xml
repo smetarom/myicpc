@@ -53,4 +53,19 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="7" author="smetana">
+        <addColumn tableName="language">
+            <column name="contestid" type="bigint" defaultValue="1">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <dropUniqueConstraint tableName="language" constraintName="uk_nk4c9qcgv8el6abqd6etg77yy" />
+        <addUniqueConstraint tableName="language" columnNames="name, contestid" />
+        <addForeignKeyConstraint baseTableName="language"
+                                 baseColumnNames="contestid"
+                                 constraintName="fk_language_contest"
+                                 referencedTableName="contest"
+                                 referencedColumnNames="id" />
+    </changeSet>
+
 </databaseChangeLog>

@@ -2,6 +2,7 @@ package com.myicpc.repository.eventFeed
 
 import com.github.springtestdbunit.annotation.DatabaseSetup
 import com.github.springtestdbunit.annotation.DatabaseTearDown
+import com.myicpc.model.contest.Contest
 import com.myicpc.model.eventFeed.Language
 import com.myicpc.repository.AbstractRepositoryTest
 import org.junit.Test
@@ -22,42 +23,34 @@ class LanguageRepositoryTest extends AbstractRepositoryTest {
 
     @Test
     void testFindByName() {
-        Language language = languageRepository.findByName("Java");
+        Contest contest = contestRepository.findOne(1L);
+        Language language = languageRepository.findByNameAndContest("Java", contest);
         assert language != null
         assert language.getId() == 3
     }
 
     @Test
     void testFindByName_caseSensitive() {
-        Language language = languageRepository.findByName("java");
+        Contest contest = contestRepository.findOne(1L);
+        Language language = languageRepository.findByNameAndContest("java", contest);
         assert language == null
     }
 
     @Test
     void testFindByNameIgnoreCase() {
-        Language language = languageRepository.findByNameIgnoreCase("JAVA");
+        Contest contest = contestRepository.findOne(1L);
+        Language language = languageRepository.findByNameIgnoreCaseAndContest("JAVA", contest);
         assert language != null
         assert language.getId() == 3
     }
 
-    @Test(expected = DataIntegrityViolationException.class)
-    void unique_name() {
-        Language language = new Language(name: "Java");
-        languageRepository.saveAndFlush(language);
-    }
-
     @Test
-    void testFindAllOrderByName() {
-        List<Language> languageList = languageRepository.findAllOrderByName();
-        assert languageList.size() == 4
+    void testFindByContestOrderByName() {
+        Contest contest = contestRepository.findOne(1L);
+        List<Language> languageList = languageRepository.findByContestOrderByName(contest);
+        assert languageList.size() == 3
         assert languageList[0].getName() == "C"
         assert languageList[1].getName() == "C++"
         assert languageList[2].getName() == "Java"
-        assert languageList[3].getName() == "Python"
-    }
-
-    @Test
-    void testGetLanguageReport() {
-        // TODO implement after refactoring insight
     }
 }

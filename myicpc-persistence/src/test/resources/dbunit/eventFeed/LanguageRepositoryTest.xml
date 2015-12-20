@@ -1,6 +1,6 @@
 <dataset>
-    <language id="1" name="Python"/>
-    <language id="2" name="C++"/>
-    <language id="3" name="Java"/>
-    <language id="4" name="C"/>
+    <language id="1" name="Python" contestId="1" />
+    <language id="2" name="C++" contestId="1" />
+    <language id="3" name="Java" contestId="1" />
+    <language id="4" name="C" contestId="2" />
 </dataset>
