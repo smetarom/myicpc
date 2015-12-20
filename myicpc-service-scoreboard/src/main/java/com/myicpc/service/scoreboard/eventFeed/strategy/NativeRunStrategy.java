@@ -105,7 +105,9 @@ public class NativeRunStrategy extends FeedRunStrategy {
                 teamsToBroadcast.add(t);
             }
             t.setRank(rank);
-            rank++;
+            if (t.getProblemsSolved() != null && t.getProblemsSolved() > 0) {
+                rank++;
+            }
         }
         teamRepository.save(teams);
         return teamsToBroadcast;
