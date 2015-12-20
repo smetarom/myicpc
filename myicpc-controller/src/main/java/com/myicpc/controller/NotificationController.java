@@ -67,7 +67,7 @@ public class NotificationController extends GeneralController {
 
     @RequestMapping(value = "/{contestCode}/notification/hashtag-panel", method = RequestMethod.GET)
     public String hashtagPanel(Model model, @PathVariable String contestCode,
-                               @RequestParam String hashtag1,
+                               @RequestParam(required = false) String hashtag1,
                                @RequestParam(required = false) String hashtag2) {
         Contest contest = getContest(contestCode, model);
 
@@ -77,8 +77,12 @@ public class NotificationController extends GeneralController {
         List<Notification> notifications = notificationRepository.findByHashTagsAndContest(hashtag1, hashtag2, contest);
 
         model.addAttribute("notifications", notifications);
-        model.addAttribute("hashtag1", hashtag1.substring(1, hashtag1.length()-1));
-        model.addAttribute("hashtag2", hashtag2.substring(1, hashtag2.length()-1));
+        if (StringUtils.isEmpty(hashtag1)) {
+            model.addAttribute("hashtag1", hashtag1.substring(1, hashtag1.length() - 1));
+        }
+        if (StringUtils.isEmpty(hashtag2)) {
+            model.addAttribute("hashtag2", hashtag2.substring(1, hashtag2.length() - 1));
+        }
         return "notification/hashtagPanel";
     }
 
