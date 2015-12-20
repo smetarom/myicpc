@@ -24,9 +24,10 @@
         <jsp:body>
           <t:plainForm action="">
             <div class="form-group">
-              <label for="panelHashtags" class="col-sm-3 control-label">Hashtags:* </label>
+              <label for="panelHashtags" class="col-sm-3 control-label">Query:* </label>
               <div class="col-sm-9">
-                <input type="text" class="form-control" id="panelHashtags" name="hashtags" placeholder="Hashtags separateg by space" required="required">
+                <input type="text" class="form-control" id="panelHashtags" name="hashtags" required="required">
+                <span class="help-block">See query specification at <a href="https://dev.twitter.com/rest/public/search">https://dev.twitter.com/rest/public/search</a></span>
               </div>
             </div>
             <div class="form-group">
