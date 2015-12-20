@@ -55,6 +55,12 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
     private static final Logger logger = LoggerFactory.getLogger(EventFeedVisitorImpl.class);
     private static final Map<Long, TestcaseXML> testcaseXMLMap = new ConcurrentHashMap<>();
 
+    private enum EventFeedState {
+        INIT, RUNNING, FINISHED;
+    }
+
+    private EventFeedState eventFeedState;
+
     @Autowired
     private PublishService publishService;
 
@@ -102,6 +108,7 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
         // TODO remove timestamp, it is here for testing purposes
 //        contest.setStartTime(new Date());
         contestRepository.saveAndFlush(contest);
+        eventFeedState = EventFeedState.INIT;
     }
 
     @Override
@@ -180,6 +187,9 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
     @Override
     @Transactional
     public void visit(TeamProblemXML xmlTeamProblem, Contest contest) {
+        if (eventFeedState == EventFeedState.INIT) {
+            publishService.broadcastEventFeedRefresh(contest.getCode());
+        }
         EventFeedControl submissionFeedControl = null;
         if (ControlFeedService.hasContestPollingStrategy(contest)) {
             submissionFeedControl = eventFeedControlRepository.findByContest(contest);
@@ -239,6 +249,7 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
         } catch (EventFeedException ex) {
             logger.error(ex.getMessage(), ex);
         }
+        eventFeedState = EventFeedState.RUNNING;
     }
 
     @Override
@@ -292,7 +303,7 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
     @Override
     @Transactional
     public void visit(FinalizedXML finalizedXML, Contest contest) {
-        // TODO do something useful with finalized information
+        eventFeedState = EventFeedState.FINISHED;
     }
 
     private FeedRunStrategy selectStrategy(Contest contest) throws EventFeedException {

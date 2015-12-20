@@ -368,7 +368,8 @@ updateScorebar = (data, ngController = null) ->
 
       ngController.drawTeamBar(team)
       ngController.updateTeamInfo(team)
-
+  else if data.type == 'refresh'
+    location.reload()
 
 
 

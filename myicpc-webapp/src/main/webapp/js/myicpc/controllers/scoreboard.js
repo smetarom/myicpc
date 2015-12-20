@@ -159,5 +159,7 @@ updateScoreboard = function(data, ngController) {
         return ngController.updateTeamProblem(data.teamId, data.problemId, data.judged, data.solved, data.attempts, data.time, data.first);
       });
     }
+  } else if (data.type === 'refresh') {
+    return location.reload();
   }
 };

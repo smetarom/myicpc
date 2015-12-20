@@ -351,3 +351,5 @@ updateWorldMap = (data, ngController = null) ->
         ngController.updateTeamProblem(data.teamId, data.problemId, data.judged, data.solved, data.attempts, data.time, data.first)
         ngController.updateTeamOnMap(ngController.getTeamById(data["teamId"]), data.solved)
       )
+  else if data.type == 'refresh'
+    location.reload()

@@ -34,7 +34,7 @@ public class NativeRunStrategy extends FeedRunStrategy {
     @Override
     protected List<Team> processScoreboardChanges(TeamProblem teamProblem, Contest contest) {
         markIfFirstProblemSolution(teamProblem);
-        return computeNewRank(teamProblem.getTeam(), contest.getPenalty());
+        return computeNewRank(teamProblem.getTeam(), contest.getPenalty(), contest);
     }
 
     /**
@@ -68,9 +68,10 @@ public class NativeRunStrategy extends FeedRunStrategy {
      * Computes a new rank for each team based on the change
      *
      * @param team team, which solved a problem
+     * @param contest contest
      * @return teams, where the rank changed
      */
-    private List<Team> computeNewRank(final Team team, final double penalty) {
+    private List<Team> computeNewRank(final Team team, final double penalty, Contest contest) {
         List<LastTeamProblem> list = lastTeamProblemRepository.findByTeam(team);
         int solved = 0;
         double totalTime = 0;
@@ -91,7 +92,7 @@ public class NativeRunStrategy extends FeedRunStrategy {
         team.setProblemsSolved(solved);
         team.setTotalTime((int) Math.floor(totalTime));
 
-        List<Team> teams = teamRepository.findAll();
+        List<Team> teams = teamRepository.findByContest(contest);
 
         // sort teams
         Collections.sort(teams, new ScoreboardComparator(teamProblemRepository));

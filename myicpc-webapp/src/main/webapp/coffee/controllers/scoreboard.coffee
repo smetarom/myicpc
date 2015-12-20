@@ -120,5 +120,6 @@ updateScoreboard = (data, ngController = null) ->
 
         ngController.updateTeamProblem(data.teamId, data.problemId, data.judged, data.solved, data.attempts, data.time, data.first)
       )
-
+  else if data.type == 'refresh'
+    location.reload()
 

@@ -403,5 +403,7 @@ updateWorldMap = function(data, ngController) {
         return ngController.updateTeamOnMap(ngController.getTeamById(data["teamId"]), data.solved);
       });
     }
+  } else if (data.type === 'refresh') {
+    return location.reload();
   }
 };

@@ -64,6 +64,15 @@ public class PublishService {
     }
 
     /**
+     * Broadcast an event that refresh started
+     */
+    public void broadcastEventFeedRefresh(final String contestCode) {
+        JsonObject refreshObject = new JsonObject();
+        refreshObject.addProperty("type", "refresh");
+        atmospherePublish(PREFIX + contestCode + "/" + SCOREBOARD_CHANNEL, refreshObject.toString());
+    }
+
+    /**
      * Broadcast a team submission to channel SCOREBOARD_CHANNEL
      */
     public void broadcastTeamProblem(final JsonObject teamProblemJSON, final String contestCode) {

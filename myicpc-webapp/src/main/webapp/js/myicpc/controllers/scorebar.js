@@ -331,5 +331,7 @@ updateScorebar = function(data, ngController) {
       ngController.drawTeamBar(team);
       return ngController.updateTeamInfo(team);
     }
+  } else if (data.type === 'refresh') {
+    return location.reload();
   }
 };
