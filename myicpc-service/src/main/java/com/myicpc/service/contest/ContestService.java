@@ -231,4 +231,18 @@ public class ContestService {
 
         contestRepository.delete(contest);
     }
+
+    /**
+     * Verifies if the contest is officially over
+     *
+     * Contest over means it is longer than 7 days from contest start
+     *
+     * @param contest contest
+     * @return contest is over
+     */
+    public static boolean isContestOver(Contest contest) {
+        Date date = new Date();
+        date = DateUtils.addDays(date, -7);
+        return contest.getStartTime() != null && contest.getStartTime().before(date);
+    }
 }

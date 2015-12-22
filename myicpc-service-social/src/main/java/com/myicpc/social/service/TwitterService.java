@@ -5,6 +5,7 @@ import com.myicpc.model.contest.Contest;
 import com.myicpc.model.contest.WebServiceSettings;
 import com.myicpc.model.social.BlacklistedUser;
 import com.myicpc.model.social.Notification;
+import com.myicpc.service.contest.ContestService;
 import com.myicpc.service.notification.NotificationBuilder;
 import com.myicpc.social.dto.TwitterStreamDTO;
 import org.apache.commons.lang3.ArrayUtils;
@@ -103,11 +104,15 @@ public class TwitterService extends ASocialService {
      * @param contest contest
      */
     public void startTwitterStreaming(Contest contest) {
-        ConfigurationBuilder cb = createTwitterConfiguration(contest.getWebServiceSettings());
-        TwitterStream twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
-        twitterStream.addListener(new TwitterStatusListener(contest));
-        twitterStream.filter(new FilterQuery(0, null, new String[]{"#" + contest.getHashtag()}));
-
+        TwitterStream twitterStream = null;
+        try {
+            ConfigurationBuilder cb = createTwitterConfiguration(contest.getWebServiceSettings());
+            twitterStream = new TwitterStreamFactory(cb.build()).getInstance();
+            twitterStream.addListener(new TwitterStatusListener(contest));
+            twitterStream.filter(new FilterQuery(0, null, new String[]{"#" + contest.getHashtag()}));
+        } catch (IllegalArgumentException ex) {
+            logger.warn("Contest " + contest.getCode() + " Twitter configuration: " + ex.getMessage());
+        }
         WebServiceSettings webServiceSettings = contest.getWebServiceSettings();
         TwitterStreamDTO twitterStreamDTO = new TwitterStreamDTO(twitterStream, contest.getHashtag(),
                 webServiceSettings.getTwitterConsumerKey(), webServiceSettings.getTwitterConsumerSecret(),
@@ -134,16 +139,21 @@ public class TwitterService extends ASocialService {
     /**
      * Checks the streams and updates them if necessary
      */
-    @Scheduled(cron = "0 */1 * * * *")
+    @Scheduled(cron = "0 */5 * * * *")
     @Transactional(readOnly = true)
     public void detectTwitterConfigurationChanges() {
         for (Map.Entry<Long, TwitterStreamDTO> entry : streamMapping.entrySet()) {
             Contest contest = contestRepository.findOne(entry.getKey());
             // TODO stop stream if the contest is over
-            TwitterStreamDTO twitterStreamDTO = entry.getValue();
-            if (twitterStreamDTO.hasConfigChanged(contest.getHashtag(), contest.getWebServiceSettings())) {
+            if (ContestService.isContestOver(contest)) {
                 stopTwitterStreaming(contest.getId());
-                startTwitterStreaming(contest);
+            } else {
+                TwitterStreamDTO twitterStreamDTO = entry.getValue();
+                if (twitterStreamDTO != null &&
+                        twitterStreamDTO.hasConfigChanged(contest.getHashtag(), contest.getWebServiceSettings())) {
+                    stopTwitterStreaming(contest.getId());
+                    startTwitterStreaming(contest);
+                }
             }
         }
     }
@@ -273,6 +283,12 @@ public class TwitterService extends ASocialService {
     }
 
     private static ConfigurationBuilder createTwitterConfiguration(final WebServiceSettings webServiceSettings) {
+        if (StringUtils.isAnyEmpty(webServiceSettings.getTwitterConsumerKey(),
+                webServiceSettings.getTwitterConsumerSecret(),
+                webServiceSettings.getTwitterAccessToken(),
+                webServiceSettings.getTwitterAccessTokenSecret())) {
+            throw new IllegalArgumentException("Missing twitter configuration");
+        }
         ConfigurationBuilder cb = new ConfigurationBuilder();
         cb.setOAuthConsumerKey(webServiceSettings.getTwitterConsumerKey())
                 .setOAuthConsumerSecret(webServiceSettings.getTwitterConsumerSecret())

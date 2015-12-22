@@ -132,7 +132,7 @@ public abstract class FeedRunStrategy {
         }
         // the problem was already solved or we have already a newer submission
         if (lastTeamProblem.getTeamProblem() != null
-                && (lastTeamProblem.getTeamProblem().getSolved() || lastTeamProblem.getTeamProblem().getTime().compareTo(teamProblem.getTime()) == 1)) {
+                && (lastTeamProblem.getTeamProblem().getSolved() || lastTeamProblem.getTeamProblem().getTime().compareTo(teamProblem.getTime()) > 0)) {
             return;
         }
         lastTeamProblem.setTeamProblem(teamProblem);
