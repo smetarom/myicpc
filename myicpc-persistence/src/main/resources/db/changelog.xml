@@ -99,4 +99,37 @@
         </sql>
     </changeSet>
 
+    <changeSet id="9" author="smetana">
+        <sql>
+            CREATE TABLE errormessage (
+            id bigint NOT NULL,
+            message character varying(255),
+            cause character varying(255),
+            solved boolean NOT NULL,
+            timestamp timestamp without time zone NOT NULL,
+            contestid bigint NOT NULL
+            );
+
+            ALTER TABLE public.errormessage OWNER TO myicpc;
+
+            CREATE SEQUENCE errormessage_id_seq
+            START WITH 1
+            INCREMENT BY 1
+            NO MINVALUE
+            NO MAXVALUE
+            CACHE 1;
+
+            ALTER TABLE public.errormessage_id_seq OWNER TO myicpc;
+
+            ALTER TABLE ONLY errormessage
+            ADD CONSTRAINT errormessage_pkey PRIMARY KEY (id);
+
+            ALTER TABLE ONLY errormessage
+            ADD CONSTRAINT cause_contestid_key UNIQUE (cause, contestid);
+
+            ALTER TABLE ONLY errormessage
+            ADD CONSTRAINT fk_errormessage_contest FOREIGN KEY (contestid) REFERENCES contest(id);
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

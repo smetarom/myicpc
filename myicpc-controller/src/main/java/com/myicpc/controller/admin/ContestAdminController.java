@@ -8,6 +8,7 @@ import com.myicpc.model.contest.Contest;
 import com.myicpc.repository.contest.ContestRepository;
 import com.myicpc.service.contest.ContestService;
 import com.myicpc.service.exception.WebServiceException;
+import com.myicpc.service.notification.ErrorMessageService;
 import com.myicpc.service.settings.GlobalSettingsService;
 import com.myicpc.service.webSevice.ContestWSService;
 import org.apache.commons.lang3.StringUtils;
@@ -60,6 +61,9 @@ public class ContestAdminController extends GeneralAdminController {
     @Autowired
     private ContestWSService contestWSService;
 
+    @Autowired
+    private ErrorMessageService errorMessageService;
+
     @RequestMapping(value = "/private/contests", method = RequestMethod.GET)
     public String contests(Model model) {
         Sort sort = new Sort(Sort.Direction.DESC, "startTime");
@@ -79,6 +83,8 @@ public class ContestAdminController extends GeneralAdminController {
     @RequestMapping(value = {"/private/{contestCode}", "/private/{contestCode}/home"}, method = RequestMethod.GET)
     public String contestHome(@PathVariable String contestCode, final Model model) {
         Contest contest = getContest(contestCode, model);
+
+        model.addAttribute("errors", errorMessageService.getRecentContestErrorMessages(contest));
 
         return "/private/contest/contestHome";
     }
