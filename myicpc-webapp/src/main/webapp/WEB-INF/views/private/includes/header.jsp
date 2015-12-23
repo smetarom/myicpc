@@ -22,6 +22,8 @@
                     <li><a href='<spring:url value="/private${contestURL}/teams/synchronize" />'>- <spring:message code="nav.admin.teams.sync" /></a></li>
                     <li class="divider"></li>
                     <li><a href='<spring:url value="/private${contestURL}/participants" />'><spring:message code="nav.admin.participants" /></a></li>
+                    <li class="divider"></li>
+                    <li><a href='<spring:url value="/private${contestURL}/judgments" />'><spring:message code="nav.admin.judgments" /></a></li>
                 </ul>
             </li>
             <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><spring:message code="nav.admin.notifications" /> <b class="caret"></b></a>

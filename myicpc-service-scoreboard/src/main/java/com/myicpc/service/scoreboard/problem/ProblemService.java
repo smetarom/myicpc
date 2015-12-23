@@ -3,6 +3,8 @@ package com.myicpc.service.scoreboard.problem;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.myicpc.model.contest.Contest;
+import com.myicpc.model.eventFeed.Judgement;
+import com.myicpc.model.eventFeed.JudgementColor;
 import com.myicpc.model.eventFeed.Problem;
 import com.myicpc.service.listener.ScoreboardListener;
 
@@ -57,4 +59,22 @@ public interface ProblemService extends ScoreboardListener {
      * @return JSON overview report
      */
     JsonArray getProblemOverviewJSON(Problem problem);
+
+    /**
+     * Persists {@code judgementColor}
+     *
+     * It updates matching {@link Judgement} if exists
+     *
+     * @param judgementColor judgement color
+     */
+    void createJudgmentColor(JudgementColor judgementColor);
+
+    /**
+     * Deletes {@code judgementColor}
+     *
+     * It updates matching {@link Judgement} if exists
+     *
+     * @param judgementColor judgement color
+     */
+    void deleteJudgmentColor(JudgementColor judgementColor);
 }

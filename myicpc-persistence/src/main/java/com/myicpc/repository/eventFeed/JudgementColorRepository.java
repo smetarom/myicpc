@@ -13,4 +13,6 @@ import java.util.List;
 
 public interface JudgementColorRepository extends JpaRepository<JudgementColor, Long> {
     JudgementColor findByCodeAndContest(String code, Contest contest);
+
+    List<JudgementColor> findByContest(Contest contest);
 }

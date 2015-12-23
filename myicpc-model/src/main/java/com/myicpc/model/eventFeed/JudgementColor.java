@@ -74,4 +74,8 @@ public class JudgementColor extends IdGeneratedContestObject {
         }
         return color;
     }
+
+    public static Map<String, String> getDefaultColors() {
+        return defaultColors;
+    }
 }

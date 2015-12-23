@@ -9,6 +9,7 @@ import com.myicpc.model.eventFeed.JudgementColor;
 import com.myicpc.model.eventFeed.Problem;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
+import com.myicpc.repository.eventFeed.JudgementColorRepository;
 import com.myicpc.repository.eventFeed.JudgementRepository;
 import com.myicpc.repository.eventFeed.ProblemRepository;
 import com.myicpc.repository.eventFeed.TeamProblemRepository;
@@ -46,6 +47,9 @@ public class ProblemServiceImpl extends ScoreboardListenerAdapter implements Pro
 
     @Autowired
     private JudgementRepository judgementRepository;
+
+    @Autowired
+    private JudgementColorRepository judgementColorRepository;
 
     @Override
     public void onSubmission(TeamProblem teamProblem, List<Team> effectedTeams) {
@@ -141,6 +145,28 @@ public class ProblemServiceImpl extends ScoreboardListenerAdapter implements Pro
         }
 
         return arr;
+    }
+
+    @Override
+    public void createJudgmentColor(JudgementColor judgementColor) {
+        judgementColorRepository.save(judgementColor);
+
+        Judgement judgement = judgementRepository.findByCodeAndContest(judgementColor.getCode(), judgementColor.getContest());
+        if (judgement != null) {
+            judgement.setColor(judgementColor.getColor());
+            judgementRepository.save(judgement);
+        }
+    }
+
+    @Override
+    public void deleteJudgmentColor(JudgementColor judgementColor) {
+        judgementColorRepository.delete(judgementColor);
+
+        Judgement judgement = judgementRepository.findByCodeAndContest(judgementColor.getCode(), judgementColor.getContest());
+        if (judgement != null) {
+            judgement.setColor(null);
+            judgementRepository.save(judgement);
+        }
     }
 
     private static JsonObject getTeamSubmissionJSON(final TeamSubmissionDTO teamProblem) {
