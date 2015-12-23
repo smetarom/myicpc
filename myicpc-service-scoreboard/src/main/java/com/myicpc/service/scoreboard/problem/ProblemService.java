@@ -7,6 +7,7 @@ import com.myicpc.model.eventFeed.Problem;
 import com.myicpc.service.listener.ScoreboardListener;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Service responsible for {@link Problem} operations
@@ -30,6 +31,14 @@ public interface ProblemService extends ScoreboardListener {
      * @return JSON representation of team attempts
      */
     JsonArray getSubmissionAttemptsJSON(Problem problem);
+
+    /**
+     * Returns the judgment colors for all judgment in the contest
+     *
+     * @param contest contest
+     * @return map between judgment code and color
+     */
+    Map<String, String> getJudgmentColors(Contest contest);
 
     /**
      * Gets all judgements in {@code contest}

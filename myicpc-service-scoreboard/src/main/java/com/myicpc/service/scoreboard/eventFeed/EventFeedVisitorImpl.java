@@ -14,6 +14,7 @@ import com.myicpc.dto.eventFeed.visitor.EventFeedVisitor;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.EventFeedControl;
 import com.myicpc.model.eventFeed.Judgement;
+import com.myicpc.model.eventFeed.JudgementColor;
 import com.myicpc.model.eventFeed.Language;
 import com.myicpc.model.eventFeed.Problem;
 import com.myicpc.model.eventFeed.Team;
@@ -23,6 +24,7 @@ import com.myicpc.model.teamInfo.Region;
 import com.myicpc.model.teamInfo.TeamInfo;
 import com.myicpc.repository.contest.ContestRepository;
 import com.myicpc.repository.eventFeed.EventFeedControlRepository;
+import com.myicpc.repository.eventFeed.JudgementColorRepository;
 import com.myicpc.repository.eventFeed.JudgementRepository;
 import com.myicpc.repository.eventFeed.LanguageRepository;
 import com.myicpc.repository.eventFeed.ProblemRepository;
@@ -83,6 +85,9 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
     private JudgementRepository judgementRepository;
 
     @Autowired
+    private JudgementColorRepository judgementColorRepository;
+
+    @Autowired
     private ProblemRepository problemRepository;
 
     @Autowired
@@ -136,8 +141,8 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
         if (judgement == null) {
             judgement = new Judgement();
             xmlJudgement.mergeTo(judgement);
-            // TODO get color
-//            judgement.setColor(GlobalUtils.getJudgementColor(judgement.getCode()));
+            JudgementColor judgementColor = judgementColorRepository.findByCodeAndContest(xmlJudgement.getAcronym(), contest);
+            judgement.setColor(getJudgmentColor(judgementColor, xmlJudgement.getAcronym()));
             judgement.setContest(contest);
             judgement = judgementRepository.saveAndFlush(judgement);
             logger.info("Judgement " + judgement.getName() + " created");
@@ -317,6 +322,13 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
             default:
                 throw new EventFeedException("No suitable event feed strategy found.");
         }
+    }
+
+    private static String getJudgmentColor(final JudgementColor judgementColor, String judgementCode) {
+        if (judgementColor != null) {
+            return judgementColor.getColor();
+        }
+        return JudgementColor.getDefaultColor(judgementCode);
     }
 
 }

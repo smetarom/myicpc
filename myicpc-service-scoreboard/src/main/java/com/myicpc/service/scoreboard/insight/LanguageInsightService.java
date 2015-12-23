@@ -6,12 +6,10 @@ import com.myicpc.dto.insight.InsightSubmissionDTO;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Judgement;
 import com.myicpc.model.eventFeed.Language;
-import com.myicpc.model.eventFeed.Team;
-import com.myicpc.model.eventFeed.TeamProblem;
 import com.myicpc.repository.eventFeed.JudgementRepository;
 import com.myicpc.repository.eventFeed.LanguageRepository;
-import com.myicpc.service.scoreboard.dto.insight.JudgmentDTO;
-import com.myicpc.service.scoreboard.dto.insight.LanguageDTO;
+import com.myicpc.dto.insight.JudgmentDTO;
+import com.myicpc.dto.insight.LanguageDTO;
 import com.myicpc.service.scoreboard.dto.insight.ReportByJudgement;
 import com.myicpc.service.scoreboard.dto.insight.ReportByLanguage;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -142,7 +140,7 @@ public class LanguageInsightService extends AbstractInsightService<Language> {
      */
     @Override
     public JsonObject reportSingle(Language language, Contest contest) {
-        ReportByLanguage report = new ReportByLanguage(language.getName());
+        ReportByLanguage report = new ReportByLanguage(language.getName(), getJudgmentColors(contest));
         int numProblemSolved = 0;
         int numProblemSubmitted = 0;
         int usedByNumTeams = 0;

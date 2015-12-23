@@ -4,6 +4,13 @@
     <jsp:attribute name="head">
         <%@ include file="/WEB-INF/views/includes/nvd3Dependencies.jsp" %>
         <script src="<c:url value='/js/myicpc/controllers/problem.js'/>" defer></script>
+        <style type="text/css">
+            <c:forEach items="${judgmentColors}" var="color">
+                .judgment-color.${color.key} {
+                    color: ${color.value};
+                }
+            </c:forEach>
+        </style>
     </jsp:attribute>
     <jsp:attribute name="title">
         ${problem.code}: ${problem.name}
@@ -29,7 +36,7 @@
                 <t:secondLevelSubmenu isMobile="${sitePreference.mobile}">
                     <li ng-class="{active: activeTab == 'attempts'}"><a href="#/attempts"><spring:message code="problem.tab.byAttempts"/></a></li>
                     <li ng-class="{active: activeTab == 'teams'}"><a href="#/teams"><spring:message code="problem.tab.byTeams"/></a></li>
-                    <li ng-class="{active: activeTab == 'overview'}"><a href="#/overview"><spring:message code="problem.tab.byTeams"/></a></li>
+                    <li ng-class="{active: activeTab == 'overview'}"><a href="#/overview"><spring:message code="problem.tab.overview"/></a></li>
                 </t:secondLevelSubmenu>
             </div>
 

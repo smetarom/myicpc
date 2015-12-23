@@ -1,4 +1,4 @@
-package com.myicpc.service.scoreboard.dto.insight;
+package com.myicpc.dto.insight;
 
 /**
  * Represents a language from Event feed

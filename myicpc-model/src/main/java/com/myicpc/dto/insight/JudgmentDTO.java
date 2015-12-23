@@ -1,4 +1,6 @@
-package com.myicpc.service.scoreboard.dto.insight;
+package com.myicpc.dto.insight;
+
+import com.myicpc.model.eventFeed.Judgement;
 
 import java.io.Serializable;
 
@@ -8,6 +10,7 @@ import java.io.Serializable;
  * @author Roman Smetana
  */
 public class JudgmentDTO implements Serializable {
+	private static final long serialVersionUID = 7674488169454101815L;
 	/**
 	 * Judgment code
 	 */

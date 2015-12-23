@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.myicpc.dto.eventFeed.TeamSubmissionDTO;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Judgement;
+import com.myicpc.model.eventFeed.JudgementColor;
 import com.myicpc.model.eventFeed.Problem;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
@@ -79,6 +80,20 @@ public class ProblemServiceImpl extends ScoreboardListenerAdapter implements Pro
         }
 
         return arr;
+    }
+
+    @Override
+    public Map<String, String> getJudgmentColors(Contest contest) {
+        List<Judgement> judgements = judgementRepository.findByContest(contest);
+        Map<String, String> colorMap = new HashMap<>();
+        for (Judgement judgement : judgements) {
+            String color = judgement.getColor();
+            if (color == null) {
+                color = JudgementColor.getDefaultColor(judgement.getCode());
+            }
+            colorMap.put(judgement.getCode(), color);
+        }
+        return colorMap;
     }
 
     @Override

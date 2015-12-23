@@ -7,6 +7,10 @@
     <div ng-init="init('${r.contextPath}', '${contest.code}', '<spring:message code="insight.problems" />')"></div>
 </c:if>
 
+<div class="col-sm-12">
+    <%@ include file="/WEB-INF/views/scoreboard/insight/fragment/insightLegend.jsp"%>
+</div>
+
 <div ng-repeat="problem in problems" ng-cloak>
     <div style="position: relative;" class="panel panel-default panel-insight">
         <h2 class="text-center">

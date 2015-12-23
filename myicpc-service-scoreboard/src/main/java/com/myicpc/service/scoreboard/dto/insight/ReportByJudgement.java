@@ -3,6 +3,7 @@ package com.myicpc.service.scoreboard.dto.insight;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import com.myicpc.dto.insight.LanguageDTO;
 import com.myicpc.model.eventFeed.Judgement;
 
 import java.util.ArrayList;
@@ -89,7 +90,7 @@ public class ReportByJudgement extends InsightReport {
 		JsonObject root = new JsonObject();
 		root.addProperty("key", judgement.getCode());
 		root.addProperty("description", judgement.getName());
-		root.addProperty("color", getResultColors(judgement.getCode()));
+		root.addProperty("color", judgement.getColor());
 		JsonArray values = new JsonArray();
 		boolean include = false;
 		sortLanguages();

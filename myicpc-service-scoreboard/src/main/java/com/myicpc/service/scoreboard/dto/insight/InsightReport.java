@@ -3,6 +3,7 @@ package com.myicpc.service.scoreboard.dto.insight;
 import com.google.gson.JsonObject;
 import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.dto.insight.InsightSubmissionDTO;
+import com.myicpc.model.eventFeed.JudgementColor;
 import com.myicpc.model.eventFeed.TeamProblem;
 
 import java.util.HashMap;
@@ -18,10 +19,10 @@ public abstract class InsightReport {
 
 	public InsightReport() {
 		colorMap = new HashMap<>();
-		colorMap.put("AC", "#006600");
-		colorMap.put("WA", "#000000");
-		colorMap.put("RTE", "#FF9900");
-		colorMap.put("TLE", "#FF0033");
+	}
+
+	public InsightReport(Map<String, String> colorMap) {
+		this.colorMap = colorMap;
 	}
 
 	/**
@@ -34,7 +35,7 @@ public abstract class InsightReport {
 	public String getResultColors(final String resultCode) {
 		String color = colorMap.get(resultCode);
 		if (color == null) {
-			return "#0000FF";
+			return JudgementColor.getDefaultColor(resultCode);
 		}
 		return color;
 	}

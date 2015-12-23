@@ -4,8 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.dto.insight.InsightSubmissionDTO;
+import com.myicpc.dto.insight.JudgmentDTO;
 import com.myicpc.model.eventFeed.Problem;
-import com.myicpc.model.eventFeed.TeamProblem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,7 +53,8 @@ public class ReportByProblem extends InsightReport {
 	private Map<String, Integer> solvedLanguageMap = new HashMap<>();
 	private Map<String, Integer> languageMap = new HashMap<>();
 
-	public ReportByProblem(final Problem problem) {
+	public ReportByProblem(final Problem problem, Map<String, String> colorMap) {
+		super(colorMap);
 		this.problem = problem;
 	}
 

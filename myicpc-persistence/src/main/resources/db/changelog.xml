@@ -68,4 +68,35 @@
                                  referencedColumnNames="id" />
     </changeSet>
 
+    <changeSet id="8" author="smetana">
+        <sql>
+            CREATE TABLE judgementcolor (
+                id bigint NOT NULL,
+                code character varying(255),
+                color character varying(255),
+                contestid bigint NOT NULL
+            );
+
+            ALTER TABLE public.judgementcolor OWNER TO myicpc;
+
+            CREATE SEQUENCE judgementcolor_id_seq
+                START WITH 1
+                INCREMENT BY 1
+                NO MINVALUE
+                NO MAXVALUE
+                CACHE 1;
+
+            ALTER TABLE public.judgementcolor_id_seq OWNER TO myicpc;
+
+            ALTER TABLE ONLY judgementcolor
+                ADD CONSTRAINT judgementcolor_pkey PRIMARY KEY (id);
+
+            ALTER TABLE ONLY judgementcolor
+                ADD CONSTRAINT code_contestid_key UNIQUE (code, contestid);
+
+            ALTER TABLE ONLY judgementcolor
+                ADD CONSTRAINT fk_judgementcolor_contest FOREIGN KEY (contestid) REFERENCES contest(id);
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

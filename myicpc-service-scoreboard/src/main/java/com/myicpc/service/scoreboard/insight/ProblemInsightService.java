@@ -7,7 +7,7 @@ import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Problem;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.repository.eventFeed.ProblemRepository;
-import com.myicpc.service.scoreboard.dto.insight.JudgmentDTO;
+import com.myicpc.dto.insight.JudgmentDTO;
 import com.myicpc.service.scoreboard.dto.insight.ReportByProblem;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,10 +60,11 @@ public class ProblemInsightService extends AbstractInsightService<Problem> {
     }
 
     public JsonArray reportAll(final Team team, final Contest contest) {
+        Map<String, String> judgmentColors = getJudgmentColors(contest);
         List<Problem> problems = problemRepository.findByContestOrderByCodeAsc(contest);
         List<ReportByProblem> reports = new ArrayList<>(problems.size());
         for (Problem problem : problems) {
-            reports.add(calcReportByProblem(problem, team));
+            reports.add(calcReportByProblem(problem, team, judgmentColors));
         }
 
         JsonArray arr = new JsonArray();
@@ -123,7 +124,8 @@ public class ProblemInsightService extends AbstractInsightService<Problem> {
      */
     @Override
     public JsonObject reportSingle(final Problem problem, final Contest contest) {
-        ReportByProblem report = calcReportByProblem(problem, null);
+        Map<String, String> judgmentColors = getJudgmentColors(contest);
+        ReportByProblem report = calcReportByProblem(problem, null, judgmentColors);
 
         double averageSolutionTime = 0;
         double numSolvedCounter = 0;
@@ -198,16 +200,17 @@ public class ProblemInsightService extends AbstractInsightService<Problem> {
      *
      * @param problem
      *            problem
+     * @param judgmentColors judgement colors
      * @return detailed report about a problem
      */
-    private ReportByProblem calcReportByProblem(final Problem problem, final Team team) {
+    private ReportByProblem calcReportByProblem(final Problem problem, final Team team, Map<String, String> judgmentColors) {
         List<ImmutablePair<String, Long>> results;
         if (team != null) {
             results = problemRepository.getProblemReportByTeam(problem, team);
         } else {
             results = problemRepository.getProblemReport(problem);
         }
-        ReportByProblem report = new ReportByProblem(problem);
+        ReportByProblem report = new ReportByProblem(problem, judgmentColors);
         for (ImmutablePair<String, Long> result : results) {
             report.addResult(new JudgmentDTO(result.getKey(), null, result.getValue().intValue()));
         }

@@ -23,7 +23,7 @@
                         <tr ng-repeat="submission in team.submissions">
                             <td style="width: 5%"><triple-tick ng-model="submission"/></td>
                             <td style="width: 10%">{{formatTime(submission.time)}}</td>
-                            <td style="width: 20%">{{submission.judgementName}}</td>
+                            <td style="width: 20%" class="judgment-color {{submission.judgement}}">{{submission.judgementName}}</td>
                             <td style="width: 15%">{{submission.language}}</td>
                             <td><div ng-if="submission.judged && !submission.solved" class="pull-right" style="width: 10em"><solution-bar ng-model="submission"/></div></td>
                         </tr>

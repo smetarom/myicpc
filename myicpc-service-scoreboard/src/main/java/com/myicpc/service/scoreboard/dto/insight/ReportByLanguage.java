@@ -3,10 +3,11 @@ package com.myicpc.service.scoreboard.dto.insight;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.myicpc.dto.insight.InsightSubmissionDTO;
-import com.myicpc.model.eventFeed.TeamProblem;
+import com.myicpc.dto.insight.JudgmentDTO;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents a detailed report for a language
@@ -53,7 +54,8 @@ public class ReportByLanguage extends InsightReport {
 	 */
 	private InsightSubmissionDTO firstSubmission;
 
-	public ReportByLanguage(final String language) {
+	public ReportByLanguage(final String language, Map<String, String> colorMap) {
+		super(colorMap);
 		this.language = language;
 	}
 
