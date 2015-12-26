@@ -1,6 +1,7 @@
 package com.myicpc.repository.quest
 
 import com.github.springtestdbunit.annotation.DatabaseSetup
+import com.github.springtestdbunit.annotation.DatabaseTearDown
 import com.myicpc.commons.utils.TimeUtils
 import com.myicpc.dto.quest.QuestSubmissionFilter
 import com.myicpc.enums.SortOrder
@@ -20,6 +21,7 @@ import org.springframework.data.domain.PageRequest
  * @author Roman Smetana
  */
 @DatabaseSetup(["classpath:dbunit/contest/ContestRepositoryTest.xml", "classpath:dbunit/quest/QuestSubmissionRepositoryTest.xml"])
+@DatabaseTearDown("classpath:dbunit/quest/CleanQuestEntities.xml")
 class QuestSubmissionRepositoryTest extends AbstractRepositoryTest {
     @Autowired
     private QuestSubmissionRepository questSubmissionRepository;

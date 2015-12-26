@@ -157,7 +157,8 @@ class QuestServiceTest extends GroovyTestCase {
         ]
 
         Mockito.when(questParticipantRepository.findByContest(contest)).thenReturn(participants)
-        Mockito.when(contestParticipantAssociationRepository.findByContestParticipantIn(contestParticipants)).thenReturn(contestParticipantAssociations)
+        Mockito.when(questParticipantRepository.findByContestOrderByPointsDescContestParticipantFirstnameAsc(contest)).thenReturn(participants)
+        Mockito.when(contestParticipantAssociationRepository.findByContestParticipantInAndContest(contestParticipants, contest)).thenReturn(contestParticipantAssociations)
         Mockito.when(questSubmissionRepository.findQuestSubmissionDTOByQuestParticipantId([1L], contest)).thenReturn(submissions)
 
         def resultParticipants = questService.getParticipantsWithRoles(roles, contest)

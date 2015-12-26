@@ -26,7 +26,7 @@ class LanguageRepositoryTest extends AbstractRepositoryTest {
         Contest contest = contestRepository.findOne(1L);
         Language language = languageRepository.findByNameAndContest("Java", contest);
         assert language != null
-        assert language.getId() == 3
+        assert language.getId() == 3L
     }
 
     @Test
@@ -41,7 +41,7 @@ class LanguageRepositoryTest extends AbstractRepositoryTest {
         Contest contest = contestRepository.findOne(1L);
         Language language = languageRepository.findByNameIgnoreCaseAndContest("JAVA", contest);
         assert language != null
-        assert language.getId() == 3
+        assert language.getId() == 3L
     }
 
     @Test
@@ -49,8 +49,8 @@ class LanguageRepositoryTest extends AbstractRepositoryTest {
         Contest contest = contestRepository.findOne(1L);
         List<Language> languageList = languageRepository.findByContestOrderByName(contest);
         assert languageList.size() == 3
-        assert languageList[0].getName() == "C"
-        assert languageList[1].getName() == "C++"
-        assert languageList[2].getName() == "Java"
+        assert languageList[0].getName() == "C++"
+        assert languageList[1].getName() == "Java"
+        assert languageList[2].getName() == "Python"
     }
 }

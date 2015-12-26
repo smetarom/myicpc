@@ -1,6 +1,7 @@
 package com.myicpc.repository.poll
 
 import com.github.springtestdbunit.annotation.DatabaseSetup
+import com.github.springtestdbunit.annotation.DatabaseTearDown
 import com.myicpc.commons.utils.TimeUtils
 import com.myicpc.model.contest.Contest
 import com.myicpc.repository.AbstractRepositoryTest
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired
  * @author Roman Smetana
  */
 @DatabaseSetup(["classpath:dbunit/contest/ContestRepositoryTest.xml", "classpath:dbunit/poll/PollRepositoryTest.xml"])
+@DatabaseTearDown("classpath:dbunit/poll/CleanPollEntities.xml")
 class PollRepositoryTest extends AbstractRepositoryTest {
     @Autowired
     private PollRepository pollRepository;

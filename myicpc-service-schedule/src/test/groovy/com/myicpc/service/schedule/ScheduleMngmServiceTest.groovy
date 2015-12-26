@@ -19,6 +19,7 @@ import com.myicpc.service.notification.NotificationService
 import com.myicpc.service.publish.PublishService
 import com.myicpc.service.schedule.dto.EditScheduleDTO
 import com.myicpc.service.validation.EventRoleValidator
+import com.myicpc.service.validation.EventValidator
 import com.myicpc.service.validation.LocationValidator
 import com.myicpc.service.validation.ScheduleDayValidator
 import org.junit.Assert
@@ -63,6 +64,9 @@ class ScheduleMngmServiceTest extends GroovyTestCase {
 
     @Mock
     private NotificationService notificationService;
+
+    @Mock
+    private EventValidator eventValidator;
 
     @InjectMocks
     private ScheduleMngmService scheduleMngmService;

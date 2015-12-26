@@ -56,6 +56,7 @@ public class TestPersistenceConfig {
     private Properties additionalProperties() {
         Properties prop = new Properties();
         prop.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+//        prop.setProperty("hibernate.hbm2ddl.auto", "create-drop");
         prop.setProperty("hibernate.hbm2ddl.auto", "create");
 //        prop.setProperty("hibernate.hbm2ddl.auto", "update");
         prop.setProperty("hibernate.connection.characterEncoding", "UTF-8");

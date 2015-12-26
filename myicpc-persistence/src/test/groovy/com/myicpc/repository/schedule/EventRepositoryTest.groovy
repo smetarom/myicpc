@@ -1,6 +1,7 @@
 package com.myicpc.repository.schedule
 
 import com.github.springtestdbunit.annotation.DatabaseSetup
+import com.github.springtestdbunit.annotation.DatabaseTearDown
 import com.myicpc.commons.utils.TimeUtils
 import com.myicpc.model.contest.Contest
 import com.myicpc.model.schedule.Event
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional
  * @author Roman Smetana
  */
 @DatabaseSetup(["classpath:dbunit/contest/ContestRepositoryTest.xml", "classpath:dbunit/schedule/EventRepositoryTest.xml"])
+@DatabaseTearDown("classpath:dbunit/schedule/CleanScheduleEntities.xml")
 class EventRepositoryTest extends AbstractRepositoryTest {
 
     @Autowired

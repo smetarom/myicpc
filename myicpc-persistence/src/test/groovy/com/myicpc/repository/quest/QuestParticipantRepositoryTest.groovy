@@ -1,6 +1,7 @@
 package com.myicpc.repository.quest
 
 import com.github.springtestdbunit.annotation.DatabaseSetup
+import com.github.springtestdbunit.annotation.DatabaseTearDown
 import com.myicpc.enums.ContestParticipantRole
 import com.myicpc.model.contest.Contest
 import com.myicpc.repository.AbstractRepositoryTest
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional
  * @author Roman Smetana
  */
 @DatabaseSetup(["classpath:dbunit/contest/ContestRepositoryTest.xml", "classpath:dbunit/quest/QuestParticipantRepositoryTest.xml"])
+@DatabaseTearDown("classpath:dbunit/quest/CleanQuestEntities.xml")
 class QuestParticipantRepositoryTest extends AbstractRepositoryTest {
     @Autowired
     private QuestParticipantRepository questParticipantRepository;

@@ -123,7 +123,7 @@ public class QuestService {
     @Transactional(readOnly = true)
     public List<QuestParticipant> getParticipantsWithRoles(final List<ContestParticipantRole> roles, final Contest contest) {
         if (roles == null) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
         int maxContestParticipantRoles = ContestParticipantRole.values().length;
         List<QuestParticipant> participants;
@@ -135,7 +135,7 @@ public class QuestService {
         }
         // skip if no participants found
         if (participants.isEmpty()) {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
         // list of all involved contest participants

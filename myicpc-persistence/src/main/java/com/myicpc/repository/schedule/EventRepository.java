@@ -47,7 +47,7 @@ public interface EventRepository extends CrudRepository<Event, Long>, EventDao {
      * @param contest contest
      * @return future events
      */
-    @Query("SELECT e FROM Event e LEFT JOIN FETCH e.roles WHERE e.endDate > ?1 AND e.contest = ?2")
+    @Query("SELECT DISTINCT e FROM Event e LEFT JOIN FETCH e.roles WHERE e.endDate > ?1 AND e.contest = ?2")
     List<Event> findAllFutureEvents(Date date, Contest contest);
 
     /**

@@ -1,6 +1,7 @@
 package com.myicpc.repository.quest
 
 import com.github.springtestdbunit.annotation.DatabaseSetup
+import com.github.springtestdbunit.annotation.DatabaseTearDown
 import com.myicpc.commons.utils.TimeUtils
 import com.myicpc.model.contest.Contest
 import com.myicpc.model.quest.QuestParticipant
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired
  * @author Roman Smetana
  */
 @DatabaseSetup(["classpath:dbunit/contest/ContestRepositoryTest.xml", "classpath:dbunit/quest/QuestChallengeRepositoryTest.xml"])
+@DatabaseTearDown("classpath:dbunit/quest/CleanQuestEntities.xml")
 class QuestChallengeRepositoryTest extends AbstractRepositoryTest {
     @Autowired
     private QuestChallengeRepository questChallengeRepository;
