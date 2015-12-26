@@ -13,7 +13,7 @@ public abstract class XMLEntity<T> implements Serializable {
 
     public abstract void mergeTo(final T entity);
 
-    public abstract void accept(EventFeedVisitor visitor, Contest contest);
+    public abstract void accept(EventFeedVisitor visitor, Contest contest, EventFeedSettingsDTO eventFeedSettings);
 
     public Long getContestId() {
         return contestId;

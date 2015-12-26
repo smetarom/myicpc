@@ -37,8 +37,8 @@ public class TestcaseXML extends XMLEntity<TeamProblem> {
     }
 
     @Override
-    public void accept(EventFeedVisitor visitor, Contest contest) {
-        visitor.visit(this, contest);
+    public void accept(EventFeedVisitor visitor, Contest contest, EventFeedSettingsDTO eventFeedSettings) {
+        visitor.visit(this, contest, eventFeedSettings);
     }
 
     public Long getSystemId() {

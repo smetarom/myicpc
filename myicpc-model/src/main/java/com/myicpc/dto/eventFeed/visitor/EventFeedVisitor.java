@@ -2,6 +2,7 @@ package com.myicpc.dto.eventFeed.visitor;
 
 import com.myicpc.dto.eventFeed.parser.AnalystMessageXML;
 import com.myicpc.dto.eventFeed.parser.ContestXML;
+import com.myicpc.dto.eventFeed.parser.EventFeedSettingsDTO;
 import com.myicpc.dto.eventFeed.parser.FinalizedXML;
 import com.myicpc.dto.eventFeed.parser.JudgementXML;
 import com.myicpc.dto.eventFeed.parser.LanguageXML;
@@ -32,8 +33,9 @@ public interface EventFeedVisitor {
      *
      * @param c contest from the feed
      * @param contest contest
+     * @param eventFeedSettings additional event feed parsing settings
      */
-    void visit(ContestXML c, Contest contest);
+    void visit(ContestXML c, Contest contest, EventFeedSettingsDTO eventFeedSettings);
 
     /**
      * Triggered on &lt;language&gt; tag
@@ -42,8 +44,9 @@ public interface EventFeedVisitor {
      *
      * @param language language from the feed
      * @param contest contest
+     * @param eventFeedSettings additional event feed parsing settings
      */
-    void visit(LanguageXML language, Contest contest);
+    void visit(LanguageXML language, Contest contest, EventFeedSettingsDTO eventFeedSettings);
 
     /**
      * Triggered on &lt;region&gt; tag
@@ -52,8 +55,9 @@ public interface EventFeedVisitor {
      *
      * @param region region from the feed
      * @param contest contest
+     * @param eventFeedSettings additional event feed parsing settings
      */
-    void visit(RegionXML region, Contest contest);
+    void visit(RegionXML region, Contest contest, EventFeedSettingsDTO eventFeedSettings);
 
     /**
      * Triggered on &lt;judgement&gt; tag
@@ -62,8 +66,9 @@ public interface EventFeedVisitor {
      *
      * @param judgement judgement from the feed
      * @param contest contest
+     * @param eventFeedSettings additional event feed parsing settings
      */
-    void visit(JudgementXML judgement, Contest contest);
+    void visit(JudgementXML judgement, Contest contest, EventFeedSettingsDTO eventFeedSettings);
 
     /**
      * Triggered on &lt;problem&gt; tag
@@ -72,8 +77,9 @@ public interface EventFeedVisitor {
      *
      * @param problem problem from the feed
      * @param contest contest
+     * @param eventFeedSettings additional event feed parsing settings
      */
-    void visit(ProblemXML problem, Contest contest);
+    void visit(ProblemXML problem, Contest contest, EventFeedSettingsDTO eventFeedSettings);
 
     /**
      * Triggered on &lt;team&gt; tag
@@ -82,8 +88,9 @@ public interface EventFeedVisitor {
      *
      * @param team team from the feed
      * @param contest contest
+     * @param eventFeedSettings additional event feed parsing settings
      */
-    void visit(TeamXML team, Contest contest);
+    void visit(TeamXML team, Contest contest, EventFeedSettingsDTO eventFeedSettings);
 
     /**
      * Triggered on &lt;run&gt; tag
@@ -92,8 +99,9 @@ public interface EventFeedVisitor {
      *
      * @param teamProblem team from the feed
      * @param contest contest
+     * @param eventFeedSettings additional event feed parsing settings
      */
-    void visit(TeamProblemXML teamProblem, Contest contest);
+    void visit(TeamProblemXML teamProblem, Contest contest, EventFeedSettingsDTO eventFeedSettings);
 
     /**
      * Triggered on &lt;testcase&gt; tag
@@ -102,8 +110,9 @@ public interface EventFeedVisitor {
      *
      * @param testcase team from the feed
      * @param contest contest
+     * @param eventFeedSettings additional event feed parsing settings
      */
-    void visit(TestcaseXML testcase, Contest contest);
+    void visit(TestcaseXML testcase, Contest contest, EventFeedSettingsDTO eventFeedSettings);
 
     /**
      * Triggered on &lt;analystmsg&gt; tag
@@ -112,8 +121,9 @@ public interface EventFeedVisitor {
      *
      * @param analystMessage team from the feed
      * @param contest contest
+     * @param eventFeedSettings additional event feed parsing settings
      */
-    void visit(AnalystMessageXML analystMessage, Contest contest);
+    void visit(AnalystMessageXML analystMessage, Contest contest, EventFeedSettingsDTO eventFeedSettings);
 
     /**
      * Triggered on &lt;finalized&gt; tag
@@ -122,6 +132,7 @@ public interface EventFeedVisitor {
      *
      * @param finalizedXML finalize information from the feed
      * @param contest contest
+     * @param eventFeedSettings additional event feed parsing settings
      */
-    void visit(FinalizedXML finalizedXML, Contest contest);
+    void visit(FinalizedXML finalizedXML, Contest contest, EventFeedSettingsDTO eventFeedSettings);
 }

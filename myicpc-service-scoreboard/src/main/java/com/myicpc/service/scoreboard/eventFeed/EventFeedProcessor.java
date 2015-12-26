@@ -6,6 +6,7 @@ import com.myicpc.commons.utils.WebServiceUtils;
 import com.myicpc.dto.eventFeed.parser.AnalystMessageXML;
 import com.myicpc.dto.eventFeed.parser.ClarificationXML;
 import com.myicpc.dto.eventFeed.parser.ContestXML;
+import com.myicpc.dto.eventFeed.parser.EventFeedSettingsDTO;
 import com.myicpc.dto.eventFeed.parser.FinalizedXML;
 import com.myicpc.dto.eventFeed.parser.JudgementXML;
 import com.myicpc.dto.eventFeed.parser.LanguageXML;
@@ -21,6 +22,7 @@ import com.myicpc.model.contest.Contest;
 import com.myicpc.model.contest.ContestSettings;
 import com.myicpc.repository.contest.ContestRepository;
 import com.myicpc.service.scoreboard.exception.EventFeedException;
+import com.myicpc.service.scoreboard.exception.EventFeedInterrupted;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.mapper.CannotResolveClassException;
 import org.apache.commons.io.IOUtils;
@@ -113,6 +115,9 @@ public class EventFeedProcessor {
                     if (isContestOver(contest)) {
                         break;
                     }
+                } catch (EventFeedInterrupted ex) {
+                    // stop event feed processing
+                    break;
                 } catch (Exception e) {
                     logger.error(e.getMessage(), e);
                 } finally {
@@ -260,6 +265,9 @@ public class EventFeedProcessor {
                     exponentialBackoff = BASE_EXPONENTIAL_BACKOFF;
                     parseXML(reader, contest);
                     break;
+                } catch (EventFeedInterrupted ex) {
+                    // stop event feed processing
+                    break;
                 } catch (Exception ex) {
                     logger.error(ex.getMessage(), ex);
                     logger.info("Resuming event feed listener for contest " + contest.getCode() + " after interruption.");
@@ -288,15 +296,22 @@ public class EventFeedProcessor {
         Reader reader = null;
         try {
             reader = new InputStreamReader(eventFeedFile);
-            parseXML(reader, contest);
-        } catch (IOException e) {
+            EventFeedSettingsDTO eventFeedSettings = new EventFeedSettingsDTO();
+            eventFeedSettings.setSkipMessageGeneration(true);
+            parseXML(reader, contest, eventFeedSettings);
+        } catch (IOException | EventFeedInterrupted e) {
             throw new EventFeedException(e);
         } finally {
             IOUtils.closeQuietly(reader);
         }
     }
 
-    private void parseXML(final Reader reader, final Contest contest) throws IOException {
+    private void parseXML(final Reader reader, final Contest contest) throws IOException, EventFeedInterrupted {
+        EventFeedSettingsDTO eventFeedSettings = new EventFeedSettingsDTO();
+        parseXML(reader, contest, eventFeedSettings);
+    }
+
+    private void parseXML(final Reader reader, final Contest contest, final EventFeedSettingsDTO eventFeedSettings) throws IOException, EventFeedInterrupted {
         final XStream xStream = createEventFeedParser();
         int submissionOrder = 0;
         ObjectInputStream in = xStream.createObjectInputStream(reader);
@@ -304,14 +319,14 @@ public class EventFeedProcessor {
             while (true) {
                 if (Thread.interrupted()) {
                     logger.info("Event feed reader for contest " + contest.getCode() + " was interrupted.");
-                    break;
+                    throw new EventFeedInterrupted("Event feed reader for contest " + contest.getCode() + " was interrupted.");
                 }
                 try {
                     XMLEntity elem = (XMLEntity) in.readObject();
                     if (elem instanceof TeamProblemXML) {
                         ((TeamProblemXML) elem).setSubmissionOrder(submissionOrder++);
                     }
-                    elem.accept(eventFeedVisitor, contest);
+                    elem.accept(eventFeedVisitor, contest, eventFeedSettings);
                 } catch (ClassNotFoundException | CannotResolveClassException e) {
                     logger.warn("Non existing Java representation of the XML structure: " + e.getMessage());
                 }

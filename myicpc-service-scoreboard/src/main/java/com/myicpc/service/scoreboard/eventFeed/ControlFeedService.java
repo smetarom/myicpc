@@ -95,7 +95,7 @@ public class ControlFeedService {
     private JmsTemplate jmsQueueTemplate;
 
     @Transactional
-    private void truncateDatabase(Contest contest) throws EventFeedException {
+    private void truncateDatabase(Contest contest, boolean deleteNotifications) throws EventFeedException {
         try {
             lastTeamProblemRepository.deleteByContest(contest);
             teamProblemRepository.deleteByContest(contest);
@@ -105,9 +105,11 @@ public class ControlFeedService {
             problemRepository.deleteByContest(contest);
             teamRepository.deleteByContest(contest);
             judgementRepository.deleteByContest(contest);
-            List<NotificationType> notificationTypes = NotificationList.newList().addScoreboardSuccess().addScoreboardSubmitted().addScoreboardFailed()
-                    .addAnalystMessage();
-            notificationRepository.deleteScoreboardNotificationsByContest(contest, notificationTypes);
+            if (deleteNotifications) {
+                List<NotificationType> notificationTypes = NotificationList.newList().addScoreboardSuccess().addScoreboardSubmitted().addScoreboardFailed()
+                        .addAnalystMessage();
+                notificationRepository.deleteScoreboardNotificationsByContest(contest, notificationTypes);
+            }
         } catch (Throwable ex) {
             logger.error(ex.getMessage(), ex);
             throw new EventFeedException("Error deleting old data from database.");
@@ -205,7 +207,7 @@ public class ControlFeedService {
      */
     public void restartEventFeed(Contest contest) throws EventFeedException {
         stopEventFeed(contest);
-        truncateDatabase(contest);
+        truncateDatabase(contest, true);
         startEventFeed(contest);
     }
 
@@ -232,7 +234,7 @@ public class ControlFeedService {
      */
     public void clearEventFeed(Contest contest) throws EventFeedException {
         stopEventFeed(contest);
-        truncateDatabase(contest);
+        truncateDatabase(contest, false);
     }
 
     /**
@@ -258,7 +260,7 @@ public class ControlFeedService {
 
     public void uploadEventFeed(InputStream eventFeedStream, Contest contest) throws EventFeedException {
         stopEventFeed(contest);
-        truncateDatabase(contest);
+        truncateDatabase(contest, false);
         eventFeedProcessor.uploadEventFeed(eventFeedStream, contest);
     }
 

@@ -16,7 +16,7 @@ public class ClarificationXML extends XMLEntity<Void> {
     }
 
     @Override
-    public void accept(EventFeedVisitor visitor, Contest contest) {
+    public void accept(EventFeedVisitor visitor, Contest contest, EventFeedSettingsDTO eventFeedSettings) {
         // do not process clarification
     }
 }
