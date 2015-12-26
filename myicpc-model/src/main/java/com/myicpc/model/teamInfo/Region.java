@@ -22,14 +22,12 @@ public class Region extends IdGeneratedObject {
         NORMAL, UNOFFICIAL, ADMINISTRATIVE;
 
         public static RegionType parseFromString(String s) {
-            if ("Normal".equalsIgnoreCase(s)) {
-                return NORMAL;
-            } else if ("Administrative".equalsIgnoreCase(s)) {
-                return UNOFFICIAL;
-            } else if ("Unofficial".equalsIgnoreCase(s)) {
+            if ("Administrative".equalsIgnoreCase(s)) {
                 return ADMINISTRATIVE;
+            } else if ("Unofficial".equalsIgnoreCase(s) || "Standalone".equalsIgnoreCase(s)) {
+                return UNOFFICIAL;
             }
-            return null;
+            return NORMAL;
         }
     }
 
