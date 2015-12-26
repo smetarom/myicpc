@@ -54,8 +54,11 @@
     </changeSet>
 
     <changeSet id="7" author="smetana">
+        <sql>
+            DELETE FROM language;
+        </sql>
         <addColumn tableName="language">
-            <column name="contestid" type="bigint" defaultValue="1">
+            <column name="contestid" type="bigint">
                 <constraints nullable="false" />
             </column>
         </addColumn>
