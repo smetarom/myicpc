@@ -20,7 +20,8 @@ public class ErrorMessage extends IdGeneratedContestObject {
     private static final long serialVersionUID = 1806369015758931836L;
 
     public enum ErrorMessageCause {
-        EVENT_FEED_CONNECTION_FAILED("Event feed connection failed");
+        EVENT_FEED_CONNECTION_FAILED("Event feed connection failed"),
+        EVENT_FEED_JSON_CONNECTION_FAILED("JSON event feed connection failed");
 
         private String name;
 

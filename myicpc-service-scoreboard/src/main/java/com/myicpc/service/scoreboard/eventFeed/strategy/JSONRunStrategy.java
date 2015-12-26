@@ -7,14 +7,17 @@ import com.google.gson.JsonParser;
 import com.myicpc.commons.adapters.JSONAdapter;
 import com.myicpc.commons.utils.FormatUtils;
 import com.myicpc.commons.utils.WebServiceUtils;
+import com.myicpc.model.ErrorMessage;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Team;
 import com.myicpc.model.eventFeed.TeamProblem;
+import com.myicpc.service.notification.ErrorMessageService;
 import com.myicpc.service.scoreboard.exception.EventFeedException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -33,6 +36,9 @@ import java.util.Map;
 @Component
 public class JSONRunStrategy extends FeedRunStrategy {
     private static final Logger logger = LoggerFactory.getLogger(JSONRunStrategy.class);
+
+    @Autowired
+    private ErrorMessageService errorMessageService;
 
     /**
      * Uses scoreboard JSON snapshot
@@ -92,8 +98,9 @@ public class JSONRunStrategy extends FeedRunStrategy {
         String password = contest.getContestSettings().getEventFeedPassword();
 
         try {
-            return IOUtils.toString(WebServiceUtils.connectCDS(jsonScoreboardURL, username, password), FormatUtils.DEFAULT_ENCODING);
+            return WebServiceUtils.connectAndGetResponse(jsonScoreboardURL, username, password);
         } catch (IOException e) {
+            errorMessageService.createErrorMessage(ErrorMessage.ErrorMessageCause.EVENT_FEED_JSON_CONNECTION_FAILED, contest, e.getMessage());
             throw new EventFeedException(e.getMessage(), e);
         }
     }

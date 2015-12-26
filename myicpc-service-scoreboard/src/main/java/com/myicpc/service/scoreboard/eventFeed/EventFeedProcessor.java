@@ -18,9 +18,11 @@ import com.myicpc.dto.eventFeed.parser.TeamXML;
 import com.myicpc.dto.eventFeed.parser.TestcaseXML;
 import com.myicpc.dto.eventFeed.parser.XMLEntity;
 import com.myicpc.dto.eventFeed.visitor.EventFeedVisitor;
+import com.myicpc.model.ErrorMessage;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.contest.ContestSettings;
 import com.myicpc.repository.contest.ContestRepository;
+import com.myicpc.service.notification.ErrorMessageService;
 import com.myicpc.service.scoreboard.exception.EventFeedException;
 import com.myicpc.service.scoreboard.exception.EventFeedInterrupted;
 import com.thoughtworks.xstream.XStream;
@@ -75,6 +77,9 @@ public class EventFeedProcessor {
     @Autowired
     private ContestRepository contestRepository;
 
+    @Autowired
+    private ErrorMessageService errorMessageService;
+
     /**
      * Starts event feed polling for changes
      * <p/>
@@ -118,6 +123,10 @@ public class EventFeedProcessor {
                 } catch (EventFeedInterrupted ex) {
                     // stop event feed processing
                     break;
+                } catch (IOException ex) {
+                    logger.error(ex.getMessage(), ex);
+                    // cannot connect to event feed
+                    errorMessageService.createErrorMessage(ErrorMessage.ErrorMessageCause.EVENT_FEED_CONNECTION_FAILED, contest, ex.getMessage());
                 } catch (Exception e) {
                     logger.error(e.getMessage(), e);
                 } finally {
