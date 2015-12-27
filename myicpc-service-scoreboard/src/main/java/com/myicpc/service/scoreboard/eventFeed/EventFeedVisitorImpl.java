@@ -58,12 +58,6 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
     private static final Logger logger = LoggerFactory.getLogger(EventFeedVisitorImpl.class);
     private static final Map<Long, TestcaseXML> testcaseXMLMap = new ConcurrentHashMap<>();
 
-    private enum EventFeedState {
-        INIT, RUNNING, FINISHED;
-    }
-
-    private EventFeedState eventFeedState;
-
     @Autowired
     private PublishService publishService;
 
@@ -114,7 +108,6 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
         // TODO remove timestamp, it is here for testing purposes
 //        contest.setStartTime(new Date());
         contestRepository.saveAndFlush(contest);
-        eventFeedState = EventFeedState.INIT;
     }
 
     @Override
@@ -193,9 +186,6 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
     @Override
     @Transactional
     public void visit(TeamProblemXML xmlTeamProblem, Contest contest, EventFeedSettingsDTO eventFeedSettings) {
-        if (eventFeedState == EventFeedState.INIT) {
-            publishService.broadcastEventFeedRefresh(contest.getCode());
-        }
         EventFeedControl submissionFeedControl = null;
         if (ControlFeedService.hasContestPollingStrategy(contest)) {
             submissionFeedControl = eventFeedControlRepository.findByContest(contest);
@@ -219,6 +209,9 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
                 logger.info(contest.getCode() + ": Skip 'done' submission {} from team {}", xmlTeamProblem.getSystemId(), xmlTeamProblem.getTeamId());
                 return;
             }
+        }
+        if (teamProblemRepository.countByTeamContest(contest) == 0) {
+            publishService.broadcastEventFeedRefresh(contest.getCode());
         }
         TeamProblem teamProblem = teamProblemRepository.findBySystemIdAndTeamContest(xmlTeamProblem.getSystemId(), contest);
 
@@ -255,7 +248,6 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
         } catch (EventFeedException ex) {
             logger.error(ex.getMessage(), ex);
         }
-        eventFeedState = EventFeedState.RUNNING;
     }
 
     @Override
@@ -313,7 +305,6 @@ public class EventFeedVisitorImpl implements EventFeedVisitor {
     @Override
     @Transactional
     public void visit(FinalizedXML finalizedXML, Contest contest, EventFeedSettingsDTO eventFeedSettings) {
-        eventFeedState = EventFeedState.FINISHED;
     }
 
     private FeedRunStrategy selectStrategy(Contest contest) throws EventFeedException {

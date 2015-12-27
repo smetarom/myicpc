@@ -123,12 +123,13 @@ public class ControlFeedService {
      */
     public void startEventFeed(Contest contest) {
         Future<Void> newFeedProcess;
+        EventFeedHolder holder = new EventFeedHolder();
         if (hasContestPollingStrategy(contest)) {
-            newFeedProcess = eventFeedProcessor.pollingEventFeed(contest, 20000);
+            newFeedProcess = eventFeedProcessor.pollingEventFeed(contest, 20000, holder);
         } else {
-            newFeedProcess = eventFeedProcessor.runEventFeed(contest);
+            newFeedProcess = eventFeedProcessor.runEventFeed(contest, holder);
         }
-        runningFeedProcesses.put(contest.getId(), new RunningFeedProcessDTO(newFeedProcess, new Date()));
+        runningFeedProcesses.put(contest.getId(), new RunningFeedProcessDTO(newFeedProcess, new Date(), holder));
     }
 
     /**
@@ -174,11 +175,14 @@ public class ControlFeedService {
         }
         RunningFeedProcessDTO runningFeedProccesor = getRunningFeedProcessor(eventFeedControl.getContestId(), eventFeedControl.getSubmittedDate());
         if (runningFeedProccesor != null && runningFeedProccesor.isRunning()) {
+            if (runningFeedProccesor.getHolder() != null) {
+                runningFeedProccesor.getHolder().setStoppedManually(true);
+            }
             final EventFeedControlResponseDTO response;
             if (eventFeedControl.getEventFeedControlType() == EventFeedControlType.STOP) {
                 boolean cancelled = runningFeedProccesor.getJob().cancel(true);
                 if (!cancelled) {
-                    logger.error("Stopping event feed for contest {} failed.", eventFeedControl.getContestId());
+                    logger.error("Stopping event feed for contest ID {} failed.", eventFeedControl.getContestId());
                 }
                 response = new EventFeedControlResponseDTO(EventFeedControlType.STOP);
             } else if (eventFeedControl.getEventFeedControlType() == EventFeedControlType.STATUS) {
@@ -293,14 +297,20 @@ public class ControlFeedService {
     private static class RunningFeedProcessDTO {
         private final Future<Void> job;
         private final Date created;
+        private EventFeedHolder holder;
 
-        private RunningFeedProcessDTO(Future<Void> job, Date created) {
+        private RunningFeedProcessDTO(Future<Void> job, Date created, EventFeedHolder holder) {
             this.job = job;
             this.created = created;
+            this.holder = holder;
         }
 
         public Future<Void> getJob() {
             return job;
+        }
+
+        public EventFeedHolder getHolder() {
+            return holder;
         }
 
         public Date getCreated() {
@@ -309,6 +319,18 @@ public class ControlFeedService {
 
         public boolean isRunning() {
             return job != null && !job.isDone();
+        }
+    }
+
+    public static class EventFeedHolder {
+        private boolean stoppedManually;
+
+        public boolean isStoppedManually() {
+            return stoppedManually;
+        }
+
+        public void setStoppedManually(boolean stoppedManually) {
+            this.stoppedManually = stoppedManually;
         }
     }
 

@@ -90,10 +90,11 @@ public class EventFeedProcessor {
      *
      * @param contest    contest
      * @param pollPeriod pause interval between poll turns (in milliseconds)
+     * @param eventFeedHolder event feed holder
      * @return link to running job
      */
     @Async
-    public Future<Void> pollingEventFeed(final Contest contest, long pollPeriod) {
+    public Future<Void> pollingEventFeed(final Contest contest, long pollPeriod, ControlFeedService.EventFeedHolder eventFeedHolder) {
         ContestSettings contestSettings = contest.getContestSettings();
         if (contestSettings != null && StringUtils.isNotEmpty(contestSettings.getEventFeedURL())) {
             Reader reader = null;
@@ -104,6 +105,7 @@ public class EventFeedProcessor {
             while (true) {
                 if (Thread.interrupted()) {
                     logger.info("Event feed reader for contest " + contest.getCode() + " was interrupted.");
+                    stopEventFeedExecution();
                     break;
                 }
                 startTime = System.currentTimeMillis();
@@ -122,13 +124,19 @@ public class EventFeedProcessor {
                     }
                 } catch (EventFeedInterrupted ex) {
                     // stop event feed processing
+                    stopEventFeedExecution();
                     break;
                 } catch (IOException ex) {
                     logger.error(ex.getMessage(), ex);
                     // cannot connect to event feed
                     errorMessageService.createErrorMessage(ErrorMessage.ErrorMessageCause.EVENT_FEED_CONNECTION_FAILED, contest, ex.getMessage());
                 } catch (Exception e) {
-                    logger.error(e.getMessage(), e);
+                    if (eventFeedHolder.isStoppedManually()) {
+                        stopEventFeedExecution();
+                        break;
+                    } else {
+                        logger.error(e.getMessage(), e);
+                    }
                 } finally {
                     IOUtils.closeQuietly(reader);
                     IOUtils.closeQuietly(in);
@@ -252,10 +260,11 @@ public class EventFeedProcessor {
      * processing.
      *
      * @param contest contest
+     * @param holder event feed holder
      * @return link to running job
      */
     @Async
-    public Future<Void> runEventFeed(final Contest contest) {
+    public Future<Void> runEventFeed(final Contest contest, ControlFeedService.EventFeedHolder holder) {
         ContestSettings contestSettings = contest.getContestSettings();
         if (contestSettings != null && !StringUtils.isEmpty(contestSettings.getEventFeedURL())) {
             Reader reader = null;
@@ -276,18 +285,24 @@ public class EventFeedProcessor {
                     break;
                 } catch (EventFeedInterrupted ex) {
                     // stop event feed processing
+                    stopEventFeedExecution();
                     break;
                 } catch (Exception ex) {
-                    logger.error(ex.getMessage(), ex);
-                    logger.info("Resuming event feed listener for contest " + contest.getCode() + " after interruption.");
-                    exponentialBackoff *= 2;
-                    if (exponentialBackoff > MAX_EXPONENTIAL_BACKOFF) {
-                        exponentialBackoff = MAX_EXPONENTIAL_BACKOFF;
-                    }
-                    try {
-                        Thread.sleep(exponentialBackoff);
-                    } catch (InterruptedException e) {
-                        // do nothing
+                    if (holder.isStoppedManually()) {
+                        stopEventFeedExecution();
+                        break;
+                    } else {
+                        logger.error(ex.getMessage(), ex);
+                        logger.info("Resuming event feed listener for contest " + contest.getCode() + " after interruption.");
+                        exponentialBackoff *= 2;
+                        if (exponentialBackoff > MAX_EXPONENTIAL_BACKOFF) {
+                            exponentialBackoff = MAX_EXPONENTIAL_BACKOFF;
+                        }
+                        try {
+                            Thread.sleep(exponentialBackoff);
+                        } catch (InterruptedException e) {
+                            // do nothing
+                        }
                     }
                 } finally {
                     IOUtils.closeQuietly(reader);
@@ -353,5 +368,9 @@ public class EventFeedProcessor {
                 TestcaseXML.class, FinalizedXML.class, ClarificationXML.class,
                 ResetXML.class, AnalystMessageXML.class});
         return xStream;
+    }
+
+    private void stopEventFeedExecution() {
+        Thread.currentThread().stop();
     }
 }
