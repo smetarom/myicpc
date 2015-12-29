@@ -14,6 +14,7 @@ import com.myicpc.repository.eventFeed.TeamProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
 import com.myicpc.service.scoreboard.ScoreboardService;
 import com.myicpc.service.scoreboard.insight.CodeInsightService;
+import com.myicpc.service.scoreboard.insight.DashboardInsightService;
 import com.myicpc.service.scoreboard.insight.LanguageInsightService;
 import com.myicpc.service.scoreboard.insight.ProblemInsightService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,9 @@ public class InsightController extends GeneralController {
 
     @Autowired
     private TeamProblemRepository teamProblemRepository;
+
+    @Autowired
+    private DashboardInsightService dashboardInsightService;
 
     @RequestMapping(value = "/{contestCode}/insight", method = RequestMethod.GET)
     public String insight(@PathVariable String contestCode, Model model) {
@@ -190,5 +194,21 @@ public class InsightController extends GeneralController {
 
     private void addJudgmentsToModel(final Model model, final Contest contest) {
         model.addAttribute("judgements", judgementRepository.findByContestOrderByNameAsc(contest));
+    }
+
+    @RequestMapping(value = "/{contestCode}/insight/overview", method = RequestMethod.GET)
+    public String dashboard(@PathVariable String contestCode, Model model) {
+        Contest contest = getContest(contestCode, model);
+
+        model.addAttribute("data", dashboardInsightService.generateStatistics(contest));
+        return "scoreboard/insight/insightOverview";
+    }
+
+    @RequestMapping(value = "/{contestCode}/insight/ajax/overview", method = RequestMethod.GET)
+    public String insightCodeJSON(@PathVariable String contestCode, Model model) {
+        Contest contest = getContest(contestCode, null);
+
+        model.addAttribute("data", dashboardInsightService.generateStatistics(contest));
+        return "scoreboard/insight/fragment/insightOverview";
     }
 }

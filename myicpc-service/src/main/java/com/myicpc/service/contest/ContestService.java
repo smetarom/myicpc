@@ -154,15 +154,15 @@ public class ContestService {
      * @return seconds from start of the contest
      */
     public long getCurrentContestTime(Contest contest) {
-        Date now = new Date();
-        Date contestStartDate = null;
-        if (contest != null) {
-            contestStartDate = contest.getStartTime();
+        if (contest == null) {
+            return 0;
         }
+        Date now = new Date();
+        Date contestStartDate = contest.getStartTime();
         long diff = now.getTime() - contestStartDate.getTime();
         diff = diff / 1000;
 
-        if (contest != null && contest.getLength() > 0) {
+        if (contest.getLength() > 0) {
             diff = Math.min(diff, contest.getLength());
         }
 
