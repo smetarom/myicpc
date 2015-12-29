@@ -61,7 +61,7 @@
                             <tr id="selectedCountryScoreboard" ng-repeat="team in teams | filter:filterTeams | orderBy:['teamRank', 'teamName']" class="team_{{team.teamId}} cursor-pointer"
                                 ng-mouseover="highlightTeamOnMap(team);" ng-mouseleave="dishighlightTeamOnMap(team)" id="team_{{team.teamExternalId}}">
                                 <td>{{team.teamRank}}</td>
-                                <td><a href='<spring:url value="/team/{{team.teamId}}" />'>{{team.teamName}}</a></td>
+                                <td><a href='<spring:url value="${contestURL}/team/{{team.teamId}}" />'>{{team.teamName}}</a></td>
                             </tr>
                             </tbody>
                         </table>
