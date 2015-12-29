@@ -101,7 +101,7 @@ public class ControlFeedService {
             teamProblemRepository.deleteByContest(contest);
             teamRankHistoryRepository.deleteByContest(contest);
             eventFeedControlRepository.deleteByContest(contest);
-            codeInsightActivityRepository.deleteByContest(contest);
+//            codeInsightActivityRepository.deleteByContest(contest);
             problemRepository.deleteByContest(contest);
             teamRepository.deleteByContest(contest);
             judgementRepository.deleteByContest(contest);

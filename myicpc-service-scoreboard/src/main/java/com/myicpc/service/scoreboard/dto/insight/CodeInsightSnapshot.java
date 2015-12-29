@@ -16,7 +16,7 @@ public class CodeInsightSnapshot implements Serializable {
     /**
      * Map between problem ID and {@link CodeInsightProblem}
      */
-    private final Map<Long, CodeInsightProblem> problems;
+    private final Map<String, CodeInsightProblem> problems;
 
     /**
      * Constructor
@@ -24,7 +24,7 @@ public class CodeInsightSnapshot implements Serializable {
      * @param time contest time in minutes
      * @param problems map between problem ID and {@link CodeInsightProblem}
      */
-    public CodeInsightSnapshot(long time, Map<Long, CodeInsightProblem> problems) {
+    public CodeInsightSnapshot(long time, Map<String, CodeInsightProblem> problems) {
         this.time = time;
         this.problems = problems;
     }
@@ -34,12 +34,12 @@ public class CodeInsightSnapshot implements Serializable {
     }
 
     /**
-     * Gets {@link CodeInsightProblem} by problem ID
+     * Gets {@link CodeInsightProblem} by problem code
      *
-     * @param id problem ID
-     * @return {@link CodeInsightProblem} by problem ID, or {@code null} if it does not exist
+     * @param problemCode problem code
+     * @return {@link CodeInsightProblem} by problem code, or {@code null} if it does not exist
      */
-    public CodeInsightProblem getProblemById(Long id) {
-        return problems.get(id);
+    public CodeInsightProblem getProblemByCode(String problemCode) {
+        return problems.get(problemCode);
     }
 }

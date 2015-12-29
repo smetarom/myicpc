@@ -1,5 +1,7 @@
 package com.myicpc.service.scoreboard.insight;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -7,12 +9,11 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
 import com.myicpc.commons.adapters.JSONAdapter;
-import com.myicpc.commons.utils.WebServiceUtils;
 import com.myicpc.model.codeInsight.CodeInsightActivity;
 import com.myicpc.model.contest.Contest;
 import com.myicpc.model.eventFeed.Problem;
+import com.myicpc.model.eventFeed.Team;
 import com.myicpc.repository.codeInsight.CodeInsightActivityRepository;
-import com.myicpc.repository.contest.ContestRepository;
 import com.myicpc.repository.eventFeed.LanguageRepository;
 import com.myicpc.repository.eventFeed.ProblemRepository;
 import com.myicpc.repository.eventFeed.TeamRepository;
@@ -25,10 +26,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import twitter4j.JSONArray;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,19 +122,20 @@ public class CodeInsightService {
                     JSONAdapter recordAdapter = new JSONAdapter(e);
                     Long externalId = recordAdapter.getLong("id");
 
-                    CodeInsightActivity codeInsightActivity = codeInsightActivityRepository.findByExternalId(externalId);
+                    CodeInsightActivity codeInsightActivity = codeInsightActivityRepository.findByExternalIdAndContest(externalId, contest);
                     if (codeInsightActivity != null) {
                         continue;
                     }
                     codeInsightActivity = new CodeInsightActivity();
                     codeInsightActivity.setExternalId(externalId);
+                    codeInsightActivity.setContest(contest);
                     codeInsightActivity.setDiffLineCount(recordAdapter.getInteger("diff_line_count"));
                     codeInsightActivity.setLineCount(recordAdapter.getInteger("line_count"));
                     codeInsightActivity.setFileSize(recordAdapter.getInteger("file_size_bytes"));
                     codeInsightActivity.setModifyTime(recordAdapter.getInteger("time"));
-                    codeInsightActivity.setLanguage(languageRepository.findByNameIgnoreCaseAndContest(recordAdapter.getString("language"), contest));
-                    codeInsightActivity.setTeam(teamRepository.findBySystemIdAndContest(recordAdapter.getLong("team_id"), contest));
-                    codeInsightActivity.setProblem(problemRepository.findByCodeIgnoreCaseAndContest(recordAdapter.getString("problem_id"), contest));
+                    codeInsightActivity.setLanguageCode(recordAdapter.getString("language"));
+                    codeInsightActivity.setTeamId(recordAdapter.getLong("team_id"));
+                    codeInsightActivity.setProblemCode(recordAdapter.getString("problem_id"));
 
                     codeInsightActivityRepository.save(codeInsightActivity);
                 } catch (Throwable ex) {
@@ -159,6 +159,13 @@ public class CodeInsightService {
         int historyTime = Math.max(contestTime - INSIGHT_HISTORY_MINUTES, 0);
 
         List<Problem> problems = problemRepository.findByContestOrderByCodeAsc(contest);
+        List<Team> teams = teamRepository.findByContest(contest);
+        Map<Long, Team> teamMap = Maps.uniqueIndex(teams, new Function<Team, Long>() {
+            @Override
+            public Long apply(Team team) {
+                return team.getSystemId();
+            }
+        });
         JsonObject root = new JsonObject();
         // creates code insight for each problem
         for (Problem problem : problems) {
@@ -166,7 +173,7 @@ public class CodeInsightService {
 
             // retrieve all teams, which created activities in period between now and historyTime
             for (int time = contestTime; time >= historyTime; time -= INSIGHT_INTERVAL) {
-                CodeInsightProblem insightProblem = getProblemFromSnapshot(time, problem, problems);
+                CodeInsightProblem insightProblem = getProblemFromSnapshot(time, problem, problems, teamMap, contest);
                 activeTeams.addAll(insightProblem.getTeamsSorted(insideCodeMode));
                 if (activeTeams.size() > INSIGHT_INTERVAL) {
                     break;
@@ -179,7 +186,7 @@ public class CodeInsightService {
 
                 JsonArray problemArray = new JsonArray();
                 for (int time = contestTime; time >= historyTime; time -= INSIGHT_INTERVAL) {
-                    CodeInsightProblem insightProblem = getProblemFromSnapshot(time, problem, problems);
+                    CodeInsightProblem insightProblem = getProblemFromSnapshot(time, problem, problems, teamMap, contest);
 
                     JsonObject pair = new JsonObject();
                     pair.addProperty("key", time);
@@ -206,36 +213,36 @@ public class CodeInsightService {
         return root;
     }
 
-    private CodeInsightProblem getProblemFromSnapshot(int time, Problem problem, final List<Problem> problems) {
-        CodeInsightSnapshot snapshot = getSnapshot(time, problems);
-        return snapshot.getProblemById(problem.getId());
+    private CodeInsightProblem getProblemFromSnapshot(int time, Problem problem, final List<Problem> problems, Map<Long, Team> teamMap, Contest contest) {
+        CodeInsightSnapshot snapshot = getSnapshot(time, problems, teamMap, contest);
+        return snapshot.getProblemByCode(problem.getCode());
     }
 
-    private CodeInsightSnapshot getSnapshot(int time, final List<Problem> problems) {
+    private CodeInsightSnapshot getSnapshot(int time, final List<Problem> problems, Map<Long, Team> teamMap, Contest contest) {
         CodeInsightSnapshot codeInsightSnapshot = cachedSnapshots.get(time);
         if (codeInsightSnapshot == null) {
-            codeInsightSnapshot = createSnapshotAt(time, problems);
+            codeInsightSnapshot = createSnapshotAt(time, problems, teamMap, contest);
             cachedSnapshots.put(time, codeInsightSnapshot);
         }
         return codeInsightSnapshot;
     }
 
-    private CodeInsightSnapshot createSnapshotAt(int time, final List<Problem> problems) {
-        List<CodeInsightActivity> activities = codeInsightActivityRepository.findByModifyTimeBetween(time - INSIGHT_INTERVAL, time);
+    private CodeInsightSnapshot createSnapshotAt(int time, final List<Problem> problems, Map<Long, Team> teamMap, Contest contest) {
+        List<CodeInsightActivity> activities = codeInsightActivityRepository.findByModifyTimeBetweenAndContest(time - INSIGHT_INTERVAL, time, contest);
 
-        Map<Long, CodeInsightProblem> problemMap = new HashMap<>();
+        Map<String, CodeInsightProblem> problemMap = new HashMap<>();
         for (Problem problem : problems) {
             CodeInsightProblem insightProblem = new CodeInsightProblem();
-            problemMap.put(problem.getId(), insightProblem);
+            problemMap.put(problem.getCode(), insightProblem);
         }
 
         for (CodeInsightActivity activity : activities) {
-            CodeInsightProblem insightProblem = problemMap.get(activity.getProblem().getId());
+            CodeInsightProblem insightProblem = problemMap.get(activity.getProblemCode());
             if (insightProblem == null) {
                 insightProblem = new CodeInsightProblem();
-                problemMap.put(activity.getProblem().getId(), insightProblem);
+                problemMap.put(activity.getProblemCode(), insightProblem);
             }
-            insightProblem.addTeamActivity(activity);
+            insightProblem.addTeamActivity(activity, teamMap.get(activity.getTeamId()));
         }
 
         return new CodeInsightSnapshot(time, problemMap);

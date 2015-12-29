@@ -135,4 +135,31 @@
         </sql>
     </changeSet>
 
+    <changeSet id="10" author="smetana">
+        <dropColumn tableName="codeinsightactivity" columnName="languageid" />
+        <dropColumn tableName="codeinsightactivity" columnName="problemid" />
+        <addColumn tableName="codeinsightactivity">
+            <column name="problemcode" type="varchar(225)">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <addColumn tableName="codeinsightactivity">
+            <column name="languagecode" type="varchar(225)"></column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="11" author="smetana">
+        <addColumn tableName="codeinsightactivity">
+            <column name="contestid" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <dropUniqueConstraint tableName="codeinsightactivity" constraintName="uk_25jduhh1cvrr976kggasi8mo5" />
+        <addUniqueConstraint tableName="codeinsightactivity" columnNames="externalid, contestid" />
+    </changeSet>
+
+    <changeSet id="12" author="smetana">
+        <dropForeignKeyConstraint baseTableName="codeinsightactivity" constraintName="fk_9whhhbdgpqgfsugnbgub6vqh1" />
+    </changeSet>
+
 </databaseChangeLog>

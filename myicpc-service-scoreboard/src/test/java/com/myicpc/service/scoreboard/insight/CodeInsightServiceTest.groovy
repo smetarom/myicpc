@@ -73,7 +73,7 @@ class CodeInsightServiceTest extends GroovyTestCase {
             }
         })
 
-        when(languageRepository.findByNameIgnoreCase(anyString())).then(new Answer<Object>() {
+        when(languageRepository.findByNameIgnoreCaseAndContest(anyString(), anyObject())).then(new Answer<Object>() {
             @Override
             Object answer(InvocationOnMock invocationOnMock) throws Throwable {
                 return new Language(name: invocationOnMock.getArgumentAt(0, String.class))
@@ -87,9 +87,9 @@ class CodeInsightServiceTest extends GroovyTestCase {
         CodeInsightActivity elem = activities.get(0)
         assert elem.externalId == 213
         assert elem.modifyTime == 80
-        assert elem.team.systemId == 56
-        assert elem.problem.code == "A"
-        assert elem.language.name == "C++"
+        assert elem.teamId == 56
+        assert elem.problemCode == "A"
+        assert elem.languageCode == "C++"
         assert elem.lineCount == 49
         assert elem.diffLineCount == 10
         assert elem.fileSize == 4277
@@ -97,9 +97,9 @@ class CodeInsightServiceTest extends GroovyTestCase {
         elem = activities.get(1)
         assert elem.externalId == 214
         assert elem.modifyTime == 84
-        assert elem.team.systemId == 84
-        assert elem.problem.code == "B"
-        assert elem.language.name == "C++"
+        assert elem.teamId == 84
+        assert elem.problemCode == "B"
+        assert elem.languageCode == "C++"
         assert elem.lineCount == 23
         assert elem.diffLineCount == 15
         assert elem.fileSize == 1547

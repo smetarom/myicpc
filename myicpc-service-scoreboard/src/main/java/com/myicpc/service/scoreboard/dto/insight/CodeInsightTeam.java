@@ -32,9 +32,10 @@ public class CodeInsightTeam implements Serializable {
      * Constructor
      *
      * @param codeInsightActivity insight activity
+     * @param team
      */
-    public CodeInsightTeam(CodeInsightActivity codeInsightActivity) {
-        this.team = codeInsightActivity.getTeam();
+    public CodeInsightTeam(CodeInsightActivity codeInsightActivity, Team team) {
+        this.team = team;
         this.lineCount = codeInsightActivity.getLineCount();
         this.diffLineCount = codeInsightActivity.getDiffLineCount();
     }

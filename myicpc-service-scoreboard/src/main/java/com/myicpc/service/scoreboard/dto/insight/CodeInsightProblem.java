@@ -2,6 +2,7 @@ package com.myicpc.service.scoreboard.dto.insight;
 
 import com.myicpc.model.codeInsight.CodeInsightActivity;
 import com.myicpc.model.eventFeed.Problem;
+import com.myicpc.model.eventFeed.Team;
 import com.myicpc.service.scoreboard.insight.CodeInsightService;
 
 import java.io.Serializable;
@@ -30,15 +31,16 @@ public class CodeInsightProblem implements Serializable {
      * Adds a {@code activity} to the team
      *
      * @param activity code insight activity
+     * @param team team
      */
-    public void addTeamActivity(CodeInsightActivity activity) {
-        CodeInsightTeam team = teamMap.get(activity.getTeam().getId());
-        if (team == null) {
-            team = new CodeInsightTeam(activity);
+    public void addTeamActivity(CodeInsightActivity activity, Team team) {
+        CodeInsightTeam codeInsightTeam = teamMap.get(activity.getTeamId());
+        if (codeInsightTeam == null) {
+            codeInsightTeam = new CodeInsightTeam(activity, team);
         } else {
-            team.merge(activity);
+            codeInsightTeam.merge(activity);
         }
-        teamMap.put(team.getTeam().getId(), team);
+        teamMap.put(codeInsightTeam.getTeam().getId(), codeInsightTeam);
     }
 
     /**

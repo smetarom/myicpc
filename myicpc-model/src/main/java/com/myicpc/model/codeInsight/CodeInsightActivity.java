@@ -1,5 +1,6 @@
 package com.myicpc.model.codeInsight;
 
+import com.myicpc.model.IdGeneratedContestObject;
 import com.myicpc.model.IdGeneratedObject;
 import com.myicpc.model.eventFeed.Language;
 import com.myicpc.model.eventFeed.Problem;
@@ -14,11 +15,11 @@ import javax.validation.constraints.NotNull;
  * @author Roman Smetana
  */
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"externalId", "contestId"})})
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "idgen", sequenceName = "CodeInsightActivity_id_seq")
-public class CodeInsightActivity extends IdGeneratedObject {
+public class CodeInsightActivity extends IdGeneratedContestObject {
     private static final long serialVersionUID = 5398398010855681655L;
 
-    @Column(unique = true)
     private Long externalId;
 
     /**
@@ -41,23 +42,17 @@ public class CodeInsightActivity extends IdGeneratedObject {
     /**
      * {@link Language} of the solution
      */
-    @ManyToOne
-    @JoinColumn(name = "languageId")
-    private Language language;
+    private String languageCode;
     /**
      * {@link Team} who submitted
      */
     @NotNull
-    @ManyToOne
-    @JoinColumn(name = "teamId")
-    private Team team;
+    private Long teamId;
     /**
      * {@link Problem} the solution tries to solve
      */
     @NotNull
-    @ManyToOne
-    @JoinColumn(name = "problemId")
-    private Problem problem;
+    private String problemCode;
 
     public Long getExternalId() {
         return externalId;
@@ -99,27 +94,27 @@ public class CodeInsightActivity extends IdGeneratedObject {
         this.modifyTime = modifyTime;
     }
 
-    public Language getLanguage() {
-        return language;
+    public String getLanguageCode() {
+        return languageCode;
     }
 
-    public void setLanguage(final Language language) {
-        this.language = language;
+    public void setLanguageCode(String languageCode) {
+        this.languageCode = languageCode;
     }
 
-    public Team getTeam() {
-        return team;
+    public Long getTeamId() {
+        return teamId;
     }
 
-    public void setTeam(final Team team) {
-        this.team = team;
+    public void setTeamId(final Long teamId) {
+        this.teamId = teamId;
     }
 
-    public Problem getProblem() {
-        return problem;
+    public String getProblemCode() {
+        return problemCode;
     }
 
-    public void setProblem(final Problem problem) {
-        this.problem = problem;
+    public void setProblemCode(String problemCode) {
+        this.problemCode = problemCode;
     }
 }
