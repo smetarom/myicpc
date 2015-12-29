@@ -77,10 +77,10 @@ public class NotificationController extends GeneralController {
         List<Notification> notifications = notificationRepository.findByHashTagsAndContest(hashtag1, hashtag2, contest);
 
         model.addAttribute("notifications", notifications);
-        if (StringUtils.isEmpty(hashtag1)) {
+        if (StringUtils.isNotEmpty(hashtag1)) {
             model.addAttribute("hashtag1", hashtag1.substring(1, hashtag1.length() - 1));
         }
-        if (StringUtils.isEmpty(hashtag2)) {
+        if (StringUtils.isNotEmpty(hashtag2)) {
             model.addAttribute("hashtag2", hashtag2.substring(1, hashtag2.length() - 1));
         }
         return "notification/hashtagPanel";
