@@ -2,6 +2,11 @@ a.gallery-thumbnail {
   margin: 5px;
   display: inline-block;
   position: relative;
+
+  img {
+    max-height: 250px;
+    max-width: 250px;
+  }
 }
 
 .play-button {

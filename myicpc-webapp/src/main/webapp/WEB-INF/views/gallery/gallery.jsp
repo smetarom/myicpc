@@ -23,7 +23,7 @@
                 {{#if isVideo}}
                     <div class="play-button glyphicon glyphicon-play-circle"></div>
                 {{/if}}
-                <img src="{{thumbnailUrl}}" alt="{{title}}" width="250" height="250" onerror="removeOnError(this, {{id}})">
+                <img src="{{thumbnailUrl}}" alt="{{title}}" onerror="removeOnError(this, {{id}})">
             </a>
         </script>
 

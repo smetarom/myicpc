@@ -12,8 +12,7 @@
         <c:if test="${not empty notification.videoUrl}">
             <div class="play-button glyphicon glyphicon-play-circle"></div>
         </c:if>
-        <img src="${notification.thumbnailUrl}" alt="${notification.title}" width="250" height="250"
-             onerror="removeOnError(this, ${notification.id})">
+        <img src="${notification.thumbnailUrl}" alt="${notification.title}" onerror="removeOnError(this, ${notification.id})">
     </a>
 </c:forEach>
 
