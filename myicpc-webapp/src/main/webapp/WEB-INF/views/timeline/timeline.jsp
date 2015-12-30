@@ -160,7 +160,7 @@
                 <div id="timeline-featured-polls"></div>
                 <div id="timeline-featured-quest-challenge"></div>
                 <div id="upcomingEventsContainer"></div>
-                <%@ include file="/WEB-INF/views/timeline/timelineFollowedTeams.jsp"%>
+                <%--<%@ include file="/WEB-INF/views/timeline/timelineFollowedTeams.jsp"%>--%>
             </div>
         </div>
     </jsp:body>
