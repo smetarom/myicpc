@@ -92,8 +92,7 @@
                   </tr>
                   <tr>
                       <th><spring:message code="team.region" />:</th>
-                      <%--TODO add region--%>
-                      <%--<td><a id="teamRegionLink" href="<spring:url value="${contestURL}/region/${team.region.id}"/>">${team.region.shortName}</a></td>--%>
+                      <td>${teamInfo.region.name}</td>
                   </tr>
                   </tbody>
               </table>
