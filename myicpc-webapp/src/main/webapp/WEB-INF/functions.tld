@@ -56,7 +56,7 @@
     <function>
         <name>universityLogoUrl</name>
         <function-class>com.myicpc.controller.functions.JSPCustomFunctions</function-class>
-        <function-signature>java.lang.String universityLogoUrl(java.lang.Long)</function-signature>
+        <function-signature>java.lang.String universityLogoUrl(java.lang.Long,com.myicpc.model.contest.Contest))</function-signature>
     </function>
 
     <function>

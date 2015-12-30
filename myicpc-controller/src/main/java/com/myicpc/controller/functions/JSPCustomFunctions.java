@@ -138,7 +138,10 @@ public class JSPCustomFunctions {
         return StringEscapeUtils.escapeEcmaScript(javascriptText);
     }
 
-    public static String universityLogoUrl(Long universityExternalId) {
+    public static String universityLogoUrl(Long universityExternalId, Contest contest) {
+        if (contest != null && contest.getContestSettings() != null && contest.getContestSettings().isUseCDNlogos()) {
+            return String.format(MyICPCConstants.CUSTOM_UNIVERSITY_LOGO_URL, contest.getCode(), universityExternalId);
+        }
         return MyICPCConstants.UNIVERSITY_LOGO_URL + universityExternalId;
     }
 

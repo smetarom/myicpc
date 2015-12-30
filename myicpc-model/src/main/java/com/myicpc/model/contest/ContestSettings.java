@@ -35,6 +35,7 @@ public class ContestSettings extends IdGeneratedObject {
     @Enumerated(EnumType.STRING)
     private FeedRunStrategyType scoreboardStrategyType;
     private boolean generateMessages;
+    private boolean useCDNlogos;
     @URL
     private String JSONScoreboardURL;
 
@@ -188,5 +189,13 @@ public class ContestSettings extends IdGeneratedObject {
 
     public void setShowCountry(boolean showCountry) {
         this.showCountry = showCountry;
+    }
+
+    public boolean isUseCDNlogos() {
+        return useCDNlogos;
+    }
+
+    public void setUseCDNlogos(boolean useCDNlogos) {
+        this.useCDNlogos = useCDNlogos;
     }
 }

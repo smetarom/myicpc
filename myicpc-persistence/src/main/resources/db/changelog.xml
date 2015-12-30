@@ -162,4 +162,12 @@
         <dropForeignKeyConstraint baseTableName="codeinsightactivity" constraintName="fk_9whhhbdgpqgfsugnbgub6vqh1" />
     </changeSet>
 
+    <changeSet id="13" author="smetana">
+        <addColumn tableName="contestsettings">
+            <column name="usecdnlogos" type="boolean" defaultValue="false">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

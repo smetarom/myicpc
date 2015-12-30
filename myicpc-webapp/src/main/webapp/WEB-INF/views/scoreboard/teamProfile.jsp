@@ -121,7 +121,7 @@
                   </c:if>
                   </tbody>
               </table>
-              <img src="${util:universityLogoUrl(teamInfo.university.externalId)}" alt="${teamInfo.university.name}" class="img-responsive center-block" onerror='this.style.display = "none"'>
+              <img src="${util:universityLogoUrl(teamInfo.university.externalId, contest)}" alt="${teamInfo.university.name}" class="img-responsive center-block" onerror='this.style.display = "none"'>
           </div>
 
           <div class="col-sm-6 col-md-4">
