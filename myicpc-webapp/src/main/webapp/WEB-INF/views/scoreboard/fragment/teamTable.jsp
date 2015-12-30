@@ -9,7 +9,7 @@
     <table class="table table-striped">
         <c:forEach var="person" items="${people}">
             <tr>
-                <td>${person.fullname}</td>
+                <td><a href="${contestURL}/people/${person.id}">${person.fullname}</a></td>
             </tr>
         </c:forEach>
     </table>

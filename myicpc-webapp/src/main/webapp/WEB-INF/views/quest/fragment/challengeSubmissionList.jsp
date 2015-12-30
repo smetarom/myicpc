@@ -3,7 +3,7 @@
     <tbody>
     <c:forEach var="submission" items="${submissions}" varStatus="status">
         <tr class="${status.index gt 4 ? 'additionalRow' : ''}" style="${status.index gt 4 ? 'display: none' : ''}">
-            <td>
+            <td style="width: 50px">
                 <img src="${submission.participant.contestParticipant.profilePictureUrl}"
                      alt="${submission.participant.contestParticipant.fullname}" width="50" height="50"
                      onerror="profilePictureError(this)">
@@ -12,6 +12,9 @@
                 <strong>${submission.participant.contestParticipant.fullname}</strong>
                 <br/>
                 <fmt:formatDate value="${submissionnotification.timestamp}" type="both" />
+                <c:if test="${showSubmissions}">
+                    <t:questSubmission submission="${submission}" />
+                </c:if>
             </td>
         </tr>
     </c:forEach>

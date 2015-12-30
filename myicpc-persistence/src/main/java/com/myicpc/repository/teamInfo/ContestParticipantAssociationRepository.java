@@ -18,6 +18,8 @@ public interface ContestParticipantAssociationRepository extends CrudRepository<
 
     List<ContestParticipantAssociation> findByContestParticipant(ContestParticipant contestParticipant);
 
+    List<ContestParticipantAssociation> findByContestParticipantAndContest(ContestParticipant contestParticipant, Contest contest);
+
     List<ContestParticipantAssociation> findByTeamInfo(TeamInfo teamInfo);
 
     List<ContestParticipantAssociation> findByContestParticipantRoleAndContest(ContestParticipantRole contestParticipantRole, Contest contest);

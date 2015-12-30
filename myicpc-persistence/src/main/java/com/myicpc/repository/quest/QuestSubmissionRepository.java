@@ -6,6 +6,7 @@ import com.myicpc.model.quest.QuestChallenge;
 import com.myicpc.model.quest.QuestParticipant;
 import com.myicpc.model.quest.QuestSubmission;
 import com.myicpc.model.social.Notification;
+import com.myicpc.model.teamInfo.ContestParticipant;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,6 +24,13 @@ public interface QuestSubmissionRepository extends JpaRepository<QuestSubmission
     QuestSubmission findByChallengeAndParticipant(QuestChallenge challenge, QuestParticipant participant);
 
     List<QuestSubmission> findByChallengeAndSubmissionStateOrderByNotificationTimestampDesc(QuestChallenge challenge, QuestSubmission.QuestSubmissionState submissionState);
+
+    @Query("SELECT qs " +
+            "FROM QuestSubmission qs " +
+            "JOIN qs.participant qp " +
+            "JOIN qp.contestParticipant cp " +
+            "WHERE cp = ?1")
+    List<QuestSubmission> findByContestParticipant(ContestParticipant contestParticipant);
 
     /**
      * Finds a {@link QuestSubmission}s, which have won a voting round
