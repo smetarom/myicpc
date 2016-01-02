@@ -90,8 +90,6 @@ public class GalleryController extends GeneralController {
 //        model.addAttribute("picasaUserId", contest.getWebServiceSettings().getPicasaUsername());
 //        model.addAttribute("picasaAlbumId", WebServiceUtils.getCrowdPicasaAlbumId());
         model.addAttribute("showUploadButton", !StringUtils.isEmpty(contest.getWebServiceSettings().getPicasaUsername()));
-
-        model.addAttribute("showUploadButton", true);
     }
 
     @RequestMapping(value = "/{contestCode}/gallery/loadMore", method = RequestMethod.GET)
