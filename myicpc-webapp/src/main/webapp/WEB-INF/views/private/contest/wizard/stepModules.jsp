@@ -37,6 +37,11 @@
         <p id="mapModule" style="display: none;"><spring:message code="module.map.description" /></p>
         <p id="codeInsightModule" style="display: none;"><spring:message code="module.codeInsight.description" /></p>
         <p id="scheduleModule" style="display: none;"><spring:message code="module.schedule.description" /></p>
+        <p id="rssModule" style="display: none;"><spring:message code="module.rss.description" /></p>
+        <p id="pollModule" style="display: none;"><spring:message code="module.poll.description" /></p>
+        <p id="galleryModule" style="display: none;"><spring:message code="module.gallery.description" /></p>
+        <p id="officialGalleryModule" style="display: none;"><spring:message code="module.officialGallery.description" /></p>
+        <p id="questModule" style="display: none;"><spring:message code="module.quest.description" /></p>
     </div>
 </div>
 
