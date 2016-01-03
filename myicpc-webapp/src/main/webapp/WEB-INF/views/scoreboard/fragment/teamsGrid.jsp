@@ -34,7 +34,7 @@
                 </table>
             </jsp:attribute>
             <jsp:body>
-                <img class="img-responsive center-block" src="${teamPictureURLPrefix}${teamInfo.university.externalId}"
+                <img class="img-responsive center-block" src="${util:universityLogoUrl(teamInfo.university.externalId, contest)}"
                      style="height: 200px"
                      alt="${teamInfo.contestTeamName}" onError="this.src='<spring:url value="/images/missing-image.jpg" />';" />
             </jsp:body>
