@@ -92,7 +92,8 @@ officialGalleryApp.controller('eventGalleryCtrl', ($scope, $http, $location, off
   $scope.config = CommonConfig
   $scope.config.maxResult = 5
 
-  $scope.init = (eventTag) ->
+  $scope.init = (eventTag, year) ->
+    $scope.config.year = year
     if (eventTag != '')
       $http.get(officialGalleryService.buildSearchUrl($scope.config, eventTag, 1))
         .success(appendResultToPhotos)
@@ -107,7 +108,9 @@ officialGalleryApp.controller('teamGalleryCtrl', ($scope, $http, $location, offi
   $scope.config = CommonConfig
   $scope.config.maxResult = 5
 
-  $scope.init = (teamTag) ->
+  $scope.init = (teamTag, year) ->
+    $scope.config.year = year
+    console.log($scope.config)
     if (teamTag != '')
       $http.get(officialGalleryService.buildSearchUrl($scope.config, teamTag, 1))
       .success(appendResultToPhotos)
@@ -127,6 +130,10 @@ officialGalleryApp.controller('officialGalleryCtrl', ($scope, $http, $location, 
   $scope.currentTeam = ""
   $scope.currentPerson = ""
   $scope.config = CommonConfig
+
+  $scope.init = (year) ->
+    $scope.config.year = year
+    processHashtag()
 
   $scope.eventFilterChanged = () ->
     $scope.searchEvent($scope.currentEvent)
@@ -176,6 +183,7 @@ officialGalleryApp.controller('officialGalleryCtrl', ($scope, $http, $location, 
     getPhotos(tag)
 
   getPhotos = (tag, start = 1, onSuccess = null) ->
+      console.log($scope.config)
       $http.get(officialGalleryService.buildSearchUrl($scope.config, tag, start))
         .success((data) ->
           appendResultToPhotos(data)
@@ -184,8 +192,6 @@ officialGalleryApp.controller('officialGalleryCtrl', ($scope, $http, $location, 
         )
 
   appendResultToPhotos = (data) ->
-    console.log(data)
-    console.log(officialGalleryService.transformToGalleryEntities(data))
     $scope.photos = $scope.photos.concat(officialGalleryService.transformToGalleryEntities(data))
     $scope.maxResult = data.feed['openSearch$totalResults']['$t']
     if $scope.photos.length == $scope.maxResult
@@ -241,7 +247,4 @@ officialGalleryApp.controller('officialGalleryCtrl', ($scope, $http, $location, 
           $scope.searchPeople($scope.currentPerson)
     else
         $scope.searchEvent($scope.currentEvent)
-
-
-  processHashtag()
 )

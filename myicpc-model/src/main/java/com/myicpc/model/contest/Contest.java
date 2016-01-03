@@ -14,6 +14,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -226,5 +227,14 @@ public class Contest extends IdGeneratedObject {
 
     public void setModuleConfiguration(ModuleConfiguration moduleConfiguration) {
         this.moduleConfiguration = moduleConfiguration;
+    }
+
+    public int getContestYear() {
+        if (startTime != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(startTime);
+            return calendar.get(Calendar.YEAR);
+        }
+        return 0;
     }
 }

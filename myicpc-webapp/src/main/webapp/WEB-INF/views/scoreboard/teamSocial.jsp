@@ -29,7 +29,7 @@
         </div>
         <div class="col-sm-6">
             <c:if test="${util:officialGalleryModuleEnabled(contest)}">
-            <div ng-app="officialGallery" ng-controller="teamGalleryCtrl" ng-init="init('${teamInfo.fullPicasaTag}')" ng-cloak>
+            <div ng-app="officialGallery" ng-controller="teamGalleryCtrl" ng-init="init('${teamInfo.fullPicasaTag}', ${contest.contestYear})" ng-cloak>
                 <h3 ng-if="photos.length"><spring:message code="officialGallery" /></h3>
                 <div ng-if="photos.length">
                     <t:button href="${contestURL}/gallery/official#${teamInfo.fullPicasaTag}" context="info" styleClass="btn-block"><spring:message code="officialGallery.viewAll" /></t:button>

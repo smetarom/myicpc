@@ -112,7 +112,8 @@ officialGalleryApp.controller('eventGalleryCtrl', function($scope, $http, $locat
   $scope.photos = [];
   $scope.config = CommonConfig;
   $scope.config.maxResult = 5;
-  $scope.init = function(eventTag) {
+  $scope.init = function(eventTag, year) {
+    $scope.config.year = year;
     if (eventTag !== '') {
       return $http.get(officialGalleryService.buildSearchUrl($scope.config, eventTag, 1)).success(appendResultToPhotos);
     }
@@ -127,7 +128,9 @@ officialGalleryApp.controller('teamGalleryCtrl', function($scope, $http, $locati
   $scope.photos = [];
   $scope.config = CommonConfig;
   $scope.config.maxResult = 5;
-  $scope.init = function(teamTag) {
+  $scope.init = function(teamTag, year) {
+    $scope.config.year = year;
+    console.log($scope.config);
     if (teamTag !== '') {
       return $http.get(officialGalleryService.buildSearchUrl($scope.config, teamTag, 1)).success(appendResultToPhotos);
     }
@@ -148,6 +151,10 @@ officialGalleryApp.controller('officialGalleryCtrl', function($scope, $http, $lo
   $scope.currentTeam = "";
   $scope.currentPerson = "";
   $scope.config = CommonConfig;
+  $scope.init = function(year) {
+    $scope.config.year = year;
+    return processHashtag();
+  };
   $scope.eventFilterChanged = function() {
     return $scope.searchEvent($scope.currentEvent);
   };
@@ -208,6 +215,7 @@ officialGalleryApp.controller('officialGalleryCtrl', function($scope, $http, $lo
     if (onSuccess == null) {
       onSuccess = null;
     }
+    console.log($scope.config);
     return $http.get(officialGalleryService.buildSearchUrl($scope.config, tag, start)).success(function(data) {
       appendResultToPhotos(data);
       if (onSuccess != null) {
@@ -216,8 +224,6 @@ officialGalleryApp.controller('officialGalleryCtrl', function($scope, $http, $lo
     });
   };
   appendResultToPhotos = function(data) {
-    console.log(data);
-    console.log(officialGalleryService.transformToGalleryEntities(data));
     $scope.photos = $scope.photos.concat(officialGalleryService.transformToGalleryEntities(data));
     $scope.maxResult = data.feed['openSearch$totalResults']['$t'];
     if ($scope.photos.length === $scope.maxResult) {
@@ -251,7 +257,7 @@ officialGalleryApp.controller('officialGalleryCtrl', function($scope, $http, $lo
     }
     return null;
   };
-  processHashtag = function() {
+  return processHashtag = function() {
     var hash, tag, tagType;
     hash = $location.path();
     console.log(hash);
@@ -281,5 +287,4 @@ officialGalleryApp.controller('officialGalleryCtrl', function($scope, $http, $lo
       return $scope.searchEvent($scope.currentEvent);
     }
   };
-  return processHashtag();
 });

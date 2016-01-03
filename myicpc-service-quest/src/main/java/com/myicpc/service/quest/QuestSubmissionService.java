@@ -185,10 +185,10 @@ public class QuestSubmissionService {
     }
 
     private boolean ignoreSubmission(QuestChallenge challenge, Notification submission) {
-//        if (challenge.getEndDate() != null && submission.getTimestamp() != null && submission.getTimestamp().after(challenge.getEndDate())) {
-//            // skip this submission, if it was posted after deadline
-//            return true;
-//        }
+        if (challenge.getEndDate() != null && submission.getTimestamp() != null && submission.getTimestamp().after(challenge.getEndDate())) {
+            // skip this submission, if it was posted after deadline
+            return true;
+        }
         if (submission.getParentId() != null) {
             // skip retweeted submission
             return true;
